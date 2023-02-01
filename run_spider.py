@@ -9,4 +9,3 @@ if __name__ == "__main__":
     })
     process.crawl(BitcoinRichListSpider)
     process.start()
-

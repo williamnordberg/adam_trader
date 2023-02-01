@@ -40,14 +40,14 @@ while True:
             trade_opp_search = False
             short_position = True
         open_price = current_price
-        print('up prob:', probability_up, 'down prob', probability_down,current_price)
+        print('up prob:', probability_up, 'down prob', probability_down, current_price)
         time.sleep(5)
 
     while long_position:
         response_price = requests.get("https://api.binance.com/api/v3/ticker/price", params={'symbol': 'BTCUSDT'})
         current_price = float(response_price.json()['price'])
         print('current_price at a long open:', current_price)
-        print('total_prob',total_prob)
+        print('total_prob', total_prob)
         # get the volume
         for symbol in symbols:
             response = requests.get(endpoint, params={'symbol': symbol, 'limit': limit})
