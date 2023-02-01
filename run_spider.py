@@ -1,7 +1,6 @@
 from scrapy.crawler import CrawlerProcess
 from spiders.spider import BitcoinRichListSpider
-import pandas as pd
-import requests
+
 
 if __name__ == "__main__":
     spider = BitcoinRichListSpider()
