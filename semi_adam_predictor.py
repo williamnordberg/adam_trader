@@ -89,14 +89,15 @@ data['Rate'] = data_rate['Rate'].fillna(method='bfill')
 # 1. FG and Git is not avilable before 2018 'Perp_intrest' and  'Perp_volume' after 2020-02-09
 print("feature with null value", data.isnull().sum())
 
-
 print('data shape1 ', data.shape)
+
+
 # A. Split data yearly and calculate correlation
 def process_data(data_to_split, start_date, end_date, file_name):
     data_subset = data_to_split[start_date:end_date]
     data_subset = data_subset.dropna(axis=1)
     corr = data_subset.corrwith(data_subset['Close'])
-    corr.nlargest(40).to_csv(file_name)
+    # corr.nlargest(40).to_csv(file_name)
     return data_subset
 
 
@@ -110,33 +111,29 @@ data22 = process_data(data, '2022', None, 'corr22.csv')
 
 
 # A1. calculate Chi_squerd on yearly dataset
-def feature_select(data_feature_select, year_in_function):
+def feature_select(data_feature_select):
     data_feature_select.dropna(axis=1, how='all')
     X = data_feature_select.iloc[:, 1:169]  # independent variable columns
     y = data_feature_select['Close']  # target variable column (price range)
-
-    # extracting top 10 best features by applying SelectKBest class
     bestfeatures = SelectKBest(score_func=chi2, k=10)
     label_encoder = preprocessing.LabelEncoder()
     y = label_encoder.fit_transform(y)
     fit = bestfeatures.fit(X, y)
     dfscores = pd.DataFrame(fit.scores_)
     dfcolumns = pd.DataFrame(X.columns)
-
     # concat two dataframes
     feature_scores = pd.concat([dfcolumns, dfscores], axis=1)
     feature_scores.columns = ['Specs', 'Score']  # naming the dataframe columns
-    # print(f"Year {year}:")
     # print(feature_scores.nlargest(10, 'Score'))   # printing 10 best features
-print('data22 shae', data22.shape)
-print('data shapr', data.shape)
-feature_select(data16, 16)
-feature_select(data17, 17)
-feature_select(data18, 18)
-feature_select(data19, 19)
-feature_select(data20, 20)
-feature_select(data21, 21)
-feature_select(data22, 22)
+
+
+feature_select(data16)
+feature_select(data17)
+feature_select(data18)
+feature_select(data19)
+feature_select(data20)
+feature_select(data21)
+feature_select(data22)
 
 
 # A2. Regressions on yearly
@@ -145,9 +142,9 @@ def mean_absolute_percentage_error(y_true, y_pred):
     return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
 
 
-def seven_regression(data_to_regression):
-    X = data_to_regression[['DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate', 'Open']]
-    y = data_to_regression[['Close']]
+def seven_regression(data_to_regression1):
+    X = data_to_regression1[['DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate', 'Open']]
+    y = data_to_regression1[['Close']]
     X_train, X_test, y_train, y_test = train_test_split(X, y,
                                                         test_size=0.2,
                                                         random_state=0)
@@ -243,7 +240,6 @@ data['RSI'] = talib.RSI(data['Close'], timeperiod=14)
 data['MACD'], data['MACD signal'], data['MACD histogram'] = talib.MACD(
     data['Close'], fastperiod=12, slowperiod=26, signalperiod=9)
 
-
 # EMA 1(20>50>200) 2(50>20>200) 3(200>50>20) 4(20>200>50) 5(200>20>50) 6(50>200>20)
 # BB 1(p>up b) 2(up b< P >M b) 3(M band < P>L b) 4(P< l ba)
 # RSI 1(P>70) 2(P < 30) 3( 70< P >30 )
@@ -304,7 +300,6 @@ data_1321 = data.loc[((data['ema50'] > data['ema20']) & (data['ema20'] > data['e
                      & (data['MACD'] < data['MACD signal'])
                      ]
 print('data_1321', data_1321.shape)
-
 
 # 2 0 2 0
 data_2020 = data.loc[((data['ema200'] > data['ema50']) & (data['ema50'] > data['ema20']))
@@ -418,4 +413,14 @@ data_5320 = data.loc[((data['ema50'] > data['ema200']) & (data['ema200'] > data[
                      ]
 print('data_5320', data_5320.shape)
 
+Technical_data_list = [data_0000, data_0300, data_0320, data_0321, data_1311, data_1320, data_1321, data_2020,
+                       data_2300, data_2310, data_2311, data_2320, data_2321, data_3300, data_3320, data_3321,
+                       data_4300, data_4320, data_4321, data_5311, data_5320]
 
+for data_to_extract_features in Technical_data_list:
+    data_to_extract_features = data_to_extract_features.dropna(axis=1)
+    # clip method of a DataFrame to replace all values below 0 with 0
+    data_to_extract_features = data_to_extract_features.clip(lower=0)
+    feature_select(data_to_extract_features)
+    # consider adjusting features, might pass it from feature select
+    seven_regression(data_to_extract_features)
