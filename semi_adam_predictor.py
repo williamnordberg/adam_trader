@@ -1,6 +1,7 @@
 import lightgbm as lgb
 import numpy as np
 import pandas as pd
+from _cffi_backend import Lib
 from numpy import ravel
 from sklearn import preprocessing
 from sklearn.ensemble import RandomForestRegressor
@@ -13,6 +14,8 @@ from sklearn.preprocessing import PolynomialFeatures, StandardScaler
 from sklearn.svm import SVR
 from sklearn.tree import DecisionTreeRegressor
 from xgboost import XGBRegressor
+from sklearn.ensemble import AdaBoostRegressor
+import talib
 
 data = pd.read_csv('C:/will/Python_project/adam_trader/datasets/BTC-to-merg.csv',
                    index_col='Date',
@@ -200,7 +203,7 @@ def seven_regression(data_to_regression):
 
     test_x = data[['DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate', 'Open']][index:].to_numpy()
     test_y = data['Close'][index:]
-    from sklearn.ensemble import AdaBoostRegressor
+
     model = AdaBoostRegressor()
     model.fit(train_x, train_y)
     predictions_ADA = model.predict(test_x)
@@ -228,3 +231,189 @@ for year, data in zip(years, [data, data16, data17, data18, data19, data20, data
     seven_regression(data)
     print('\n', '***************', year, '***************', '\n')
 
+# B. add technical data to dataset
+data['ema200'] = talib.EMA(data['Close'], timeperiod=200)
+data['ema50'] = talib.EMA(data['Close'], timeperiod=50)
+data['ema20'] = talib.EMA(data['Close'], timeperiod=20)
+
+data['upper_band'], data['middle_band'], data['lower_band'] = talib.BBANDS(data['Close'],
+                                                                           timeperiod=20)
+
+data['RSI'] = talib.RSI(data['Close'], timeperiod=14)
+
+data['MACD'], data['MACD signal'], data['MACD histogram'] = talib.MACD(
+    data['Close'], fastperiod=12, slowperiod=26, signalperiod=9)
+
+# EMA 1(20>50>200) 2(50>20>200) 3(200>50>20) 4(20>200>50) 5(200>20>50) 6(50>200>20)
+# BB 1(p>up b) 2(up b< P >M b) 3(M band < P>L b) 4(P< l ba)
+# RSI 1(P>70) 2(P < 30) 3( 70< P >30 )
+# MACD 1 (MACD > signal) 2 ( MACD < signal)
+
+# 0 0 0 0
+data_0000 = data.loc[((data['ema20'] > data['ema50']) & (data['ema50'] > data['ema200']))
+                     & (data['upper_band'] < data['Close'])
+                     & (data['RSI'] > 70)
+                     & (data['MACD'] > data['MACD signal'])
+                     ]
+print('data_0000', data_0000.shape)
+
+# 0 3 0 0
+data_0300 = data.loc[((data['ema20'] > data['ema50']) & (data['ema50'] > data['ema200']))
+                     & (data['lower_band'] < data['Close'])
+                     & (data['RSI'] > 70)
+                     & (data['MACD'] > data['MACD signal'])
+                     ]
+print('data_0300', data_0300.shape)
+
+# 0 3 2 0
+data_0320 = data.loc[((data['ema20'] > data['ema50']) & (data['ema50'] > data['ema200']))
+                     & (data['lower_band'] < data['Close'])
+                     & ((data['RSI'] > 30) & (data['RSI'] < 70))
+                     & (data['MACD'] > data['MACD signal'])
+                     ]
+print('data_0320', data_0320.shape)
+
+# 0 3 2 1
+data_0321 = data.loc[((data['ema20'] > data['ema50']) & (data['ema50'] > data['ema200']))
+                     & (data['lower_band'] < data['Close'])
+                     & ((data['RSI'] > 30) & (data['RSI'] < 70))
+                     & (data['MACD'] < data['MACD signal'])
+                     ]
+print('data_0321', data_0321.shape)
+
+# 1 3 1 1
+data_1311 = data.loc[((data['ema50'] > data['ema20']) & (data['ema20'] > data['ema200']))
+                     & (data['lower_band'] < data['Close'])
+                     & (data['RSI'] < 30)
+                     & (data['MACD'] < data['MACD signal'])
+                     ]
+print('data_1311', data_1311.shape)
+
+# 1 3 2 0
+data_1320 = data.loc[((data['ema50'] > data['ema20']) & (data['ema20'] > data['ema200']))
+                     & (data['lower_band'] < data['Close'])
+                     & ((data['RSI'] > 30) & (data['RSI'] < 70))
+                     & (data['MACD'] > data['MACD signal'])
+                     ]
+print('data_1320', data_1320.shape)
+
+# 1 3 2 1
+data_1321 = data.loc[((data['ema50'] > data['ema20']) & (data['ema20'] > data['ema200']))
+                     & (data['lower_band'] < data['Close'])
+                     & ((data['RSI'] > 30) & (data['RSI'] < 70))
+                     & (data['MACD'] < data['MACD signal'])
+                     ]
+print('data_1321', data_1321.shape)
+
+
+# 2 0 2 0
+data_2020 = data.loc[((data['ema200'] > data['ema50']) & (data['ema50'] > data['ema20']))
+                     & (data['upper_band'] < data['Close'])
+                     & ((data['RSI'] > 30) & (data['RSI'] < 70))
+                     & (data['MACD'] > data['MACD signal'])
+                     ]
+print('data_2020', data_2020.shape)
+
+# 2 3 0 0
+data_2300 = data.loc[((data['ema200'] > data['ema50']) & (data['ema50'] > data['ema20']))
+                     & (data['lower_band'] < data['Close'])
+                     & (data['RSI'] > 70)
+                     & (data['MACD'] > data['MACD signal'])
+                     ]
+print('data_2300', data_2300.shape)
+
+# 2 3 1 0
+data_2310 = data.loc[((data['ema200'] > data['ema50']) & (data['ema50'] > data['ema20']))
+                     & (data['lower_band'] < data['Close'])
+                     & (data['RSI'] < 30)
+                     & (data['MACD'] > data['MACD signal'])
+                     ]
+print('data_2310', data_2310.shape)
+
+# 2 3 1 1
+data_2311 = data.loc[((data['ema200'] > data['ema50']) & (data['ema50'] > data['ema20']))
+                     & (data['lower_band'] < data['Close'])
+                     & (data['RSI'] < 30)
+                     & (data['MACD'] < data['MACD signal'])
+                     ]
+print('data_2311', data_2311.shape)
+
+# 2 3 2 0
+data_2320 = data.loc[((data['ema200'] > data['ema50']) & (data['ema50'] > data['ema20']))
+                     & (data['lower_band'] < data['Close'])
+                     & ((data['RSI'] > 30) & (data['RSI'] < 70))
+                     & (data['MACD'] > data['MACD signal'])
+                     ]
+print('data_2320', data_2320.shape)
+
+# 2 3 2 1
+data_2321 = data.loc[((data['ema200'] > data['ema50']) & (data['ema50'] > data['ema20']))
+                     & (data['lower_band'] < data['Close'])
+                     & ((data['RSI'] > 30) & (data['RSI'] < 70))
+                     & (data['MACD'] < data['MACD signal'])
+                     ]
+print('data_2321', data_2321.shape)
+
+# 3 3 0 0
+data_3300 = data.loc[((data['ema20'] > data['ema200']) & (data['ema200'] > data['ema50']))
+                     & (data['lower_band'] < data['Close'])
+                     & (data['RSI'] > 70)
+                     & (data['MACD'] > data['MACD signal'])
+                     ]
+print('data_3300', data_3300.shape)
+
+# 3 3 2 0
+data_3320 = data.loc[((data['ema20'] > data['ema200']) & (data['ema200'] > data['ema50']))
+                     & (data['lower_band'] < data['Close'])
+                     & ((data['RSI'] > 30) & (data['RSI'] < 70))
+                     & (data['MACD'] > data['MACD signal'])
+                     ]
+print('data_3320', data_3320.shape)
+
+# 3 3 2 1
+data_3321 = data.loc[((data['ema20'] > data['ema200']) & (data['ema200'] > data['ema50']))
+                     & (data['lower_band'] < data['Close'])
+                     & ((data['RSI'] > 30) & (data['RSI'] < 70))
+                     & (data['MACD'] < data['MACD signal'])
+                     ]
+print('data_3321', data_3321.shape)
+
+# 4 3 0 0
+data_4300 = data.loc[((data['ema200'] > data['ema20']) & (data['ema20'] > data['ema50']))
+                     & (data['lower_band'] < data['Close'])
+                     & (data['RSI'] > 70)
+                     & (data['MACD'] > data['MACD signal'])
+                     ]
+print('data_4300', data_4300.shape)
+
+# 4 3 2 0
+data_4320 = data.loc[((data['ema200'] > data['ema20']) & (data['ema20'] > data['ema50']))
+                     & (data['lower_band'] < data['Close'])
+                     & ((data['RSI'] > 30) & (data['RSI'] < 70))
+                     & (data['MACD'] > data['MACD signal'])
+                     ]
+print('data_4320', data_4320.shape)
+
+# 4 3 2 1
+data_4321 = data.loc[((data['ema200'] > data['ema20']) & (data['ema20'] > data['ema50']))
+                     & (data['lower_band'] < data['Close'])
+                     & ((data['RSI'] > 30) & (data['RSI'] < 70))
+                     & (data['MACD'] < data['MACD signal'])
+                     ]
+print('data_4321', data_4321.shape)
+
+# 5 3 1 1
+data_5311 = data.loc[((data['ema50'] > data['ema200']) & (data['ema200'] > data['ema20']))
+                     & (data['lower_band'] < data['Close'])
+                     & (data['RSI'] < 30)
+                     & (data['MACD'] < data['MACD signal'])
+                     ]
+print('data_5311', data_5311.shape)
+
+# 5 3 2 0
+data_5320 = data.loc[((data['ema50'] > data['ema200']) & (data['ema200'] > data['ema20']))
+                     & (data['lower_band'] < data['Close'])
+                     & ((data['RSI'] > 30) & (data['RSI'] < 70))
+                     & (data['MACD'] > data['MACD signal'])
+                     ]
+print('data_5320', data_5320.shape)
