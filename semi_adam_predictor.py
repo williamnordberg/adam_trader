@@ -1,7 +1,7 @@
 import lightgbm as lgb
+import math
 import numpy as np
 import pandas as pd
-from _cffi_backend import Lib
 from numpy import ravel
 from sklearn import preprocessing
 from sklearn.ensemble import RandomForestRegressor
@@ -87,9 +87,10 @@ data_rate = pd.read_csv('C:/will/Python_project/adam_trader/datasets/rate.csv',
 data['Rate'] = data_rate['Rate'].fillna(method='bfill')
 
 # 1. FG and Git is not avilable before 2018 'Perp_intrest' and  'Perp_volume' after 2020-02-09
-print("feature with null value\n", data.isnull().sum())
+print("feature with null value", data.isnull().sum())
 
 
+print('data shape1 ', data.shape)
 # A. Split data yearly and calculate correlation
 def process_data(data_to_split, start_date, end_date, file_name):
     data_subset = data_to_split[start_date:end_date]
@@ -109,8 +110,6 @@ data22 = process_data(data, '2022', None, 'corr22.csv')
 
 
 # A1. calculate Chi_squerd on yearly dataset
-
-
 def feature_select(data_feature_select, year_in_function):
     data_feature_select.dropna(axis=1, how='all')
     X = data_feature_select.iloc[:, 1:169]  # independent variable columns
@@ -129,8 +128,8 @@ def feature_select(data_feature_select, year_in_function):
     feature_scores.columns = ['Specs', 'Score']  # naming the dataframe columns
     # print(f"Year {year}:")
     # print(feature_scores.nlargest(10, 'Score'))   # printing 10 best features
-
-
+print('data22 shae', data22.shape)
+print('data shapr', data.shape)
 feature_select(data16, 16)
 feature_select(data17, 17)
 feature_select(data18, 18)
@@ -141,7 +140,6 @@ feature_select(data22, 22)
 
 
 # A2. Regressions on yearly
-
 def mean_absolute_percentage_error(y_true, y_pred):
     y_true, y_pred = np.array(y_true), np.array(y_pred)
     return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
@@ -194,7 +192,6 @@ def seven_regression(data_to_regression):
     print('MAPE_forest:', mean_absolute_percentage_error(y_test, predictions_forest))
 
     # 6.ADA booster
-    import math
     training_amount = 0.8
     ROWS = data.shape[0]
     index = math.floor(ROWS * training_amount)
@@ -226,12 +223,14 @@ def seven_regression(data_to_regression):
     print("MAPE for LightGBM:", lgb_mape)
 
 
+data_to_regression = data
 years = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
-for year, data in zip(years, [data, data16, data17, data18, data19, data20, data21, data22]):
-    seven_regression(data)
+for year, data_to_regression in zip(years, [data, data16, data17, data18, data19, data20, data21, data22]):
+    seven_regression(data_to_regression)
     print('\n', '***************', year, '***************', '\n')
 
 # B. add technical data to dataset
+
 data['ema200'] = talib.EMA(data['Close'], timeperiod=200)
 data['ema50'] = talib.EMA(data['Close'], timeperiod=50)
 data['ema20'] = talib.EMA(data['Close'], timeperiod=20)
@@ -243,6 +242,7 @@ data['RSI'] = talib.RSI(data['Close'], timeperiod=14)
 
 data['MACD'], data['MACD signal'], data['MACD histogram'] = talib.MACD(
     data['Close'], fastperiod=12, slowperiod=26, signalperiod=9)
+
 
 # EMA 1(20>50>200) 2(50>20>200) 3(200>50>20) 4(20>200>50) 5(200>20>50) 6(50>200>20)
 # BB 1(p>up b) 2(up b< P >M b) 3(M band < P>L b) 4(P< l ba)
@@ -417,3 +417,5 @@ data_5320 = data.loc[((data['ema50'] > data['ema200']) & (data['ema200'] > data[
                      & (data['MACD'] > data['MACD signal'])
                      ]
 print('data_5320', data_5320.shape)
+
+
