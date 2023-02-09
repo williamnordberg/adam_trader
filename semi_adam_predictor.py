@@ -15,7 +15,6 @@ from sklearn.svm import SVR
 from sklearn.tree import DecisionTreeRegressor
 from xgboost import XGBRegressor
 from sklearn.ensemble import AdaBoostRegressor
-import talib
 
 data = pd.read_csv('C:/will/Python_project/adam_trader/datasets/BTC-to-merg.csv',
                    index_col='Date',
@@ -86,7 +85,7 @@ data_rate = pd.read_csv('C:/will/Python_project/adam_trader/datasets/rate.csv',
                         )
 data['Rate'] = data_rate['Rate'].fillna(method='bfill')
 
-# 1. FG and Git is not avilable before 2018 'Perp_intrest' and  'Perp_volume' after 2020-02-09
+# 1. FG and Git is not available before 2018 'Perp_intrest' and  'Perp_volume' after 2020-02-09
 print("feature with null value", data.isnull().sum())
 
 print('data shape1 ', data.shape)
@@ -226,32 +225,70 @@ for year, data_to_regression in zip(years, [data, data16, data17, data18, data19
     seven_regression(data_to_regression)
     print('\n', '***************', year, '***************', '\n')
 
+
 # B. add technical data to dataset
 
-data['ema200'] = talib.EMA(data['Close'], timeperiod=200)
-data['ema50'] = talib.EMA(data['Close'], timeperiod=50)
-data['ema20'] = talib.EMA(data['Close'], timeperiod=20)
 
-data['upper_band'], data['middle_band'], data['lower_band'] = talib.BBANDS(data['Close'],
-                                                                           timeperiod=20)
+def exponential_moving_average(data_in_function, window):
+    weights = np.exp(np.linspace(-1., 0., window))
+    weights /= weights.sum()
+    a = np.convolve(data_in_function, weights, mode='full')[:len(data_in_function)]
+    a[:window] = a[window]
+    return a
 
-data['RSI'] = talib.RSI(data['Close'], timeperiod=14)
 
-data['MACD'], data['MACD signal'], data['MACD histogram'] = talib.MACD(
-    data['Close'], fastperiod=12, slowperiod=26, signalperiod=9)
+def bollinger_bands(data_to_bb, window, num_std_dev):
+    moving_average = exponential_moving_average(data_to_bb, window)
+    std_dev = np.std(data_to_bb)
+    upper_band = moving_average + num_std_dev * std_dev
+    lower_band = moving_average - num_std_dev * std_dev
+    return upper_band, moving_average, lower_band
+
+
+def relative_strength_index(data_rsi, window):
+    delta = data_rsi - np.roll(data_rsi, 1)
+    gain = np.where(delta > 0, delta, 0)
+    loss = np.where(delta < 0, -delta, 0)
+    avg_gain = exponential_moving_average(gain, window)
+    avg_loss = exponential_moving_average(loss, window)
+    rs = avg_gain / avg_loss
+    rsi = 100.0 - (100.0 / (1.0 + rs))
+    return rsi
+
+
+def macd(data_macd, fast_window=12, slow_window=26, signal_window=9):
+    fast_ema = exponential_moving_average(data_macd, fast_window)
+    slow_ema = exponential_moving_average(data_macd, slow_window)
+    macd_in_func = fast_ema - slow_ema
+    signal = exponential_moving_average(macd_in_func, signal_window)
+    histogram = macd_in_func - signal
+    return macd_in_func, signal, histogram
+
+
+data['ema200'] = exponential_moving_average(data['Close'], 200)
+data['ema50'] = exponential_moving_average(data['Close'], 50)
+data['ema20'] = exponential_moving_average(data['Close'], 20)
+
+data['upper_band'], data['middle_band'], data['lower_band'] = bollinger_bands(data['Close'], window=20, num_std_dev=2)
+
+# data['upper_band'], data['middle_band'], data['lower_band'] = talib.BBANDS(data['Close'],
+#                                                                           timeperiod=20)
+
+data['RSI'] = relative_strength_index(data['Close'], window=14)
+# data['RSI'] = talib.RSI(data['Close'], timeperiod=14)
+
+
+data['MACD'], data['MACD signal'], data['MACD histogram'] = macd(data['Close'], fast_window=12, slow_window=26,
+                                                                 signal_window=9)
+
+# data['MACD'], data['MACD signal'], data['MACD histogram'] = talib.MACD(
+#   data['Close'], fastperiod=12, slowperiod=26, signalperiod=9)
 
 # EMA 1(20>50>200) 2(50>20>200) 3(200>50>20) 4(20>200>50) 5(200>20>50) 6(50>200>20)
 # BB 1(p>up b) 2(up b< P >M b) 3(M band < P>L b) 4(P< l ba)
 # RSI 1(P>70) 2(P < 30) 3( 70< P >30 )
 # MACD 1 (MACD > signal) 2 ( MACD < signal)
 
-# 0 0 0 0
-data_0000 = data.loc[((data['ema20'] > data['ema50']) & (data['ema50'] > data['ema200']))
-                     & (data['upper_band'] < data['Close'])
-                     & (data['RSI'] > 70)
-                     & (data['MACD'] > data['MACD signal'])
-                     ]
-print('data_0000', data_0000.shape)
 
 # 0 3 0 0
 data_0300 = data.loc[((data['ema20'] > data['ema50']) & (data['ema50'] > data['ema200']))
@@ -300,14 +337,6 @@ data_1321 = data.loc[((data['ema50'] > data['ema20']) & (data['ema20'] > data['e
                      & (data['MACD'] < data['MACD signal'])
                      ]
 print('data_1321', data_1321.shape)
-
-# 2 0 2 0
-data_2020 = data.loc[((data['ema200'] > data['ema50']) & (data['ema50'] > data['ema20']))
-                     & (data['upper_band'] < data['Close'])
-                     & ((data['RSI'] > 30) & (data['RSI'] < 70))
-                     & (data['MACD'] > data['MACD signal'])
-                     ]
-print('data_2020', data_2020.shape)
 
 # 2 3 0 0
 data_2300 = data.loc[((data['ema200'] > data['ema50']) & (data['ema50'] > data['ema20']))
@@ -413,7 +442,7 @@ data_5320 = data.loc[((data['ema50'] > data['ema200']) & (data['ema200'] > data[
                      ]
 print('data_5320', data_5320.shape)
 
-Technical_data_list = [data_0000, data_0300, data_0320, data_0321, data_1311, data_1320, data_1321, data_2020,
+Technical_data_list = [data_0300, data_0320, data_0321, data_1311, data_1320, data_1321,
                        data_2300, data_2310, data_2311, data_2320, data_2321, data_3300, data_3320, data_3321,
                        data_4300, data_4320, data_4321, data_5311, data_5320]
 

@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="first commit">
-      <change afterPath="$PROJECT_DIR$/Interest_rate.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scrap_interest_rate.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interest_rate.py" beforeDir="false" afterPath="$PROJECT_DIR$/Interest_rate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scrap_interest_rate.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/semi_adam_predictor.py" beforeDir="false" afterPath="$PROJECT_DIR$/semi_adam_predictor.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,7 +74,7 @@
       <recent name="C:\will\Python_project\adam_trader\spiders" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.scrap_interest_rate">
+  <component name="RunManager" selected="Python.semi_adam_predictor">
     <configuration name="Interest_rate" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -182,10 +182,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.scrap_interest_rate" />
-        <item itemvalue="Python.Interest_rate" />
-        <item itemvalue="Python.Twitter" />
         <item itemvalue="Python.semi_adam_predictor" />
+        <item itemvalue="Python.Interest_rate" />
+        <item itemvalue="Python.scrap_interest_rate" />
+        <item itemvalue="Python.Twitter" />
         <item itemvalue="Python.mape_test" />
       </list>
     </recent_temporary>
@@ -325,7 +325,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675741592024</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="first commit">
+      <created>1675905616290</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1675905616290</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
