@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="first commit">
-      <change afterPath="$PROJECT_DIR$/scrap_rate_CPI_PPI.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interest_rate.py" beforeDir="false" afterPath="$PROJECT_DIR$/Interest_rate.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,7 +72,7 @@
       <recent name="C:\will\Python_project\adam_trader\spiders" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.scrap_rate_CPI_PPI (1)">
+  <component name="RunManager" selected="Python.test">
     <configuration name="Interest_rate" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -181,10 +180,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.test" />
         <item itemvalue="Python.scrap_rate_CPI_PPI (1)" />
         <item itemvalue="Python.scrap_rate_CPI_PPI" />
         <item itemvalue="Python.Interest_rate" />
-        <item itemvalue="Python.test" />
         <item itemvalue="Python.semi_adam_predictor" />
       </list>
     </recent_temporary>
@@ -345,7 +344,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676001561565</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="first commit">
+      <created>1676001653925</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1676001653925</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
