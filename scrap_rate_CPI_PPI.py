@@ -48,7 +48,7 @@ def get_forecast_values(events_in_function, url_in_function):
 
 
 # Search criteria
-events = ["Unemployment Claims", "Construction PMI", "Retail Sales m/m"]
+events = ["Unemployment Claims", "CPI y/y", "Retail Sales m/m"]
 url = "https://www.forexfactory.com/calendar"
 
 forecast_values = get_forecast_values(events, url)
