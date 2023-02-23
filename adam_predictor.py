@@ -1,4 +1,3 @@
-from sklearn.tree import DecisionTreeRegressor
 from fredapi import Fred
 import pandas as pd
 import yfinance as yf
@@ -9,6 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 import os
 import time
+
 
 # region A. update factors
 
@@ -67,11 +67,11 @@ def update_internal_factors():
             # Write the updated dataset to disk
             main_dataset.to_csv('main_dataset.csv', index=False)
 
-            print(f"{len(new_data)} new rows of internal factors added to the main dataset.")
+            print(f"{len(new_data)} new rows of internal factors added.")
         else:
-            print("The main dataset internal factors is already up to date.")
+            print("internal factors is already up to date.")
     else:
-        print("Error: Failed to download internal factors new data.")
+        print("Error: Failed to download internal factors.")
 
     return None
 
@@ -99,25 +99,50 @@ def update_yahoo_data():
             # Write the updated dataset to disk
             main_dataset.to_csv('main_dataset.csv', index=False)
 
-            print(f"{len(new_rows)} new rows of yahoo data added to the main dataset.")
+            print(f"{len(new_rows)} new rows of yahoo data added.")
         else:
-            print("The main dataset of yahoo data is already up to date.")
+            print("Yahoo data is already up to date.")
     else:
         print("Error: Failed to download new data of yahoo data.")
 
     return None
 
 
-
 def update_macro_economic():
-    fred = Fred(api_key='8f7cbcbc1210c7efa87ee9484e159c21')
+    # Connect to FRED API and get the latest federal funds rate data
+    try:
+        fred = Fred(api_key='8f7cbcbc1210c7efa87ee9484e159c21')
+        df2 = fred.get_series('FEDFUNDS')
+    except Exception as e:
+        print(f"Error: {e}")
+        return
 
-    return None
+    # Load the main dataset into a DataFrame
+    main_dataset = pd.read_csv('main_dataset.csv')
+
+    # Check if the latest federal funds rate is already in the main dataset
+    latest_rate = df2.iloc[-1]
+    if latest_rate == main_dataset['Rate'].iloc[-1]:
+        print("interest rate data is already up to date.")
+        return
+
+    # Update the last row of the Rate column with the latest federal funds rate data
+    main_dataset.loc[main_dataset.index[-1], 'Rate'] = latest_rate
+
+    # Backward fill missing values with the next non-null value, but only up to the next value change
+    main_dataset['Rate'].fillna(method='bfill', limit=1, inplace=True)
+
+    # Print a message indicating that the new rate has been added to the main dataset
+    print("interest rate added to the main dataset.")
+
+    # Save the updated main dataset to a CSV file
+    main_dataset.to_csv('main_dataset.csv', index=False)
+
 
 # endregion
 
 
-def decision_tree_predictor(dataset):
+def decision_tree_predictor():
     update_internal_factors()
     update_yahoo_data()
     update_macro_economic()
