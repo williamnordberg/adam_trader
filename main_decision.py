@@ -1,5 +1,6 @@
 from time import sleep
 from order_book import get_probabilities
+from adam_predictor import decision_tree_predictor
 loop_counter = 0
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 
@@ -8,11 +9,10 @@ while True:
     loop_counter += 1
     print(loop_counter)
     # region 1.1 Get the prediction
+    Predicted_price = decision_tree_predictor('Dataset.csv')
 
     # endregion
 
-    # region 1.2 add new value to dataset
-    # endregion
 
     # region 2. Get Adam Watcher value
     # endregion 2. Get Adam Watcher value
