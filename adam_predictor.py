@@ -1,4 +1,3 @@
-import numpy as np
 from sklearn.tree import DecisionTreeRegressor
 from fredapi import Fred
 import pandas as pd
@@ -9,33 +8,17 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 import os
+import time
 
 # region A. update factors
 
 
-def update_yahoo_data():
-    # Set the start and end dates for the historical data
-    start_date = '2022-11-01'
-    end_date = '2023-02-20'
-    # Use yfinance to get the historical data for Bitcoin
-    ticker_data = yf.download('BTC-USD', start=start_date, end=end_date)
-    # Create a Pandas DataFrame from the ticker data
-    df1 = pd.DataFrame(ticker_data)
-    fred = Fred(api_key='8f7cbcbc1210c7efa87ee9484e159c21')
-    series_id = 'DGS10'
-    data = fred.get_series(series_id, observation_start='2022-11-01')
-    df2 = pd.DataFrame({'Date': data.index, 'Interest Rate': data.values}, columns=['Date', 'Interest Rate'])
-    df2.set_index('Date', inplace=True)
-    df1['Rate'] = df2['Interest Rate']
-    # Forward fill missing values with the last non-null value
-    df1['Rate'] = df1['Rate'].fillna(method='ffill')
-
-    # Backward fill missing values with the next non-null value, but only up to the next value change
-    df1['Rate'] = df1['Rate'].fillna(method='bfill', limit=1)
-    return df1
-
-
 def update_internal_factors():
+    # Read the main dataset from disk
+    main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})
+
+    # Get the latest date in the main dataset
+    latest_date = main_dataset['Date'].max()
 
     # Create a new instance of the Firefox driver
     driver = webdriver.Firefox()
@@ -49,6 +32,7 @@ def update_internal_factors():
     accept_button.click()
 
     # Find and select Bitcoin from the dropdown menu
+    time.sleep(4)
     selector = Select(WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "#downloadSelect"))))
     selector.select_by_value("https://raw.githubusercontent.com/coinmetrics/data/master/csv/btc.csv")
 
@@ -56,43 +40,97 @@ def update_internal_factors():
     download_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button.cm-button")))
     download_button.click()
 
-    # Wait for the download to finish and print the CSV data
+    # Wait for the download to finish and read the new data
     wait_for_download = True
+    new_data = None
     while wait_for_download:
         for file in os.listdir(os.path.join(os.path.expanduser("~"), "Downloads")):
             if file.endswith(".csv"):
-                data = pd.read_csv(os.path.join(os.path.expanduser("~"), "Downloads", file), dtype={146: str})
-                print(data)
+                new_data = pd.read_csv(os.path.join(os.path.expanduser("~"), "Downloads", file), dtype={146: str})
                 wait_for_download = False
+                break
 
     # Close the Firefox window
     driver.quit()
 
+    if new_data is not None:
+        # Rename the 'time' column to 'Date'
+        new_data = new_data.rename(columns={'time': 'Date'})
+
+        # Filter the new data to only include rows with a date after the latest date in the main dataset
+        new_data = new_data[new_data['Date'] > latest_date]
+
+        if len(new_data) > 0:
+            # Append the new rows to the main dataset
+            main_dataset = pd.concat([main_dataset, new_data])
+
+            # Write the updated dataset to disk
+            main_dataset.to_csv('main_dataset.csv', index=False)
+
+            print(f"{len(new_data)} new rows of internal factors added to the main dataset.")
+        else:
+            print("The main dataset internal factors is already up to date.")
+    else:
+        print("Error: Failed to download internal factors new data.")
+
     return None
 
 
+def update_yahoo_data():
+    # Read the main dataset from disk
+    main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})
+
+    # Get the latest date in the main dataset
+    latest_date = main_dataset['Date'].max()
+
+    # Download the new data from Yahoo Finance
+    ticker = yf.Ticker("BTC-USD")
+    new_data = ticker.history(period="max")
+
+    if new_data is not None:
+        # Filter the new data to only include rows with a date after the latest date in the main dataset
+        new_data = new_data[new_data.index > latest_date]
+
+        if len(new_data) > 0:
+            # Append the new rows to the main dataset
+            new_rows = new_data[['Open', 'High', 'Low', 'Close']].reset_index().rename(columns={'Date': 'Date'})
+            main_dataset = pd.concat([main_dataset, new_rows])
+
+            # Write the updated dataset to disk
+            main_dataset.to_csv('main_dataset.csv', index=False)
+
+            print(f"{len(new_rows)} new rows of yahoo data added to the main dataset.")
+        else:
+            print("The main dataset of yahoo data is already up to date.")
+    else:
+        print("Error: Failed to download new data of yahoo data.")
+
+    return None
+
+
+
 def update_macro_economic():
+    fred = Fred(api_key='8f7cbcbc1210c7efa87ee9484e159c21')
 
     return None
 
 # endregion
 
 
-def decision_tree_predictor(data_to_regression1):
+def decision_tree_predictor(dataset):
     update_internal_factors()
     update_yahoo_data()
     update_macro_economic()
-
+    # consider the last day have close also ( so do not use it for train)
     # train model with all data before last Row
-    X_train = data_to_regression1[['DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate', 'Open', 'Rate']]
-    y_train = data_to_regression1[['Close']]
+    #X_train = dataset[['DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate', 'Open', 'Rate']]
+    #y_train = dataset[['Close']]
 
     # use last row to predict price
-    X_test = data_to_regression1[['DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate', 'Open', 'Rate']]
-    decision_model = DecisionTreeRegressor(random_state=0)
-    decision_model.fit(X_train, y_train)
-    predictions_tree = decision_model.predict(X_test).reshape(-1, 1)
-    return predictions_tree
+    #X_test = dataset[['DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate', 'Open', 'Rate']]
+    #decision_model = DecisionTreeRegressor(random_state=0)
+    #decision_model.fit(X_train, y_train)
+    #predictions_tree = decision_model.predict(X_test).reshape(-1, 1)
+    return None#predictions_tree
 
 
-data_to_regression = pd.read_csv('data22.csv')
