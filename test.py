@@ -4,34 +4,42 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 import pandas as pd
+import yfinance as yf
+import os
+from fredapi import Fred
+import pandas as pd
+import yfinance as yf
+from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium import webdriver
 import os
 
-# Create a new instance of the Firefox driver
-driver = webdriver.Firefox()
 
-# Open the webpage
-driver.get("https://coinmetrics.io/community-network-data/")
+def update_yahoo_data1():
+    main_dataset = pd.read_csv('main_dataset.csv')
 
-# Accept cookies
-accept_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "a.fusion-privacy-bar-acceptance")))
-accept_button.click()
+    fred = Fred(api_key='8f7cbcbc1210c7efa87ee9484e159c21')
+    series_id = 'DGS10'
+    data = fred.get_series(series_id, observation_start='2022-01-01')
+    df2 = pd.DataFrame({'Date': data.index, 'Interest Rate': data.values}, columns=['Date', 'Interest Rate'])
+    df2.set_index('Date', inplace=True)
+    df2.to_csv('interest_rate.csv')
+    main_dataset['Interest Rate1'] = df2['Interest Rate']
 
-# Find and select Bitcoin from the dropdown menu
-selector = Select(WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "#downloadSelect"))))
-selector.select_by_value("https://raw.githubusercontent.com/coinmetrics/data/master/csv/btc.csv")
+    # Forward fill missing values with the last non-null value
+    #main_dataset['Interest Rate1'] = main_dataset['Interest Rate1'].fillna(method='ffill')
 
-# Click the Download button
-download_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button.cm-button")))
-download_button.click()
+    # Backward fill missing values with the next non-null value, but only up to the next value change
+    #main_dataset['Interest Rate1'] = main_dataset['Interest Rate1'].fillna(method='bfill', limit=1)
+    #main_dataset.to_csv('main_dataset.csv')
+    #print(main_dataset['Interest Rate1'])
+    print(main_dataset['Interest Rate1'] )
+    return None
 
-# Wait for the download to finish and print the CSV data
-wait_for_download = True
-while wait_for_download:
-    for file in os.listdir(os.path.join(os.path.expanduser("~"), "Downloads")):
-        if file.endswith(".csv"):
-            data = pd.read_csv(os.path.join(os.path.expanduser("~"), "Downloads", file), dtype={146: str})
-            print(data)
-            wait_for_download = False
 
-# Close the Firefox window
-driver.quit()
+#update_yahoo_data1()
+main_dataset = pd.read_csv('main_dataset.csv')
+
+print(main_dataset['Rate'])
