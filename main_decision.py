@@ -10,7 +10,7 @@ while True:
     print(loop_counter)
 
     # region 1.1 Get the prediction
-    Predicted_price = decision_tree_predictor('main_dataset.csv')
+    Predicted_price = decision_tree_predictor()
 
     # endregion
 
