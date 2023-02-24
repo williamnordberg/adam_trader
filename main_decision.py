@@ -1,8 +1,27 @@
 from time import sleep
 from order_book import get_probabilities
 from adam_predictor import decision_tree_predictor
+import requests
 loop_counter = 0
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
+
+
+def get_bitcoin_price():
+    try:
+        url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            data = response.json()
+            current_price_in_function = data['bitcoin']['usd']
+            return current_price_in_function
+        else:
+            print("Error: Could not retrieve Bitcoin price data")
+            return None
+    except requests.exceptions.RequestException as e:
+        print(f"Error: Could not connect to CoinGecko API:{e}")
+        return None
+
 
 # trading opportunity
 while True:
@@ -11,6 +30,7 @@ while True:
 
     # region 1.1 Get the prediction
     Predicted_price = decision_tree_predictor()
+    print(f"The predicted price is: {Predicted_price}")
 
     # endregion
 
@@ -52,9 +72,16 @@ while True:
     # endregion
 
     # region 3.Make decision about the trade
+
+    current_price = get_bitcoin_price()
+    if (Predicted_price > current_price * 1.01) and (probability_up > 0.6):
+        print('A long opened')
+        break
+    elif(Predicted_price < current_price * 0.99) and (probability_down > 0.6):
+        print('A short opened')
     # endregion
 
-    sleep(30)
+    sleep(10)
 
 # region when a trade is open
 # endregion

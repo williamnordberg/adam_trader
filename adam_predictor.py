@@ -1,3 +1,4 @@
+from sklearn.tree import DecisionTreeRegressor
 from fredapi import Fred
 import pandas as pd
 import yfinance as yf
@@ -8,9 +9,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 import os
 import time
+from datetime import datetime
+from datetime import datetime, timedelta
 
 
-# region A. update factors
+
+# region A. Update factors
 
 
 def update_internal_factors():
@@ -81,30 +85,34 @@ def update_yahoo_data():
     main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})
 
     # Get the latest date in the main dataset
-    latest_date = main_dataset['Date'].max()
+    latest_date = main_dataset.loc[main_dataset['Open'].last_valid_index(), 'Date']
+
+    # Set the end date to today
+    end_date = datetime.today().strftime('%Y-%m-%d')
 
     # Download the new data from Yahoo Finance
     ticker = yf.Ticker("BTC-USD")
-    new_data = ticker.history(period="max")
+    new_data = ticker.history(start=latest_date, end=end_date)
+
+    new_data.index = new_data.index.strftime('%Y-%m-%d')
+    new_data['Date'] = new_data.index
 
     if new_data is not None:
-        # Filter the new data to only include rows with a date after the latest date in the main dataset
-        new_data = new_data[new_data.index > latest_date]
+        print(f"{len(new_data)} new rows of yahoo data added.")
+        # Update main dataset with new data
+        for date, open_value, close_value in new_data[['Date', 'Open', 'Close']].values:
+            # Check if date already exists in main dataset
+            if date in main_dataset['Date'].tolist():
+                # Update the corresponding row in the main dataset
+                main_dataset.loc[main_dataset['Date'] == date, ['Open', 'Close']] = [open_value, close_value]
+            else:
+                # Append a new row to the main dataset
+                new_row = pd.DataFrame([[date, open_value, close_value]], columns=['Date', 'Open', 'Close'])
+                main_dataset = pd.concat([main_dataset, new_row], ignore_index=True)
 
-        if len(new_data) > 0:
-            # Append the new rows to the main dataset
-            new_rows = new_data[['Open', 'High', 'Low', 'Close']].reset_index().rename(columns={'Date': 'Date'})
-            main_dataset = pd.concat([main_dataset, new_rows])
-
-            # Write the updated dataset to disk
-            main_dataset.to_csv('main_dataset.csv', index=False)
-
-            print(f"{len(new_rows)} new rows of yahoo data added.")
-        else:
-            print("Yahoo data is already up to date.")
     else:
-        print("Error: Failed to download new data of yahoo data.")
-
+        print("Yahoo data is already up to date.")
+    main_dataset.to_csv('main_dataset.csv')
     return None
 
 
@@ -141,21 +149,43 @@ def update_macro_economic():
 
 # endregion
 
-
+# region  B. Prediction
 def decision_tree_predictor():
-    update_internal_factors()
-    update_yahoo_data()
-    update_macro_economic()
-    # consider the last day have close also ( so do not use it for train)
-    # train model with all data before last Row
-    #X_train = dataset[['DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate', 'Open', 'Rate']]
-    #y_train = dataset[['Close']]
+    # Read the last update time from disk
+    last_update_time = pd.read_csv('last_update_time.csv', header=None, names=['time'])['time'][0]
+    last_update_time = datetime.strptime(last_update_time, '%Y-%m-%d %H:%M:%S')
+
+    if datetime.now() - last_update_time > timedelta(hours=8):
+        update_internal_factors()
+        update_yahoo_data()
+        update_macro_economic()
+
+        # Save the update time to disk
+        now = datetime.now()
+        now_str = now.strftime('%Y-%m-%d %H:%M:%S')
+        pd.DataFrame({'time': [now_str]}).to_csv('last_update_time.csv', index=False, header=False)
+        print(f'dataset been update{now}')
+    else:
+        last_update_time = pd.read_csv('last_update_time.csv', header=None, names=['time'])['time'][0]
+        last_update_time = datetime.strptime(last_update_time, '%Y-%m-%d %H:%M:%S')
+        print(f'dataset is already update less that 8 hour ago at {last_update_time}')
+
+    # load the main dataset and finn null value
+    main_dataset = pd.read_csv('main_dataset.csv')
+    main_dataset = main_dataset.set_index(main_dataset['Date'])
+    # Backward fill missing values with the next non-null value
+    main_dataset.fillna(method='ffill', limit=1, inplace=True)
+
+    X_train = main_dataset.iloc[:-1][['DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate', 'Open', 'Rate']]
+    y_train = main_dataset.iloc[:-1][['Close']]
 
     # use last row to predict price
-    #X_test = dataset[['DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate', 'Open', 'Rate']]
-    #decision_model = DecisionTreeRegressor(random_state=0)
-    #decision_model.fit(X_train, y_train)
-    #predictions_tree = decision_model.predict(X_test).reshape(-1, 1)
-    return None#predictions_tree
+    X_test = main_dataset.tail(1)[['DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate', 'Open', 'Rate']]
+    decision_model = DecisionTreeRegressor(random_state=0)
+    decision_model.fit(X_train, y_train)
+    predictions_tree = decision_model.predict(X_test).reshape(-1, 1)
+    return predictions_tree
 
+
+# endregion
 
