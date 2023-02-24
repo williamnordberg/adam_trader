@@ -1,45 +1,41 @@
-from selenium.webdriver.support.ui import Select
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium import webdriver
 import pandas as pd
 import yfinance as yf
-import os
-from fredapi import Fred
-import pandas as pd
-import yfinance as yf
-from selenium.webdriver.support.ui import Select
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium import webdriver
-import os
+from datetime import datetime
 
 
-def update_yahoo_data1():
-    main_dataset = pd.read_csv('main_dataset.csv')
+def update_yahoo_data():
+    # Read the main dataset from disk
+    main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})
 
-    fred = Fred(api_key='8f7cbcbc1210c7efa87ee9484e159c21')
-    series_id = 'DGS10'
-    data = fred.get_series(series_id, observation_start='2022-01-01')
-    df2 = pd.DataFrame({'Date': data.index, 'Interest Rate': data.values}, columns=['Date', 'Interest Rate'])
-    df2.set_index('Date', inplace=True)
-    df2.to_csv('interest_rate.csv')
-    main_dataset['Interest Rate1'] = df2['Interest Rate']
+    # Get the latest date in the main dataset
+    latest_date = main_dataset.loc[main_dataset['Open'].last_valid_index(), 'Date']
 
-    # Forward fill missing values with the last non-null value
-    #main_dataset['Interest Rate1'] = main_dataset['Interest Rate1'].fillna(method='ffill')
+    # Set the end date to today
+    end_date = datetime.today().strftime('%Y-%m-%d')
 
-    # Backward fill missing values with the next non-null value, but only up to the next value change
-    #main_dataset['Interest Rate1'] = main_dataset['Interest Rate1'].fillna(method='bfill', limit=1)
-    #main_dataset.to_csv('main_dataset.csv')
-    #print(main_dataset['Interest Rate1'])
-    print(main_dataset['Interest Rate1'] )
+    # Download the new data from Yahoo Finance
+    ticker = yf.Ticker("BTC-USD")
+    new_data = ticker.history(start=latest_date, end=end_date)
+
+    new_data.index = new_data.index.strftime('%Y-%m-%d')
+    new_data['Date'] = new_data.index
+
+    if new_data is not None:
+        print(f"{len(new_data)} new rows of yahoo data added.")
+        # Update main dataset with new data
+        for date, open_value, close_value in new_data[['Date', 'Open', 'Close']].values:
+            # Check if date already exists in main dataset
+            if date in main_dataset['Date'].tolist():
+                # Update the corresponding row in the main dataset
+                main_dataset.loc[main_dataset['Date'] == date, ['Open', 'Close']] = [open_value, close_value]
+            else:
+                # Append a new row to the main dataset
+                new_row = pd.DataFrame([[date, open_value, close_value]], columns=['Date', 'Open', 'Close'])
+                main_dataset = pd.concat([main_dataset, new_row], ignore_index=True)
+
+    else:
+        print("Yahoo data is already up to date.")
     return None
 
 
-#update_yahoo_data1()
-main_dataset = pd.read_csv('main_dataset.csv')
-
-print(main_dataset['Rate'])
+update_yahoo_data()
