@@ -1,41 +1,83 @@
+import requests
+import time
+import csv
 import pandas as pd
-import yfinance as yf
-from datetime import datetime
+from scrapy.crawler import CrawlerProcess
+from spider import BitcoinRichListSpider
 
 
-def update_yahoo_data():
-    # Read the main dataset from disk
-    main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})
+def check_address_transactions(address):
+    invalid_addresses = []
+    transactions = []
 
-    # Get the latest date in the main dataset
-    latest_date = main_dataset.loc[main_dataset['Open'].last_valid_index(), 'Date']
+    response = requests.get(f"https://blockchain.info/rawaddr/{address}")
 
-    # Set the end date to today
-    end_date = datetime.today().strftime('%Y-%m-%d')
+    if response.status_code == 200:
+        data = response.json()
+        if 'txs' not in data:
+            print(f"Address {address} has no transaction history")
+            invalid_addresses.append(address)
+            return invalid_addresses, transactions
 
-    # Download the new data from Yahoo Finance
-    ticker = yf.Ticker("BTC-USD")
-    new_data = ticker.history(start=latest_date, end=end_date)
+        transactions = data["txs"]
+        for tx in transactions:
+            # Get the time of the transaction in seconds
+            tx_time = tx["time"]
+            # Calculate the time difference in minutes
+            time_diff = (time.time() - tx_time) / 60
+            if time_diff <= 10:
+                # The transaction took place in the last 10 minutes
+                print(f"Transaction found for address {address}. {tx['out'][0]['value'] / 100000000} BTC moved.")
 
-    new_data.index = new_data.index.strftime('%Y-%m-%d')
-    new_data['Date'] = new_data.index
-
-    if new_data is not None:
-        print(f"{len(new_data)} new rows of yahoo data added.")
-        # Update main dataset with new data
-        for date, open_value, close_value in new_data[['Date', 'Open', 'Close']].values:
-            # Check if date already exists in main dataset
-            if date in main_dataset['Date'].tolist():
-                # Update the corresponding row in the main dataset
-                main_dataset.loc[main_dataset['Date'] == date, ['Open', 'Close']] = [open_value, close_value]
-            else:
-                # Append a new row to the main dataset
-                new_row = pd.DataFrame([[date, open_value, close_value]], columns=['Date', 'Open', 'Close'])
-                main_dataset = pd.concat([main_dataset, new_row], ignore_index=True)
-
+    elif response.status_code == 429:
+        print(f"Rate limited for address {address}. Sleeping for a minute.")
+        time.sleep(60)
+        invalid_addresses, transactions = check_address_transactions(address)
     else:
-        print("Yahoo data is already up to date.")
-    return None
+        print(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")
+        invalid_addresses.append(address)
+
+    return invalid_addresses, transactions
 
 
-update_yahoo_data()
+def read_addresses_from_csv(file_path):
+    addresses = []
+    with open(file_path, 'r') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            addresses.append(row[0])
+    return addresses
+
+
+def check_multiple_addresses(addresses):
+    invalid_addresses = []
+    all_transactions = []
+    for address in addresses:
+        print(f"Checking transaction history for address {address}")
+        invalid, transactions = check_address_transactions(address)
+        invalid_addresses += invalid
+        all_transactions += transactions
+        time.sleep(6)
+    return invalid_addresses, all_transactions
+
+
+def run_bitcoin_transaction_checker():
+    process = CrawlerProcess({
+        'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
+    })
+    process.crawl(BitcoinRichListSpider)
+    process.start()
+
+    # Read addresses from the CSV file
+    addresses = read_addresses_from_csv('bitcoin_rich_list2000.csv')
+    invalid_addresses, transactions = check_multiple_addresses(addresses)
+
+    # Save transactions to a DataFrame and CSV file
+    df = pd.DataFrame(transactions)
+    df.to_csv('recent_transactions.csv', index=False)
+
+    if len(invalid_addresses) > 0:
+        print(f"{len(invalid_addresses)} addresses had invalid transaction history: {invalid_addresses}")
+
+
+run_bitcoin_transaction_checker()
