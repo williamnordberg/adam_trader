@@ -1,5 +1,5 @@
 from scrapy.crawler import CrawlerProcess
-from spiders.spider import BitcoinRichListSpider
+from spider import BitcoinRichListSpider
 
 
 if __name__ == "__main__":
