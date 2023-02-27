@@ -1,4 +1,6 @@
 from time import sleep
+
+from monitor_2000_richest import monitor_bitcoin_richest_addresses
 from order_book import get_probabilities
 from adam_predictor import decision_tree_predictor
 import requests
@@ -46,6 +48,8 @@ while True:
     # endregion
 
     # region 2.2. Richest address on blockchain
+    # total_received, total_sent = 1, 0
+    total_received, total_sent = monitor_bitcoin_richest_addresses()
     # endregion
 
     # region 2.3 google search
@@ -73,12 +77,16 @@ while True:
 
     # region 3.Make decision about the trade
 
+    # Adam predictor
     current_price = get_bitcoin_price()
     if (Predicted_price > current_price * 1.01) and (probability_up > 0.6):
-        print('A long opened')
+        if total_received > total_sent:
+            print('A long opened')
         break
     elif(Predicted_price < current_price * 0.99) and (probability_down > 0.6):
-        print('A short opened')
+        if total_received < total_sent:
+            print('A short opened')
+
     # endregion
 
     sleep(10)

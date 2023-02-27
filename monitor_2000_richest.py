@@ -1,43 +1,10 @@
+from datetime import datetime, timedelta
 import requests
 import time
 import csv
 import pandas as pd
 from scrapy.crawler import CrawlerProcess
 from spider import BitcoinRichListSpider
-
-
-def check_address_transactions(address):
-    invalid_addresses = []
-    transactions = []
-
-    response = requests.get(f"https://blockchain.info/rawaddr/{address}")
-
-    if response.status_code == 200:
-        data = response.json()
-        if 'txs' not in data:
-            print(f"Address {address} has no transaction history")
-            invalid_addresses.append(address)
-            return invalid_addresses, transactions
-
-        transactions = data["txs"]
-        for tx in transactions:
-            # Get the time of the transaction in seconds
-            tx_time = tx["time"]
-            # Calculate the time difference in minutes
-            time_diff = (time.time() - tx_time) / 60
-            if time_diff <= 10:
-                # The transaction took place in the last 10 minutes
-                print(f"Transaction found for address {address}. {tx['out'][0]['value'] / 100000000} BTC moved.")
-
-    elif response.status_code == 429:
-        print(f"Rate limited for address {address}. Sleeping for a minute.")
-        time.sleep(60)
-        invalid_addresses, transactions = check_address_transactions(address)
-    else:
-        print(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")
-        invalid_addresses.append(address)
-
-    return invalid_addresses, transactions
 
 
 def read_addresses_from_csv(file_path):
@@ -49,35 +16,89 @@ def read_addresses_from_csv(file_path):
     return addresses
 
 
+def check_address_transactions(address):
+    # Get the current time and time 24 hours ago
+    current_time = int(time.time())
+    time_24_hours_ago = current_time - 86400
+
+    # Construct the API URL to get all transactions for the address
+    api_url = f"https://blockchain.info/rawaddr/{address}"
+
+    # Send the API request and get the response
+    response = requests.get(api_url)
+
+    # Check the response status code
+    if response.status_code == 200:
+        response_json = response.json()
+
+        # Get the list of transactions for the address in the last 24 hours
+        transactions = [tx for tx in response_json["txs"] if tx["time"] > time_24_hours_ago]
+
+        # Initialize variables for tracking total sent and received
+        total_received = 0
+        total_sent = 0
+
+        # Loop through the list of transactions and calculate total sent and received
+        for tx in transactions:
+            for input in tx["inputs"]:
+                if "prev_out" in input and input["prev_out"]["addr"] == address:
+                    total_sent += input["prev_out"]["value"]
+                else:
+                    for output in tx["out"]:
+                        if output["addr"] == address:
+                            total_received += output["value"]
+
+        # Convert from Satoshi to BTC
+        return (total_received / 100000000), (total_sent / -100000000)
+
+    elif response.status_code == 429:
+        print(f"Rate limited for address {address}. Sleeping for a minute.")
+        time.sleep(60)
+        return check_address_transactions(address)
+    else:
+        print(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")
+        return 0, 0
+
+
 def check_multiple_addresses(addresses):
-    invalid_addresses = []
-    all_transactions = []
+    total_received = 0
+    total_sent = 0
+
     for address in addresses:
         print(f"Checking transaction history for address {address}")
-        invalid, transactions = check_address_transactions(address)
-        invalid_addresses += invalid
-        all_transactions += transactions
+        received, sent = check_address_transactions(address)
+        total_received += received
+        total_sent += sent
+        print(f"Total Bitcoin received in the last 24 hours: {total_received} BTC")
+        print(f"Total Bitcoin sent in the last 24 hours: {total_sent} BTC")
         time.sleep(6)
-    return invalid_addresses, all_transactions
+
+    return total_received, total_sent
 
 
-def run_bitcoin_transaction_checker():
-    process = CrawlerProcess({
-        'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
-    })
-    process.crawl(BitcoinRichListSpider)
-    process.start()
+def monitor_bitcoin_richest_addresses():
+    # Update if last update is older than 4 hours
+    last_update_time = pd.read_csv('last_update_time_richest_addresses.csv', header=None, names=['time'])['time'][0]
+    last_update_time = datetime.strptime(last_update_time, '%Y-%m-%d %H:%M:%S')
+
+    if datetime.now() - last_update_time > timedelta(hours=4):
+        process = CrawlerProcess({'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'})
+        process.crawl(BitcoinRichListSpider)
+        process.start()
+
+        # Save the update time to disk
+        now = datetime.now()
+        now_str = now.strftime('%Y-%m-%d %H:%M:%S')
+        pd.DataFrame({'time': [now_str]}).to_csv('last_update_time_richest_addresses.csv', index=False, header=False)
+        print(f'Richest addresses been updated at {now}')
+    else:
+        last_update_time = pd.read_csv('last_update_time_richest_addresses.csv', header=None, names=['time'])['time'][0]
+        last_update_time = datetime.strptime(last_update_time, '%Y-%m-%d %H:%M:%S')
+        print(f'The dataset was already updated less than 4 hours ago at {last_update_time}')
 
     # Read addresses from the CSV file
     addresses = read_addresses_from_csv('bitcoin_rich_list2000.csv')
-    invalid_addresses, transactions = check_multiple_addresses(addresses)
 
-    # Save transactions to a DataFrame and CSV file
-    df = pd.DataFrame(transactions)
-    df.to_csv('recent_transactions.csv', index=False)
-
-    if len(invalid_addresses) > 0:
-        print(f"{len(invalid_addresses)} addresses had invalid transaction history: {invalid_addresses}")
-
-
-run_bitcoin_transaction_checker()
+    # Check the total Bitcoin received and sent in the last 24 hours for all addresses
+    total_received, total_sent = check_multiple_addresses(addresses)
+    return total_received, total_sent
