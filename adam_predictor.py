@@ -9,14 +9,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 import os
 import time
-from datetime import datetime
 from datetime import datetime, timedelta
 
 
-
 # region A. Update factors
-
-
 def update_internal_factors():
     # Read the main dataset from disk
     main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})
@@ -30,10 +26,13 @@ def update_internal_factors():
     # Open the webpage
     driver.get("https://coinmetrics.io/community-network-data/")
 
-    # Accept cookies
-    accept_button = WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.CSS_SELECTOR, "a.fusion-privacy-bar-acceptance")))
-    accept_button.click()
+    # Check if the accept button for cookies is present
+    try:
+        accept_button = WebDriverWait(driver, 7).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "a.fusion-privacy-bar-acceptance")))
+        accept_button.click()
+    except:
+        pass
 
     # Find and select Bitcoin from the dropdown menu
     time.sleep(4)
@@ -44,11 +43,14 @@ def update_internal_factors():
     download_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button.cm-button")))
     download_button.click()
 
-    # Wait for the download to finish and read the new data
+    # Wait for the download to finish
     wait_for_download = True
-    new_data = None
     while wait_for_download:
-        for file in os.listdir(os.path.join(os.path.expanduser("~"), "Downloads")):
+        # Get a list of all files in the Downloads folder, sorted by creation time (newest first)
+        files = sorted(os.listdir(os.path.join(os.path.expanduser("~"), "Downloads")),
+                       key=lambda x: os.path.getctime(os.path.join(os.path.expanduser("~"), "Downloads", x)),
+                       reverse=True)
+        for file in files:
             if file.endswith(".csv"):
                 new_data = pd.read_csv(os.path.join(os.path.expanduser("~"), "Downloads", file), dtype={146: str})
                 wait_for_download = False
@@ -63,6 +65,7 @@ def update_internal_factors():
 
         # Filter the new data to only include rows with a date after the latest date in the main dataset
         new_data = new_data[new_data['Date'] > latest_date]
+        print('new data lenth', new_data)
 
         if len(new_data) > 0:
             # Append the new rows to the main dataset
@@ -105,14 +108,14 @@ def update_yahoo_data():
             if date in main_dataset['Date'].tolist():
                 # Update the corresponding row in the main dataset
                 main_dataset.loc[main_dataset['Date'] == date, ['Open', 'Close']] = [open_value, close_value]
-            else:
+            #else:
                 # Append a new row to the main dataset
-                new_row = pd.DataFrame([[date, open_value, close_value]], columns=['Date', 'Open', 'Close'])
-                main_dataset = pd.concat([main_dataset, new_row], ignore_index=True)
+                #new_row = pd.DataFrame([[date, open_value, close_value]], columns=['Date', 'Open', 'Close'])
+                #main_dataset = pd.concat([main_dataset, new_row], ignore_index=True)
 
     else:
         print("Yahoo data is already up to date.")
-    main_dataset.to_csv('main_dataset.csv')
+    main_dataset.to_csv('main_dataset.csv', index=False)
     return None
 
 
@@ -138,7 +141,7 @@ def update_macro_economic():
     main_dataset.loc[main_dataset.index[-1], 'Rate'] = latest_rate
 
     # Backward fill missing values with the next non-null value, but only up to the next value change
-    main_dataset['Rate'].fillna(method='bfill', limit=1, inplace=True)
+    main_dataset['Rate'].fillna(method='bfill', limit=30, inplace=True)
 
     # Print a message indicating that the new rate has been added to the main dataset
     print("interest rate added to the main dataset.")
@@ -188,4 +191,3 @@ def decision_tree_predictor():
 
 
 # endregion
-
