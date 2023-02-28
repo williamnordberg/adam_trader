@@ -6,9 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="first commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bitcoin_rich_list2000.csv" beforeDir="false" afterPath="$PROJECT_DIR$/bitcoin_rich_list2000.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/geckodriver.log" beforeDir="false" afterPath="$PROJECT_DIR$/geckodriver.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/google_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/google_search.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/last_update_time.csv" beforeDir="false" afterPath="$PROJECT_DIR$/last_update_time.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/last_update_time_richest_addresses.csv" beforeDir="false" afterPath="$PROJECT_DIR$/last_update_time_richest_addresses.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main_decision.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_decision.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,7 +80,7 @@
       <recent name="C:\will\Python_project\adam_trader\spiders" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.test">
+  <component name="RunManager" selected="Python.main_decision">
     <configuration name="adam_predictor" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -185,10 +188,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.main_decision" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python.google_search" />
         <item itemvalue="Python.youtube" />
-        <item itemvalue="Python.main_decision" />
         <item itemvalue="Python.adam_predictor" />
       </list>
     </recent_temporary>
@@ -496,7 +499,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677486886909</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="first commit">
+      <created>1677550478030</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1677550478030</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
