@@ -55,7 +55,6 @@ while True:
 
     # region 2.3 google search
     Increase_google_search = check_search_trend(["Bitcoin", "Cryptocurrency"], threshold=1.2)
-
     # endregion
 
     # region 2.4 interest rate

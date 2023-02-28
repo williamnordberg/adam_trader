@@ -65,8 +65,3 @@ def check_search_trend(keywords: List[str], threshold: float = 1.2) -> bool:
         return False
 
 
-result = check_search_trend(["Bitcoin", "ethereum"], threshold=1.2)
-if result:
-    print("There is a significant increase in search volume for all keywords.")
-else:
-    print("There is no significant increase in search volume for all keywords.")
