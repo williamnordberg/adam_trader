@@ -3,7 +3,9 @@ from time import sleep
 from monitor_2000_richest import monitor_bitcoin_richest_addresses
 from order_book import get_probabilities
 from adam_predictor import decision_tree_predictor
+from google_search import check_search_trend
 import requests
+
 loop_counter = 0
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 
@@ -48,11 +50,12 @@ while True:
     # endregion
 
     # region 2.2. Richest address on blockchain
-    # total_received, total_sent = 1, 0
     total_received, total_sent = monitor_bitcoin_richest_addresses()
     # endregion
 
     # region 2.3 google search
+    Increase_google_search = check_search_trend(["Bitcoin", "Cryptocurrency"], threshold=1.2)
+
     # endregion
 
     # region 2.4 interest rate
@@ -79,11 +82,11 @@ while True:
 
     # Adam predictor
     current_price = get_bitcoin_price()
-    if (Predicted_price > current_price * 1.01) and (probability_up > 0.6):
+    if (Predicted_price > current_price * 1.01) and (probability_up > 0.6) and Increase_google_search:
         if total_received > total_sent:
             print('A long opened')
         break
-    elif(Predicted_price < current_price * 0.99) and (probability_down > 0.6):
+    elif (Predicted_price < current_price * 0.99) and (probability_down > 0.6) and not Increase_google_search:
         if total_received < total_sent:
             print('A short opened')
 
