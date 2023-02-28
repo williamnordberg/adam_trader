@@ -31,7 +31,6 @@ html = browser.page_source
 
 # Create BeautifulSoup object from the source
 soup = BeautifulSoup(html, "html.parser")
-#print(soup)
 
 table = soup.find("table", class_="calendar__table")
 rows = table.find_all("tr")

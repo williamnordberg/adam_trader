@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 
 
 def get_macro_expected_and_real_compare():
-    events_list = ["CPI m/m", "CPI y/y", "Core CPI m/m", "Core PPI m/m", "PPI m/m","Federal Funds Rate"]
+    events_list = ["CPI m/m", "CPI y/y", "Core CPI m/m", "Durable Goods Orders m/m"]
     url = "https://www.forexfactory.com/calendar"
     options = webdriver.ChromeOptions()
     options.add_argument("--headless")
@@ -15,10 +15,6 @@ def get_macro_expected_and_real_compare():
 
     service = Service(executable_path=os.environ.get("CHROMEDRIVER_PATH", "C:\will\chromedriver.exe"))
     service.start()
-
-    CPI_better_than_expected = False
-    PPI_better_than_expected = False
-    interest_rate_better_than_expected = False
 
     with webdriver.Remote(service.service_url, options=options) as browser:
         browser.get(url)
@@ -31,9 +27,11 @@ def get_macro_expected_and_real_compare():
         if not table:
             print("Table not found")
             service.stop()
-            return CPI_better_than_expected, PPI_better_than_expected, interest_rate_better_than_expected
+            return
 
-        events_dict = {}
+        forecast_values_in_function = {}
+        actual_values_in_function = {}
+        events_not_found = []
         for event in events_list:
             for row in table.find_all("tr"):
                 event_cell = row.find("td", class_="calendar__cell calendar__event event")
@@ -43,30 +41,21 @@ def get_macro_expected_and_real_compare():
                         interest_cell = event_cell.find_next_sibling("td",
                                                                      class_="calendar__cell calendar__forecast forecast")
                         forecast_value = interest_cell.string if interest_cell else None
+                        forecast_values_in_function[event] = forecast_value
 
                         actual_cell = row.find("td", class_="calendar__cell calendar__actual actual")
                         actual_value = actual_cell.text.strip() if actual_cell else None
-
-                        if actual_value and forecast_value and float(actual_value[:-1]) <= float(forecast_value[:-1]):
-                            events_dict[event] = True
-                            if event == "CPI m/m" or event == "CPI y/y":
-                                CPI_better_than_expected = True
-                            elif event == "Core PPI m/m" or event == "PPI m/m":
-                                PPI_better_than_expected = True
-                            elif event == "Federal Funds Rate":
-                                interest_rate_better_than_expected = True
-                        else:
-                            events_dict[event] = False
+                        actual_values_in_function[event] = actual_value
                     else:
-                        events_dict[event] = False
+                        events_not_found.append(event)
                     break
             else:
-                events_dict[event] = False
+                events_not_found.append(event)
 
     service.stop()
-    return CPI_better_than_expected, PPI_better_than_expected, interest_rate_better_than_expected
+    print("Forecast values:", forecast_values_in_function)
+    print("Actual values:", actual_values_in_function)
+    print("Events not found or not in USD currency:", events_not_found)
 
 
-CPI_better_than_expected, PPI_better_than_expected, interest_rate_better_than_expected \
-    = get_macro_expected_and_real_compare()
-print(CPI_better_than_expected, PPI_better_than_expected, interest_rate_better_than_expected)
+get_macro_expected_and_real_compare()
