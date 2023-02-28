@@ -6,6 +6,8 @@ from adam_predictor import decision_tree_predictor
 from google_search import check_search_trend
 import requests
 
+from macro_expected import get_macro_expected_and_real_compare
+
 loop_counter = 0
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 
@@ -50,15 +52,16 @@ while True:
     # endregion
 
     # region 2.2. Richest address on blockchain
-    total_received, total_sent = monitor_bitcoin_richest_addresses()
+    #total_received, total_sent = monitor_bitcoin_richest_addresses()
     # endregion
 
     # region 2.3 google search
     Increase_google_search = check_search_trend(["Bitcoin", "Cryptocurrency"], threshold=1.2)
     # endregion
 
-    # region 2.4 interest rate
-
+    # region 2.4 interest rate, CPI PPI
+    CPI_better_than_expected, PPI_better_than_expected, interest_rate_better_than_expected \
+        = get_macro_expected_and_real_compare()
     # endregion
 
     # region 2.5 news website
@@ -67,14 +70,10 @@ while True:
     # region 2.6 Reddit
     # endregion
 
-    # region  2.7 CPI PPI
-
-    # end region
-
-    # region 2.8 Twitter
+    # region 2.7 Twitter
     # endregion
 
-    # region 2.9 Youtube
+    # region 2.8 Youtube
     # endregion
 
     # region 3.Make decision about the trade
@@ -83,11 +82,13 @@ while True:
     current_price = get_bitcoin_price()
     if (Predicted_price > current_price * 1.01) and (probability_up > 0.6) and Increase_google_search:
         if total_received > total_sent:
-            print('A long opened')
+            if CPI_better_than_expected and PPI_better_than_expected and interest_rate_better_than_expected:
+                print('A long opened')
         break
     elif (Predicted_price < current_price * 0.99) and (probability_down > 0.6) and not Increase_google_search:
         if total_received < total_sent:
-            print('A short opened')
+            if not CPI_better_than_expected and not PPI_better_than_expected and not interest_rate_better_than_expected:
+                print('A short opened')
 
     # endregion
 
