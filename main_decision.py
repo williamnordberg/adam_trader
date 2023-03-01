@@ -6,6 +6,7 @@ from adam_predictor import decision_tree_predictor
 from google_search import check_search_trend
 from macro_expected import get_macro_expected_and_real_compare
 from reddit import reddit_check, load_previous_values
+from youtube import check_bitcoin_youtube_videos_increase
 
 LOOP_COUNTER = 0
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
@@ -60,7 +61,12 @@ while True:
     current_activity, current_count, activity_increase, count_increase = reddit_check(previous_activity, previous_count)
     previous_activity, previous_count = current_activity, current_count
 
-    # 2.8 Collect data from news websites, Reddit, Twitter, and YouTube
+    # 2.6 YouTube
+    bitcoin_youtube_increase_15_percent = check_bitcoin_youtube_videos_increase()
+
+    # 2.8 Collect data from news websites
+
+    # 2.9 Twitter
 
     # endregion
 
@@ -72,7 +78,8 @@ while True:
         if total_received > total_sent:
             if cpi_better_than_expected and ppi_better_than_expected and interest_rate_better_than_expected:
                 if activity_increase or count_increase:
-                    print('Opening a long position')
+                    if bitcoin_youtube_increase_15_percent:
+                        print('Opening a long position')
                 # TODO: Add code to execute the long position
 
     # 3.2 Check if conditions are met for a short position
@@ -80,7 +87,8 @@ while True:
         if total_received < total_sent:
             if not cpi_better_than_expected and not ppi_better_than_expected and not interest_rate_better_than_expected:
                 if not activity_increase or not count_increase:
-                    print('Opening a short position')
+                    if not bitcoin_youtube_increase_15_percent:
+                      print('Opening a short position')
                 # TODO: Add code to execute the short position
     # endregion
 
