@@ -68,7 +68,7 @@ while True:
     sentiment_of_news = check_sentiment_of_news()
 
     # 2.9 Twitter
-
+    # TODO: after getting academic api key
     # endregion
 
     # region 3. Make decision about the trade
