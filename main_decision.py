@@ -7,7 +7,7 @@ from google_search import check_search_trend
 from macro_expected import get_macro_expected_and_real_compare
 from reddit import reddit_check, load_previous_values
 from youtube import check_bitcoin_youtube_videos_increase
-
+from news_websites import check_sentiment_of_news
 LOOP_COUNTER = 0
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 
@@ -65,6 +65,7 @@ while True:
     bitcoin_youtube_increase_15_percent = check_bitcoin_youtube_videos_increase()
 
     # 2.8 Collect data from news websites
+    sentiment_of_news = check_sentiment_of_news()
 
     # 2.9 Twitter
 
@@ -79,7 +80,8 @@ while True:
             if cpi_better_than_expected and ppi_better_than_expected and interest_rate_better_than_expected:
                 if activity_increase or count_increase:
                     if bitcoin_youtube_increase_15_percent:
-                        print('Opening a long position')
+                        if sentiment_of_news:
+                            print('Opening a long position')
                 # TODO: Add code to execute the long position
 
     # 3.2 Check if conditions are met for a short position
@@ -88,7 +90,8 @@ while True:
             if not cpi_better_than_expected and not ppi_better_than_expected and not interest_rate_better_than_expected:
                 if not activity_increase or not count_increase:
                     if not bitcoin_youtube_increase_15_percent:
-                      print('Opening a short position')
+                        if not sentiment_of_news:
+                            print('Opening a short position')
                 # TODO: Add code to execute the short position
     # endregion
 
