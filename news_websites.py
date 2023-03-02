@@ -2,6 +2,7 @@ import requests
 import json
 from textblob import TextBlob
 
+
 def check_sentiment_of_news():
     # Set your API key
     API_KEY = '7b1ad64379694add8ae9c48b23fcd3f6'

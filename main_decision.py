@@ -8,6 +8,9 @@ from macro_expected import get_macro_expected_and_real_compare
 from reddit import reddit_check, load_previous_values
 from youtube import check_bitcoin_youtube_videos_increase
 from news_websites import check_sentiment_of_news
+from long_trade import long_trade_is_open
+from short_trade import short_trade_is_open
+
 LOOP_COUNTER = 0
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 
@@ -30,6 +33,9 @@ def get_bitcoin_price():
     except requests.exceptions.RequestException as e:
         print(f"Error: Could not connect to CoinGecko API:{e}")
         return None
+
+
+
 
 
 # Main trading loop
@@ -69,6 +75,9 @@ while True:
 
     # 2.9 Twitter
     # TODO: after getting academic api key
+
+    # 2.10 Technical analysis
+
     # endregion
 
     # region 3. Make decision about the trade
@@ -82,7 +91,7 @@ while True:
                     if bitcoin_youtube_increase_15_percent:
                         if sentiment_of_news:
                             print('Opening a long position')
-                # TODO: Add code to execute the long position
+                            long_trade_is_open()
 
     # 3.2 Check if conditions are met for a short position
     elif (predicted_price < current_price * 0.99) and (probability_down > 0.6) and not increase_google_search:
@@ -91,11 +100,14 @@ while True:
                 if not activity_increase or not count_increase:
                     if not bitcoin_youtube_increase_15_percent:
                         if not sentiment_of_news:
-                            print('Opening a short position')
-                # TODO: Add code to execute the short position
+                            short_trade_is_open()
     # endregion
 
     sleep(10)
 
+
 # region when a trade is open
-# TODO: Add code to
+def long_trade_is_open():
+    print('long trade')
+
+# endregion
