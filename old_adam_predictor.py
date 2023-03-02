@@ -248,6 +248,7 @@ for year, data_to_regression in zip(years, [data, data16, data17, data18, data19
 
 # region B. Add technical data to dataset
 
+
 def exponential_moving_average(data_in_function, window):
     weights = np.exp(np.linspace(-1., 0., window))
     weights /= weights.sum()
