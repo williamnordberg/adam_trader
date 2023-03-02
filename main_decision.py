@@ -10,7 +10,7 @@ from youtube import check_bitcoin_youtube_videos_increase
 from news_websites import check_sentiment_of_news
 from long_trade import long_trade_is_open
 from short_trade import short_trade_is_open
-
+from technical_analysis import technical_analyse
 LOOP_COUNTER = 0
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 
@@ -34,6 +34,13 @@ def get_bitcoin_price():
         print(f"Error: Could not connect to CoinGecko API:{e}")
         return None
 
+
+def long_position_is_open():
+    return None
+
+
+def short_position_is_open():
+    return None
 
 
 
@@ -77,7 +84,7 @@ while True:
     # TODO: after getting academic api key
 
     # 2.10 Technical analysis
-
+    technical_bullish, technical_bearish = technical_analyse()
     # endregion
 
     # region 3. Make decision about the trade
@@ -90,8 +97,9 @@ while True:
                 if activity_increase or count_increase:
                     if bitcoin_youtube_increase_15_percent:
                         if sentiment_of_news:
-                            print('Opening a long position')
-                            long_trade_is_open()
+                            if technical_bullish:
+                                print('Opening a long position')
+                                long_position_is_open()
 
     # 3.2 Check if conditions are met for a short position
     elif (predicted_price < current_price * 0.99) and (probability_down > 0.6) and not increase_google_search:
@@ -100,14 +108,15 @@ while True:
                 if not activity_increase or not count_increase:
                     if not bitcoin_youtube_increase_15_percent:
                         if not sentiment_of_news:
-                            short_trade_is_open()
+                            if technical_bearish:
+                                print('Opening short position')
+                                short_position_is_open()
     # endregion
 
     sleep(10)
 
 
 # region when a trade is open
-def long_trade_is_open():
-    print('long trade')
+
 
 # endregion
