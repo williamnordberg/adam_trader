@@ -54,7 +54,6 @@ def exponential_moving_average(data, window_size):
 
 
 def bollinger_bands(data, window=20, std_dev=1):
-    print('current price', data[-1])
     # Calculate rolling mean and standard deviation
     rolling_mean = data.rolling(window=window).mean()
     rolling_std = data.rolling(window=window).std()
@@ -86,8 +85,6 @@ def relative_strength_index(data_rsi, window):
             prev_non_zero = avg_loss[zero_start_idx - 1]
             avg_loss[zero_start_idx:zero_start_idx + len(zero_run)] = prev_non_zero
 
-
-
     # Add a small constant to avoid division by zero
     avg_loss = np.nan_to_num(avg_loss) + 1e-10
 
@@ -108,11 +105,21 @@ def macd(data_macd, fast_window=12, slow_window=26, signal_window=9):
 
 def potential_reversal():
     potential_up_reversal_bullish, Potential_down_reversal_bearish = False, False
-    rsi = relative_strength_index(data_close, 14)
     upper_band, moving_average, lower_band = bollinger_bands(data_close)
     current_price = data_close[-1]
-    print(upper_band[-1], moving_average[-1], lower_band[-1])
-     #TODO: if (moving_average[-1] - lower_band[-1]) <
+
+    # MACD:  Calculate 70 percent between bands and moving averages
+    distance_middle_lower = (moving_average[-1] - lower_band[-1]) * 0.7
+    distance_middle_upper = (upper_band[-1] - moving_average[-1]) * 0.7
+
+    # Check if price fill 70 percent of distance between bands and moving average
+    rsi = relative_strength_index(data_close, 14)
+    if current_price < moving_average[-1]:
+        if (moving_average[-1] - current_price) > distance_middle_lower:
+            potential_up_reversal_bullish = True
+    elif current_price > moving_average[-1]:
+        if (current_price-moving_average[-1]) > distance_middle_upper:
+            Potential_down_reversal_bearish = True
 
     # check if today rsi is bigger than yesterday,and macd is over signal
     if rsi[-1] > 30:
