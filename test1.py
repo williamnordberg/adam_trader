@@ -1,172 +1,183 @@
-import numpy as np
+from sklearn.tree import DecisionTreeRegressor
+from fredapi import Fred
 import pandas as pd
-import requests
+import yfinance as yf
+from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium import webdriver
+import os
+import time
+from datetime import datetime, timedelta
 
 
-def get_bitcoin_price():
-    """
-    Retrieves the current Bitcoin price in USD from the CoinGecko API.
-    """
+# region A. Update factors
+def update_internal_factors():
+    # Read the main dataset from disk
+    main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})
+    # Get the latest date in the main dataset
+    latest_date = main_dataset['Date'].max()
+
+    # Create a new instance of the Firefox driver
+    driver = webdriver.Firefox()
+
+    # Open the webpage
+    driver.get("https://coinmetrics.io/community-network-data/")
+
+    # Check if the accept button for cookies is present
     try:
-        url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
-        response = requests.get(url)
+        accept_button = WebDriverWait(driver, 7).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "a.fusion-privacy-bar-acceptance")))
+        accept_button.click()
+    except:
+        pass
 
-        if response.status_code == 200:
-            data = response.json()
-            return data['bitcoin']['usd']
+    # Find and select Bitcoin from the dropdown menu
+    time.sleep(4)
+    selector = Select(WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "#downloadSelect"))))
+    selector.select_by_value("https://raw.githubusercontent.com/coinmetrics/data/master/csv/btc.csv")
+
+    # Click the Download button
+    download_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button.cm-button")))
+    download_button.click()
+    # Close the Firefox window
+    driver.quit()
+
+    downloaded_data = pd.read_csv(r"C:\Users\Willi\Downloads\btc.csv", dtype={146: str})
+    new_data = downloaded_data[['time', 'DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate']]
+    if new_data is not None:
+        # Rename the 'time' column to 'Date'
+        new_data = new_data.rename(columns={'time': 'Date'})
+
+        # Filter the new data to only include rows with a date after the latest date in the main dataset
+        new_data = new_data[new_data['Date'] > latest_date]
+        print('new data length', new_data)
+
+        if len(new_data) > 0:
+            # Append the new rows to the main dataset
+            main_dataset = pd.concat([main_dataset, new_data])
+
+            # Write the updated dataset to disk
+            main_dataset.to_csv('main_dataset.csv', index=False)
+
+            print(f"{len(new_data)} new rows of internal factors added.")
         else:
-            print("Error: Could not retrieve Bitcoin price data")
-            return None
-    except requests.exceptions.RequestException as e:
-        print(f"Error: Could not connect to CoinGecko API: {e}")
-        return None
-
-
-# read the data
-dataset = pd.read_csv('main_dataset.csv', index_col='Date')
-data_close = dataset['Close']
-
-
-def exponential_moving_average(data, window_size):
-    """
-    Calculates the exponential moving average (EMA) of a dataset with a specified window size.
-    Args:
-        data (list or numpy array): The input dataset.
-        window_size (int): The size of the moving window used to calculate the EMA.
-    Returns:
-        The EMA of the input dataset as a numpy array.
-    """
-    # Convert data to numpy array
-    data = np.array(data)
-
-    # Calculate the weighting multiplier
-    alpha = 2 / (window_size + 1)
-
-    # Initialize the EMA with the first value of the input data
-    ema = [data[0]]
-
-    # Calculate the EMA for the remaining data points
-    for i in range(1, len(data)):
-        ema.append(alpha * data[i] + (1 - alpha) * ema[i - 1])
-
-    return np.array(ema)
-
-
-def bollinger_bands(data, window=20, std_dev=1):
-    # Calculate rolling mean and standard deviation
-    rolling_mean = data.rolling(window=window).mean()
-    rolling_std = data.rolling(window=window).std()
-
-    # Calculate upper and lower bands
-    upper_band = rolling_mean + (rolling_std * std_dev)
-    lower_band = rolling_mean - (rolling_std * std_dev)
-
-    return upper_band, rolling_mean, lower_band
-
-
-def relative_strength_index(data, window):
-    delta = data - np.roll(data, 1)
-    gain = np.where(delta > 0, delta, 0)
-    loss = np.where(delta < 0, -delta, 0)
-    avg_gain = exponential_moving_average(gain, window)
-    avg_loss = exponential_moving_average(loss, window)
-
-    # Replace NaN values with zero to avoid division by zero error
-    avg_gain = np.nan_to_num(avg_gain)
-    avg_loss = np.nan_to_num(avg_loss)
-
-    # Check for consecutive zero values in avg_loss
-    zero_runs = np.split(avg_loss, np.where(avg_loss != 0)[0])
-    for zero_run in zero_runs:
-        if len(zero_run) > 1:
-            # If there is a run of consecutive zero values, replace them with the previous non-zero value
-            zero_start_idx = np.where(avg_loss == zero_run[0])[0][0]
-            prev_non_zero = avg_loss[zero_start_idx - 1]
-            avg_loss[zero_start_idx:zero_start_idx + len(zero_run)] = prev_non_zero
-
-    # Add a small constant to avoid division by zero
-    avg_loss = np.nan_to_num(avg_loss) + 1e-10
-
-    # Calculate RS and RSI
-    rs = avg_gain / avg_loss
-    rsi = 100.0 - (100.0 / (1.0 + rs))
-    return rsi
-
-
-def macd(data, fast_window=12, slow_window=26, signal_window=9):
-    fast_ema = exponential_moving_average(data, fast_window)
-    slow_ema = exponential_moving_average(data, slow_window)
-    macd_line = fast_ema - slow_ema
-    signal = exponential_moving_average(macd_line, signal_window)
-    histogram = macd_line - signal
-    return macd_line, signal, histogram
-
-
-def potential_reversal():
-    potential_up_reversal_bullish, potential_down_reversal_bearish = False, False
-    upper_band, moving_average, lower_band = bollinger_bands(data_close)
-    current_price = data_close[-1]
-
-    # MACD:  Calculate 70 percent between bands and moving averages
-    distance_middle_lower = (moving_average[-1] - lower_band[-1]) * 0.7
-    distance_middle_upper = (upper_band[-1] - moving_average[-1]) * 0.7
-
-    # Check if price fill 70 percent of distance between bands and moving average
-    rsi = relative_strength_index(data_close, 14)
-    if current_price < moving_average[-1]:
-        if (moving_average[-1] - current_price) > distance_middle_lower:
-            potential_up_reversal_bullish = True
-    elif current_price > moving_average[-1]:
-        if (current_price - moving_average[-1]) > distance_middle_upper:
-            potential_down_reversal_bearish = True
-
-    # check if today rsi is bigger than yesterday,and macd is over signal
-    if rsi[-1] > 30 and macd(data_close)[0][-1] > macd(data_close)[1][-1]:
-        potential_up_reversal_bullish = True
-    elif rsi[-1] > 70 and macd(data_close)[0][-1] < macd(data_close)[1][-1]:
-        potential_down_reversal_bearish = True
-
-    return potential_up_reversal_bullish, potential_down_reversal_bearish
-
-
-def potential_up_trending():
-    rsi = relative_strength_index(data_close, 14)
-    macd_line, signal, histogram = macd(data_close)
-
-    # check if today rsi is bigger than yesterday,and macd is over signal
-    if rsi[-1] > rsi[-2] or macd_line[-1] > signal[-1]:
-        potential_up_trend = True
+            print("internal factors is already up to date.")
     else:
-        potential_up_trend = False
+        print("Error: Failed to download internal factors.")
 
-    return potential_up_trend
+    return None
 
 
-def technical_analyse():
-    potential_up_trend = potential_up_trending()
-    potential_up_reversal_bullish, potential_down_reversal_bearish = potential_reversal()
-    technical_bullish, technical_bearish = False, False
+def update_yahoo_data():
+    # Read the main dataset from disk
+    main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})
 
-    # Set initial value base on ema200
-    ema200 = exponential_moving_average(data_close, 200)
-    current_price = get_bitcoin_price()
-    if current_price >= ema200[-1]:
-        technical_bullish = True
+    # Get the latest date in the main dataset
+    latest_date = main_dataset.loc[main_dataset['Open'].last_valid_index(), 'Date']
+
+    # Set the end date to today
+    end_date = datetime.today().strftime('%Y-%m-%d')
+
+    # Download the new data from Yahoo Finance
+    ticker = yf.Ticker("BTC-USD")
+    new_data = ticker.history(start=latest_date, end=end_date)
+
+    new_data.index = new_data.index.strftime('%Y-%m-%d')
+    new_data['Date'] = new_data.index
+
+    if new_data is not None:
+        print(f"{len(new_data)} new rows of yahoo data added.")
+        # Update main dataset with new data
+        for date, open_value, close_value in new_data[['Date', 'Open', 'Close']].values:
+            # Check if date already exists in main dataset
+            if date in main_dataset['Date'].tolist():
+                # Update the corresponding row in the main dataset
+                main_dataset.loc[main_dataset['Date'] == date, ['Open', 'Close']] = [open_value, close_value]
+            #else:
+                # Append a new row to the main dataset
+                #new_row = pd.DataFrame([[date, open_value, close_value]], columns=['Date', 'Open', 'Close'])
+                #main_dataset = pd.concat([main_dataset, new_row], ignore_index=True)
+
     else:
-        technical_bearish = True
-
-    # check potentials
-    if potential_up_reversal_bullish:
-        technical_bullish = True
-    elif potential_down_reversal_bearish:
-        technical_bearish = True
-    elif potential_up_trend:
-        technical_bullish = True
-    elif not potential_up_trend:
-        technical_bearish = True
-
-    return technical_bullish, technical_bearish
+        print("Yahoo data is already up to date.")
+    main_dataset.to_csv('main_dataset.csv', index=False)
+    return None
 
 
-technical_bullish1, technical_bearish1 = technical_analyse()
-print(technical_bullish1, technical_bearish1)
+def update_macro_economic():
+    # Connect to FRED API and get the latest federal funds rate data
+    try:
+        fred = Fred(api_key='8f7cbcbc1210c7efa87ee9484e159c21')
+        df2 = fred.get_series('FEDFUNDS')
+    except Exception as e:
+        print(f"Error: {e}")
+        return
+
+    # Load the main dataset into a DataFrame
+    main_dataset = pd.read_csv('main_dataset.csv')
+
+    # Check if the latest federal funds rate is already in the main dataset
+    latest_rate = df2.iloc[-1]
+    if latest_rate == main_dataset['Rate'].iloc[-1]:
+        print("interest rate data is already up to date.")
+        return
+
+    # Update the last row of the Rate column with the latest federal funds rate data
+    main_dataset.loc[main_dataset.index[-1], 'Rate'] = latest_rate
+
+    # Backward fill missing values with the next non-null value, but only up to the next value change
+    main_dataset['Rate'].fillna(method='bfill', limit=30, inplace=True)
+
+    # Print a message indicating that the new rate has been added to the main dataset
+    print("interest rate added to the main dataset.")
+
+    # Save the updated main dataset to a CSV file
+    main_dataset.to_csv('main_dataset.csv', index=False)
+
+
+# endregion
+
+# region  B. Prediction
+def decision_tree_predictor():
+    # Read the last update time from disk
+    last_update_time = pd.read_csv('last_update_time.csv', header=None, names=['time'])['time'][0]
+    last_update_time = datetime.strptime(last_update_time, '%Y-%m-%d %H:%M:%S')
+
+    if datetime.now() - last_update_time > timedelta(hours=8):
+        update_internal_factors()
+        update_yahoo_data()
+        update_macro_economic()
+
+        # Save the update time to disk
+        now = datetime.now()
+        now_str = now.strftime('%Y-%m-%d %H:%M:%S')
+        pd.DataFrame({'time': [now_str]}).to_csv('last_update_time.csv', index=False, header=False)
+        print(f'dataset been update{now}')
+    else:
+        last_update_time = pd.read_csv('last_update_time.csv', header=None, names=['time'])['time'][0]
+        last_update_time = datetime.strptime(last_update_time, '%Y-%m-%d %H:%M:%S')
+        print(f'dataset is already update less that 8 hour ago at {last_update_time}')
+
+    # load the main dataset and finn null value
+    main_dataset = pd.read_csv('main_dataset.csv')
+    main_dataset = main_dataset.set_index(main_dataset['Date'])
+    # Backward fill missing values with the next non-null value
+    main_dataset.fillna(method='ffill', limit=1, inplace=True)
+
+    X_train = main_dataset.iloc[:-1][['DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate', 'Open', 'Rate']]
+    y_train = main_dataset.iloc[:-1][['Close']]
+
+    # use last row to predict price
+    X_test = main_dataset.tail(1)[['DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate', 'Open', 'Rate']]
+    decision_model = DecisionTreeRegressor(random_state=0)
+    decision_model.fit(X_train, y_train)
+    predictions_tree = decision_model.predict(X_test).reshape(-1, 1)
+    return predictions_tree
+
+
+# endregion
+
+predicted_price = decision_tree_predictor()
+print(f"The predicted price is: {predicted_price}")
