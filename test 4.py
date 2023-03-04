@@ -34,11 +34,20 @@ def check_sentiment_of_news():
             blob = TextBlob(content)
             sentiment_score = blob.sentiment.polarity
 
+            for article in data['articles']:
+                title = article['title']
+                content = article['content']
+
+            # Classify the sentiment as positive, negative, or neutral
             # Classify the sentiment as positive, negative, or neutral
             if sentiment_score > 0.1:
                 positive_count += 1
+                print(f"{title} - Positive")
             elif sentiment_score < -0.1:
                 negative_count += 1
+                print(f"{title} - Negative")
+            else:
+                print(f"{title} - Neutral")
 
         # Check if the number of positive articles is 80% or more than the number of negative articles
         if positive_count >= 1.8 * negative_count:

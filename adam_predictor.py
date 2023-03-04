@@ -191,3 +191,6 @@ def decision_tree_predictor():
 
 
 # endregion
+
+predicted_price = decision_tree_predictor()
+print(f"The predicted price is: {predicted_price}")
