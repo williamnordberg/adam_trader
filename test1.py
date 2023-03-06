@@ -12,12 +12,17 @@ import time
 from datetime import datetime, timedelta
 
 
+
 # region A. Update factors
+
 def update_internal_factors():
     # Read the main dataset from disk
     main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})
+
     # Get the latest date in the main dataset
-    latest_date = main_dataset['Date'].max()
+
+    latest_date = main_dataset.loc[main_dataset['DiffLast'].last_valid_index(), 'Date']
+    print(latest_date)
 
     # Create a new instance of the Firefox driver
     driver = webdriver.Firefox()
@@ -41,20 +46,40 @@ def update_internal_factors():
     # Click the Download button
     download_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button.cm-button")))
     download_button.click()
+
+    # Wait for the download to finish
+    wait_for_download = True
+    while wait_for_download:
+        # Get a list of all files in the Downloads folder, sorted by creation time (newest first)
+        files = sorted(os.listdir(os.path.join(os.path.expanduser("~"), "Downloads")),
+                       key=lambda x: os.path.getctime(os.path.join(os.path.expanduser("~"), "Downloads", x)),
+                       reverse=True)
+        for file in files:
+            if file.endswith(".csv"):
+                new_data = pd.read_csv(os.path.join(os.path.expanduser("~"), "Downloads", file), dtype={146: str})
+                wait_for_download = False
+                break
+
     # Close the Firefox window
     driver.quit()
 
-    downloaded_data = pd.read_csv(r"C:\Users\Willi\Downloads\btc.csv", dtype={146: str})
-    new_data = downloaded_data[['time', 'DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate']]
     if new_data is not None:
         # Rename the 'time' column to 'Date'
         new_data = new_data.rename(columns={'time': 'Date'})
 
         # Filter the new data to only include rows with a date after the latest date in the main dataset
         new_data = new_data[new_data['Date'] > latest_date]
-        print('new data length', new_data)
-
+        new_data = new_data[['Date', 'DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate']]
+        print('main_dataset[Dat].iloc[-1]', main_dataset['Date'].iloc[-1])
+        print('new_data[Date].iloc[-1]', new_data['Date'].iloc[0])
         if len(new_data) > 0:
+            # check if new data have a same date row with main_dataset
+            if main_dataset['Date'].iloc[-1] == new_data['Date'].iloc[0]:
+                print('main_dataset[Date].iloc[-1] == new_data=Date[0]')
+                #main_dataset[['DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate']].iloc[-1] = new_data[['DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate']].iloc[0]
+                main_dataset = main_dataset.drop(main_dataset.index[-1])
+                print('new_data after', main_dataset)
+
             # Append the new rows to the main dataset
             main_dataset = pd.concat([main_dataset, new_data])
 
@@ -84,8 +109,15 @@ def update_yahoo_data():
     ticker = yf.Ticker("BTC-USD")
     new_data = ticker.history(start=latest_date, end=end_date)
 
+
+
     new_data.index = new_data.index.strftime('%Y-%m-%d')
     new_data['Date'] = new_data.index
+
+    # check if the dataset is already update
+    if latest_date == new_data['Date'].iloc[-1]:
+        print('Yahoo data is already update')
+        return None
 
     if new_data is not None:
         print(f"{len(new_data)} new rows of yahoo data added.")
@@ -153,7 +185,7 @@ def decision_tree_predictor():
         # Save the update time to disk
         now = datetime.now()
         now_str = now.strftime('%Y-%m-%d %H:%M:%S')
-        pd.DataFrame({'time': [now_str]}).to_csv('last_update_time.csv', index=False, header=False)
+        #pd.DataFrame({'time': [now_str]}).to_csv('last_update_time.csv', index=False, header=False)
         print(f'dataset been update{now}')
     else:
         last_update_time = pd.read_csv('last_update_time.csv', header=None, names=['time'])['time'][0]
@@ -165,7 +197,6 @@ def decision_tree_predictor():
     main_dataset = main_dataset.set_index(main_dataset['Date'])
     # Backward fill missing values with the next non-null value
     main_dataset.fillna(method='ffill', limit=1, inplace=True)
-
     X_train = main_dataset.iloc[:-1][['DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate', 'Open', 'Rate']]
     y_train = main_dataset.iloc[:-1][['Close']]
 

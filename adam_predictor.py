@@ -12,13 +12,16 @@ import time
 from datetime import datetime, timedelta
 
 
+
 # region A. Update factors
+
 def update_internal_factors():
     # Read the main dataset from disk
     main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})
 
     # Get the latest date in the main dataset
-    latest_date = main_dataset['Date'].max()
+
+    latest_date = main_dataset.loc[main_dataset['DiffLast'].last_valid_index(), 'Date']
 
     # Create a new instance of the Firefox driver
     driver = webdriver.Firefox()
@@ -65,9 +68,15 @@ def update_internal_factors():
 
         # Filter the new data to only include rows with a date after the latest date in the main dataset
         new_data = new_data[new_data['Date'] > latest_date]
-        print('new data lenth', new_data)
-
+        new_data = new_data[['Date', 'DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate']]
         if len(new_data) > 0:
+
+            # check if new data have a same date row with main_dataset
+            if main_dataset['Date'].iloc[-1] == new_data['Date'].iloc[0]:
+
+                # drop the last row in main datasett
+                main_dataset = main_dataset.drop(main_dataset.index[-1])
+
             # Append the new rows to the main dataset
             main_dataset = pd.concat([main_dataset, new_data])
 
@@ -97,8 +106,15 @@ def update_yahoo_data():
     ticker = yf.Ticker("BTC-USD")
     new_data = ticker.history(start=latest_date, end=end_date)
 
+
+
     new_data.index = new_data.index.strftime('%Y-%m-%d')
     new_data['Date'] = new_data.index
+
+    # check if the dataset is already update
+    if latest_date == new_data['Date'].iloc[-1]:
+        print('Yahoo data is already update')
+        return None
 
     if new_data is not None:
         print(f"{len(new_data)} new rows of yahoo data added.")
@@ -178,7 +194,6 @@ def decision_tree_predictor():
     main_dataset = main_dataset.set_index(main_dataset['Date'])
     # Backward fill missing values with the next non-null value
     main_dataset.fillna(method='ffill', limit=1, inplace=True)
-
     X_train = main_dataset.iloc[:-1][['DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate', 'Open', 'Rate']]
     y_train = main_dataset.iloc[:-1][['Close']]
 
