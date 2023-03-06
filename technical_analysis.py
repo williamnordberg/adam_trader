@@ -169,5 +169,5 @@ def technical_analyse():
     return technical_bullish, technical_bearish
 
 
-technical_bullish1, technical_bearish1 = technical_analyse()
-print(technical_bullish1, technical_bearish1)
+#technical_bullish1, technical_bearish1 = technical_analyse()
+#print(technical_bullish1, technical_bearish1)
