@@ -50,4 +50,5 @@ def check_sentiment_of_news():
         print(f'Error occurred: {e}')
         return False
 
+
 check_sentiment_of_news()

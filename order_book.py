@@ -30,8 +30,26 @@ def get_probabilities(symbols, limit=1000, bid_multiplier=0.995, ask_multiplier=
         except requests.exceptions.RequestException as e:
             print(e)
             return None
-    probability_down_in_function = bid_volume / (bid_volume + ask_volume)
-    probability_up_in_function = ask_volume / (bid_volume + ask_volume)
+    probability_up_in_function = bid_volume / (bid_volume + ask_volume)
+    probability_down_in_function = ask_volume / (bid_volume + ask_volume)
     return probability_down_in_function, probability_up_in_function
+
+
+def get_probabilities_hit_profit_or_stop(symbols, limit, profit_target, stop_loss):
+    endpoint = "https://api.binance.com/api/v3/depth"
+    bid_volume, ask_volume = 0, 0
+    for symbol in symbols:
+        try:
+            response = requests.get(endpoint, params={'symbol': symbol, 'limit': limit})
+            data = response.json()
+            bid_volume += sum([float(bid[1]) for bid in data['bids'] if float(bid[0]) >= stop_loss])
+            ask_volume += sum([float(ask[1]) for ask in data['asks'] if float(ask[0]) <= profit_target])
+        except requests.exceptions.RequestException as e:
+            print(e)
+            return None
+
+    probability_to_hit_target = bid_volume / (bid_volume + ask_volume)
+    probability_to_hit_stop_loss = ask_volume / (bid_volume + ask_volume)
+    return probability_to_hit_target, probability_to_hit_stop_loss
 
 

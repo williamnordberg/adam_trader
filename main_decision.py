@@ -8,9 +8,9 @@ from macro_expected import get_macro_expected_and_real_compare
 from reddit import reddit_check, load_previous_values
 from youtube import check_bitcoin_youtube_videos_increase
 from news_websites import check_sentiment_of_news
-from long_trade import long_trade_is_open
-from short_trade import short_trade_is_open
+from position import long_position_is_open, short_position_is_open
 from technical_analysis import technical_analyse
+
 LOOP_COUNTER = 0
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 
@@ -35,14 +35,6 @@ def get_bitcoin_price():
         return None
 
 
-def long_position_is_open():
-    return None
-
-
-def short_position_is_open():
-    return None
-
-
 # Main trading loop
 while True:
     LOOP_COUNTER += 1
@@ -58,7 +50,7 @@ while True:
     print('Probability of price going down and up:', probability_down, probability_up)
 
     # 2.2 Monitor the richest Bitcoin addresses
-    #total_received, total_sent = monitor_bitcoin_richest_addresses()
+    # total_received, total_sent = monitor_bitcoin_richest_addresses()
 
     # 2.3 Check Google search trends for Bitcoin and cryptocurrency
     increase_google_search = check_search_trend(["Bitcoin", "Cryptocurrency"], threshold=1.2)
@@ -90,31 +82,33 @@ while True:
 
     # 3.1 Check if conditions are met for a long position
     if (predicted_price > current_price * 1.01) and (probability_up > 0.6) and increase_google_search:
-        #if total_received > total_sent:
-            if cpi_better_than_expected and ppi_better_than_expected and interest_rate_better_than_expected:
-                if activity_increase or count_increase:
-                    if bitcoin_youtube_increase_15_percent:
-                        if sentiment_of_news:
-                            if technical_bullish:
-                                print('Opening a long position')
+        # if total_received > total_sent:
+        if cpi_better_than_expected and ppi_better_than_expected and interest_rate_better_than_expected:
+            if activity_increase or count_increase:
+                if bitcoin_youtube_increase_15_percent:
+                    if sentiment_of_news:
+                        if technical_bullish:
+                            print('Opening a long position')
+                            profit_after_trade, loss_after_trade = \
                                 long_position_is_open()
+                            print(f"profit_after_trade:{profit_after_trade},"
+                                  f" loss_after_trade:"
+                                  f"{loss_after_trade}")
 
     # 3.2 Check if conditions are met for a short position
     elif (predicted_price < current_price * 0.99) and (probability_down > 0.6) and not increase_google_search:
-        #if total_received < total_sent:
-            if not cpi_better_than_expected and not ppi_better_than_expected and not interest_rate_better_than_expected:
-                if not activity_increase or not count_increase:
-                    if not bitcoin_youtube_increase_15_percent:
-                        if not sentiment_of_news:
-                            if technical_bearish:
-                                print('Opening short position')
+        # if total_received < total_sent:
+        if not cpi_better_than_expected and not ppi_better_than_expected and not interest_rate_better_than_expected:
+            if not activity_increase or not count_increase:
+                if not bitcoin_youtube_increase_15_percent:
+                    if not sentiment_of_news:
+                        if technical_bearish:
+                            print('Opening short position')
+                            profit_after_trade, loss_after_trade = \
                                 short_position_is_open()
+                            print(f"profit_after_trade:{profit_after_trade}"
+                                  f", loss_after_trade:"
+                                  f"{loss_after_trade}")
     # endregion
 
     sleep(10)
-
-
-# region when a trade is open
-
-
-# endregion
