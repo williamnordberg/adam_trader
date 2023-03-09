@@ -1,6 +1,6 @@
 from time import sleep
 
-from monitor_2000_richest import monitor_bitcoin_richest_addresses
+from old_monitor_2000_richest import monitor_bitcoin_richest_addresses
 from order_book import get_probabilities
 from adam_predictor import decision_tree_predictor
 from google_search import check_search_trend

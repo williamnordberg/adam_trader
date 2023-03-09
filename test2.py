@@ -103,44 +103,38 @@ def check_address_transactions_blockcypher(address):
         return None, None
 
 
-def check_address_transactions_zapper(address):
-    print('check_address_transactions_zapper')
+def check_address_transactions_bitcore(address):
+    print('check_address_transactions_bitcore')
     # Get the current time and time 24 hours ago
     current_time = int(time.time())
     time_24_hours_ago = current_time - 86400
 
     # Construct the API URL to get all transactions for the address
-    api_url = f"https://api.zapper.fi/v1/transactions?addresses%5B%5D={address}&network=bitcoin&api_key=a91dd9fb-3f4f-441e-bcaf-6f4715f817b4"
+    api_url = f"https://api.bitcore.io/api/BTC/mainnet/address/{address}/txs"
 
     # Send the API request and get the response
     response = requests.get(api_url)
 
     # Check the response status code
     if response.status_code == 200:
-        response_json = response.json()
-
-        # Get the list of transactions for the address in the last 24 hours
-        transactions = [tx for tx in response_json if parse(tx["date"]).timestamp() > time_24_hours_ago]
-
-        # Initialize variables for tracking total sent and received
-        total_received = 0
-        total_sent = 0
-
-        # Loop through the list of transactions and calculate total sent and received
+        transactions = response.json()
+        outgoing_txids = []
+        total_send, total_receive = 0, 0
         for tx in transactions:
-            for transfer in tx["transfers"]:
-                if transfer["toAddress"].lower() == address.lower():
-                    total_received += transfer["amount"]
-                elif transfer["fromAddress"].lower() == address.lower():
-                    total_sent += transfer["amount"]
+            if tx['spentTxid'] != '':
+                # This is an outgoing transaction
+                outgoing_txids.append(tx['mintTxid'])
+                total_send += tx['value']
+            elif tx['mintTxid'] not in outgoing_txids:
+                # This is an incoming transaction
+                total_receive += tx['value']
 
-        # Convert from Satoshi to BTC
-        return (total_received / 100000000), (total_sent / -100000000)
+        return total_receive / 100000000, total_send / 10000000
 
     elif response.status_code == 429:
         print(f"Rate limited for address {address}. Sleeping for a minute.")
         time.sleep(60)
-        return check_address_transactions_zapper(address)
+        return check_address_transactions_bitcore(address)
     else:
         print(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")
         return 0, 0
@@ -162,7 +156,7 @@ def check_multiple_addresses(addresses):
 
         else:
             # Use the Blockchair API
-            received, sent = check_address_transactions_zapper(address)
+            received, sent = check_address_transactions_bitcore(address)
 
         total_received += received
         total_sent += sent
