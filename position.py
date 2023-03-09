@@ -54,6 +54,7 @@ def long_position_is_open():
               probability_to_hit_stop_loss)
 
         # 2. Blockchain monitoring(is the richest addresses accumulating?)
+        # TODO: here
 
         # 3. Macroeconomics data ( is the day that important data comes out)?
 
