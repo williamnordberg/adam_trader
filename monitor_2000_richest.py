@@ -56,6 +56,7 @@ def check_address_transactions_blockchain_info(address):
         # Initialize variables for tracking total sent and received
         total_received = 0
         total_sent = 0
+        processed_txids = []
 
         # Loop through the list of transactions and calculate total sent and received
         for tx in transactions:
@@ -65,10 +66,12 @@ def check_address_transactions_blockchain_info(address):
                 else:
                     for output in tx["out"]:
                         if output["addr"] == address:
-                            total_received += output["value"]
+                            if tx["hash"] not in processed_txids:
+                                processed_txids.append(tx["hash"])
+                                total_received += output["value"]
 
         # Convert from Satoshi to BTC
-        return (total_received / 100000000), (total_sent / -100000000)
+        return abs(total_received / 100000000), abs(total_sent / -100000000)
 
     elif response.status_code == 429:
         print(f"Rate limited for address {address}. Sleeping for a minute.")
@@ -80,13 +83,17 @@ def check_address_transactions_blockchain_info(address):
 
 
 def check_address_transactions_blockcypher(address):
+    # API requests limit is 20 requests per second and 200 per hour
+    # consider if there is more than 20 more recipient in one transaction than this api do not load more than 2o
+
     print('check_address_transactions_blockcypher')
     # Get the current time and time 24 hours ago
     current_time = int(time.time())
     time_24_hours_ago = current_time - 86400
 
     # Construct the API URL to get all transactions for the address
-    api_key = '8e20b70ce07248dd90e02aa19d611edf'
+    api_key = '4f0f5269fb8f4ccf811d9b65b2a7cab8'
+    # api_key = '8e20b70ce07248dd90e02aa19d611edf'
     api_url = f"https://api.blockcypher.com/v1/btc/main/addrs/{address}/full?token={api_key}"
 
     # Send the API request and get the response
@@ -115,16 +122,27 @@ def check_address_transactions_blockcypher(address):
         # Convert from Satoshi to BTC
         return (total_received / 100000000), (total_sent / 100000000)
 
+    elif response.status_code == 429:
+
+        print(f"Rate limited for address {address}. Sleeping for a minute.")
+
+        time.sleep(60)
+
+        return check_address_transactions_blockcypher(address)
+
     else:
-        # Handle the case where the API request fails
-        return None, None
+
+        print(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")
+
+        return 0, 0
 
 
 def check_address_transactions_bitcore(address):
+    #  limit for API requests is 60 requests per minute
     print('check_address_transactions_bitcore')
     # Get the block height 24 hours ago
     current_height = get_current_block_height()
-    block_height_24_hours_ago = current_height - 576
+    block_height_24_hours_ago = current_height - 134
 
     # Construct the API URL to get all transactions for the address
     api_url = f"https://api.bitcore.io/api/BTC/mainnet/address/{address}/txs"
@@ -175,14 +193,14 @@ def check_multiple_addresses(addresses):
 
         else:
             # Use the Blockchair API
-            received, sent = check_address_transactions_bitcore(address)
+            received, sent = check_address_transactions_blockcypher(address)
 
         total_received += received
         total_sent += sent
 
         print(f"Total Bitcoin received in the last 24 hours: {total_received} BTC")
         print(f"Total Bitcoin sent in the last 24 hours: {total_sent} BTC")
-        #time.sleep(1)
+        time.sleep(2)
 
     return total_received, total_sent
 

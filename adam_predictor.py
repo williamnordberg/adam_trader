@@ -12,9 +12,7 @@ import time
 from datetime import datetime, timedelta
 
 
-
 # region A. Update factors
-
 def update_internal_factors():
     # Read the main dataset from disk
     main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})
