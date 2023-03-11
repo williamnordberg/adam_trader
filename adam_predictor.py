@@ -43,6 +43,7 @@ def update_internal_factors():
     # Click the Download button
     download_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button.cm-button")))
     download_button.click()
+    time.sleep(2)
 
     # Wait for the download to finish
     wait_for_download = True
@@ -71,7 +72,6 @@ def update_internal_factors():
 
             # check if new data have a same date row with main_dataset
             if main_dataset['Date'].iloc[-1] == new_data['Date'].iloc[0]:
-
                 # drop the last row in main datasett
                 main_dataset = main_dataset.drop(main_dataset.index[-1])
 
@@ -104,8 +104,6 @@ def update_yahoo_data():
     ticker = yf.Ticker("BTC-USD")
     new_data = ticker.history(start=latest_date, end=end_date)
 
-
-
     new_data.index = new_data.index.strftime('%Y-%m-%d')
     new_data['Date'] = new_data.index
 
@@ -122,11 +120,6 @@ def update_yahoo_data():
             if date in main_dataset['Date'].tolist():
                 # Update the corresponding row in the main dataset
                 main_dataset.loc[main_dataset['Date'] == date, ['Open', 'Close']] = [open_value, close_value]
-            #else:
-                # Append a new row to the main dataset
-                #new_row = pd.DataFrame([[date, open_value, close_value]], columns=['Date', 'Open', 'Close'])
-                #main_dataset = pd.concat([main_dataset, new_row], ignore_index=True)
-
     else:
         print("Yahoo data is already up to date.")
     main_dataset.to_csv('main_dataset.csv', index=False)
@@ -137,22 +130,23 @@ def update_macro_economic():
     # Connect to FRED API and get the latest federal funds rate data
     try:
         fred = Fred(api_key='8f7cbcbc1210c7efa87ee9484e159c21')
-        df2 = fred.get_series('FEDFUNDS')
+        fred_dataset = fred.get_series('FEDFUNDS')
     except Exception as e:
         print(f"Error: {e}")
         return
 
     # Load the main dataset into a DataFrame
-    main_dataset = pd.read_csv('main_dataset.csv')
+    main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})
 
     # Check if the latest federal funds rate is already in the main dataset
-    latest_rate = df2.iloc[-1]
+    latest_rate = fred_dataset.iloc[-1]
+    latest_date_in_main_dataset = main_dataset.loc[main_dataset['Close'].last_valid_index(), 'Date']
+
     if latest_rate == main_dataset['Rate'].iloc[-1]:
         print("interest rate data is already up to date.")
         return
-
     # Update the last row of the Rate column with the latest federal funds rate data
-    main_dataset.loc[main_dataset.index[-1], 'Rate'] = latest_rate
+    main_dataset.loc[main_dataset['Date'] == latest_date_in_main_dataset, 'Rate'] = latest_rate
 
     # Backward fill missing values with the next non-null value, but only up to the next value change
     main_dataset['Rate'].fillna(method='bfill', limit=30, inplace=True)
