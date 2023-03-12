@@ -6,8 +6,8 @@ from datetime import datetime
 
 
 def print_upcoming_events(events_date_dict):
-    now = datetime.datetime.utcnow()
-    days_to_check = 3
+    now = datetime.utcnow()
+    days_to_check = 2
     for event, event_date in events_date_dict.items():
         if event_date is None:
             continue
@@ -84,6 +84,6 @@ def get_macro_expected_and_real_compare():
 
 
 CPI_better_than_expected1, PPI_better_than_expected1, interest_rate_better_than_expected1, \
-    events_date_dict = get_macro_expected_and_real_compare()
+    events_date_dict_outer = get_macro_expected_and_real_compare()
 print(CPI_better_than_expected1, PPI_better_than_expected1, interest_rate_better_than_expected1)
-print_upcoming_events(events_date_dict)
+print_upcoming_events(events_date_dict_outer)
