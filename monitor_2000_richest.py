@@ -35,7 +35,7 @@ def read_addresses_from_csv(file_path):
 
 
 def check_address_transactions_blockchain_info(address):
-    print('check_address_transactions_blockchain_info')
+    print('check_blockchain_info')
     # Get the current time and time 24 hours ago
     current_time = int(time.time())
     time_24_hours_ago = current_time - 86400
@@ -86,7 +86,7 @@ def check_address_transactions_blockcypher(address):
     # API requests limit is 20 requests per second and 200 per hour
     # consider if there is more than 20 more recipient in one transaction than this api do not load more than 2o
 
-    print('check_address_transactions_blockcypher')
+    print('check_blockcypher')
     # Get the current time and time 24 hours ago
     current_time = int(time.time())
     time_24_hours_ago = current_time - 86400
@@ -139,7 +139,7 @@ def check_address_transactions_blockcypher(address):
 
 def check_address_transactions_bitcore(address):
     #  limit for API requests is 60 requests per minute
-    print('check_address_transactions_bitcore')
+    print('check_bitcore')
     # Get the block height 24 hours ago
     current_height = get_current_block_height()
     block_height_24_hours_ago = current_height - 134
@@ -182,7 +182,7 @@ def check_multiple_addresses(addresses):
     total_sent = 0
 
     for i, address in enumerate(addresses):
-        print(f"Checking transaction history for address {address} and {i}")
+        print(f"*******Checking address {address} and {i}*******")
         if i % 3 == 0:
             # Use the Blockchain.info API
             received, sent = check_address_transactions_blockchain_info(address)
@@ -198,9 +198,9 @@ def check_multiple_addresses(addresses):
         total_received += received
         total_sent += sent
 
-        print(f"Total Bitcoin received in the last 24 hours: {total_received} BTC")
-        print(f"Total Bitcoin sent in the last 24 hours: {total_sent} BTC")
-        time.sleep(2)
+        print(f"Total received: {total_received} BTC")
+        print(f"Total sent: {total_sent} BTC")
+        time.sleep(3)
 
     return total_received, total_sent
 
@@ -234,4 +234,9 @@ def monitor_bitcoin_richest_addresses():
 
 
 total_received1, total_sent1 = monitor_bitcoin_richest_addresses()
-print(total_received1, total_sent1)
+
+# Create a pandas DataFrame with the values
+last_24_accumulation = pd.DataFrame({'total_received': [total_received1], 'total_sent': [total_sent1]})
+
+# Save the DataFrame to a CSV file
+last_24_accumulation.to_csv('last_24_accumulation.csv', index=False)

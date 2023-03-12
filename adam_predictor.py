@@ -48,7 +48,7 @@ def update_internal_factors():
     # Wait for the download to finish
     wait_for_download = True
     while wait_for_download:
-        # Get a list of all files in the Downloads folder, sorted by creation time (newest first)
+        # Get a list of all files in the Downloads folder, sorted by creation time (new first)
         files = sorted(os.listdir(os.path.join(os.path.expanduser("~"), "Downloads")),
                        key=lambda x: os.path.getctime(os.path.join(os.path.expanduser("~"), "Downloads", x)),
                        reverse=True)

@@ -41,6 +41,8 @@ def check_sentiment_of_news():
                 negative_count += 1
 
         # Check if the number of positive articles is 80% or more than the number of negative articles
+        print('positive_count', positive_count)
+        print('negative_count', negative_count)
         if positive_count >= 1.8 * negative_count:
             return True
         else:
@@ -51,4 +53,5 @@ def check_sentiment_of_news():
         return False
 
 
-check_sentiment_of_news()
+sentement_positive = check_sentiment_of_news()
+print('sentement_positive', sentement_positive)
