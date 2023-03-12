@@ -8,7 +8,7 @@ class BitcoinRichListSpider(scrapy.Spider):
     def __init__(self, *args, **kwargs):
         super(BitcoinRichListSpider, self).__init__(*args, **kwargs)
         self.base_url = "https://bitinfocharts.com/top-100-richest-bitcoin-addresses"
-        self.start_urls = [f"{self.base_url}-{i}.html" for i in range(1, 21)]
+        self.start_urls = [f"{self.base_url}-{i}.html" for i in range(1, 4)]
         self.df = pd.DataFrame(columns=["address"])
 
     def parse(self, response):
