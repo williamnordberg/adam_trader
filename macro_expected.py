@@ -2,21 +2,22 @@ import os
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
-from datetime import datetime, timedelta
+from datetime import datetime
 
 
-def print_upcoming_events(events_date_dict_inner):
-    now = datetime.utcnow()
+def print_upcoming_events(events_date_dict):
+    now = datetime.datetime.utcnow()
     days_to_check = 3
-    for event, event_date in events_date_dict_inner.items():
-        if event_date is not None:
-            days_until_event = (event_date - now).days
-            if 0 <= days_until_event <= days_to_check:
-                time_until_event = event_date - now
-                hours, remainder = divmod(time_until_event.seconds, 3600)
-                minutes, seconds = divmod(remainder, 60)
-                time_str = f"{days_until_event} day(s), {hours} hour(s), {minutes} minute(s), {seconds} second(s)"
-                print(f"Upcoming event: {event} on {event_date}, {time_str} remaining")
+    for event, event_date in events_date_dict.items():
+        if event_date is None:
+            continue
+        days_until_event = (event_date - now).days
+        if 0 <= days_until_event <= days_to_check:
+            time_until_event = event_date - now
+            hours, remainder = divmod(time_until_event.seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            time_str = f"{days_until_event} day(s), {hours} hour(s), {minutes} minute(s), {seconds} second(s)"
+            print(f"Upcoming event: {event} on {event_date}, {time_str} remaining")
 
 
 def get_macro_expected_and_real_compare():
