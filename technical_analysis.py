@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import requests
+import ccxt
 
 
 def get_bitcoin_price():
@@ -23,9 +24,18 @@ def get_bitcoin_price():
         return None
 
 
+def get_historical_data(symbol: str, timeframe: str, limit: int) -> pd.DataFrame:
+    exchange = ccxt.binance()
+    ohlcv = exchange.fetch_ohlcv(symbol=symbol, timeframe=timeframe, limit=limit)
+    df = pd.DataFrame(ohlcv, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
+    df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
+    df.set_index('timestamp', inplace=True)
+    df.drop(['open', 'high', 'low', 'volume'], axis=1, inplace=True)
+    return df
+
+
 # read the data
-dataset = pd.read_csv('main_dataset.csv', index_col='Date')
-data_close = dataset['Close']
+data_close = get_historical_data('BTC/USDT', '1d', 200)
 
 
 def exponential_moving_average(data, window_size):
@@ -106,22 +116,23 @@ def macd(data_macd, fast_window=12, slow_window=26, signal_window=9):
 def potential_reversal():
     potential_up_reversal_bullish, Potential_down_reversal_bearish = False, False
     upper_band, moving_average, lower_band = bollinger_bands(data_close)
-    current_price = data_close[-1]
+    current_price = int(data_close.iloc[-1])
 
     # MACD:  Calculate 70 percent between bands and moving averages
-    distance_middle_lower = (moving_average[-1] - lower_band[-1]) * 0.7
-    distance_middle_upper = (upper_band[-1] - moving_average[-1]) * 0.7
+    distance_middle_lower = int((moving_average.iloc[-1] - lower_band.iloc[-1]) * 0.7)
+    distance_middle_upper = int((upper_band.iloc[-1] - moving_average.iloc[-1]) * 0.7)
 
     # Check if price fill 70 percent of distance between bands and moving average
-    rsi = relative_strength_index(data_close, 14)
-    if current_price < moving_average[-1]:
-        if (moving_average[-1] - current_price) > distance_middle_lower:
+    last_moving_average = int(moving_average.iloc[-1])
+    if current_price < last_moving_average:
+        if (last_moving_average - current_price) > distance_middle_lower:
             potential_up_reversal_bullish = True
-    elif current_price > moving_average[-1]:
-        if (current_price-moving_average[-1]) > distance_middle_upper:
+    elif current_price > last_moving_average:
+        if (current_price-last_moving_average) > distance_middle_upper:
             Potential_down_reversal_bearish = True
 
     # check if today rsi is bigger than yesterday,and macd is over signal
+    rsi = relative_strength_index(data_close, 14)
     if rsi[-1] > 30:
         potential_up_reversal_bullish = True
     elif rsi[-1] > 70:
@@ -144,8 +155,8 @@ def potential_up_trending():
 
 
 def technical_analyse():
-    potential_up_trend = potential_up_trending()
     potential_up_reversal_bullish, Potential_down_reversal_bearish = potential_reversal()
+    potential_up_trend = potential_up_trending()
     technical_bullish, technical_bearish = False, False
 
     # Set initial value base on ema200
@@ -159,7 +170,7 @@ def technical_analyse():
     # check potentials
     if potential_up_reversal_bullish:
         technical_bullish = True
-    elif potential_up_reversal_bullish:
+    elif Potential_down_reversal_bearish:
         technical_bearish = True
     elif potential_up_trend:
         technical_bullish = True

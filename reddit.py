@@ -118,3 +118,9 @@ def reddit_check(previous_activity=None, previous_count=None):
         save_current_time()
 
         return current_activity, current_count, activity_increase, count_increase
+
+
+previous_activity, previous_count = load_previous_values()
+current_activity, current_count, activity_increase, count_increase = reddit_check(
+                                                         previous_activity, previous_count)
+print(current_activity, current_count, activity_increase, count_increase)

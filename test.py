@@ -1,88 +1,57 @@
-import os
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from bs4 import BeautifulSoup
-from datetime import datetime, timedelta
+import requests
+import json
+from textblob import TextBlob
 
 
-def print_upcoming_events(events_date_dict_inner):
-    now = datetime.utcnow()
-    days_to_check = 3
-    for event, event_date in events_date_dict_inner.items():
-        if event_date is not None:
-            days_until_event = (event_date - now).days
-            if 0 <= days_until_event <= days_to_check:
-                time_until_event = event_date - now
-                hours, remainder = divmod(time_until_event.seconds, 3600)
-                minutes, seconds = divmod(remainder, 60)
-                time_str = f"{days_until_event} day(s), {hours} hour(s), {minutes} minute(s), {seconds} second(s)"
-                print(f"Upcoming event: {event} on {event_date}, {time_str} remaining")
+def check_sentiment_of_news():
+    # Set your API key
+    API_KEY = '7b1ad64379694add8ae9c48b23fcd3f6'
+
+    # Set the endpoint and parameters for the News API
+    endpoint = 'https://newsapi.org/v2/everything'
+    params = {
+        'q': 'cryptocurrency OR bitcoin OR blockchain',  # Search for articles related to cryptocurrencies
+        'language': 'en',  # Only get articles in English
+        'sortBy': 'publishedAt',  # Sort articles by date published
+        'apiKey': API_KEY
+    }
+
+    # Initialize counters for positive and negative articles
+    positive_count = 0
+    negative_count = 0
+
+    try:
+        # Make a request to the News API and get the response
+        response = requests.get(endpoint, params=params)
+        response.raise_for_status()  # Raise an exception if the status code is not 200
+        data = json.loads(response.text)
+
+        # Iterate through each article and perform sentiment analysis
+        for article in data['articles']:
+            content = article['content']
+
+            # Perform sentiment analysis using TextBlob
+            blob = TextBlob(content)
+            sentiment_score = blob.sentiment.polarity
+
+            # Classify the sentiment as positive, negative, or neutral
+            if sentiment_score > 0.1:
+                positive_count += 1
+            elif sentiment_score < -0.1:
+                negative_count += 1
+
+        # Check if the number of positive articles is 80% or more than the number of negative articles
+        print('positive_count', positive_count)
+        print('negative_count', negative_count)
+        if positive_count >= 1.8 * negative_count:
+            return True
+        else:
+            return False
+
+    except requests.exceptions.RequestException as e:
+        print(f'Error occurred: {e}')
+        return False
 
 
-def get_macro_expected_and_real_compare():
-    events_list = ["CPI m/m", "CPI y/y", "Core CPI m/m", "Core PPI m/m", "PPI m/m", "Federal Funds Rate"]
-    url = "https://www.forexfactory.com/calendar"
-    options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
-    options.add_argument(
-        "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/87.0.4280.67 Safari/537.36")
-
-    service = Service(executable_path=os.environ.get("CHROMEDRIVER_PATH", "C:\will\chromedriver.exe"))
-    service.start()
-
-    events_date_dict = {}
-    CPI_better_than_expected = False
-    PPI_better_than_expected = False
-    interest_rate_better_than_expected = False
-
-    with webdriver.Remote(service.service_url, options=options) as browser:
-        browser.get(url)
-        browser.implicitly_wait(10)
-
-        html = browser.page_source
-        soup = BeautifulSoup(html, "html.parser")
-
-        table = soup.find("table", class_="calendar__table")
-        if not table:
-            print("Table not found")
-            service.stop()
-            return CPI_better_than_expected, PPI_better_than_expected, interest_rate_better_than_expected
-
-        for event in events_list:
-            for row in table.find_all("tr"):
-                event_cell = row.find("td", class_="calendar__cell calendar__event event")
-                if event_cell and event_cell.find("span", class_="calendar__event-title").text == event:
-                    currency_cell = row.find("td", class_="calendar__cell calendar__currency currency")
-                    if currency_cell and currency_cell.string.strip() == "USD":
-                        interest_cell = event_cell.find_next_sibling(
-                            "td", class_="calendar__cell calendar__forecast forecast")
-                        forecast_value = interest_cell.string if interest_cell else None
-
-                        actual_cell = row.find("td", class_="calendar__cell calendar__actual actual")
-                        actual_value = actual_cell.text.strip() if actual_cell else None
-
-                        if actual_value and forecast_value and float(actual_value[:-1]) <= float(forecast_value[:-1]):
-                            events_date_dict[event] = datetime.utcfromtimestamp(int(row['data-timestamp']))
-                            if event == "CPI m/m" or event == "CPI y/y":
-                                CPI_better_than_expected = True
-                            elif event == "Core PPI m/m" or event == "PPI m/m":
-                                PPI_better_than_expected = True
-                            elif event == "Federal Funds Rate":
-                                interest_rate_better_than_expected = True
-                        else:
-                            events_date_dict[event] = datetime.utcfromtimestamp(int(row['data-timestamp']))
-                    else:
-                        events_date_dict[event] = datetime.utcfromtimestamp(int(row['data-timestamp']))
-                    break
-            else:
-                events_date_dict[event] = None
-
-    service.stop()
-    return CPI_better_than_expected, PPI_better_than_expected, interest_rate_better_than_expected, events_date_dict
-
-
-CPI_better_than_expected1, PPI_better_than_expected1, interest_rate_better_than_expected1, \
-    events_date_dict = get_macro_expected_and_real_compare()
-print(CPI_better_than_expected1, PPI_better_than_expected1, interest_rate_better_than_expected1)
-print_upcoming_events(events_date_dict)
+sentiment_positive = check_sentiment_of_news()
+print('sentiment_positive:', sentiment_positive)
