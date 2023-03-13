@@ -4,7 +4,7 @@ ENDPOINT = "https://api.binance.com/api/v3/depth"
 LIMIT = 1000
 IMBALANCE_TO_INITIATE = 0.53
 IMBALANCE_TO_CLOSE_POSITION = 0.65
-PROBABILITY_THRESHOLD = -0.2
+PROBABILITY_THRESHOLD = 0.01
 BID_VOLUME, ASK_VOLUME, TARGET_PRICE, STOP_PRICE = 0, 0, 0, 0
 
 
@@ -47,9 +47,11 @@ def get_probabilities_hit_profit_or_stop(symbols, limit, profit_target, stop_los
         except requests.exceptions.RequestException as e:
             print(e)
             return None
-
     probability_to_hit_target = bid_volume / (bid_volume + ask_volume)
     probability_to_hit_stop_loss = ask_volume / (bid_volume + ask_volume)
     return probability_to_hit_target, probability_to_hit_stop_loss
+
+
+
 
 

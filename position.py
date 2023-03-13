@@ -1,11 +1,17 @@
 from time import sleep
 import requests
-from order_book import get_probabilities, get_probabilities_hit_profit_or_stop
 import pandas as pd
+from order_book import get_probabilities, get_probabilities_hit_profit_or_stop
 from macro_expected import get_macro_expected_and_real_compare, print_upcoming_events
+from technical_analysis import technical_analyse
+from news_websites import check_sentiment_of_news
+from google_search import check_search_trend
+from reddit import reddit_check, load_previous_values
+from youtube import check_bitcoin_youtube_videos_increase
+from adam_predictor import decision_tree_predictor
 
 
-PROFIT_MARGIN = 0.002
+PROFIT_MARGIN = 0.01
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 
 
@@ -54,7 +60,7 @@ def long_position_is_open():
         # 1.Order book
         probability_down, probability_up = get_probabilities(
             SYMBOLS, bid_multiplier=0.995, ask_multiplier=1.005)
-        # print('Probability of price going down and up:', probability_down, probability_up)
+        print(f'Probability of price down: {probability_down} and up:{probability_up}')
 
         probability_to_hit_target, probability_to_hit_stop_loss = \
             get_probabilities_hit_profit_or_stop(SYMBOLS, 1000, profit_point, stop_loss)
@@ -72,53 +78,122 @@ def long_position_is_open():
         # remind upcoming macro events
         print_upcoming_events(events_dates)
 
-        # 4. Technical Analysis (are we going toward position)?
+        # 4. Technical Analysis
+        technical_bullish, technical_bearish = technical_analyse()
 
         # 5.News and Events(positive > negative * 1.6)
+        sentiment_of_news = check_sentiment_of_news()
 
         # 6. Twitter
 
         # 7.Google search (is that increase?)
+        increase_google_search = check_search_trend(["Bitcoin", "Cryptocurrency"], threshold=1.2)
 
         # 8.Reddit
+        previous_activity, previous_count = load_previous_values()
+        current_activity, current_count, activity_increase, count_increase = reddit_check(
+                                                         previous_activity, previous_count)
 
         # 9.Youtube
+        bitcoin_youtube_increase_15_percent = check_bitcoin_youtube_videos_increase()
 
         # 10. Adam predictor (is prediction is positive)
+        predicted_price = decision_tree_predictor()
+        print(f"The predicted price is: {predicted_price}")
 
         # decision to close long position
         if probability_to_hit_target < 40 or probability_up < 40:
             if total_received < total_sent:
-                print('close position at loss')
+                if technical_bearish:
+                    if sentiment_of_news:
+                        if not increase_google_search:
+                            if not activity_increase or not count_increase:
+                                if bitcoin_youtube_increase_15_percent:
+                                    if predicted_price < current_price * 1.01:
+                                        print('close long position at loss')
                 return profit, loss
         sleep(5)
 
 
 def short_position_is_open():
+    current_price = get_bitcoin_price()
+    position_opening_price = current_price
+    profit_point = current_price - (current_price * PROFIT_MARGIN)
+    stop_loss = current_price + (current_price * PROFIT_MARGIN)
+    print(f'current_price:{current_price}, profit_point:{profit_point},stop_loss:{stop_loss} ')
+    profit, loss = 0, 0
 
-    print('short trade')
+    while True:
+        print('******************************************')
+        current_price = get_bitcoin_price()
+        print(f'current_price:{current_price}, profit_point:{profit_point},stop_loss:{stop_loss} ')
+        # Check if we meet profit or stop loss
+        if current_price < profit_point:
+            profit = position_opening_price - current_price
+            print('&&&&&&&&&&&&&& TARGET HIT &&&&&&&&&&&&&&&&&&&&&')
+            return profit, loss
+        elif current_price > stop_loss:
+            loss = current_price - position_opening_price
+            print('&&&&&&&&&&&&&& STOP LOSS &&&&&&&&&&&&&&&&&&&&&')
+            return profit, loss
 
-    # 1.Order book
-    # probability of going toward profit
-    # sell market if we there are some position to take position toward SL
+        # 1.Order book
+        probability_down, probability_up = get_probabilities(
+            SYMBOLS, bid_multiplier=0.995, ask_multiplier=1.005)
+        print(f'Probability of price down: {probability_down} and up:{probability_up}')
 
-    # 2. Blockchain monitoring(is the richest addresses accumulating?)
+        probability_to_hit_target, probability_to_hit_stop_loss = \
+            get_probabilities_hit_profit_or_stop(SYMBOLS, 1000, profit_point, stop_loss)
+        print(f'profit:{probability_to_hit_target}stop:{probability_to_hit_stop_loss}')
 
-    # 3. Macroeconomics data ( is the day that important data comes out)?
+        # 2. Blockchain monitoring(is the richest addresses accumulating?)
+        last_24_accumulation = pd.read_csv('last_24_accumulation.csv')
+        total_received, total_sent = last_24_accumulation['total_received'] \
+            .values[0], last_24_accumulation['total_sent'].values[0]
 
-    # 4. Technical Analysis (are we going toward position)?
+        # 3. Macroeconomics data
+        cpi_better_than_expected, ppi_better_than_expected, interest_rate_better_than_expected, \
+            events_dates = get_macro_expected_and_real_compare()
 
-    # 5.News and Events(positive > negative * 1.6)
+        # remind upcoming macro events
+        print_upcoming_events(events_dates)
 
-    # 6. Twitter
+        # 4. Technical Analysis
+        technical_bullish, technical_bearish = technical_analyse()
 
-    # 7.Google search (is that increase?)
+        # 5.News and Events(positive > negative * 1.6)
+        sentiment_of_news = check_sentiment_of_news()
 
-    # 8.Reddit
+        # 6. Twitter
+        # TODO
 
-    # 9.Youtube
+        # 7.Google search (is that increase?)
+        increase_google_search = check_search_trend(["Bitcoin", "Cryptocurrency"], threshold=1.2)
 
-    # 10. Adam predictor (is prediction is positive)
+        # 8.Reddit
+        previous_activity, previous_count = load_previous_values()
+        current_activity, current_count, activity_increase, count_increase = reddit_check(
+            previous_activity, previous_count)
+
+        # 9.Youtube
+        bitcoin_youtube_increase_15_percent = check_bitcoin_youtube_videos_increase()
+
+        # 10. Adam predictor (is prediction is positive)
+        predicted_price = decision_tree_predictor()
+        print(f"The predicted price is: {predicted_price}")
+
+        # decision to close long position
+        if probability_to_hit_target < 40 or probability_up < 40:
+            if total_received > total_sent:
+                if technical_bullish:
+                    if not sentiment_of_news:
+                        if increase_google_search:
+                            if activity_increase or count_increase:
+                                if not bitcoin_youtube_increase_15_percent:
+                                    if predicted_price > current_price * 1.01:
+                                        print('close short position at loss')
+                return profit, loss
+        sleep(5)
 
 
 profit_after_trade, loss_after_trade = long_position_is_open()

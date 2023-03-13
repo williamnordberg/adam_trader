@@ -67,7 +67,8 @@ while True:
 
     # 2.5 Reddit
     previous_activity, previous_count = load_previous_values()
-    current_activity, current_count, activity_increase, count_increase = reddit_check(previous_activity, previous_count)
+    current_activity, current_count, activity_increase, count_increase = reddit_check(
+                                                    previous_activity, previous_count)
     previous_activity, previous_count = current_activity, current_count
 
     # 2.6 YouTube

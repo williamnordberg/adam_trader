@@ -74,3 +74,6 @@ def check_bitcoin_youtube_videos_increase():
         return True
     else:
         return False
+
+
+
