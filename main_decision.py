@@ -4,7 +4,7 @@ from order_book import get_probabilities
 from adam_predictor import decision_tree_predictor
 from google_search import check_search_trend
 from macro_expected import get_macro_expected_and_real_compare, print_upcoming_events
-from reddit import reddit_check, load_previous_values
+from reddit import reddit_check
 from youtube import check_bitcoin_youtube_videos_increase
 from news_websites import check_sentiment_of_news
 from position import long_position_is_open, short_position_is_open
@@ -51,9 +51,9 @@ while True:
 
     # 2.2 Monitor the richest Bitcoin addresses
 
-    last_24_accumulation = pd.read_csv('last_24_accumulation.csv')
-    total_received, total_sent = last_24_accumulation['total_received']. \
-        values[0], last_24_accumulation['total_sent'].values[0]
+    latest_info_saved = pd.read_csv('latest_info_saved.csv')
+    total_received = latest_info_saved['total_received_coins_in_last_24'][0]
+    total_sent = latest_info_saved['total_sent_coins_in_last_24'][0]
 
     # 2.3 Check Google search trends for Bitcoin and cryptocurrency
     increase_google_search = check_search_trend(["Bitcoin", "Cryptocurrency"], threshold=1.2)
@@ -66,10 +66,7 @@ while True:
     print_upcoming_events(events_dates)
 
     # 2.5 Reddit
-    previous_activity, previous_count = load_previous_values()
-    current_activity, current_count, activity_increase, count_increase = reddit_check(
-                                                    previous_activity, previous_count)
-    previous_activity, previous_count = current_activity, current_count
+    current_activity, current_count, activity_increase, count_increase = reddit_check()
 
     # 2.6 YouTube
     bitcoin_youtube_increase_15_percent = check_bitcoin_youtube_videos_increase()
