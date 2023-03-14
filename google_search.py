@@ -50,6 +50,7 @@ def check_search_trend(keywords: List[str], threshold: float = 1.2) -> bool:
 
         # Calculate the average increase in search volume for all keywords
         search_volume = trend.values
+        print('trend.values', trend.values)
         increase = np.diff(search_volume, axis=0)
         average_increase = np.mean(increase, axis=0)
 
@@ -65,3 +66,5 @@ def check_search_trend(keywords: List[str], threshold: float = 1.2) -> bool:
         return False
 
 
+increase_google_search = check_search_trend(["Bitcoin", "Cryptocurrency"], threshold=1.2)
+print(increase_google_search)

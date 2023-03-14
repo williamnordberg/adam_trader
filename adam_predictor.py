@@ -163,8 +163,9 @@ def update_macro_economic():
 # region  B. Prediction
 def decision_tree_predictor():
     # Read the last update time from disk
-    last_update_time = pd.read_csv('last_update_time.csv', header=None, names=['time'])['time'][0]
-    last_update_time = datetime.strptime(last_update_time, '%Y-%m-%d %H:%M:%S')
+    latest_info_saved = pd.read_csv('latest_info_saved.csv')
+    last_update_time_str = latest_info_saved['latest_dataset_update'][0]
+    last_update_time = datetime.strptime(last_update_time_str, '%Y-%m-%d %H:%M:%S')
 
     if datetime.now() - last_update_time > timedelta(hours=8):
         update_internal_factors()
@@ -174,12 +175,14 @@ def decision_tree_predictor():
         # Save the update time to disk
         now = datetime.now()
         now_str = now.strftime('%Y-%m-%d %H:%M:%S')
-        pd.DataFrame({'time': [now_str]}).to_csv('last_update_time.csv', index=False, header=False)
-        print(f'dataset been update{now}')
+        latest_info_saved['latest_dataset_update'] = now_str
+
+        # Save the latest info to disk
+        latest_info_saved.to_csv('latest_info_saved.csv', index=False)
+        print(f'dataset been updated {now}')
+
     else:
-        last_update_time = pd.read_csv('last_update_time.csv', header=None, names=['time'])['time'][0]
-        last_update_time = datetime.strptime(last_update_time, '%Y-%m-%d %H:%M:%S')
-        print(f'dataset is already update less that 8 hour ago at {last_update_time}')
+        print(f'dataset is already updated less than 8 hours ago at {last_update_time}')
 
     # load the main dataset and finn null value
     main_dataset = pd.read_csv('main_dataset.csv')

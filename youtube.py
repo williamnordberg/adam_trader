@@ -11,12 +11,12 @@ def get_authenticated_service():
     # Set up the API client
     api_service_name = "youtube"
     api_version = "v3"
-    client_secrets_file = "client_secret.json"
+    client_secrets_file = "youtube_client_secret.json"
     scopes = ["https://www.googleapis.com/auth/youtube.force-ssl"]
 
     # Check if the credentials file exists
     creds = None
-    token_file = 'token.pickle'
+    token_file = 'youtube_token.pickle'
     if os.path.exists(token_file):
         with open(token_file, 'rb') as token:
             creds = pickle.load(token)

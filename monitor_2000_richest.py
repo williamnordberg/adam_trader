@@ -207,7 +207,8 @@ def check_multiple_addresses(addresses):
 
 def monitor_bitcoin_richest_addresses():
     # Update if last update is older than 4 hours
-    last_update_time = pd.read_csv('last_update_time_richest_addresses.csv', header=None, names=['time'])['time'][0]
+    latest_info_saved = pd.read_csv('latest_info_saved.csv')
+    last_update_time = latest_info_saved['latest_richest_addresses_update'][0]
     last_update_time = datetime.strptime(last_update_time, '%Y-%m-%d %H:%M:%S')
 
     if datetime.now() - last_update_time > timedelta(hours=4):
@@ -218,12 +219,14 @@ def monitor_bitcoin_richest_addresses():
         # Save the update time to disk
         now = datetime.now()
         now_str = now.strftime('%Y-%m-%d %H:%M:%S')
-        pd.DataFrame({'time': [now_str]}).to_csv('last_update_time_richest_addresses.csv', index=False, header=False)
-        print(f'Richest addresses been updated at {now}')
+        latest_info_saved['latest_richest_addresses_update'] = now_str
+
+        # Save the latest info to disk
+        latest_info_saved.to_csv('latest_info_saved.csv', index=False)
+        print(f'dataset been updated {now}')
+
     else:
-        last_update_time = pd.read_csv('last_update_time_richest_addresses.csv', header=None, names=['time'])['time'][0]
-        last_update_time = datetime.strptime(last_update_time, '%Y-%m-%d %H:%M:%S')
-        print(f'The dataset was already updated less than 4 hours ago at {last_update_time}')
+        print(f'dataset is already updated less than 8 hours ago at {last_update_time}')
 
     # Read addresses from the CSV file
     addresses = read_addresses_from_csv('bitcoin_rich_list2000.csv')
@@ -233,10 +236,14 @@ def monitor_bitcoin_richest_addresses():
     return total_received, total_sent
 
 
+# call function to get total send and total receive in last 24 hours
 total_received1, total_sent1 = monitor_bitcoin_richest_addresses()
 
-# Create a pandas DataFrame with the values
-last_24_accumulation = pd.DataFrame({'total_received': [total_received1], 'total_sent': [total_sent1]})
+latest_info_saved_outer = pd.read_csv('latest_info_saved.csv')
+latest_info_saved_outer['total_received_coins_in_last_24'] = total_received1
+latest_info_saved_outer['total_sent_coins_in_last_24'] = total_sent1
 
-# Save the DataFrame to a CSV file
-last_24_accumulation.to_csv('last_24_accumulation.csv', index=False)
+# Save the latest info to disk
+now_time = datetime.now()
+latest_info_saved_outer.to_csv('latest_info_saved.csv', index=False)
+print(f'total receive and total send updated {now_time}')

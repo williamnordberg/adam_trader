@@ -1,51 +1,18 @@
 import praw
-import pickle
 import time
-
-
-def save_increases(activity_increase, count_increase):
-    with open('last_increases.pkl', 'wb') as f:
-        data = {'activity_increase': activity_increase, 'count_increase': count_increase}
-        pickle.dump(data, f)
-
-
-def load_last_increases():
-    try:
-        with open('last_increases.pkl', 'rb') as f:
-            data = pickle.load(f)
-            last_activity_increase = data['activity_increase']
-            last_count_increase = data['count_increase']
-        return last_activity_increase, last_count_increase
-    except FileNotFoundError:
-        return False, False
-
-
-def save_previous_values(previous_activity, previous_count):
-    with open('previous_values.pkl', 'wb') as f:
-        data = {'previous_activity': previous_activity, 'previous_count': previous_count}
-        pickle.dump(data, f)
-
-
-def load_previous_values():
-    try:
-        with open('previous_values.pkl', 'rb') as f:
-            data = pickle.load(f)
-            previous_activity = data['previous_activity']
-            previous_count = data['previous_count']
-        return previous_activity, previous_count
-    except FileNotFoundError:
-        return None, None
+import pandas as pd
 
 
 def save_current_time():
-    with open('last_update_time.txt', 'w') as f:
-        f.write(str(time.time()))
+    latest_info_saved = pd.read_csv('latest_info_saved.csv')
+    latest_info_saved.loc[0, 'last_reddit_update_time'] = str(time.time())
+    latest_info_saved.to_csv('latest_info_saved.csv', index=False)
 
 
 def load_last_update_time():
     try:
-        with open('last_update_time.txt', 'r') as f:
-            last_update_time = float(f.read())
+        latest_info_saved = pd.read_csv('latest_info_saved.csv')
+        last_update_time = float(latest_info_saved['last_reddit_update_time'][0])
         return last_update_time
     except FileNotFoundError:
         return None
@@ -93,13 +60,15 @@ def reddit_check(previous_activity=None, previous_count=None):
                          client_secret='25JDkyyvbbAP-osqrzXykVK65w86mw',
                          user_agent='btc_monitor_app:com.www.btc1231231:v1.0 (by /u/will7i7am)')
 
+    latest_info_saved = pd.read_csv('latest_info_saved.csv')
     if previous_activity is None:
-        previous_activity = reddit.subreddit("Bitcoin").active_user_count
-        previous_count = count_bitcoin_posts(reddit)
+        previous_activity = float(latest_info_saved['previous_activity'][0])
+        previous_count = float(latest_info_saved['previous_count'][0])
 
     if check_last_update_time():
         print('Last Reddit update was less than 24 hours ago. Skipping...')
-        last_activity_increase, last_count_increase = load_last_increases()
+        last_activity_increase = float(latest_info_saved['last_activity_increase'][0])
+        last_count_increase = float(latest_info_saved['last_count_increase'][0])
         return previous_activity, previous_count, last_activity_increase, last_count_increase
     else:
         current_activity = reddit.subreddit("Bitcoin").active_user_count
@@ -113,14 +82,16 @@ def reddit_check(previous_activity=None, previous_count=None):
         else:
             count_increase = False
 
-        save_increases(activity_increase, count_increase)
-        save_previous_values(current_activity, current_count)
+        latest_info_saved.loc[0, 'previous_activity'] = current_activity
+        latest_info_saved.loc[0, 'previous_count'] = current_count
+        latest_info_saved.loc[0, 'last_activity_increase'] = activity_increase
+        latest_info_saved.loc[0, 'last_count_increase'] = count_increase
+        latest_info_saved.to_csv('latest_info_saved.csv', index=False)
+
         save_current_time()
 
         return current_activity, current_count, activity_increase, count_increase
 
 
-previous_activity, previous_count = load_previous_values()
-current_activity, current_count, activity_increase, count_increase = reddit_check(
-                                                         previous_activity, previous_count)
-print(current_activity, current_count, activity_increase, count_increase)
+current_activity1, current_count1, activity_increase1, count_increase1 = reddit_check()
+print(current_activity1, current_count1, activity_increase1, count_increase1)
