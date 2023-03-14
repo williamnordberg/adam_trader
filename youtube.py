@@ -2,20 +2,45 @@ import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
 import datetime
+import pickle
+import os.path
+from google.auth.transport.requests import Request
 
 
-def check_bitcoin_youtube_videos_increase():
+def get_authenticated_service():
     # Set up the API client
     api_service_name = "youtube"
     api_version = "v3"
     client_secrets_file = "client_secret.json"
     scopes = ["https://www.googleapis.com/auth/youtube.force-ssl"]
 
-    # Authenticate and build the service object
-    flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(client_secrets_file, scopes)
-    credentials = flow.run_local_server(port=0)
+    # Check if the credentials file exists
+    creds = None
+    token_file = 'token.pickle'
+    if os.path.exists(token_file):
+        with open(token_file, 'rb') as token:
+            creds = pickle.load(token)
 
-    youtube = googleapiclient.discovery.build(api_service_name, api_version, credentials=credentials)
+    # If there are no (valid) credentials available, let the user log in.
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
+                client_secrets_file, scopes)
+            creds = flow.run_local_server(port=0)
+        # Save the credentials for the next run
+        with open(token_file, 'wb') as token:
+            pickle.dump(creds, token)
+
+    # Authenticate and build the service object
+    youtube = googleapiclient.discovery.build(api_service_name, api_version, credentials=creds)
+    return youtube
+
+
+def check_bitcoin_youtube_videos_increase():
+    # Get the authenticated service object
+    youtube = get_authenticated_service()
 
     # Get the date ranges for the last 24 hours and the 24 hours before that
     now = datetime.datetime.utcnow()
@@ -59,7 +84,8 @@ def check_bitcoin_youtube_videos_increase():
     while search_request_last_48_to_24_hours:
         search_response = search_request_last_48_to_24_hours.execute()
         search_results_last_48_to_24_hours.extend(search_response['items'])
-        search_request_last_48_to_24_hours = youtube.search().list_next(search_request_last_48_to_24_hours, search_response)
+        search_request_last_48_to_24_hours = youtube.search().list_next(search_request_last_48_to_24_hours,
+                                                                        search_response)
 
     # Calculate the increase or decrease in the number of videos with the #bitcoin hashtag
     num_last_24_hours = len(search_results_last_24_hours)
@@ -76,4 +102,5 @@ def check_bitcoin_youtube_videos_increase():
         return False
 
 
-
+bitcoin_youtube_increase_15_percent = check_bitcoin_youtube_videos_increase()
+print('bitcoin_youtube_increase_15_percent:', bitcoin_youtube_increase_15_percent)
