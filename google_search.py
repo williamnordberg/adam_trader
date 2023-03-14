@@ -68,3 +68,4 @@ def check_search_trend(keywords: List[str], threshold: float = 1.2) -> bool:
 
 increase_google_search = check_search_trend(["Bitcoin", "Cryptocurrency"], threshold=1.2)
 print(increase_google_search)
+ 
