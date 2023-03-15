@@ -9,29 +9,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="first commit">
-      <change afterPath="$PROJECT_DIR$/_trial_temp/_trial_marker" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/_trial_temp/test.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/update_factors.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/adam_trader.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/adam_trader.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/adam_predictor.py" beforeDir="false" afterPath="$PROJECT_DIR$/adam_predictor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/geckodriver.log" beforeDir="false" afterPath="$PROJECT_DIR$/geckodriver.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/google_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/google_search.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/latest_info_saved.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/macro_expected.py" beforeDir="false" afterPath="$PROJECT_DIR$/macro_expected.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main_dataset.csv" beforeDir="false" afterPath="$PROJECT_DIR$/main_dataset.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_decision.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_decision.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitor_2000_richest.py" beforeDir="false" afterPath="$PROJECT_DIR$/monitor_2000_richest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news_websites.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_websites.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_book.py" beforeDir="false" afterPath="$PROJECT_DIR$/order_book.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/position.py" beforeDir="false" afterPath="$PROJECT_DIR$/position.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reddit.py" beforeDir="false" afterPath="$PROJECT_DIR$/reddit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/technical_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/technical_analysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/twitter.py" beforeDir="false" afterPath="$PROJECT_DIR$/twitter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/youtube.py" beforeDir="false" afterPath="$PROJECT_DIR$/youtube.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/youtube_token.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/youtube_token.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test1.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +87,7 @@
       <recent name="C:\will\Python_project\adam_trader\spiders" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main_decision">
+  <component name="RunManager" selected="Python.adam_predictor">
     <configuration name="adam_predictor" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -204,9 +188,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.main_decision" />
         <item itemvalue="Python.adam_predictor" />
         <item itemvalue="Python.test" />
+        <item itemvalue="Python.main_decision" />
         <item itemvalue="Python.google_search" />
         <item itemvalue="Python tests.Python tests in test.py" />
       </list>
@@ -220,13 +204,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00025" summary="first commit">
-      <created>1676019780761</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1676019780761</updated>
     </task>
     <task id="LOCAL-00026" summary="first commit">
       <created>1676263129131</created>
@@ -564,7 +541,14 @@
       <option name="project" value="LOCAL" />
       <updated>1678779852843</updated>
     </task>
-    <option name="localTasksCounter" value="74" />
+    <task id="LOCAL-00074" summary="first commit">
+      <created>1678861486683</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1678861486683</updated>
+    </task>
+    <option name="localTasksCounter" value="75" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
