@@ -2,6 +2,9 @@ import numpy as np
 import pandas as pd
 import requests
 import ccxt
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def get_bitcoin_price():
@@ -17,10 +20,10 @@ def get_bitcoin_price():
             current_price_local = data['bitcoin']['usd']
             return current_price_local
         else:
-            print("Error: Could not retrieve Bitcoin price data")
+            logging.error("Error: Could not retrieve Bitcoin price data")
             return None
     except requests.exceptions.RequestException as e:
-        print(f"Error: Could not connect to CoinGecko API:{e}")
+        logging.error(f"Error: Could not connect to CoinGecko API:{e}")
         return None
 
 
@@ -180,5 +183,6 @@ def technical_analyse():
     return technical_bullish, technical_bearish
 
 
-technical_bullish1, technical_bearish1 = technical_analyse()
-print(technical_bullish1, technical_bearish1)
+if __name__ == '__main__':
+    technical_bullish1, technical_bearish1 = technical_analyse()
+    logging.info(technical_bullish1, technical_bearish1)

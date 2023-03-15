@@ -1,6 +1,8 @@
 import tweepy
 from datetime import datetime, timedelta
+import logging
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 # Twitter API credentials
 consumer_key = "OerQrw03cE5ofQwEoSDPOXYqc"
 consumer_secret = "hvixzZ4QuDtlFuZQjmDgbNc6ZeRLAL5I0v3BNFE9FxeJgiiovy"
@@ -27,4 +29,4 @@ count = 0
 for tweet in tweets:
     count += 1
 
-print(f"Number of tweets with {hashtag} in the last 24 hours: {count}")
+logging.info(f"Number of tweets with {hashtag} in the last 24 hours: {count}")

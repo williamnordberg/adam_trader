@@ -1,6 +1,9 @@
 import praw
 import time
 import pandas as pd
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def save_current_time():
@@ -66,7 +69,7 @@ def reddit_check(previous_activity=None, previous_count=None):
         previous_count = float(latest_info_saved['previous_count'][0])
 
     if check_last_update_time():
-        print('Last Reddit update was less than 24 hours ago. Skipping...')
+        logging.info('Last Reddit update was less than 24 hours ago. Skipping...')
         last_activity_increase = float(latest_info_saved['last_activity_increase'][0])
         last_count_increase = float(latest_info_saved['last_count_increase'][0])
         return previous_activity, previous_count, last_activity_increase, last_count_increase
@@ -93,5 +96,6 @@ def reddit_check(previous_activity=None, previous_count=None):
         return current_activity, current_count, activity_increase, count_increase
 
 
-current_activity1, current_count1, activity_increase1, count_increase1 = reddit_check()
-print(current_activity1, current_count1, activity_increase1, count_increase1)
+if __name__ == '__main__':
+    current_activity1, current_count1, activity_increase1, count_increase1 = reddit_check()
+    logging.info(current_activity1, current_count1, activity_increase1, count_increase1)

@@ -1,6 +1,9 @@
 import requests
 import json
 from textblob import TextBlob
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def check_sentiment_of_news():
@@ -41,17 +44,18 @@ def check_sentiment_of_news():
                 negative_count += 1
 
         # Check if the number of positive articles is 80% or more than the number of negative articles
-        #print('positive_count', positive_count)
-        #print('negative_count', negative_count)
+        #  logging.info('positive_count', positive_count)
+        #  logging.info('negative_count', negative_count)
         if positive_count >= 1.8 * negative_count:
             return True
         else:
             return False
 
     except requests.exceptions.RequestException as e:
-        print(f'Error occurred: {e}')
+        logging.info(f'Error occurred: {e}')
         return False
 
 
-#sentiment_positive = check_sentiment_of_news()
-#print('sentiment_positive:', sentiment_positive)
+if __name__ == "__main__":
+    sentiment_positive = check_sentiment_of_news()
+    logging.info('sentiment_positive:', sentiment_positive)

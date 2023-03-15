@@ -3,6 +3,9 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
 from datetime import datetime
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def print_upcoming_events(events_date_dict):
@@ -17,7 +20,7 @@ def print_upcoming_events(events_date_dict):
             hours, remainder = divmod(time_until_event.seconds, 3600)
             minutes, seconds = divmod(remainder, 60)
             time_str = f"{days_until_event} day(s), {hours} hour(s), {minutes} min(s)"
-            print(f"Upcoming event: {event} x, {time_str} remaining")
+            logging.info(f"Upcoming event: {event} x, {time_str} remaining")
 
 
 def get_macro_expected_and_real_compare():
@@ -46,7 +49,7 @@ def get_macro_expected_and_real_compare():
 
         table = soup.find("table", class_="calendar__table")
         if not table:
-            print("Table not found")
+            logging.warning("Table not found")
             service.stop()
             return CPI_better_than_expected, PPI_better_than_expected, interest_rate_better_than_expected
 
@@ -83,7 +86,8 @@ def get_macro_expected_and_real_compare():
     return CPI_better_than_expected, PPI_better_than_expected, interest_rate_better_than_expected, events_date_dict
 
 
-# CPI_better_than_expected1, PPI_better_than_expected1, interest_rate_better_than_expected1, \
-#    events_date_dict_outer = get_macro_expected_and_real_compare()
-# print(CPI_better_than_expected1, PPI_better_than_expected1, interest_rate_better_than_expected1)
-# print_upcoming_events(events_date_dict_outer)
+if __name__ == "__main__":
+    CPI_better_than_expected1, PPI_better_than_expected1, interest_rate_better_than_expected1, \
+        events_date_dict_outer = get_macro_expected_and_real_compare()
+    logging.info(f"{CPI_better_than_expected1}, {PPI_better_than_expected1}, {interest_rate_better_than_expected1}")
+    print_upcoming_events(events_date_dict_outer)

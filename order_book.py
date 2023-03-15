@@ -1,5 +1,7 @@
 import requests
+import logging
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 ENDPOINT = "https://api.binance.com/api/v3/depth"
 LIMIT = 1000
 IMBALANCE_TO_INITIATE = 0.53
@@ -13,7 +15,7 @@ def get_price(symbol):
         response = requests.get("https://api.binance.com/api/v3/ticker/price", params={'symbol': symbol})
         return float(response.json()['price'])
     except requests.exceptions.RequestException as e:
-        print(e)
+        logging.error(e)
         return None
 
 
@@ -28,7 +30,7 @@ def get_probabilities(symbols, limit=1000, bid_multiplier=0.995, ask_multiplier=
             bid_volume += sum([float(bid[1]) for bid in data['bids'] if float(bid[0]) >= (current_price * bid_multiplier)])
             ask_volume += sum([float(ask[1]) for ask in data['asks'] if float(ask[0]) <= current_price * ask_multiplier])
         except requests.exceptions.RequestException as e:
-            print(e)
+            logging.error(e)
             return None
     probability_up_in_function = bid_volume / (bid_volume + ask_volume)
     probability_down_in_function = ask_volume / (bid_volume + ask_volume)
@@ -45,7 +47,7 @@ def get_probabilities_hit_profit_or_stop(symbols, limit, profit_target, stop_los
             bid_volume += sum([float(bid[1]) for bid in data['bids'] if float(bid[0]) >= stop_loss])
             ask_volume += sum([float(ask[1]) for ask in data['asks'] if float(ask[0]) <= profit_target])
         except requests.exceptions.RequestException as e:
-            print(e)
+            logging.error(e)
             return None
     probability_to_hit_target = bid_volume / (bid_volume + ask_volume)
     probability_to_hit_stop_loss = ask_volume / (bid_volume + ask_volume)

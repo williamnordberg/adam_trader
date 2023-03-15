@@ -6,6 +6,9 @@ import pandas as pd
 from scrapy.crawler import CrawlerProcess
 from spider import BitcoinRichListSpider
 from dateutil.parser import parse
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def get_current_block_height():
@@ -18,10 +21,10 @@ def get_current_block_height():
             block_height_hex = data['data']['blocks']
             return block_height_hex
         else:
-            print(f"Error: {response.status_code} - {response.reason}")
+            logging.info(f"Error: {response.status_code} - {response.reason}")
             return None
     except requests.exceptions.RequestException as e:
-        print(f"Error: {e}")
+        logging.info(f"Error: {e}")
         return None
 
 
@@ -35,7 +38,7 @@ def read_addresses_from_csv(file_path):
 
 
 def check_address_transactions_blockchain_info(address):
-    print('check_blockchain_info')
+    logging.info('check_blockchain_info')
     # Get the current time and time 24 hours ago
     current_time = int(time.time())
     time_24_hours_ago = current_time - 86400
@@ -74,11 +77,11 @@ def check_address_transactions_blockchain_info(address):
         return abs(total_received / 100000000), abs(total_sent / -100000000)
 
     elif response.status_code == 429:
-        print(f"Rate limited for address {address}. Sleeping for a minute.")
+        logging.info(f"Rate limited for address {address}. Sleeping for a minute.")
         time.sleep(60)
         return check_address_transactions_blockchain_info(address)
     else:
-        print(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")
+        logging.info(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")
         return 0, 0
 
 
@@ -86,7 +89,7 @@ def check_address_transactions_blockcypher(address):
     # API requests limit is 20 requests per second and 200 per hour
     # consider if there is more than 20 more recipient in one transaction than this api do not load more than 2o
 
-    print('check_blockcypher')
+    logging.info('check_blockcypher')
     # Get the current time and time 24 hours ago
     current_time = int(time.time())
     time_24_hours_ago = current_time - 86400
@@ -124,7 +127,7 @@ def check_address_transactions_blockcypher(address):
 
     elif response.status_code == 429:
 
-        print(f"Rate limited for address {address}. Sleeping for a minute.")
+        logging.info(f"Rate limited for address {address}. Sleeping for a minute.")
 
         time.sleep(60)
 
@@ -132,14 +135,14 @@ def check_address_transactions_blockcypher(address):
 
     else:
 
-        print(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")
+        logging.info(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")
 
         return 0, 0
 
 
 def check_address_transactions_bitcore(address):
     #  limit for API requests is 60 requests per minute
-    print('check_bitcore')
+    logging.info('check_bitcore')
     # Get the block height 24 hours ago
     current_height = get_current_block_height()
     block_height_24_hours_ago = current_height - 134
@@ -169,11 +172,11 @@ def check_address_transactions_bitcore(address):
         return total_receive / 100000000, total_send / 10000000
 
     elif response.status_code == 429:
-        print(f"Rate limited for address {address}. Sleeping for a minute.")
+        logging.info(f"Rate limited for address {address}. Sleeping for a minute.")
         time.sleep(60)
         return check_address_transactions_bitcore(address)
     else:
-        print(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")
+        logging.info(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")
         return 0, 0
 
 
@@ -182,7 +185,7 @@ def check_multiple_addresses(addresses):
     total_sent = 0
 
     for i, address in enumerate(addresses):
-        print(f"*******Checking address {address} and {i}*******")
+        logging.info(f"*******Checking address {address} and {i}*******")
         if i % 3 == 0:
             # Use the Blockchain.info API
             received, sent = check_address_transactions_blockchain_info(address)
@@ -198,8 +201,8 @@ def check_multiple_addresses(addresses):
         total_received += received
         total_sent += sent
 
-        print(f"Total received: {total_received} BTC")
-        print(f"Total sent: {total_sent} BTC")
+        logging.info(f"Total received: {total_received} BTC")
+        logging.info(f"Total sent: {total_sent} BTC")
         time.sleep(3)
 
     return total_received, total_sent
@@ -223,10 +226,10 @@ def monitor_bitcoin_richest_addresses():
 
         # Save the latest info to disk
         latest_info_saved.to_csv('latest_info_saved.csv', index=False)
-        print(f'dataset been updated {now}')
+        logging.info(f'dataset been updated {now}')
 
     else:
-        print(f'dataset is already updated less than 8 hours ago at {last_update_time}')
+        logging.info(f'dataset is already updated less than 8 hours ago at {last_update_time}')
 
     # Read addresses from the CSV file
     addresses = read_addresses_from_csv('bitcoin_rich_list2000.csv')
@@ -236,14 +239,15 @@ def monitor_bitcoin_richest_addresses():
     return total_received, total_sent
 
 
-# call function to get total send and total receive in last 24 hours
-total_received1, total_sent1 = monitor_bitcoin_richest_addresses()
+if __name__ == "__main__":
+    # call function to get total send and total receive in last 24 hours
+    total_received1, total_sent1 = monitor_bitcoin_richest_addresses()
 
-latest_info_saved_outer = pd.read_csv('latest_info_saved.csv')
-latest_info_saved_outer['total_received_coins_in_last_24'] = total_received1
-latest_info_saved_outer['total_sent_coins_in_last_24'] = total_sent1
+    latest_info_saved_outer = pd.read_csv('latest_info_saved.csv')
+    latest_info_saved_outer['total_received_coins_in_last_24'] = total_received1
+    latest_info_saved_outer['total_sent_coins_in_last_24'] = total_sent1
 
-# Save the latest info to disk
-now_time = datetime.now()
-latest_info_saved_outer.to_csv('latest_info_saved.csv', index=False)
-print(f'total receive and total send updated {now_time}')
+    # Save the latest info to disk
+    now_time = datetime.now()
+    latest_info_saved_outer.to_csv('latest_info_saved.csv', index=False)
+    logging.info(f'total receive and total send updated {now_time}')

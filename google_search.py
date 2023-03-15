@@ -3,6 +3,9 @@ from pytrends.exceptions import ResponseError
 from pytrends.request import TrendReq
 import numpy as np
 import requests
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def check_internet_connection() -> bool:
@@ -16,7 +19,7 @@ def check_internet_connection() -> bool:
         requests.get("http://www.google.com", timeout=3)
         return True
     except requests.ConnectionError:
-        print("No internet connection available.")
+        logging.warning("No internet connection available.")
         return False
 
 
@@ -50,7 +53,7 @@ def check_search_trend(keywords: List[str], threshold: float = 1.2) -> bool:
 
         # Calculate the average increase in search volume for all keywords
         search_volume = trend.values
-        print('trend.values', trend.values)
+        logging.info(f'trend.values: {trend.values}')
         increase = np.diff(search_volume, axis=0)
         average_increase = np.mean(increase, axis=0)
 
@@ -62,10 +65,11 @@ def check_search_trend(keywords: List[str], threshold: float = 1.2) -> bool:
         return True
 
     except ResponseError as e:
-        print(f"An error occurred: {e}")
+        logging.error(f"An error occurred: {e}")
         return False
 
 
-increase_google_search = check_search_trend(["Bitcoin", "Cryptocurrency"], threshold=1.2)
-print(increase_google_search)
+if __name__ == "__main__":
+    increase_google_search = check_search_trend(["Bitcoin", "Cryptocurrency"], threshold=1.2)
+    logging.info(increase_google_search)
  
