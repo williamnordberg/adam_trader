@@ -5,6 +5,9 @@ import datetime
 import pickle
 import os.path
 from google.auth.transport.requests import Request
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def get_authenticated_service():
@@ -102,5 +105,6 @@ def check_bitcoin_youtube_videos_increase():
         return False
 
 
-bitcoin_youtube_increase_15_percent = check_bitcoin_youtube_videos_increase()
-print('bitcoin_youtube_increase_15_percent:', bitcoin_youtube_increase_15_percent)
+if __name__ == "__main__":
+    bitcoin_youtube_increase_15_percent = check_bitcoin_youtube_videos_increase()
+    logging.info('bitcoin_youtube_increase_15_percent:', bitcoin_youtube_increase_15_percent)
