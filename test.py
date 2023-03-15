@@ -1,154 +1,115 @@
-from selenium.common import TimeoutException
-from fredapi import Fred
-import pandas as pd
-import yfinance as yf
-from selenium.webdriver.support.ui import Select
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium import webdriver
-import os
-import time
-from datetime import datetime
 import logging
+import requests
+import pandas as pd
+from time import sleep
+from technical_analysis import technical_analyse
+from position import long_position_is_open, short_position_is_open
+from news_websites import check_sentiment_of_news
+from youtube import check_bitcoin_youtube_videos_increase
+from reddit import reddit_check
+from macro_expected import get_macro_expected_and_real_compare, print_upcoming_events
+from google_search import check_search_trend
+from adam_predictor import decision_tree_predictor
+from order_book import get_probabilities
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# Constants
+LOOP_COUNTER = 0
+SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 
-
-def download_bitcoin_data():
-    """Download Bitcoin data from CoinMetrics."""
-    # Create a new instance of the Firefox driver
-    with webdriver.Firefox() as driver:
-
-        # Open the webpage
-        driver.get("https://coinmetrics.io/community-network-data/")
-
-        # Check if the accept button for cookies is present
-        try:
-            accept_button = WebDriverWait(driver, 7).until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, "a.fusion-privacy-bar-acceptance")))
-            accept_button.click()
-        except TimeoutException:
-            pass
-
-        # Find and select Bitcoin from the dropdown menu
-        time.sleep(4)
-        selector = Select(WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "#downloadSelect"))))
-        selector.select_by_value("https://raw.githubusercontent.com/coinmetrics/data/master/csv/btc.csv")
-
-        # Click the Download button
-        download_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button.cm-button")))
-        download_button.click()
-        time.sleep(2)
-
-        # Wait for the download to finish
-        wait_for_download = True
-        new_data = None  # Initialize new_data as None
-        while wait_for_download:
-            # Get a list of all files in the Downloads folder, sorted by creation time (new first)
-            files = sorted(os.listdir(os.path.join(os.path.expanduser("~"), "Downloads")),
-                           key=lambda x: os.path.getctime(os.path.join(os.path.expanduser("~"), "Downloads", x)),
-                           reverse=True)
-            for file in files:
-                if file.endswith(".csv"):
-                    with open(os.path.join(os.path.expanduser("~"), "Downloads", file)) as csv_file:
-                        new_data = pd.read_csv(csv_file, dtype={146: str})
-                    wait_for_download = False
-                    break
-
-    return new_data
+# Logging setup
+logging.basicConfig(filename='trading.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def update_main_dataset(new_data, columns_to_update):
-    """Update the main dataset with new data."""
-    with open('main_dataset.csv') as file:
-        main_dataset = pd.read_csv(file, dtype={146: str})
-
-    if new_data is not None:
-        # Rename the 'time' column to 'Date'
-        new_data = new_data.rename(columns={'time': 'Date'})
-
-        # Filter the new data to only include rows with a date after the latest date in the main dataset
-        latest_date = main_dataset.loc[main_dataset['DiffLast'].last_valid_index(), 'Date']
-        new_data = new_data[new_data['Date'] > latest_date]
-        new_data = new_data[columns_to_update]
-
-        if len(new_data) > 0:
-            # Check if new data have a same date row with main_dataset
-            if main_dataset['Date'].iloc[-1] == new_data['Date'].iloc[0]:
-                # Drop the last row in main dataset
-                main_dataset = main_dataset.drop(main_dataset.index[-1])
-
-            # Append the new rows to the main dataset
-            main_dataset = pd.concat([main_dataset, new_data])
-
-            # Write the updated dataset to disk
-            with open('main_dataset.csv', 'w') as file:
-                main_dataset.to_csv(file, index=False)
-
-            main_dataset.to_csv('main_dataset.csv', index=False)
-
-            logging.info(f"{len(new_data)} new rows of data added.")
-        else:
-            logging.info("The dataset is already up to date.")
-    else:
-        logging.error("Failed to download data.")
-
-    return None
-
-
-def update_internal_factors():
-    new_data = download_bitcoin_data()
-    update_main_dataset(new_data, ['Date', 'DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate'])
-
-
-def update_yahoo_data():
-    # Read the main dataset from disk
-    with open('main_dataset.csv') as file:
-        main_dataset = pd.read_csv(file, dtype={146: str})
-    latest_date = main_dataset.loc[main_dataset['Open'].last_valid_index(), 'Date']
-    end_date = datetime.today().strftime('%Y-%m-%d')
-
-    # Download the new data from Yahoo Finance
-    ticker = yf.Ticker("BTC-USD")
-    new_data = ticker.history(start=latest_date, end=end_date)
-
-    new_data.index = new_data.index.strftime('%Y-%m-%d')
-    new_data['Date'] = new_data.index
-
-    # Update main dataset with new data
-    update_main_dataset(new_data, ['Date', 'Open', 'Close'])
-
-
-def update_macro_economic():
-    # Connect to FRED API and get the latest federal funds rate data
+def get_bitcoin_price():
+    """
+    Retrieves the current Bitcoin price in USD from the CoinGecko API.
+    """
     try:
-        with Fred(api_key='8f7cbcbc1210c7efa87ee9484e159c21') as fred:
-            fred_dataset = fred.get_series('FEDFUNDS')
+        url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            data = response.json()
+            current_price_local = data['bitcoin']['usd']
+            return current_price_local
+        else:
+            logging.error("Error: Could not retrieve Bitcoin price data")
+            raise Exception("Error: Could not retrieve Bitcoin price data")
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Error: Could not connect to CoinGecko API:{e}")
+        raise Exception(f"Error: Could not connect to CoinGecko API:{e}")
+
+
+def make_trading_decision(predicted_price_inner, current_price_inner, probability_down_inner, probability_up_inner,
+                          increase_google_search_inner, total_received_inner, total_sent_inner,
+                          cpi_better_than_expected_inner, ppi_better_than_expected_inner,
+                          interest_rate_better_than_expected_inner, activity_increase_inner, count_increase_inner,
+                          bitcoin_youtube_increase_15_percent_inner, sentiment_of_news_inner, technical_bullish_inner,
+                          technical_bearish_inner):
+    """
+    Makes a trading decision based on the conditions met.
+    """
+    if (predicted_price_inner > current_price_inner * 1.01) and (probability_up_inner > 0.6) and \
+            increase_google_search_inner:
+        if total_received_inner > total_sent_inner:
+            if cpi_better_than_expected_inner and ppi_better_than_expected_inner and \
+                    interest_rate_better_than_expected_inner:
+                if activity_increase_inner or count_increase_inner:
+                    if bitcoin_youtube_increase_15_percent_inner:
+                        if sentiment_of_news_inner:
+                            if technical_bullish_inner:
+                                logging.info('Opening a long position')
+                                profit_after_trade, loss_after_trade = long_position_is_open()
+                                logging.info(f"profit_after_trade:{profit_after_trade}, loss_after_trade:"
+                                             f"{loss_after_trade}")
+    elif (predicted_price_inner < current_price_inner * 0.99) and (probability_down_inner > 0.6) and not \
+            increase_google_search_inner:
+        if total_received_inner < total_sent_inner:
+            if not cpi_better_than_expected_inner and not ppi_better_than_expected_inner and not \
+                    interest_rate_better_than_expected_inner:
+                if not activity_increase_inner or not count_increase_inner:
+                    if not bitcoin_youtube_increase_15_percent_inner:
+                        if not sentiment_of_news_inner:
+                            if technical_bearish_inner:
+                                logging.info('Opening short position')
+                                profit_after_trade, loss_after_trade = short_position_is_open()
+                                logging.info(f"profit_after_trade:{profit_after_trade}, "
+                                             f"loss_after_trade:{loss_after_trade}")
+
+
+def gather_data():
+    data = {}
+
+    try:
+        data["predicted_price"] = decision_tree_predictor()
+        data["probability_down"], data["probability_up"] = get_probabilities(SYMBOLS, bid_multiplier=0.995,
+                                                                             ask_multiplier=1.005)
+        latest_info_saved_inner = pd.read_csv('latest_info_saved.csv')
+        data["total_received"] = latest_info_saved_inner['total_received_coins_in_last_24'][0]
+        data["total_sent"] = latest_info_saved_inner['total_sent_coins_in_last_24'][0]
+        data["increase_google_search"] = check_search_trend(["Bitcoin", "Cryptocurrency"], threshold=1.2)
+        data["cpi_better_than_expected"], data["ppi_better_than_expected"], data["interest_rate_better_than_expected"],\
+            data["events_dates"] = get_macro_expected_and_real_compare()
+        data["current_activity"], data["current_count"], data["activity_increase"], data[
+            "count_increase"] = reddit_check()
+        data["bitcoin_youtube_increase_15_percent"] = check_bitcoin_youtube_videos_increase()
+        data["sentiment_of_news"] = check_sentiment_of_news()
+        data["technical_bullish"], data["technical_bearish"] = technical_analyse()
+        data["current_price"] = get_bitcoin_price()
+
     except Exception as e:
-        logging.error(f"Error: {e}")
-        return
+        logging.error(f"Error gathering data: {e}")
 
-    # Load the main dataset into a DataFrame
-    with open('main_dataset.csv') as file:
-        main_dataset = pd.read_csv(file, dtype={146: str})
+    return data
 
-    # Check if the latest federal funds rate is already in the main dataset
-    latest_rate = fred_dataset.iloc[-1]
-    latest_date_in_main_dataset = main_dataset.loc[main_dataset['Close'].last_valid_index(), 'Date']
 
-    if latest_rate == main_dataset['Rate'].iloc[-1]:
-        logging.info("interest rate data is already up to date.")
-        return
-    # Update the last row of the Rate column with the latest federal funds rate data
-    main_dataset.loc[main_dataset['Date'] == latest_date_in_main_dataset, 'Rate'] = latest_rate
+# Main trading loop
+while True:
+    LOOP_COUNTER += 1
+    logging.info(f"LOOP_COUNTER: {LOOP_COUNTER}")
 
-    # Backward fill missing values with the next non-null value, but only up to the next value change
-    main_dataset['Rate'].fillna(method='bfill', limit=30, inplace=True)
+    data = gather_data()
 
-    # Print a message indicating that the new rate has been added to the main dataset
-    logging.info("interest rate added to the main dataset.")
+    make_trading_decision(**data)
 
-    # Save the updated main dataset to a CSV file
-    main_dataset.to_csv('main_dataset.csv', index=False)
-
+    sleep(10)

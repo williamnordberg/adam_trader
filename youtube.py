@@ -107,4 +107,4 @@ def check_bitcoin_youtube_videos_increase():
 
 if __name__ == "__main__":
     bitcoin_youtube_increase_15_percent = check_bitcoin_youtube_videos_increase()
-    logging.info('bitcoin_youtube_increase_15_percent:', bitcoin_youtube_increase_15_percent)
+    logging.info('bitcoin_youtube_increase_15_percent: %s', bitcoin_youtube_increase_15_percent)
