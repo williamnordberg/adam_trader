@@ -1,7 +1,9 @@
 from sklearn.tree import DecisionTreeRegressor
 import pandas as pd
 from datetime import datetime, timedelta
-from update_factors import update_internal_factors, update_yahoo_data, update_macro_economic
+from update_dataset_internal_factors import update_internal_factors
+from update_dataset_yahoo import update_yahoo_data
+from update_dataset_macro import update_macro_economic
 import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 

@@ -1,34 +1,40 @@
+# Standard library
 from datetime import datetime, timedelta
-import requests
 import time
 import csv
-import pandas as pd
-from scrapy.crawler import CrawlerProcess
-from spider import BitcoinRichListSpider
-from dateutil.parser import parse
 import logging
 
+# Third-party libraries
+import pandas as pd
+from scrapy.crawler import CrawlerProcess
+import configparser
+
+
+# Local imports
+from spider import BitcoinRichListSpider
+from api_blockchain_info import check_address_transactions_blockchain_info
+from api_blockcypher import check_address_transactions_blockcypher
+
+
+SATOSHI_TO_BITCOIN = 100000000
+LATEST_INFO_FILE = 'latest_info_saved.csv'
+BITCOIN_RICH_LIST_FILE = 'bitcoin_rich_list2000.csv'
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-
-def get_current_block_height():
-    try:
-        api_url = 'https://api.blockchair.com/bitcoin/stats'
-        response = requests.get(api_url)
-
-        if response.status_code == 200:
-            data = response.json()
-            block_height_hex = data['data']['blocks']
-            return block_height_hex
-        else:
-            logging.info(f"Error: {response.status_code} - {response.reason}")
-            return None
-    except requests.exceptions.RequestException as e:
-        logging.info(f"Error: {e}")
-        return None
+# Load the config file
+config = configparser.ConfigParser()
+config.read('config.ini')
+USER_AGENT = config.get('Crawler', 'UserAgent')
 
 
 def read_addresses_from_csv(file_path):
+    """
+        Read Bitcoin addresses from a CSV file.
+        Args:
+            file_path (str): The path to the CSV file containing Bitcoin addresses.
+        Returns:
+            addresses (list): A list of Bitcoin addresses.
+        """
     addresses = []
     with open(file_path, 'r') as file:
         reader = csv.reader(file)
@@ -37,150 +43,15 @@ def read_addresses_from_csv(file_path):
     return addresses
 
 
-def check_address_transactions_blockchain_info(address):
-    logging.info('check_blockchain_info')
-    # Get the current time and time 24 hours ago
-    current_time = int(time.time())
-    time_24_hours_ago = current_time - 86400
-
-    # Construct the API URL to get all transactions for the address
-    api_url = f"https://blockchain.info/rawaddr/{address}"
-
-    # Send the API request and get the response
-    response = requests.get(api_url)
-
-    # Check the response status code
-    if response.status_code == 200:
-        response_json = response.json()
-
-        # Get the list of transactions for the address in the last 24 hours
-        transactions = [tx for tx in response_json["txs"] if tx["time"] > time_24_hours_ago]
-
-        # Initialize variables for tracking total sent and received
-        total_received = 0
-        total_sent = 0
-        processed_txids = []
-
-        # Loop through the list of transactions and calculate total sent and received
-        for tx in transactions:
-            for input_inner in tx["inputs"]:
-                if "prev_out" in input_inner and input_inner["prev_out"]["addr"] == address:
-                    total_sent += input_inner["prev_out"]["value"]
-                else:
-                    for output in tx["out"]:
-                        if output["addr"] == address:
-                            if tx["hash"] not in processed_txids:
-                                processed_txids.append(tx["hash"])
-                                total_received += output["value"]
-
-        # Convert from Satoshi to BTC
-        return abs(total_received / 100000000), abs(total_sent / -100000000)
-
-    elif response.status_code == 429:
-        logging.info(f"Rate limited for address {address}. Sleeping for a minute.")
-        time.sleep(60)
-        return check_address_transactions_blockchain_info(address)
-    else:
-        logging.info(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")
-        return 0, 0
-
-
-def check_address_transactions_blockcypher(address):
-    # API requests limit is 20 requests per second and 200 per hour
-    # consider if there is more than 20 more recipient in one transaction than this api do not load more than 2o
-
-    logging.info('check_blockcypher')
-    # Get the current time and time 24 hours ago
-    current_time = int(time.time())
-    time_24_hours_ago = current_time - 86400
-
-    # Construct the API URL to get all transactions for the address
-    api_key = '4f0f5269fb8f4ccf811d9b65b2a7cab8'
-    # api_key = '8e20b70ce07248dd90e02aa19d611edf'
-    api_url = f"https://api.blockcypher.com/v1/btc/main/addrs/{address}/full?token={api_key}"
-
-    # Send the API request and get the response
-    response = requests.get(api_url)
-
-    # Check the response status code
-    if response.status_code == 200:
-        response_json = response.json()
-
-        # Get the list of transactions for the address in the last 24 hours
-        transactions = [tx for tx in response_json["txs"] if parse(tx["received"]).timestamp() > time_24_hours_ago]
-
-        # Initialize variables for tracking total sent and received
-        total_received = 0
-        total_sent = 0
-
-        # Loop through the list of transactions and calculate total sent and received
-        for tx in transactions:
-            for output in tx["outputs"]:
-                if output["addresses"] == [address]:
-                    total_received += output["value"]
-            for input_inner in tx["inputs"]:
-                if input_inner["addresses"] == [address]:
-                    total_sent += input_inner["output_value"]
-
-        # Convert from Satoshi to BTC
-        return (total_received / 100000000), (total_sent / 100000000)
-
-    elif response.status_code == 429:
-
-        logging.info(f"Rate limited for address {address}. Sleeping for a minute.")
-
-        time.sleep(60)
-
-        return check_address_transactions_blockcypher(address)
-
-    else:
-
-        logging.info(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")
-
-        return 0, 0
-
-
-def check_address_transactions_bitcore(address):
-    #  limit for API requests is 60 requests per minute
-    logging.info('check_bitcore')
-    # Get the block height 24 hours ago
-    current_height = get_current_block_height()
-    block_height_24_hours_ago = current_height - 134
-
-    # Construct the API URL to get all transactions for the address
-    api_url = f"https://api.bitcore.io/api/BTC/mainnet/address/{address}/txs"
-
-    # Send the API request and get the response
-    response = requests.get(api_url)
-
-    # Check the response status code
-    if response.status_code == 200:
-        transactions = response.json()
-        outgoing_txids = []
-        total_send, total_receive = 0, 0
-        for tx in transactions:
-            mint_height = tx['mintHeight']
-            if (mint_height <= current_height) and (mint_height > block_height_24_hours_ago):
-                if tx['spentTxid'] != '':
-                    # This is an outgoing transaction
-                    outgoing_txids.append(tx['mintTxid'])
-                    total_send += tx['value']
-                elif tx['mintTxid'] not in outgoing_txids:
-                    # This is an incoming transaction
-                    total_receive += tx['value']
-
-        return total_receive / 100000000, total_send / 10000000
-
-    elif response.status_code == 429:
-        logging.info(f"Rate limited for address {address}. Sleeping for a minute.")
-        time.sleep(60)
-        return check_address_transactions_bitcore(address)
-    else:
-        logging.info(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")
-        return 0, 0
-
-
 def check_multiple_addresses(addresses):
+    """
+    Check the total Bitcoin received and sent in the last 24 hours for a list of addresses.
+    Args:
+        addresses (list): A list of Bitcoin addresses.
+    Returns:
+        total_received (float): Total Bitcoin received in the last 24 hours for all addresses.
+        total_sent (float): Total Bitcoin sent in the last 24 hours for all addresses.
+    """
     total_received = 0
     total_sent = 0
 
@@ -209,13 +80,19 @@ def check_multiple_addresses(addresses):
 
 
 def monitor_bitcoin_richest_addresses():
+    """
+    Monitor the richest Bitcoin addresses and calculate the total received and sent in the last 24 hours.
+    Returns:
+        total_received (float): Total Bitcoin received in the last 24 hours for the richest addresses.
+        total_sent (float): Total Bitcoin sent in the last 24 hours for the richest addresses.
+    """
     # Update if last update is older than 4 hours
-    latest_info_saved = pd.read_csv('latest_info_saved.csv')
+    latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
     last_update_time = latest_info_saved['latest_richest_addresses_update'][0]
     last_update_time = datetime.strptime(last_update_time, '%Y-%m-%d %H:%M:%S')
 
     if datetime.now() - last_update_time > timedelta(hours=4):
-        process = CrawlerProcess({'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'})
+        process = CrawlerProcess({'USER_AGENT': USER_AGENT})
         process.crawl(BitcoinRichListSpider)
         process.start()
 
@@ -232,7 +109,7 @@ def monitor_bitcoin_richest_addresses():
         logging.info(f'dataset is already updated less than 8 hours ago at {last_update_time}')
 
     # Read addresses from the CSV file
-    addresses = read_addresses_from_csv('bitcoin_rich_list2000.csv')
+    addresses = read_addresses_from_csv(BITCOIN_RICH_LIST_FILE)
 
     # Check the total Bitcoin received and sent in the last 24 hours for all addresses
     total_received, total_sent = check_multiple_addresses(addresses)
@@ -243,7 +120,7 @@ if __name__ == "__main__":
     # call function to get total send and total receive in last 24 hours
     total_received1, total_sent1 = monitor_bitcoin_richest_addresses()
 
-    latest_info_saved_outer = pd.read_csv('latest_info_saved.csv')
+    latest_info_saved_outer = pd.read_csv(LATEST_INFO_FILE)
     latest_info_saved_outer['total_received_coins_in_last_24'] = total_received1
     latest_info_saved_outer['total_sent_coins_in_last_24'] = total_sent1
 
