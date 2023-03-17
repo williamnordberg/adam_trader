@@ -107,7 +107,7 @@ while True:
     print_upcoming_events(events_dates)
 
     # 2.5 Reddit
-    current_activity, current_count, activity_increase, count_increase = reddit_check()
+    activity_increase, count_increase = reddit_check()
 
     # 2.6 YouTube
     bitcoin_youtube_increase_15_percent = check_bitcoin_youtube_videos_increase()

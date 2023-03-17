@@ -1,87 +1,59 @@
-import requests
+import praw
+import time
+import pandas as pd
 import logging
-import configparser
+from datetime import datetime, timedelta
+
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Load the config file
-config = configparser.ConfigParser()
-config.read('config.ini')
 
-ENDPOINT = "https://api.binance.com/api/v3/depth"
-LIMIT = 1000
-SYMBOLS = ['BTCUSDT', 'BTCBUSD']
-PROFIT_MARGIN = 0.01
+def count_bitcoin_posts(reddit):
+    subreddit = reddit.subreddit("all")
+    bitcoin_posts = subreddit.search("#Crypto ", limit=1000)
+    count = 0
+    for post in bitcoin_posts:
+        if post.created_utc > (time.time() - 7 * 24 * 60 * 60):
+            count += 1
 
-
-def get_price(symbol):
-    """
-      Get the price of a given symbol.
-
-      :param symbol: The trading symbol to get the price for
-      :return: The price of the symbol or None if an error occurs
-      """
-    try:
-        response = requests.get("https://api.binance.com/api/v3/ticker/price", params={'symbol': symbol})
-        return float(response.json()['price'])
-    except requests.exceptions.RequestException as e:
-        logging.error(e)
-        return None
+    return count
 
 
-def get_probabilities(symbols, limit=LIMIT, bid_multiplier=0.995, ask_multiplier=1.005):
-    """
-    Calculate the probabilities of price movement for a list of trading symbols.
+def reddit_check():
+    reddit = praw.Reddit(client_id='KiayZQKazH6eL_hTwlSgQw',
+                         client_secret='25JDkyyvbbAP-osqrzXykVK65w86mw',
+                         user_agent='btc_monitor_app:com.www.btc1231231:v1.0 (by /u/will7i7am)')
 
-    :param symbols: List of trading symbols
-    :param limit: Limit for the depth of the order book
-    :param bid_multiplier: Multiplier for bid orders
-    :param ask_multiplier: Multiplier for ask orders
-    :return: Probabilities of price movement (down, up) or None if an error occurs
-    """
-    bid_volume, ask_volume = 0, 0
-    for symbol in symbols:
-        try:
-            response = requests.get(f"{ENDPOINT}/depth", params={'symbol': symbol, 'limit': limit})
-            data = response.json()
-            current_price = get_price(symbol)
-            bid_volume += sum(
-                [float(bid[1]) for bid in data['bids'] if float(bid[0]) >= (current_price * bid_multiplier)])
-            ask_volume += sum(
-                [float(ask[1]) for ask in data['asks'] if float(ask[0]) <= current_price * ask_multiplier])
-        except requests.exceptions.RequestException as e:
-            logging.error(e)
-            return None
-    probability_down = bid_volume / (bid_volume + ask_volume)
-    probability_up = ask_volume / (bid_volume + ask_volume)
-    return probability_down, probability_up
+    latest_info_saved = pd.read_csv('latest_info_saved.csv')
+    last_reddit_update_time_str = latest_info_saved['last_reddit_update_time'][0]
+    last_reddit_update_time = datetime.strptime(last_reddit_update_time_str, '%Y-%m-%d %H:%M:%S')
 
+    if datetime.now() - last_reddit_update_time < timedelta(hours=24):
+        logging.info('Last Reddit update was less than 24 hours ago. Skipping...')
+        last_activity_increase = latest_info_saved['last_activity_increase'][0]
+        last_count_increase = latest_info_saved['last_count_increase'][0]
+        return last_activity_increase, last_count_increase
 
-def get_probabilities_hit_profit_or_stop(symbols, limit, profit_target, stop_loss):
-    """
-    Calculate the probabilities of hitting profit target or stop loss for a list of trading symbols.
+    else:
+        previous_activity = float(latest_info_saved['previous_activity'][0])
+        previous_count = float(latest_info_saved['previous_count'][0])
+        current_activity = reddit.subreddit("Bitcoin").active_user_count
+        current_count = count_bitcoin_posts(reddit)
+        last_activity_increase = (current_activity / previous_activity) > 1.15
+        last_count_increase = (current_count / previous_count) > 1.15
 
-    :param symbols: List of trading symbols
-    :param limit: Limit for the depth of the order book
-    :param profit_target: Profit target price
-    :param stop_loss: Stop loss price
-    :return: Probabilities of hitting profit target and stop loss (target, stop_loss) or None if an error occurs
-    """
-    bid_volume, ask_volume = 0, 0
-    for symbol in symbols:
-        try:
-            response = requests.get(f"{ENDPOINT}/depth", params={'symbol': symbol, 'limit': limit})
-            data = response.json()
-            bid_volume += sum([float(bid[1]) for bid in data['bids'] if float(bid[0]) >= stop_loss])
-            ask_volume += sum([float(ask[1]) for ask in data['asks'] if float(ask[0]) <= profit_target])
-        except requests.exceptions.RequestException as e:
-            logging.error(e)
-            return None
-    probability_to_hit_target = bid_volume / (bid_volume + ask_volume)
-    probability_to_hit_stop_loss = ask_volume / (bid_volume + ask_volume)
-    return probability_to_hit_target, probability_to_hit_stop_loss
+        latest_info_saved.loc[0, 'previous_activity'] = current_activity
+        latest_info_saved.loc[0, 'previous_count'] = current_count
+
+        # Save the update time to disk
+        now = datetime.now()
+        now_str = now.strftime('%Y-%m-%d %H:%M:%S')
+        latest_info_saved.loc[0, 'last_reddit_update_time'] = now_str
+        latest_info_saved.to_csv('latest_info_saved.csv', index=False)
+
+        return last_activity_increase, last_count_increase
 
 
-if __name__ == "__main__":
-    probability_down_outer, probability_up_outer = get_probabilities(SYMBOLS, LIMIT, bid_multiplier=0.995, ask_multiplier=1.005)
-    logging.info(f'Probability of price going down and up: {probability_down_outer}, {probability_up_outer}')
+if __name__ == '__main__':
+    activity_increase1, count_increase1 = reddit_check()
+    logging.info(f", activity_increase: {activity_increase1}, count_increase: {count_increase1}")
