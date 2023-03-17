@@ -16,7 +16,6 @@ SATOSHI_TO_BITCOIN = 100000000
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-
 def check_address_transactions_blockchain_info(address):
     """
         Check the total Bitcoin received and sent in the last 24 hours for an address using the Blockchain.info API.
