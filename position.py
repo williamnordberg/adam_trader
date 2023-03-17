@@ -105,7 +105,7 @@ def long_position_is_open():
         increase_google_search = check_search_trend(["Bitcoin", "Cryptocurrency"], threshold=1.2)
 
         # 8.Reddit
-        current_activity, current_count, activity_increase, count_increase = reddit_check()
+        activity_increase, count_increase = reddit_check()
 
         # 9.Youtube
         bitcoin_youtube_increase_15_percent = check_bitcoin_youtube_videos_increase()
