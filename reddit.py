@@ -3,27 +3,59 @@ import time
 import pandas as pd
 import logging
 from datetime import datetime, timedelta
+import configparser
+
+SEVEN_DAYS_IN_SECONDS = 7 * 24 * 60 * 60
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def count_bitcoin_posts(reddit):
+    """
+        Counts the number of Bitcoin-related posts on Reddit in the last 7 days.
+
+        Args:
+            reddit (praw.Reddit): An authenticated Reddit instance.
+
+        Returns:
+            int: The number of Bitcoin-related posts in the last 7 days.
+
+        """
     subreddit = reddit.subreddit("all")
     bitcoin_posts = subreddit.search("#Crypto ", limit=1000)
     count = 0
     for post in bitcoin_posts:
-        if post.created_utc > (time.time() - 7 * 24 * 60 * 60):
+        if post.created_utc > (time.time() - SEVEN_DAYS_IN_SECONDS):
             count += 1
 
     return count
 
 
 def reddit_check():
-    reddit = praw.Reddit(client_id='KiayZQKazH6eL_hTwlSgQw',
-                         client_secret='25JDkyyvbbAP-osqrzXykVK65w86mw',
-                         user_agent='btc_monitor_app:com.www.btc1231231:v1.0 (by /u/will7i7am)')
+    """
+      Checks the current activity and post count of the Bitcoin subreddit on Reddit.
+      If the last check was less than 24 hours ago, returns the activity and count increase
+      from the last check. Otherwise, calculates the activity and count increase from the
+      previous check and updates the saved information file.
 
+      Returns:
+          tuple: A tuple containing the activity increase and count increase as booleans.
+              The activity increase is True if the current activity is at least 15% higher than
+              the previous activity, and False otherwise. The count increase is True if the
+              current post count is at least 15% higher than the previous post count, and False
+              otherwise.
+
+      """
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+
+    reddit_config = config['reddit']
+    reddit = praw.Reddit(
+        client_id=reddit_config['client_id'],
+        client_secret=reddit_config['client_secret'],
+        user_agent=reddit_config['user_agent']
+    )
     latest_info_saved = pd.read_csv('latest_info_saved.csv')
     last_reddit_update_time_str = latest_info_saved['last_reddit_update_time'][0]
     last_reddit_update_time = datetime.strptime(last_reddit_update_time_str, '%Y-%m-%d %H:%M:%S')
