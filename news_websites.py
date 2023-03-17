@@ -3,15 +3,19 @@ import json
 import configparser
 from textblob import TextBlob
 import logging
+import os
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 SENTIMENT_THRESHOLD = 0.15
+POSITIVITY_PERCENT = 1.8
+
 
 # Load the config file
 config = configparser.ConfigParser()
-config.read('config.ini')
-API_NEWSAPI = config.get('API', 'Newsapi')
+config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.ini")
+config.read(config_path)
+API_NEWSAPI = config.get("API", "Newsapi")
 
 
 def check_sentiment_of_news():
@@ -50,7 +54,7 @@ def check_sentiment_of_news():
             except Exception as e:
                 logging.error(f"Error analyzing content: {e}")
 
-        if positive_count >= 1.8 * negative_count:
+        if positive_count >= POSITIVITY_PERCENT * negative_count:
             return True
         else:
             return False

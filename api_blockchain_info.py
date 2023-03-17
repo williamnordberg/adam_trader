@@ -1,13 +1,6 @@
-# Standard library
 import time
 import logging
-
-# Third-party libraries
 from requests.sessions import Session
-import configparser
-
-
-# Local imports
 
 # Initialize a session object
 session = Session()
