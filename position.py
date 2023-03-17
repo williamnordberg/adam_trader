@@ -14,11 +14,15 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 PROFIT_MARGIN = 0.01
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
+LATEST_INFO_FILE = 'latest_info_saved.csv'
 
 
 def get_bitcoin_price():
     """
     Retrieves the current Bitcoin price in USD from the CoinGecko API.
+
+    Returns:
+        float: The current Bitcoin price in USD or 0 if an error occurred.
     """
     try:
         url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
@@ -37,6 +41,16 @@ def get_bitcoin_price():
 
 
 def long_position_is_open():
+    """
+    Monitors a long position for various factors to decide when to close the position.
+    The function continuously checks various factors like probabilities, technical analysis,
+    news sentiment, search trends, Reddit activity, and YouTube trends.
+    It also checks for stop loss and profit points.
+
+    Returns:
+        float: The profit made after closing the position.
+        float: The loss made after closing the position.
+    """
     current_price = get_bitcoin_price()
     position_opening_price = current_price
     profit_point = current_price + (current_price * PROFIT_MARGIN)
@@ -65,12 +79,12 @@ def long_position_is_open():
 
         probability_to_hit_target, probability_to_hit_stop_loss = \
             get_probabilities_hit_profit_or_stop(SYMBOLS, 1000, profit_point, stop_loss)
-        logging.info(f'profit:{probability_to_hit_target}stop:{probability_to_hit_stop_loss}')
+        logging.info(f'profit_probability: {probability_to_hit_target}stop_probability: {probability_to_hit_stop_loss}')
 
         # 2. Blockchain monitoring(is the richest addresses accumulating?)
-        last_24_accumulation = pd.read_csv('last_24_accumulation.csv')
-        total_received, total_sent = last_24_accumulation['total_received']\
-            .values[0], last_24_accumulation['total_sent'].values[0]
+        latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
+        total_received = latest_info_saved['total_received_coins_in_last_24'][0]
+        total_sent = latest_info_saved['total_sent_coins_in_last_24'][0]
 
         # 3. Macroeconomics data
         cpi_better_than_expected, ppi_better_than_expected, interest_rate_better_than_expected, \
@@ -115,6 +129,16 @@ def long_position_is_open():
 
 
 def short_position_is_open():
+    """
+       Monitors a short position for various factors to decide when to close the position.
+       The function continuously checks various factors like probabilities, technical analysis,
+       news sentiment, search trends, Reddit activity, and YouTube trends.
+       It also checks for stop loss and profit points.
+
+       Returns:
+           float: The profit made after closing the position.
+           float: The loss made after closing the position.
+       """
     current_price = get_bitcoin_price()
     position_opening_price = current_price
     profit_point = current_price - (current_price * PROFIT_MARGIN)
@@ -147,8 +171,8 @@ def short_position_is_open():
 
         # 2. Blockchain monitoring(is the richest addresses accumulating?)
         last_24_accumulation = pd.read_csv('last_24_accumulation.csv')
-        total_received, total_sent = last_24_accumulation['total_received'] \
-            .values[0], last_24_accumulation['total_sent'].values[0]
+        total_received, total_sent = last_24_accumulation[
+            'total_received'][0], last_24_accumulation['total_sent'][0]
 
         # 3. Macroeconomics data
         cpi_better_than_expected, ppi_better_than_expected, interest_rate_better_than_expected, \

@@ -98,4 +98,6 @@ def reddit_check(previous_activity=None, previous_count=None):
 
 if __name__ == '__main__':
     current_activity1, current_count1, activity_increase1, count_increase1 = reddit_check()
-    logging.info(current_activity1, current_count1, activity_increase1, count_increase1)
+    logging.info(
+        f"current_activity: {current_activity1}, current_count: {current_count1}"
+        f", activity_increase: {activity_increase1}, count_increase: {count_increase1}")

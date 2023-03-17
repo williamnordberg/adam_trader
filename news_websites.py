@@ -1,61 +1,69 @@
 import requests
 import json
+import configparser
 from textblob import TextBlob
 import logging
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+SENTIMENT_THRESHOLD = 0.15
+
+# Load the config file
+config = configparser.ConfigParser()
+config.read('config.ini')
+API_NEWSAPI = config.get('API', 'Newsapi')
+
 
 def check_sentiment_of_news():
-    # Set your API key
-    API_KEY = '7b1ad64379694add8ae9c48b23fcd3f6'
+    """
+    Check the sentiment of news articles related to cryptocurrencies.
 
-    # Set the endpoint and parameters for the News API
+    Return: True if the sentiment is positive, False otherwise
+    """
     endpoint = 'https://newsapi.org/v2/everything'
     params = {
-        'q': 'cryptocurrency OR bitcoin OR blockchain',  # Search for articles related to cryptocurrencies
-        'language': 'en',  # Only get articles in English
-        'sortBy': 'publishedAt',  # Sort articles by date published
-        'apiKey': API_KEY
+        'q': 'cryptocurrency OR bitcoin OR blockchain',
+        'language': 'en',
+        'sortBy': 'publishedAt',
+        'apiKey': API_NEWSAPI
     }
 
-    # Initialize counters for positive and negative articles
     positive_count = 0
     negative_count = 0
 
     try:
-        # Make a request to the News API and get the response
         response = requests.get(endpoint, params=params)
-        response.raise_for_status()  # Raise an exception if the status code is not 200
+        response.raise_for_status()
         data = json.loads(response.text)
 
-        # Iterate through each article and perform sentiment analysis
         for article in data['articles']:
             content = article['content']
 
-            # Perform sentiment analysis using TextBlob
-            blob = TextBlob(content)
-            sentiment_score = blob.sentiment.polarity
+            try:
+                blob = TextBlob(content)
+                sentiment_score = blob.sentiment.polarity
 
-            # Classify the sentiment as positive, negative, or neutral
-            if sentiment_score > 0.1:
-                positive_count += 1
-            elif sentiment_score < -0.1:
-                negative_count += 1
+                if sentiment_score > SENTIMENT_THRESHOLD:
+                    positive_count += 1
+                elif sentiment_score < -SENTIMENT_THRESHOLD:
+                    negative_count += 1
+            except Exception as e:
+                logging.error(f"Error analyzing content: {e}")
 
-        # Check if the number of positive articles is 80% or more than the number of negative articles
-        #  logging.info('positive_count', positive_count)
-        #  logging.info('negative_count', negative_count)
         if positive_count >= 1.8 * negative_count:
             return True
         else:
             return False
 
     except requests.exceptions.RequestException as e:
-        logging.info(f'Error occurred: {e}')
+        logging.error(f'Error occurred: {e}')
+        return False
+    except json.JSONDecodeError as e:
+        logging.error(f'Error decoding JSON response: {e}')
         return False
 
 
 if __name__ == "__main__":
+    API_KEY = API_NEWSAPI
     sentiment_positive = check_sentiment_of_news()
-    logging.info('sentiment_positive:', sentiment_positive)
+    logging.info(f'sentiment_positive: {sentiment_positive}')
