@@ -18,6 +18,11 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 # Load the config file
 config = configparser.ConfigParser()
 config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.ini')
+
+with open(config_path, 'r') as f:
+    config_string = f.read()
+
+config.read_string(config_string)
 API_KEY_BLOCKCYPHER = config.get('API', 'Blockcypher')
 
 
@@ -53,7 +58,6 @@ def check_address_transactions_blockcypher(address):
 
         # Get the list of transactions for the address in the last 24 hours
         transactions = [tx for tx in response_json["txs"] if parse(tx["received"]).timestamp() > time_24_hours_ago]
-
         # Initialize variables for tracking total sent and received
         total_received = 0
         total_sent = 0
@@ -86,5 +90,5 @@ def check_address_transactions_blockcypher(address):
 
 
 if __name__ == "__main__":
-    received, sent = check_address_transactions_blockcypher('bc1q0584qslzdwmjh8et2gaazls6d6e6g7sqejwlxj')
+    received, sent = check_address_transactions_blockcypher('13nxifM4WUfT8fBd2caeaxTtUe4zeQa9zB')
     logging.info(f'receive: {received}, sent: {sent} ')
