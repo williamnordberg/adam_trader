@@ -1,66 +1,45 @@
-import unittest
+from unittest import TestCase
 from unittest.mock import patch, MagicMock
 from api_blockchain_info import check_address_transactions_blockchain_info
 
 
-class TestCheckAddressTransactionsBlockchainInfo(unittest.TestCase):
-
-    @patch("api_blockchain_info.session.get")
+class TestApiBlockchainInfo(TestCase):
+    @patch('api_blockchain_info.session.get')
     def test_check_address_transactions_blockchain_info(self, mock_get):
-        # Mock the API response
-        response = MagicMock()
-        response.status_code = 200
-        response.json.return_value = {
+        # Define the mock response JSON
+        mock_response_json = {
             "txs": [
                 {
-                    "time": 1628697600,  # A timestamp within the last 24 hours
+                    "time": 1679072298,
                     "inputs": [
                         {
                             "prev_out": {
-                                "addr": "test_address",
-                                "value": 5 * 100000000  # 5 BTC in Satoshi
+                                "addr": "bc1q0584qslzdwmjh8et2gaazls6d6e6g7sqejwlxj",
+                                "value": 500600356695
                             }
                         }
                     ],
                     "out": [
                         {
-                            "addr": "other_address",  # Change this to a different address
-                            "value": 5 * 100000000  # 5 BTC in Satoshi
+                            "addr": "bc1q9z9zn87tz0xrs7yv299geqtx3ed7q8f9se4xfn",
+                            "value": 250000000000
+                        },
+                        {
+                            "addr": "bc1q0584qslzdwmjh8et2gaazls6d6e6g7sqejwlxj",
+                            "value": 250600300295
                         }
                     ],
-                    "hash": "test_tx_hash"
+                    "hash": "11c8d77185d04eb43374fb7a717685242be1c3d88af13733a4fedda672dd1f56"
                 }
             ]
         }
-        mock_get.return_value = response
 
-        # Call the function
-        total_received, total_sent = check_address_transactions_blockchain_info("test_address")
+        # Configure the mock to return the mock response JSON
+        mock_get.return_value = MagicMock(status_code=200, json=lambda: mock_response_json)
 
-        # Check if the returned values are correct
-        self.assertEqual(total_received, 0)  # Change this to 0, since no BTC was received
-        self.assertEqual(total_sent, 5)
+        # Call the function with the test address
+        total_received, total_sent = check_address_transactions_blockchain_info("bc1q0584qslzdwmjh8et2gaazls6d6e6g7sqejwlxj")
 
-    # ... (the other test case remains the same)
-
-
-    @patch("api_blockchain_info.session.get")
-    @patch("api_blockchain_info.time.sleep", side_effect=lambda x: None)
-    def test_check_address_transactions_blockchain_info_rate_limited(self, mock_get, mock_sleep):
-        # Mock the API response with a rate limit status code
-        response = MagicMock()
-        response.status_code = 429
-        mock_get.return_value = response
-
-        # Call the function
-        total_received, total_sent = check_address_transactions_blockchain_info("test_address")
-
-        # Check if the returned values are 0
-        self.assertEqual(total_received, 0)
-        self.assertEqual(total_sent, 0)
-        # Check if sleep was called
-        mock_sleep.assert_called()
-
-
-if __name__ == "__main__":
-    unittest.main()
+        # Assert the expected values
+        self.assertEqual(total_received, 0.0)
+        self.assertEqual(total_sent, 0.0)

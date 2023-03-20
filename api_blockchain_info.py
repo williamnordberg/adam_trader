@@ -32,10 +32,8 @@ def check_address_transactions_blockchain_info(address):
     # Check the response status code
     if response.status_code == 200:
         response_json = response.json()
-
         # Get the list of transactions for the address in the last 24 hours
         transactions = [tx for tx in response_json["txs"] if tx["time"] > time_24_hours_ago]
-
         # Initialize variables for tracking total sent and received
         total_received = 0
         total_sent = 0
@@ -63,3 +61,8 @@ def check_address_transactions_blockchain_info(address):
     else:
         logging.info(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")
         return 0, 0
+
+
+if __name__ == '__main__':
+    receive, sent = check_address_transactions_blockchain_info('bc1q0584qslzdwmjh8et2gaazls6d6e6g7sqejwlxj')
+    logging.info(f'receive: {receive},sent: {sent}')
