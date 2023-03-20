@@ -1,86 +1,70 @@
-import google_auth_oauthlib.flow
-import googleapiclient.discovery
-import googleapiclient.errors
-import datetime
-import pickle
-import os.path
-from google.auth.transport.requests import Request
+import time
 import logging
+from requests.sessions import Session
 
+# Initialize a session object
+session = Session()
+
+SATOSHI_TO_BITCOIN = 100000000
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def get_authenticated_service():
-    api_service_name = "youtube"
-    api_version = "v3"
-    client_secrets_file = "youtube_client_secret.json"
-    scopes = ["https://www.googleapis.com/auth/youtube.force-ssl"]
+def check_address_transactions_blockchain_info(address):
+    """
+        Check the total Bitcoin received and sent in the last 24 hours for an address using the Blockchain.info API.
+        Args:
+            address (str): The Bitcoin address to check.
+        Returns:
+            total_received (float): Total Bitcoin received in the last 24 hours.
+            total_sent (float): Total Bitcoin sent in the last 24 hours.
+        """
+    logging.info('check_blockchain_info')
+    # Get the current time and time 24 hours ago
+    current_time = int(time.time())
+    time_24_hours_ago = current_time - 86400
 
-    creds = None
-    token_file = 'youtube_token.pickle'
-    if os.path.exists(token_file):
-        with open(token_file, 'rb') as token:
-            creds = pickle.load(token)
+    # Construct the API URL to get all transactions for the address
+    api_url = f"https://blockchain.info/rawaddr/{address}"
 
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
-                client_secrets_file, scopes)
-            creds = flow.run_local_server(port=0)
+    # Send the API request and get the response
+    response = session.get(api_url)
 
-        with open(token_file, 'wb') as token:
-            pickle.dump(creds, token)
+    # Check the response status code
+    if response.status_code == 200:
+        response_json = response.json()
+        # Get the list of transactions for the address in the last 24 hours
+        transactions = [tx for tx in response_json["txs"] if tx["time"] > time_24_hours_ago]
+        # Initialize variables for tracking total sent and received
+        total_received = 0
+        total_sent = 0
+        processed_txids = []
 
-    youtube = googleapiclient.discovery.build(api_service_name, api_version, credentials=creds)
-    return youtube
+        # Loop through the list of transactions and calculate total sent and received
+        for tx in transactions:
+            for input_inner in tx["inputs"]:
+                if "prev_out" in input_inner and input_inner["prev_out"]["addr"] == address:
+                    total_sent += input_inner["prev_out"]["value"]
 
+            for output in tx["out"]:
+                if output["addr"] == address:
+                    if tx["hash"] not in processed_txids:
+                        processed_txids.append(tx["hash"])
+                        total_received += output["value"]
 
-def get_youtube_videos(youtube, published_after, published_before):
-    search_request = youtube.search().list(
-        part="id,snippet",
-        q="#bitcoin",
-        type="video",
-        videoDefinition="high",
-        videoDuration="short",
-        videoDimension="2d",
-        publishedAfter=published_after,
-        publishedBefore=published_before,
-        maxResults=50
-    )
+        # Convert from Satoshi to BTC
+        return abs(total_received / SATOSHI_TO_BITCOIN), abs(total_sent / -SATOSHI_TO_BITCOIN)
 
-    search_results = []
-    while search_request:
-        search_response = search_request.execute()
-        search_results.extend(search_response['items'])
-        search_request = youtube.search().list_next(search_request, search_response)
-
-    return search_results
-
-
-def check_bitcoin_youtube_videos_increase():
-    youtube = get_authenticated_service()
-
-    now = datetime.datetime.utcnow()
-    last_24_hours_start = (now - datetime.timedelta(days=1)).strftime('%Y-%m-%dT%H:%M:%SZ')
-    last_48_hours_start = (now - datetime.timedelta(days=2)).strftime('%Y-%m-%dT%H:%M:%SZ')
-    last_24_hours_end = now.strftime('%Y-%m-%dT%H:%M:%SZ')
-
-    search_results_last_24_hours = get_youtube_videos(youtube, last_24_hours_start, last_24_hours_end)
-    search_results_last_48_to_24_hours = get_youtube_videos(youtube, last_48_hours_start, last_24_hours_start)
-
-    num_last_24_hours = len(search_results_last_24_hours)
-    num_last_48_to_24_hours = len(search_results_last_48_to_24_hours)
-    delta = num_last_24_hours - num_last_48_to_24_hours
-
-    if num_last_48_to_24_hours == 0:
-        return False
-
-    increase_percentage = (delta / num_last_48_to_24_hours) * 100
-    return increase_percentage >= 15
+    elif response.status_code == 429:
+        logging.info(f"Rate limited for address {address}. Sleeping for a minute.")
+        time.sleep(60)
+        return check_address_transactions_blockchain_info(address)
+    else:
+        logging.info(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")
+        return 0, 0
 
 
-if __name__ == "__main__":
-    bitcoin_youtube_increase_15_percent = check_bitcoin_youtube_videos_increase()
-    logging.info(f'bitcoin_youtube_increase_15_percent: {bitcoin_youtube_increase_15_percent}')
+if __name__ == '__main__':
+    receive, sent = check_address_transactions_blockchain_info('3LCGsSmfr24demGvriN4e3ft8wEcDuHFqh')
+    logging.info(f'receive: {receive},sent: {sent}')
+
+

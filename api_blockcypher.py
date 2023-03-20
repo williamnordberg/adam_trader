@@ -6,6 +6,7 @@ import logging
 from requests.sessions import Session
 from dateutil.parser import parse
 import configparser
+import os
 
 
 # Initialize a session object
@@ -16,7 +17,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 # Load the config file
 config = configparser.ConfigParser()
-config.read('config.ini')
+config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.ini')
 API_KEY_BLOCKCYPHER = config.get('API', 'Blockcypher')
 
 
@@ -82,3 +83,8 @@ def check_address_transactions_blockcypher(address):
         logging.info(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")
 
         return 0, 0
+
+
+if __name__ == "__main__":
+    received, sent = check_address_transactions_blockcypher('bc1q0584qslzdwmjh8et2gaazls6d6e6g7sqejwlxj')
+    logging.info(f'receive: {received}, sent: {sent} ')
