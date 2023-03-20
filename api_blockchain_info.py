@@ -64,5 +64,5 @@ def check_address_transactions_blockchain_info(address):
 
 
 if __name__ == '__main__':
-    receive, sent = check_address_transactions_blockchain_info('bc1q0584qslzdwmjh8et2gaazls6d6e6g7sqejwlxj')
+    receive, sent = check_address_transactions_blockchain_info('13nxifM4WUfT8fBd2caeaxTtUe4zeQa9zB')
     logging.info(f'receive: {receive},sent: {sent}')
