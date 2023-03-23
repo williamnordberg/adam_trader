@@ -27,7 +27,7 @@ def get_order_book(symbol, limit, session):
 
 
 def get_probabilities(symbols, limit=LIMIT, bid_multiplier=0.995, ask_multiplier=1.005):
-    bid_volume, ask_volume = 0, 0
+    bid_volume, ask_volume = 0.0000001, 0
     with requests.Session() as session:
         for symbol in symbols:
             data = get_order_book(symbol, limit, session)
