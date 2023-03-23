@@ -9,19 +9,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="first commit">
-      <change afterPath="$PROJECT_DIR$/tests/bitcoin_rich_list2000.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/latest_info_saved.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_position.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_book.py" beforeDir="false" afterPath="$PROJECT_DIR$/order_book.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_adam_predictor.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_old/test_adam_predictor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_api_blockchain_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_old/test_api_blockchain_info.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_api_blockcypher.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_old/test_api_blockcypher.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_google_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_old/test_google_search.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_indicator_calculator.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_old/test_indicator_calculator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_macro_expected.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_old/test_macro_expected.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_monitor_2000_richest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_old/test_monitor_2000_richest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_news_websites.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_old/test_news_websites.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_order_book.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_order_book.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/youtube_client_secret.json" beforeDir="false" afterPath="$PROJECT_DIR$/youtube_client_secret.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,15 +67,15 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/will/Python_project/adam_trader/tests&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/will/Python_project/adam_trader&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;aDefault&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyIntegratedToolsModulesConfigurable&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\will\Python_project\adam_trader\tests" />
       <recent name="C:\will\Python_project\adam_trader" />
+      <recent name="C:\will\Python_project\adam_trader\tests" />
       <recent name="C:\will\Python_project\adam_trader\datasets" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -96,49 +86,7 @@
       <recent name="C:\will\Python_project\adam_trader\tests_not_confirmed" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Unittests with right config">
-    <configuration name="api_blockchain_info" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="adam_trader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/api_blockchain_info.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="api_blockcypher" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="adam_trader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/api_blockcypher.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.youtube">
     <configuration name="monitor_2000_richest" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -181,6 +129,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="position" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="adam_trader" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/position.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="youtube" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -202,6 +171,20 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="Python tests in tests_old" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="adam_trader" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests_old" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests_old&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="Unittests with right config" type="tests" factoryName="Unittests">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -219,20 +202,20 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.api_blockchain_info" />
-      <item itemvalue="Python.api_blockcypher" />
       <item itemvalue="Python.monitor_2000_richest" />
       <item itemvalue="Python.order_book" />
+      <item itemvalue="Python.position" />
       <item itemvalue="Python.youtube" />
       <item itemvalue="Python tests.Unittests with right config" />
+      <item itemvalue="Python tests.Python tests in tests_old" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.youtube" />
+        <item itemvalue="Python.position" />
+        <item itemvalue="Python tests.Python tests in tests_old" />
         <item itemvalue="Python.order_book" />
         <item itemvalue="Python.monitor_2000_richest" />
-        <item itemvalue="Python.api_blockcypher" />
-        <item itemvalue="Python.api_blockchain_info" />
-        <item itemvalue="Python.youtube" />
       </list>
     </recent_temporary>
   </component>
@@ -244,13 +227,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00043" summary="first commit">
-      <created>1677550478030</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1677550478030</updated>
     </task>
     <task id="LOCAL-00044" summary="first commit">
       <created>1677552260890</created>
@@ -588,7 +564,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679552415927</updated>
     </task>
-    <option name="localTasksCounter" value="92" />
+    <task id="LOCAL-00092" summary="first commit">
+      <created>1679556525844</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1679556525844</updated>
+    </task>
+    <option name="localTasksCounter" value="93" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
