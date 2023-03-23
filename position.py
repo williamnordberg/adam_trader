@@ -170,9 +170,9 @@ def short_position_is_open():
         logging.info(f'profit:{probability_to_hit_target}stop:{probability_to_hit_stop_loss}')
 
         # 2. Blockchain monitoring(is the richest addresses accumulating?)
-        last_24_accumulation = pd.read_csv('last_24_accumulation.csv')
-        total_received, total_sent = last_24_accumulation[
-            'total_received'][0], last_24_accumulation['total_sent'][0]
+        latest_info_saved_outer = pd.read_csv('latest_info_saved.csv')
+        total_received = latest_info_saved_outer['total_received_coins_in_last_24'][0]
+        total_sent = latest_info_saved_outer['total_sent_coins_in_last_24'][0]
 
         # 3. Macroeconomics data
         cpi_better_than_expected, ppi_better_than_expected, interest_rate_better_than_expected, \
@@ -194,7 +194,7 @@ def short_position_is_open():
         increase_google_search = check_search_trend(["Bitcoin", "Cryptocurrency"], threshold=1.2)
 
         # 8.Reddit
-        current_activity, current_count, activity_increase, count_increase = reddit_check()
+        activity_increase, count_increase = reddit_check()
 
         # 9.Youtube
         bitcoin_youtube_increase_15_percent = check_bitcoin_youtube_videos_increase()
