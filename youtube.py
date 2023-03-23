@@ -23,9 +23,16 @@ def get_authenticated_service():
             creds = pickle.load(token)
 
     if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
+        try:
+            if creds and creds.expired and creds.refresh_token:
+                creds.refresh(Request())
+            else:
+                flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
+                    client_secrets_file, scopes)
+                creds = flow.run_local_server(port=0)
+        except Exception as e:
+            logging.error(f"Error refreshing token: {e}")
+            logging.info("Manually authenticate and save the token in youtube_token.pickle")
             flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
                 client_secrets_file, scopes)
             creds = flow.run_local_server(port=0)
