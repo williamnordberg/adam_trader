@@ -14,6 +14,22 @@ class TestDecisionTreePredictor(unittest.TestCase):
     @patch("adam_predictor.pd.DataFrame.to_csv")
     def test_decision_tree_predictor(self, mock_to_csv, mock_read_csv, mock_update_macro, mock_update_yahoo,
                                      mock_update_internal):
+        """
+        Tests the `decision_tree_predictor` function with mocked data.
+        The function should read data from CSV files, update the internal factors and external data, train a decision tree
+        model, and make predictions using the latest data.
+
+        Args:
+            self: the unittest.TestCase object.
+            mock_to_csv: the mocked pd.DataFrame.to_csv method.
+            mock_read_csv: the mocked pd.read_csv method.
+            mock_update_macro: the mocked update_macro_economic function.
+            mock_update_yahoo: the mocked update_yahoo_data function.
+            mock_update_internal: the mocked update_internal_factors function.
+
+        Returns:
+            None. The test passes if the function returns a numpy array of predictions, and calls the expected functions.
+        """
         # Mock the data read
         latest_info_saved = pd.DataFrame({"latest_dataset_update": ["2022-01-01 00:00:00"]})
         main_dataset = pd.DataFrame({

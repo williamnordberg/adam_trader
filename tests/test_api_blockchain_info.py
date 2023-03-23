@@ -6,6 +6,18 @@ from api_blockchain_info import check_address_transactions_blockchain_info
 class TestApiBlockchainInfo(TestCase):
     @patch('api_blockchain_info.session.get')
     def test_check_address_transactions_blockchain_info(self, mock_get):
+        """
+                Tests the `check_address_transactions_blockchain_info` function with a mocked GET request.
+                The mocked response contains a sample transaction history for a given test address.
+                The function should extract the total received and total sent amounts from the transaction history.
+
+                Args:
+                    self: the unittest.TestCase object.
+                    mock_get: the mocked session.get function, which is patched using the @patch decorator.
+
+                Returns:
+                    None. The test passes if the function returns the expected total received and total sent amounts.
+        """
         # Define the mock response JSON
         mock_response_json = {
             "txs": [
@@ -38,7 +50,8 @@ class TestApiBlockchainInfo(TestCase):
         mock_get.return_value = MagicMock(status_code=200, json=lambda: mock_response_json)
 
         # Call the function with the test address
-        total_received, total_sent = check_address_transactions_blockchain_info("bc1q0584qslzdwmjh8et2gaazls6d6e6g7sqejwlxj")
+        total_received, total_sent = check_address_transactions_blockchain_info(
+            "bc1q0584qslzdwmjh8et2gaazls6d6e6g7sqejwlxj")
 
         # Assert the expected values
         self.assertEqual(total_received, 0.0)
