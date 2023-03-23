@@ -9,12 +9,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="first commit">
-      <change afterPath="$PROJECT_DIR$/tests/test_google_search.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_macro_expected.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/geckodriver.log" beforeDir="false" afterPath="$PROJECT_DIR$/geckodriver.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/google_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/google_search.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/latest_info_saved.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_api_blockcypher.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_api_blockcypher.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/macro_expected.py" beforeDir="false" afterPath="$PROJECT_DIR$/macro_expected.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -214,9 +211,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.macro_expected" />
         <item itemvalue="Python.google_search" />
         <item itemvalue="Python.main_decision" />
-        <item itemvalue="Python.macro_expected" />
         <item itemvalue="Python tests.Python tests in test_google_search.py" />
         <item itemvalue="Python.test" />
       </list>
@@ -230,13 +227,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00037" summary="first commit">
-      <created>1677124186129</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1677124186129</updated>
     </task>
     <task id="LOCAL-00038" summary="first commit">
       <created>1677129608289</created>
@@ -574,7 +564,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679272807945</updated>
     </task>
-    <option name="localTasksCounter" value="86" />
+    <task id="LOCAL-00086" summary="first commit">
+      <created>1679536053309</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1679536053309</updated>
+    </task>
+    <option name="localTasksCounter" value="87" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

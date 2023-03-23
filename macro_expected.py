@@ -9,6 +9,15 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 
 def print_upcoming_events(events_date_dict):
+    """
+       Print upcoming events within a specified time range.
+
+       This function takes a dictionary containing events and their corresponding dates,
+       and logs information about events that are happening within the specified number of days.
+
+       :param events_date_dict: A dictionary containing events as keys and their corresponding
+                                datetime objects as values.
+       """
     now = datetime.utcnow()
     days_to_check = 2
     for event, event_date in events_date_dict.items():
@@ -24,6 +33,25 @@ def print_upcoming_events(events_date_dict):
 
 
 def get_macro_expected_and_real_compare():
+    """
+    Retrieve macroeconomic data from the Forex Factory calendar and compare the actual
+    and expected values of selected events.
+
+    This function scrapes the Forex Factory calendar to find the actual and expected values
+    of specific macroeconomic events. It then compares these values and returns a tuple
+    containing boolean values indicating if the actual value is better than the expected
+    value for CPI, PPI, and Federal Funds Rate. It also returns a dictionary containing the
+    event names and their corresponding datetime objects.
+
+    :return: A tuple containing:
+             - CPI_better_than_expected (bool): True if actual CPI value is better than expected, False otherwise.
+             - PPI_better_than_expected (bool): True if actual PPI value is better than expected, False otherwise.
+             - interest_rate_better_than_expected (bool): True if actual Federal Funds Rate is better than expected,
+              False otherwise.
+             - events_date_dict (dict): A dictionary containing event names as keys and their corresponding datetime
+              objects as values.
+    """
+
     events_list = ["CPI m/m", "CPI y/y", "Core CPI m/m", "Core PPI m/m", "PPI m/m", "Federal Funds Rate"]
     url = "https://www.forexfactory.com/calendar"
     options = webdriver.ChromeOptions()
