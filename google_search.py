@@ -82,9 +82,7 @@ def check_search_trend(keywords: List[str], threshold: float = 1.2) -> bool:
         trend = pytrends.interest_over_time()
         # Check if the last hour's search volume is significantly higher for all keywords
         last_hour = trend.iloc[-1].values[0]
-        print(last_hour)
         two_hours_before = trend.iloc[-2].values[0]
-        print(two_hours_before)
 
         # Check the threshold number of increase in the search
         if last_hour >= (two_hours_before * threshold):

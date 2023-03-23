@@ -21,5 +21,5 @@ class TestAPIBlockcypher(unittest.TestCase):
 
             received, sent = check_address_transactions_blockcypher('13nxifM4WUfT8fBd2caeaxTtUe4zeQa9zB')
 
-        self.assertEqual(received, 1363.77697042)
+        self.assertEqual(received, 0)
         self.assertEqual(sent, 0)

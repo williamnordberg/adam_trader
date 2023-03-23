@@ -9,13 +9,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="first commit">
-      <change afterPath="$PROJECT_DIR$/tests/test_indicator_calculator.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_google_search.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_blockchain_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/api_blockchain_info.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_blockcypher.py" beforeDir="false" afterPath="$PROJECT_DIR$/api_blockcypher.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/geckodriver.log" beforeDir="false" afterPath="$PROJECT_DIR$/geckodriver.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/google_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/google_search.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/_trial_temp/test.log" beforeDir="false" afterPath="$PROJECT_DIR$/tests/_trial_temp/test.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/latest_info_saved.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_api_blockcypher.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_api_blockcypher.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -92,48 +90,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Python tests.Unittests with right config">
-    <configuration name="api_blockchain_info" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="adam_trader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\will\Python_project\adam_trader\api_blockchain_info.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="api_blockcypher" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="adam_trader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\will\Python_project\adam_trader\api_blockcypher.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="google_search" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -147,6 +103,48 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/google_search.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="macro_expected" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="adam_trader" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/macro_expected.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main_decision" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="adam_trader" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main_decision.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -207,9 +205,9 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.macro_expected" />
+      <item itemvalue="Python.main_decision" />
       <item itemvalue="Python.google_search" />
-      <item itemvalue="Python.api_blockchain_info" />
-      <item itemvalue="Python.api_blockcypher" />
       <item itemvalue="Python.test" />
       <item itemvalue="Python tests.Unittests with right config" />
       <item itemvalue="Python tests.Python tests in test_google_search.py" />
@@ -217,10 +215,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.google_search" />
+        <item itemvalue="Python.main_decision" />
+        <item itemvalue="Python.macro_expected" />
         <item itemvalue="Python tests.Python tests in test_google_search.py" />
         <item itemvalue="Python.test" />
-        <item itemvalue="Python.api_blockcypher" />
-        <item itemvalue="Python.api_blockchain_info" />
       </list>
     </recent_temporary>
   </component>
