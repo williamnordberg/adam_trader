@@ -61,5 +61,5 @@ def get_probabilities_hit_profit_or_stop(symbols, limit, profit_target, stop_los
 
 if __name__ == '__main__':
     prob_down, prob_up = get_probabilities(SYMBOLS, limit=LIMIT, bid_multiplier=0.995, ask_multiplier=1.005)
-    prob_target, prob_stop_loss = get_probabilities_hit_profit_or_stop(SYMBOLS, LIMIT, 26000, 22000)
+    prob_target, prob_stop_loss = get_probabilities_hit_profit_or_stop(SYMBOLS, LIMIT, 30000, 20000)
     print(prob_down, prob_up, prob_target, prob_stop_loss)
