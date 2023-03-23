@@ -24,7 +24,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 # Load the config file
 config = configparser.ConfigParser()
 config.read('config.ini')
-USER_AGENT = config.get('Crawler', 'UserAgent')
+USER_AGENT = 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
 
 
 def read_addresses_from_csv(file_path):
@@ -58,15 +58,15 @@ def check_multiple_addresses(addresses):
     for i, address in enumerate(addresses):
         logging.info(f"*******Checking address {address} and {i}*******")
         if i % 3 == 0:
-            # Use the Blockchain.info API
-            received, sent = check_address_transactions_blockchain_info(address)
-
-        elif i % 3 == 1:
             # Use the Blockcypher API
             received, sent = check_address_transactions_blockcypher(address)
 
+        elif i % 3 == 1:
+            # Use the Blockchain.info API
+            received, sent = check_address_transactions_blockchain_info(address)
+
         else:
-            # Use the Blockchair API
+            # Use the Blockcypher API again
             received, sent = check_address_transactions_blockcypher(address)
 
         total_received += received
@@ -91,7 +91,7 @@ def monitor_bitcoin_richest_addresses():
     last_update_time = latest_info_saved['latest_richest_addresses_update'][0]
     last_update_time = datetime.strptime(last_update_time, '%Y-%m-%d %H:%M:%S')
 
-    if datetime.now() - last_update_time > timedelta(hours=4):
+    if datetime.now() - last_update_time > timedelta(hours=8):
         process = CrawlerProcess({'USER_AGENT': USER_AGENT})
         process.crawl(BitcoinRichListSpider)
         process.start()
@@ -106,7 +106,7 @@ def monitor_bitcoin_richest_addresses():
         logging.info(f'dataset been updated {now}')
 
     else:
-        logging.info(f'dataset is already updated less than 8 hours ago at {last_update_time}')
+        logging.info(f'list of richest addresses is already updated less than 8 hours ago at {last_update_time}')
 
     # Read addresses from the CSV file
     addresses = read_addresses_from_csv(BITCOIN_RICH_LIST_FILE)
