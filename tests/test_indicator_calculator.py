@@ -7,6 +7,17 @@ from indicator_calculator import exponential_moving_average, bollinger_bands, re
 class TestIndicatorCalculator(unittest.TestCase):
 
     def test_exponential_moving_average(self):
+        """
+        Tests the `exponential_moving_average` function with a sample data and window size.
+        The expected EMA values are calculated manually and compared with the actual values computed by the function.
+        The function should return an array of EMA values for the input data and window size.
+
+        Args:
+            self: the unittest.TestCase object.
+
+        Returns:
+            None. The test passes if the EMA values computed by the function match the expected values.
+        """
         data = [11, 12, 14, 18, 12, 15, 13, 16, 10]
         window_size = 2
         expected_ema = np.array([11., 11.6667, 13.2222, 16.4074, 13.4691, 14.4897, 13.4966, 15.1655, 11.7218])
@@ -14,6 +25,20 @@ class TestIndicatorCalculator(unittest.TestCase):
         np.testing.assert_array_almost_equal(expected_ema, actual_ema, decimal=4)
 
     def test_bollinger_bands_values(self):
+        """
+        Tests the `bollinger_bands` function with a sample data, window size, and standard deviation.
+        The expected values for the upper band, rolling mean, and lower band are calculated manually and compared
+        with the actual values computed by the function.
+        The function should return three series of values for the upper band, rolling mean, and lower band,
+        respectively, based on the input data, window size, and standard deviation.
+
+        Args:
+            self: the unittest.TestCase object.
+
+        Returns:
+            None. The test passes if the upper band, rolling mean, and lower band values computed by the function
+            match the expected values.
+        """
         data = pd.Series([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
         window = 3
         std_dev = 1
@@ -33,6 +58,17 @@ class TestIndicatorCalculator(unittest.TestCase):
         self.assertEqual(len(lower_band), len(data))
 
     def test_relative_strength_index(self):
+        """
+        Tests the `relative_strength_index` function with a sample data and window size.
+        The expected RSI values are calculated manually and compared with the actual values computed by the function.
+        The function should return a series of RSI values for the input data and window size.
+
+        Args:
+            self: the unittest.TestCase object.
+
+        Returns:
+            None. The test passes if the RSI values computed by the function match the expected values.
+        """
         data = pd.Series([1, 20, 3, 40, 5, 60, 7, 80, 90, 10])
         window = 3
         rsi = relative_strength_index(data, window)
@@ -48,6 +84,20 @@ class TestIndicatorCalculator(unittest.TestCase):
         np.testing.assert_allclose(rsi, expected_rsi, rtol=1e-3, atol=1e-3)
 
     def test_macd(self):
+        """
+        Tests the `macd` function with a sample data and window sizes for the fast, slow, and signal lines.
+        The expected MACD line, signal line, and histogram values are calculated manually and compared
+        with the actual values computed by the function.
+        The function should return three series of values for the MACD line, signal line, and histogram,
+        respectively, based on the input data and window sizes.
+
+        Args:
+            self: the unittest.TestCase object.
+
+        Returns:
+            None. The test passes if the MACD line, signal line, and histogram values computed by the function
+            match the expected values.
+        """
         data = pd.Series([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
         fast_window = 2
         slow_window = 4
