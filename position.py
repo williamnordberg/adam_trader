@@ -63,7 +63,7 @@ def long_position_is_open():
         current_price = get_bitcoin_price()
         logging.info(f'current_price:{current_price}, profit_point:{profit_point},stop_loss:{stop_loss} ')
         # Check if we meet profit or stop loss
-        if current_price > profit_point:
+        if current_price >= profit_point:
             profit = current_price - position_opening_price
             logging.info('&&&&&&&&&&&&&& target hit &&&&&&&&&&&&&&&&&&&&&')
             return profit, loss
