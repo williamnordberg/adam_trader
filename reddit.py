@@ -56,7 +56,7 @@ def reddit_check():
         client_secret=reddit_config['client_secret'],
         user_agent=reddit_config['user_agent']
     )
-    latest_info_saved = pd.read_csv('latest_info_saved.csv')
+    latest_info_saved = pd.read_csv('latest_info_saved.csv', squeeze=True)
     last_reddit_update_time_str = latest_info_saved['last_reddit_update_time'][0]
     last_reddit_update_time = datetime.strptime(last_reddit_update_time_str, '%Y-%m-%d %H:%M:%S')
 
