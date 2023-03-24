@@ -9,14 +9,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="first commit">
-      <change afterPath="$PROJECT_DIR$/tests/test_youtube.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests_passed/test_update_dataset_yahoo.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/trade_executer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_dataset.csv" beforeDir="false" afterPath="$PROJECT_DIR$/main_dataset.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/_trial_temp/test.log" beforeDir="false" afterPath="$PROJECT_DIR$/tests/_trial_temp/test.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/main_dataset.csv" beforeDir="false" afterPath="$PROJECT_DIR$/tests/main_dataset.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_update_dataset_macro.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_passed/test_update_dataset_macro.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/youtube_token.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/youtube_token.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.ini" beforeDir="false" afterPath="$PROJECT_DIR$/config.ini" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,15 +79,15 @@
       <recent name="C:\will\Python_project\adam_trader\datasets" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\will\Python_project\adam_trader\tests" />
       <recent name="C:\will\Python_project\adam_trader\tests_passed" />
       <recent name="C:\will\Python_project\adam_trader\tests_old" />
-      <recent name="C:\will\Python_project\adam_trader\tests" />
       <recent name="C:\will\Python_project\adam_trader" />
       <recent name="C:\will\Python_project\adam_trader\datasets" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Unittests with right config">
-    <configuration name="update_dataset_internal_factors" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.trade_executer">
+    <configuration name="trade_executer" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -104,7 +99,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/update_dataset_internal_factors.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/trade_executer.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -186,7 +181,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests_passed/test_update_dataset_yahoo.py&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_update_dataset_yahoo.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -207,7 +202,7 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.update_dataset_internal_factors" />
+      <item itemvalue="Python.trade_executer" />
       <item itemvalue="Python.update_dataset_macro" />
       <item itemvalue="Python.update_dataset_yahoo" />
       <item itemvalue="Python.youtube" />
@@ -216,11 +211,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.trade_executer" />
         <item itemvalue="Python.youtube" />
         <item itemvalue="Python.update_dataset_yahoo" />
         <item itemvalue="Python tests.Python tests in test_update_dataset_yahoo.py" />
         <item itemvalue="Python.update_dataset_macro" />
-        <item itemvalue="Python.update_dataset_internal_factors" />
       </list>
     </recent_temporary>
   </component>
@@ -232,20 +227,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00050" summary="first commit">
-      <created>1677643418170</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1677643418170</updated>
-    </task>
-    <task id="LOCAL-00051" summary="first commit">
-      <created>1677647536463</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1677647536464</updated>
     </task>
     <task id="LOCAL-00052" summary="first commit">
       <created>1677718749914</created>
@@ -576,7 +557,21 @@
       <option name="project" value="LOCAL" />
       <updated>1679632893491</updated>
     </task>
-    <option name="localTasksCounter" value="99" />
+    <task id="LOCAL-00099" summary="first commit">
+      <created>1679639907222</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1679639907222</updated>
+    </task>
+    <task id="LOCAL-00100" summary="first commit">
+      <created>1679639938259</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1679639938261</updated>
+    </task>
+    <option name="localTasksCounter" value="101" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
