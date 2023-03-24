@@ -67,20 +67,25 @@ def potential_reversal():
     upper_band, moving_average, lower_band = bollinger_bands(data_close)
     current_price = int(data_close.iloc[-1])
 
-    # MACD:  Calculate 70 percent between bands and moving averages
-    distance_middle_lower = int((moving_average.iloc[-1] - lower_band.iloc[-1]) * 0.7)
-    distance_middle_upper = int((upper_band.iloc[-1] - moving_average.iloc[-1]) * 0.7)
-
     # Check if price fill 70 percent of distance between bands and moving average
-    last_moving_average = int(moving_average.iloc[-1])
-    if current_price < last_moving_average:
-        if (last_moving_average - current_price) > distance_middle_lower:
-            potential_up_reversal_bullish = True
-    elif current_price > last_moving_average:
-        if (current_price-last_moving_average) > distance_middle_upper:
-            Potential_down_reversal_bearish = True
+    last_moving_average = int(moving_average.iloc[-1]) if not pd.isna(moving_average.iloc[-1]) else 0
+    last_lower_band = int(lower_band.iloc[-1]) if not pd.isna(lower_band.iloc[-1]) else 0
+    last_upper_band = int(upper_band.iloc[-1]) if not pd.isna(upper_band.iloc[-1]) else 0
 
-    # check if today rsi is bigger than yesterday,and macd is over signal
+    distance_middle_lower = int((last_moving_average - last_lower_band) * 0.7) if not pd.isna(
+        moving_average.iloc[-1]) and not pd.isna(lower_band.iloc[-1]) else 0
+    distance_middle_upper = int((last_upper_band - last_moving_average) * 0.7) if not pd.isna(
+        upper_band.iloc[-1]) and not pd.isna(moving_average.iloc[-1]) else 0
+
+    if not pd.isna(current_price) and not pd.isna(last_moving_average):
+        if current_price < last_moving_average:
+            if (last_moving_average - current_price) > distance_middle_lower:
+                potential_up_reversal_bullish = True
+        elif current_price > last_moving_average:
+            if (current_price - last_moving_average) > distance_middle_upper:
+                Potential_down_reversal_bearish = True
+
+    # RSI overbought or oversold
     rsi = relative_strength_index(data_close, 14)
     if rsi[-1] > 30:
         potential_up_reversal_bullish = True
