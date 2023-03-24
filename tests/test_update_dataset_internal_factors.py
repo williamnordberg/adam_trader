@@ -41,7 +41,7 @@ class TestUpdateDatasetInternalFactors(unittest.TestCase):
         udf.update_internal_factors()
 
         # Check if the function has updated the main dataset
-        main_dataset_updated = pd.read_csv('../tests/main_dataset.csv')
+        main_dataset_updated = pd.read_csv('main_dataset.csv')
         expected_updated_dataset = pd.concat([test_main_dataset, test_new_data.rename(columns={'time': 'Date'})])
 
         # Assert that the main dataset has been updated correctly
