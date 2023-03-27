@@ -86,7 +86,8 @@ def get_macro_expected_and_real_compare():
                 event_cell = row.find("td", class_="calendar__cell calendar__event event")
                 if event_cell and event_cell.find("span", class_="calendar__event-title").text == event:
                     currency_cell = row.find("td", class_="calendar__cell calendar__currency currency")
-                    if currency_cell and currency_cell.string.strip() == "USD":
+                    if currency_cell and (currency_cell.string.strip() == "USD"):
+                        events_date_dict[event] = datetime.utcfromtimestamp(int(row['data-timestamp']))
                         interest_cell = event_cell.find_next_sibling(
                             "td", class_="calendar__cell calendar__forecast forecast")
                         forecast_value = interest_cell.string if interest_cell else None
@@ -102,11 +103,7 @@ def get_macro_expected_and_real_compare():
                                 PPI_better_than_expected = True
                             elif event == "Federal Funds Rate":
                                 interest_rate_better_than_expected = True
-                        else:
-                            events_date_dict[event] = datetime.utcfromtimestamp(int(row['data-timestamp']))
-                    else:
-                        events_date_dict[event] = datetime.utcfromtimestamp(int(row['data-timestamp']))
-                    break
+
             else:
                 events_date_dict[event] = None
 
