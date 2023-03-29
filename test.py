@@ -1,4 +1,0 @@
-import ccxt
-
-
-print('Hi')

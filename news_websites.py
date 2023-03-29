@@ -26,7 +26,7 @@ def check_sentiment_of_news():
     """
     endpoint = 'https://newsapi.org/v2/everything'
     params = {
-        'q': 'cryptocurrency OR bitcoin OR blockchain',
+        'q': 'bitcoin',
         'language': 'en',
         'sortBy': 'publishedAt',
         'apiKey': API_NEWSAPI
@@ -68,6 +68,5 @@ def check_sentiment_of_news():
 
 
 if __name__ == "__main__":
-    API_KEY = API_NEWSAPI
     sentiment_positive = check_sentiment_of_news()
     logging.info(f'sentiment_positive: {sentiment_positive}')
