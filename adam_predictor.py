@@ -1,7 +1,7 @@
 from sklearn.tree import DecisionTreeRegressor
 import pandas as pd
 from datetime import datetime, timedelta
-from update_dataset_internal_factors import update_internal_factors
+from old_update_dataset_internal_factors import update_internal_factors
 from update_dataset_yahoo import update_yahoo_data
 from update_dataset_macro import update_macro_economic
 import logging
