@@ -28,7 +28,7 @@ class TestUpdateDatasetMacro(unittest.TestCase):
         udm.update_macro_economic()
 
         # Check if the function has updated the main dataset
-        main_dataset_updated = pd.read_csv('main_dataset.csv')
+        main_dataset_updated = pd.read_csv('../tests/main_dataset.csv')
 
         # Create the expected updated dataset
         expected_updated_dataset = test_main_dataset.copy()

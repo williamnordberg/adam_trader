@@ -97,7 +97,7 @@ while True:
     total_sent = latest_info_saved['total_sent_coins_in_last_24'][0]
 
     # 2.3 Check Google search trends for Bitcoin and cryptocurrency
-    increase_google_search = check_search_trend(["Bitcoin", "Cryptocurrency"], threshold=1.2)
+    google_bullish, google_bearish = check_search_trend(["Bitcoin", "Cryptocurrency"])
 
     # 2.4 Check macroeconomic indicators
     cpi_better_than_expected, ppi_better_than_expected, interest_rate_better_than_expected, events_dates \

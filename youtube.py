@@ -6,6 +6,9 @@ import pickle
 import os.path
 from google.auth.transport.requests import Request
 import logging
+from datetime import timedelta
+from datetime import datetime
+import pandas as pd
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -69,30 +72,54 @@ def get_youtube_videos(youtube, published_after, published_before):
 def check_bitcoin_youtube_videos_increase():
     """
        Checks if there's a 15% or more increase in the number of YouTube videos with the #bitcoin hashtag
-       published in the last 24 hours compared to the 24 hours before that.
+       published in the last 24 hours compared to the 24 hours before that, but only if the last update was
+       earlier than 8 hours ago.
 
        Returns:
-           bool: True if there's a 15% or more increase in the number of videos, False otherwise.
+        youtube_bullish: a value between 0 (the lowest probability) and 1 (highest probability).
+        youtube_bearish: a value between 0 (the lowest probability) and 1 (highest probability).
+
+
        """
-    youtube = get_authenticated_service()
+    # Read the latest info saved
+    latest_info_saved = pd.read_csv('latest_info_saved.csv').squeeze("columns")
 
-    now = datetime.datetime.utcnow()
-    last_24_hours_start = (now - datetime.timedelta(days=1)).strftime('%Y-%m-%dT%H:%M:%SZ')
-    last_48_hours_start = (now - datetime.timedelta(days=2)).strftime('%Y-%m-%dT%H:%M:%SZ')
-    last_24_hours_end = now.strftime('%Y-%m-%dT%H:%M:%SZ')
+    # Check if the last update was earlier than 8 hours ago
+    last_youtube_update_time_str = latest_info_saved['last_youtube_update_time'][0]
+    last_youtube_update_time = datetime.strptime(last_youtube_update_time_str, '%Y-%m-%d %H:%M:%S')
+    if datetime.now() - last_youtube_update_time > timedelta(hours=8):
+        # If so, check the increase in the number of YouTube videos with the #bitcoin hashtag
+        youtube = get_authenticated_service()
 
-    search_results_last_24_hours = get_youtube_videos(youtube, last_24_hours_start, last_24_hours_end)
-    search_results_last_48_to_24_hours = get_youtube_videos(youtube, last_48_hours_start, last_24_hours_start)
+        now = datetime.utcnow()
+        last_24_hours_start = (now - timedelta(days=1)).strftime('%Y-%m-%dT%H:%M:%SZ')
+        last_48_hours_start = (now - timedelta(days=2)).strftime('%Y-%m-%dT%H:%M:%SZ')
+        last_24_hours_end = now.strftime('%Y-%m-%dT%H:%M:%SZ')
 
-    num_last_24_hours = len(search_results_last_24_hours)
-    num_last_48_to_24_hours = len(search_results_last_48_to_24_hours)
-    delta = num_last_24_hours - num_last_48_to_24_hours
+        search_results_last_24_hours = get_youtube_videos(youtube, last_24_hours_start, last_24_hours_end)
+        search_results_last_48_to_24_hours = get_youtube_videos(youtube, last_48_hours_start, last_24_hours_start)
 
-    if num_last_48_to_24_hours == 0:
-        return False
+        num_last_24_hours = len(search_results_last_24_hours)
+        num_last_48_to_24_hours = len(search_results_last_48_to_24_hours)
+        delta = num_last_24_hours - num_last_48_to_24_hours
 
-    increase_percentage = (delta / num_last_48_to_24_hours) * 100
-    return increase_percentage >= 15
+        if num_last_48_to_24_hours == 0:
+            return False
+
+        increase_percentage = (delta / num_last_48_to_24_hours) * 100
+
+        # Save the update time to disk
+        now = datetime.now()
+        now_str = now.strftime('%Y-%m-%d %H:%M:%S')
+        latest_info_saved.loc[0, 'last_youtube_update_time'] = now_str
+        latest_info_saved.to_csv('latest_info_saved.csv', index=False)
+
+        return increase_percentage >= 15
+    else:
+        # If not, return the last value of the increase
+        logging.info('Last youtube update was less than 8 hours ago. Skipping...')
+        last_youtube_increase = latest_info_saved['last_youtube'][0]
+        return last_youtube_increase
 
 
 if __name__ == "__main__":
