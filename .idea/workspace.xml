@@ -9,16 +9,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="first commit">
-      <change afterPath="$PROJECT_DIR$/old_update_dataset_internal_factors.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/new_google_search.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/new_main_decision.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/trading_decision.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/adam_predictor.py" beforeDir="false" afterPath="$PROJECT_DIR$/adam_predictor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/geckodriver.log" beforeDir="false" afterPath="$PROJECT_DIR$/geckodriver.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/google_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/google_search.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/latest_info_saved.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_dataset.csv" beforeDir="false" afterPath="$PROJECT_DIR$/main_dataset.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news_websites.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_websites.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_update_dataset_internal_factors.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_update_dataset_internal_factors.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/update_dataset_internal_factors.py" beforeDir="false" afterPath="$PROJECT_DIR$/update_dataset_internal_factors.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_decision.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_decision.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_adam_predictor.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_adam_predictor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_api_blockchain_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_api_blockchain_info.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_api_blockcypher.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_api_blockcypher.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_google_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_google_search.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_indicator_calculator.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_indicator_calculator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_macro_expected.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_macro_expected.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_monitor_2000_richest.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_monitor_2000_richest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_news_websites.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_news_websites.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_order_book.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_order_book.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_reddit.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_reddit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_spider.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_spider.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_technical_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_technical_analysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_update_dataset_internal_factors.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_update_dataset_internal_factors.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_update_dataset_macro.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_update_dataset_macro.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_update_dataset_yahoo.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_update_dataset_yahoo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/youtube.py" beforeDir="false" afterPath="$PROJECT_DIR$/youtube.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/youtube_token.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/youtube_token.pickle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,13 +102,34 @@
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\will\Python_project\adam_trader\tests" />
+      <recent name="C:\will\Python_project\adam_trader\old_tests" />
       <recent name="C:\will\Python_project\adam_trader\tests_passed" />
       <recent name="C:\will\Python_project\adam_trader\tests_old" />
       <recent name="C:\will\Python_project\adam_trader" />
-      <recent name="C:\will\Python_project\adam_trader\datasets" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.news_websites">
+  <component name="RunManager" selected="Python.new_main_decision">
+    <configuration name="google_search" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="adam_trader" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/google_search.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="main_decision" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -115,7 +151,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="news_websites" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="new_google_search" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -127,7 +163,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/news_websites.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/new_google_search.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -136,7 +172,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="reddit" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="new_main_decision" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -148,7 +184,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reddit.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/new_main_decision.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -157,7 +193,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="order_book" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -169,70 +205,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\will\Python_project\adam_trader\test.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="update_dataset_internal_factors" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="adam_trader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\will\Python_project\adam_trader\update_dataset_internal_factors.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="update_dataset_internal_factors" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="adam_trader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\will\Python_project\adam_trader\update_dataset_internal_factors.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="youtube" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="adam_trader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/youtube.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/order_book.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -258,20 +231,20 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.new_main_decision" />
+      <item itemvalue="Python.google_search" />
+      <item itemvalue="Python.new_google_search" />
+      <item itemvalue="Python.order_book" />
       <item itemvalue="Python.main_decision" />
-      <item itemvalue="Python.news_websites" />
-      <item itemvalue="Python.update_dataset_internal_factors" />
-      <item itemvalue="Python.reddit" />
-      <item itemvalue="Python.youtube" />
       <item itemvalue="Python tests.Unittests with right config" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.news_websites" />
+        <item itemvalue="Python.new_main_decision" />
         <item itemvalue="Python.main_decision" />
-        <item itemvalue="Python.update_dataset_internal_factors" />
-        <item itemvalue="Python.update_dataset_internal_factors" />
-        <item itemvalue="Python.test" />
+        <item itemvalue="Python.new_google_search" />
+        <item itemvalue="Python.google_search" />
+        <item itemvalue="Python.order_book" />
       </list>
     </recent_temporary>
   </component>
@@ -283,13 +256,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00055" summary="first commit">
-      <created>1677914165517</created>
-      <option name="number" value="00055" />
-      <option name="presentableId" value="LOCAL-00055" />
-      <option name="project" value="LOCAL" />
-      <updated>1677914165517</updated>
     </task>
     <task id="LOCAL-00056" summary="first commit">
       <created>1678092557825</created>
@@ -627,7 +593,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679970840770</updated>
     </task>
-    <option name="localTasksCounter" value="104" />
+    <task id="LOCAL-00104" summary="first commit">
+      <created>1680067995820</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1680067995820</updated>
+    </task>
+    <option name="localTasksCounter" value="105" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
