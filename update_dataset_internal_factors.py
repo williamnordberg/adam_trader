@@ -21,6 +21,7 @@ def update_internal_factors():
 
     # Get the latest date in the main dataset
     latest_date = main_dataset.loc[main_dataset['DiffLast'].last_valid_index(), 'Date']
+
     # Set up ChromeDriver options
     options = Options()
     options.add_argument('--headless')  # Run ChromeDriver in headless mode

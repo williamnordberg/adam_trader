@@ -60,13 +60,14 @@ def check_search_trend(keywords: List[str]):
         keywords (List[str]): The list of keywords to search for.
 
     Returns:
-        google_bullish: a value between 0 (the lowest probability) and 1 (highest probability).
-        google_bearish: a value between 0 (the lowest probability) and 1 (highest probability).
+        news_bullish: a value between 0 (the lowest probability) and 1 (highest probability).
+        news_bearish: a value between 0 (the lowest probability) and 1 (highest probability).
     """
 
     # Check for internet connection
     if not check_internet_connection():
-        return False
+        logging.info('unable to get google trend')
+        return 0, 0
 
     # Convert all keywords to lowercase
     keywords = [keyword.lower() for keyword in keywords]

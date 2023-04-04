@@ -9,31 +9,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="first commit">
-      <change afterPath="$PROJECT_DIR$/new_google_search.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/new_main_decision.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trading_decision.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/new_news_websites.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/newsAPI.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_aggregate.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_compare_polarity.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_crypto_compare.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_scrapper.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/geckodriver.log" beforeDir="false" afterPath="$PROJECT_DIR$/geckodriver.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/google_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/google_search.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/latest_info_saved.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_decision.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_decision.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_adam_predictor.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_adam_predictor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_api_blockchain_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_api_blockchain_info.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_api_blockcypher.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_api_blockcypher.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_google_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_google_search.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_indicator_calculator.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_indicator_calculator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_macro_expected.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_macro_expected.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_monitor_2000_richest.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_monitor_2000_richest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_news_websites.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_news_websites.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_order_book.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_order_book.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_reddit.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_reddit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_spider.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_spider.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_technical_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_technical_analysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_update_dataset_internal_factors.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_update_dataset_internal_factors.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_update_dataset_macro.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_update_dataset_macro.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_update_dataset_yahoo.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_update_dataset_yahoo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/youtube.py" beforeDir="false" afterPath="$PROJECT_DIR$/youtube.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/youtube_token.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/youtube_token.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_google_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_google_search.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/update_dataset_internal_factors.py" beforeDir="false" afterPath="$PROJECT_DIR$/update_dataset_internal_factors.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,8 +93,8 @@
       <recent name="C:\will\Python_project\adam_trader" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.new_main_decision">
-    <configuration name="google_search" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.newsAPI (1)">
+    <configuration name="new_news_websites" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -121,7 +106,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/google_search.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/new_news_websites.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -130,7 +115,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="main_decision" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="newsAPI (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -142,7 +127,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main_decision.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/newsAPI.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -151,7 +136,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="new_google_search" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="news_crypto_compare (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -163,7 +148,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/new_google_search.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/news_crypto_compare.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -172,7 +157,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="new_main_decision" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="news_scrapper" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -184,7 +169,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/new_main_decision.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/news_scrapper.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -193,7 +178,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="order_book" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -205,7 +190,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/order_book.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -231,20 +216,20 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.new_main_decision" />
-      <item itemvalue="Python.google_search" />
-      <item itemvalue="Python.new_google_search" />
-      <item itemvalue="Python.order_book" />
-      <item itemvalue="Python.main_decision" />
+      <item itemvalue="Python.new_news_websites" />
+      <item itemvalue="Python.newsAPI (1)" />
+      <item itemvalue="Python.news_crypto_compare (1)" />
+      <item itemvalue="Python.news_scrapper" />
+      <item itemvalue="Python.test" />
       <item itemvalue="Python tests.Unittests with right config" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.new_main_decision" />
-        <item itemvalue="Python.main_decision" />
-        <item itemvalue="Python.new_google_search" />
-        <item itemvalue="Python.google_search" />
-        <item itemvalue="Python.order_book" />
+        <item itemvalue="Python.newsAPI (1)" />
+        <item itemvalue="Python.test" />
+        <item itemvalue="Python.news_scrapper" />
+        <item itemvalue="Python.news_crypto_compare (1)" />
+        <item itemvalue="Python.new_news_websites" />
       </list>
     </recent_temporary>
   </component>
@@ -256,13 +241,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00056" summary="first commit">
-      <created>1678092557825</created>
-      <option name="number" value="00056" />
-      <option name="presentableId" value="LOCAL-00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1678092557825</updated>
     </task>
     <task id="LOCAL-00057" summary="first commit">
       <created>1678093344729</created>
@@ -600,7 +578,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680067995820</updated>
     </task>
-    <option name="localTasksCounter" value="105" />
+    <task id="LOCAL-00105" summary="first commit">
+      <created>1680482980250</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1680482980251</updated>
+    </task>
+    <option name="localTasksCounter" value="106" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
