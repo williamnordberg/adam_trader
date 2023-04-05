@@ -1,4 +1,3 @@
-import requests
 import logging
 import pandas as pd
 from datetime import datetime, timedelta
@@ -43,8 +42,12 @@ def check_sentiment_of_news():
         latest_info_saved.loc[0, 'negative_polarity_score'] = negative_polarity_24_hours_before
         latest_info_saved.loc[0, 'positive_news_count'] = positive_count_24_hours_before
         latest_info_saved.loc[0, 'negative_news_count'] = negative_count_24_hours_before
-        latest_info_saved[0, 'news_bullish'] = news_bullish
-        latest_info_saved[0, 'news_bearish'] = news_bearish
+        latest_info_saved.loc[0, 'news_bullish'] = news_bullish
+        latest_info_saved.loc[0, 'news_bearish'] = news_bearish
+
+        now = datetime.now()
+        now_str = now.strftime('%Y-%m-%d %H:%M:%S')
+        latest_info_saved.loc[0, 'last_news_update_time'] = now_str
         latest_info_saved.to_csv('latest_info_saved.csv', index=False)
         logging.info(f'news data has been updated')
 
@@ -79,8 +82,12 @@ def check_sentiment_of_news():
         latest_info_saved.loc[0, 'negative_polarity_score'] = negative_polarity_24_hours_to_save
         latest_info_saved.loc[0, 'positive_news_count'] = positive_count_24_hours_to_save
         latest_info_saved.loc[0, 'negative_news_count'] = negative_count_24_hours_to_save
-        latest_info_saved[0, 'news_bullish'] = news_bullish
-        latest_info_saved[0, 'news_bearish'] = news_bearish
+        latest_info_saved.loc[0, 'news_bullish'] = news_bullish
+        latest_info_saved.loc[0, 'news_bearish'] = news_bearish
+
+        now = datetime.now()
+        now_str = now.strftime('%Y-%m-%d %H:%M:%S')
+        latest_info_saved.loc[0, 'last_news_update_time'] = now_str
         latest_info_saved.to_csv('latest_info_saved.csv', index=False)
         logging.info(f'news data has been updated')
 

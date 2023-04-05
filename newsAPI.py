@@ -34,7 +34,6 @@ def check_internet_connection() -> bool:
 
 
 def check_news_api_sentiment(start, end):
-
     # Check for internet connection
     if not check_internet_connection():
         logging.info('unable to get news sentiment')
@@ -56,7 +55,7 @@ def check_news_api_sentiment(start, end):
     positive_polarity_score = 0.0
     positive_count = 0
     negative_polarity_score = 0.0
-    negative_count = 0
+    negative_count: int = 0
 
     try:
         response = requests.get(endpoint, params=params)
@@ -78,7 +77,7 @@ def check_news_api_sentiment(start, end):
             except Exception as e:
                 logging.error(f"Error analyzing content: {e}")
 
-        return positive_polarity_score/positive_count, negative_polarity_score/negative_count,\
+        return positive_polarity_score / positive_count, negative_polarity_score / negative_count, \
             positive_count, negative_count
 
     except requests.exceptions.RequestException as e:
@@ -90,13 +89,13 @@ def check_news_api_sentiment(start, end):
 
 
 if __name__ == "__main__":
-    start_outer = datetime.datetime.now() - datetime.timedelta(days=2)
-    end_outer = datetime.datetime.now() - datetime.timedelta(days=1)
+    start_outer = datetime.datetime.now() - datetime.timedelta(days=1)
+    end_outer = datetime.datetime.now()
 
     positive_polarity_score_outer, negative_polarity_score_outer, \
         positive_count_outer, negative_count_outer = check_news_api_sentiment(start_outer, end_outer)
 
-    logging.info(f'positive_polarity: {positive_polarity_score_outer}'
-                 f'and negative_polarity: {negative_polarity_score_outer}')
+    logging.info(f'positive_polarity: {positive_polarity_score_outer/positive_count_outer}'
+                 f'and negative_polarity: {negative_polarity_score_outer/negative_count_outer}')
     logging.info(f'positive_count: {positive_count_outer} '
                  f'negative_count: {negative_count_outer}')
