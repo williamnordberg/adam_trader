@@ -83,5 +83,3 @@ if __name__ == "__main__":
                  f' and negative_polarity: {negative_polarity_score_outer}')
     logging.info(f'positive_count: {positive_count_outer} '
                  f'negative_count: {negative_count_outer}')
-
-

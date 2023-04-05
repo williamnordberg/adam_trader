@@ -90,14 +90,13 @@ def check_news_api_sentiment(start, end):
 
 
 if __name__ == "__main__":
-    start = datetime.datetime.now() - datetime.timedelta(days=2)
-    end = datetime.datetime.now() - datetime.timedelta(days=1)
+    start_outer = datetime.datetime.now() - datetime.timedelta(days=2)
+    end_outer = datetime.datetime.now() - datetime.timedelta(days=1)
 
     positive_polarity_score_outer, negative_polarity_score_outer, \
-        positive_count_outer, negative_count_outer = check_news_api_sentiment(start, end)
+        positive_count_outer, negative_count_outer = check_news_api_sentiment(start_outer, end_outer)
 
     logging.info(f'positive_polarity: {positive_polarity_score_outer}'
                  f'and negative_polarity: {negative_polarity_score_outer}')
     logging.info(f'positive_count: {positive_count_outer} '
                  f'negative_count: {negative_count_outer}')
-
