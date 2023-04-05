@@ -9,6 +9,7 @@ import logging
 from datetime import timedelta
 from datetime import datetime
 import pandas as pd
+from reddit import compare
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -101,27 +102,27 @@ def check_bitcoin_youtube_videos_increase():
 
         num_last_24_hours = len(search_results_last_24_hours)
         num_last_48_to_24_hours = len(search_results_last_48_to_24_hours)
-        delta = num_last_24_hours - num_last_48_to_24_hours
 
-        if num_last_48_to_24_hours == 0:
-            return False
-
-        increase_percentage = (delta / num_last_48_to_24_hours) * 100
+        youtube_bullish, youtube_bearish = compare(num_last_24_hours, num_last_48_to_24_hours)
 
         # Save the update time to disk
         now = datetime.now()
         now_str = now.strftime('%Y-%m-%d %H:%M:%S')
         latest_info_saved.loc[0, 'last_youtube_update_time'] = now_str
+
+        latest_info_saved.loc[0, 'youtube_bullish'] = youtube_bullish
+        latest_info_saved.loc[0, 'youtube_bearish'] = youtube_bearish
         latest_info_saved.to_csv('latest_info_saved.csv', index=False)
 
-        return increase_percentage >= 15
+        return youtube_bullish, youtube_bearish
     else:
         # If not, return the last value of the increase
         logging.info('Last youtube update was less than 8 hours ago. Skipping...')
-        last_youtube_increase = latest_info_saved['last_youtube'][0]
-        return last_youtube_increase
+        youtube_bullish = latest_info_saved['youtube_bullish'][0]
+        youtube_bearish = latest_info_saved['last_youtube'][0]
+        return youtube_bullish, youtube_bearish
 
 
 if __name__ == "__main__":
-    bitcoin_youtube_increase_15_percent = check_bitcoin_youtube_videos_increase()
-    logging.info(f'bitcoin_youtube_increase_15_percent: {bitcoin_youtube_increase_15_percent}')
+    youtube_bullish_outer, youtube_bearish_outer = check_bitcoin_youtube_videos_increase()
+    logging.info(f'youtube_bullish: {youtube_bullish_outer} , youtube_bearish: {youtube_bearish_outer}')

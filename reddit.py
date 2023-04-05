@@ -5,10 +5,41 @@ import logging
 from datetime import datetime, timedelta
 import configparser
 
-SEVEN_DAYS_IN_SECONDS = 7 * 24 * 60 * 60
+ONE_DAYS_IN_SECONDS = 24 * 60 * 60
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+
+def compare(current_activity, previous_activity):
+
+    activity_percentage = (current_activity - previous_activity) / previous_activity * 100
+
+    if activity_percentage > 0:
+        if activity_percentage >= 50:
+            return 1, 0
+        elif activity_percentage >= 40:
+            return 0.9, 0.1
+        elif activity_percentage >= 30:
+            return 0.8, 0.2
+        elif activity_percentage >= 20:
+            return 0.7, 0.3
+        elif activity_percentage >= 10:
+            return 0.6, 0.4
+
+    elif activity_percentage <= 0:
+        if previous_activity <= 50:
+            return 0, 1
+        elif previous_activity <= 40:
+            return 0.1, 0.9
+        elif previous_activity <= 30:
+            return 0.2, 0.8
+        elif previous_activity <= 20:
+            return 0.3, 0.7
+        elif previous_activity <= 10:
+            return 0.4, 0.6
+
+    return 0, 0
 
 
 def count_bitcoin_posts(reddit):
@@ -26,27 +57,14 @@ def count_bitcoin_posts(reddit):
     bitcoin_posts = subreddit.search("#Crypto ", limit=1000)
     count = 0
     for post in bitcoin_posts:
-        if post.created_utc > (time.time() - SEVEN_DAYS_IN_SECONDS):
+        if post.created_utc > (time.time() - ONE_DAYS_IN_SECONDS):
             count += 1
 
     return count
 
 
 def reddit_check():
-    """
-      Checks the current activity and post count of the Bitcoin subreddit on Reddit.
-      If the last check was less than 24 hours ago, returns the activity and count increase
-      from the last check. Otherwise, calculates the activity and count increase from the
-      previous check and updates the saved information file.
 
-      Returns:
-          tuple: A tuple containing the activity increase and count increase as booleans.
-              The activity increase is True if the current activity is at least 15% higher than
-              the previous activity, and False otherwise. The count increase is True if the
-              current post count is at least 15% higher than the previous post count, and False
-              otherwise.
-
-      """
     config = configparser.ConfigParser()
     config.read('config.ini')
 
@@ -62,8 +80,8 @@ def reddit_check():
 
     if datetime.now() - last_reddit_update_time < timedelta(hours=24):
         logging.info('Last Reddit update was less than 24 hours ago. Skipping...')
-        last_activity_increase = latest_info_saved['last_activity_increase'][0]
-        last_count_increase = latest_info_saved['last_count_increase'][0]
+        last_activity_increase = latest_info_saved['reddit_bullish'][0]
+        last_count_increase = latest_info_saved['reddit_bearish'][0]
         return last_activity_increase, last_count_increase
 
     else:
@@ -71,9 +89,13 @@ def reddit_check():
         previous_count = float(latest_info_saved['previous_count'][0])
         current_activity = reddit.subreddit("Bitcoin").active_user_count
         current_count = count_bitcoin_posts(reddit)
-        last_activity_increase = (current_activity / previous_activity) > 1.15
-        last_count_increase = (current_count / previous_count) > 1.15
+        reddit_bullish, reddit_bearish = compare(current_activity, previous_activity)
 
+        print('current_activity / previous_activity', current_activity, previous_activity)
+        print('current_count / previous_count', current_count, previous_count)
+
+        latest_info_saved.loc[0, 'reddit_bullish'] = reddit_bullish
+        latest_info_saved.loc[0, 'reddit_bearish'] = reddit_bearish
         latest_info_saved.loc[0, 'previous_activity'] = current_activity
         latest_info_saved.loc[0, 'previous_count'] = current_count
 
@@ -83,9 +105,9 @@ def reddit_check():
         latest_info_saved.loc[0, 'last_reddit_update_time'] = now_str
         latest_info_saved.to_csv('latest_info_saved.csv', index=False)
 
-        return last_activity_increase, last_count_increase
+        return reddit_bullish, reddit_bearish
 
 
 if __name__ == '__main__':
-    activity_increase1, count_increase1 = reddit_check()
-    logging.info(f", activity_increase: {activity_increase1}, count_increase: {count_increase1}")
+    reddit_bullish_outer, reddit_bearish_outer = reddit_check()
+    logging.info(f", reddit_bullish: {reddit_bullish_outer}, reddit_bearish: {reddit_bearish_outer}")

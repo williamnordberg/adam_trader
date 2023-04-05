@@ -2,9 +2,11 @@ import logging
 import requests
 import pandas as pd
 from time import sleep
+
+from reddit import compare
 from technical_analysis import technical_analyse
 from position import long_position_is_open, short_position_is_open
-from news_websites import check_sentiment_of_news
+from news_analyser import check_sentiment_of_news
 from youtube import check_bitcoin_youtube_videos_increase
 from reddit import reddit_check
 from macro_expected import get_macro_expected_and_real_compare, print_upcoming_events
@@ -56,7 +58,8 @@ while True:
     latest_info_saved = pd.read_csv('latest_info_saved.csv')
     total_received = latest_info_saved['total_received_coins_in_last_24'][0]
     total_sent = latest_info_saved['total_sent_coins_in_last_24'][0]
-    richest_addresses_bullish, richest_addresses_bearish = 0, 0
+    richest_addresses_bullish, richest_addresses_bearish = compare(
+        total_received, total_sent)
 
     # 4 Check Google search trends for Bitcoin and cryptocurrency
     google_search_bullish, google_search_bearish = check_search_trend(["Bitcoin", "Cryptocurrency"])
