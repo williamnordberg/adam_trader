@@ -3,10 +3,7 @@ import sys
 import unittest
 from unittest import mock
 from unittest.mock import MagicMock
-from news_websites import check_sentiment_of_news
-
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from news_analyser import check_sentiment_of_news
 
 
 class TestNewsWebsites(unittest.TestCase):
