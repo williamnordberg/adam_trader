@@ -129,10 +129,36 @@ def technical_analyse():
     current_price = get_bitcoin_price()
 
     # check potentials
-    technical_bullish = potential_up_reversal_bullish or potential_up_trend or (current_price >= ema200[-1])
-    technical_bearish = Potential_down_reversal_bearish or not potential_up_trend or (current_price < ema200[-1])
+    if potential_up_reversal_bullish and potential_up_trend and (current_price >= ema200[-1]):
+        return 1, 0
+    elif Potential_down_reversal_bearish and not potential_up_trend and (current_price >= ema200[-1]):
+        return 0, 1
 
-    return technical_bullish, technical_bearish
+    # potential and ris and macd trend
+    elif potential_up_reversal_bullish and potential_up_trend and not(current_price >= ema200[-1]):
+        return 0.9, 0.1
+    elif Potential_down_reversal_bearish and not potential_up_trend and (current_price >= ema200[-1]):
+        return 0.1, 0.9
+
+    # just reversal
+    elif potential_up_reversal_bullish and not potential_up_trend and (current_price >= ema200[-1]):
+        return 0.75, 0.25
+    elif Potential_down_reversal_bearish and potential_up_trend and (current_price >= ema200[-1]):
+        return 0.75, 0.25
+
+    # just ris and macd trend
+    elif not potential_up_reversal_bullish and potential_up_trend and not (current_price >= ema200[-1]):
+        return 0.65, 0.35
+    elif not Potential_down_reversal_bearish and not potential_up_trend and (current_price >= ema200[-1]):
+        return 0.35, 0.65
+
+    # just EMA
+    elif not potential_up_reversal_bullish and not potential_up_trend and (current_price >= ema200[-1]):
+        return 0.6, 0.4
+    elif not Potential_down_reversal_bearish and not potential_up_trend and (current_price >= ema200[-1]):
+        return 0.4, 0.6
+
+    return 0, 0
 
 
 if __name__ == '__main__':
