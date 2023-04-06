@@ -52,23 +52,22 @@ def check_internet_connection() -> bool:
         return False
 
 
-def check_search_trend(keywords: List[str], threshold: float = 1.2) -> bool:
+def check_search_trend(keywords: List[str]):
     """
     Check if there is a significant increase in search volume for a list of keywords in the past 7 days.
 
     Args:
         keywords (List[str]): The list of keywords to search for.
-        threshold (float): The threshold to use for determining if the last hour's search volume is significantly
-        higher. Default is 1.2, which means if the last hour's search volume is 20% higher than the expected value,
-        it is considered significant.
 
     Returns:
-        bool: True if there is a significant increase in search volume for all keywords, False otherwise.
+        news_bullish: a value between 0 (the lowest probability) and 1 (highest probability).
+        news_bearish: a value between 0 (the lowest probability) and 1 (highest probability).
     """
 
     # Check for internet connection
     if not check_internet_connection():
-        return False
+        logging.info('unable to get google trend')
+        return 0, 0
 
     # Convert all keywords to lowercase
     keywords = [keyword.lower() for keyword in keywords]
@@ -79,21 +78,38 @@ def check_search_trend(keywords: List[str], threshold: float = 1.2) -> bool:
         pytrends.build_payload(keywords, cat=0, timeframe='now 7-d', geo='', gprop='')
 
         trend = pytrends.interest_over_time()
+
         # Check if the last hour's search volume is significantly higher for all keywords
-        last_hour = trend.iloc[-1].values[0]
-        two_hours_before = trend.iloc[-2].values[0]
-
+        last_hour = int(trend.iloc[-1].values[0])
+        two_hours_before = int(trend.iloc[-2].values[0])
         # Check the threshold number of increase in the search
-        if last_hour >= (two_hours_before * threshold):
-            return True
+        if last_hour >= two_hours_before:
+            if last_hour >= (two_hours_before * 1.8):
+                return 1, 0
+            elif last_hour >= (two_hours_before * 1.6):
+                return 0.85, 0.15
+            elif last_hour >= (two_hours_before * 1.35):
+                return 0.75, 0.25
+            elif last_hour >= (two_hours_before * 1.2):
+                return 0.6, 0.4
+            return 0, 0
 
-        return False
+        elif last_hour <= two_hours_before:
+            if two_hours_before >= (last_hour * 1.8):
+                return 0, 11
+            elif two_hours_before >= (last_hour * 1.6):
+                return 0.15, 0.85
+            elif two_hours_before >= (last_hour * 1.35):
+                return 0.25, 0.75
+            elif two_hours_before >= (last_hour * 1.2):
+                return 0.84, 0.16
+            return 0, 0
 
     except ResponseError as e:
         logging.error(f"An error occurred: {e}")
-        return False
+        return 0, 0
 
 
 if __name__ == "__main__":
-    increase_google_search = check_search_trend(["Bitcoin"], threshold=1.2)
-    logging.info(increase_google_search)
+    google_bullish, google_bearish = check_search_trend(["Bitcoin"])
+    logging.info(f'google_bullish: {google_bullish}   google_bearish:{google_bearish}')

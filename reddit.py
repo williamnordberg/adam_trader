@@ -28,15 +28,15 @@ def compare(current_activity, previous_activity):
             return 0.6, 0.4
 
     elif activity_percentage <= 0:
-        if previous_activity <= 50:
+        if activity_percentage <= -50:
             return 0, 1
-        elif previous_activity <= 40:
+        elif activity_percentage <= -40:
             return 0.1, 0.9
-        elif previous_activity <= 30:
+        elif activity_percentage <= -30:
             return 0.2, 0.8
-        elif previous_activity <= 20:
+        elif activity_percentage <= -20:
             return 0.3, 0.7
-        elif previous_activity <= 10:
+        elif activity_percentage <= -10:
             return 0.4, 0.6
 
     return 0, 0
