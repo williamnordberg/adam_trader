@@ -5,6 +5,8 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 import logging
 
+from macro_compare import calculate_macro_sentiment
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
@@ -33,26 +35,8 @@ def print_upcoming_events(events_date_dict):
 
 
 def get_macro_expected_and_real_compare():
-    """
-    Retrieve macroeconomic data from the Forex Factory calendar and compare the actual
-    and expected values of selected events.
 
-    This function scrapes the Forex Factory calendar to find the actual and expected values
-    of specific macroeconomic events. It then compares these values and returns a tuple
-    containing boolean values indicating if the actual value is better than the expected
-    value for CPI, PPI, and Federal Funds Rate. It also returns a dictionary containing the
-    event names and their corresponding datetime objects.
-
-    :return: A tuple containing:
-             - CPI_better_than_expected (bool): True if actual CPI value is better than expected, False otherwise.
-             - PPI_better_than_expected (bool): True if actual PPI value is better than expected, False otherwise.
-             - interest_rate_better_than_expected (bool): True if actual Federal Funds Rate is better than expected,
-              False otherwise.
-             - events_date_dict (dict): A dictionary containing event names as keys and their corresponding datetime
-              objects as values.
-    """
-
-    events_list = ["CPI m/m", "CPI y/y", "Core CPI m/m", "Core PPI m/m", "PPI m/m", "Federal Funds Rate"]
+    events_list = ["Final Manufacturing PMI", "CPI m/m", "PPI m/m"]
     url = "https://www.forexfactory.com/calendar"
     options = webdriver.ChromeOptions()
     options.add_argument("--headless")
@@ -64,9 +48,6 @@ def get_macro_expected_and_real_compare():
     service.start()
 
     events_date_dict = {}
-    CPI_better_than_expected = False
-    PPI_better_than_expected = False
-    interest_rate_better_than_expected = False
 
     with webdriver.Remote(service.service_url, options=options) as browser:
         browser.get(url)
@@ -79,8 +60,12 @@ def get_macro_expected_and_real_compare():
         if not table:
             logging.warning("Table not found")
             service.stop()
-            return CPI_better_than_expected, PPI_better_than_expected, interest_rate_better_than_expected
+            return 0, 0
 
+        rate_this_month = None
+        rate_month_before = None
+        cpi_m_to_m = None
+        ppi_m_to_m = None
         for event in events_list:
             for row in table.find_all("tr"):
                 event_cell = row.find("td", class_="calendar__cell calendar__event event")
@@ -95,24 +80,33 @@ def get_macro_expected_and_real_compare():
                         actual_cell = row.find("td", class_="calendar__cell calendar__actual actual")
                         actual_value = actual_cell.text.strip() if actual_cell else None
 
-                        if actual_value and forecast_value and float(actual_value[:-1]) <= float(forecast_value[:-1]):
-                            events_date_dict[event] = datetime.utcfromtimestamp(int(row['data-timestamp']))
-                            if event == "CPI m/m" or event == "CPI y/y":
-                                CPI_better_than_expected = True
-                            elif event == "Core PPI m/m" or event == "PPI m/m":
-                                PPI_better_than_expected = True
-                            elif event == "Federal Funds Rate":
-                                interest_rate_better_than_expected = True
+                        previous_value_cell = row.find("td", class_="calendar__cell calendar__previous previous")
+                        previous_value = previous_value_cell.text.strip() if previous_value_cell else None
 
-            else:
-                events_date_dict[event] = None
+                        if actual_value or forecast_value:
+                            value = float(actual_value if actual_value else forecast_value)
+                            events_date_dict[event] = datetime.utcfromtimestamp(int(row['data-timestamp']))
+
+                            if event == "Final Manufacturing PMI":
+                                rate_this_month = value
+                                rate_month_before = float(previous_value)
+                            elif event == "CPI m/m":
+                                cpi_m_to_m = value
+                            elif event == "PPI m/m":
+                                ppi_m_to_m = value
 
     service.stop()
-    return CPI_better_than_expected, PPI_better_than_expected, interest_rate_better_than_expected, events_date_dict
+
+    if rate_this_month or cpi_m_to_m or ppi_m_to_m:
+        macro_bullish, macro_bearish = calculate_macro_sentiment(
+            rate_this_month, rate_month_before, cpi_m_to_m, ppi_m_to_m)
+        return macro_bullish, macro_bearish, events_date_dict
+
+    else:
+        return 0, 0
 
 
 if __name__ == "__main__":
-    CPI_better_than_expected1, PPI_better_than_expected1, interest_rate_better_than_expected1, \
-        events_date_dict_outer = get_macro_expected_and_real_compare()
-    logging.info(f"{CPI_better_than_expected1}, {PPI_better_than_expected1}, {interest_rate_better_than_expected1}")
+    macro_bullish_outer, macro_bearish_outer, events_date_dict_outer = get_macro_expected_and_real_compare()
+    logging.info(f"{macro_bullish_outer},{macro_bearish_outer}, event: {events_date_dict_outer}")
     print_upcoming_events(events_date_dict_outer)

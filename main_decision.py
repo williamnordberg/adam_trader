@@ -7,7 +7,7 @@ from position import long_position_is_open, short_position_is_open
 from news_websites import check_sentiment_of_news
 from youtube import check_bitcoin_youtube_videos_increase
 from reddit import reddit_check
-from macro_expected import get_macro_expected_and_real_compare, print_upcoming_events
+from macro_analyser import macro_sentiment, print_upcoming_events
 from google_search import check_search_trend
 from adam_predictor import decision_tree_predictor
 from order_book import get_probabilities
@@ -101,7 +101,7 @@ while True:
 
     # 2.4 Check macroeconomic indicators
     cpi_better_than_expected, ppi_better_than_expected, interest_rate_better_than_expected, events_dates \
-        = get_macro_expected_and_real_compare()
+        = macro_sentiment()
 
     # remind upcoming macro events
     print_upcoming_events(events_dates)
