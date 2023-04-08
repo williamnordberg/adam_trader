@@ -4,7 +4,7 @@ import pandas as pd
 from order_book import get_probabilities, get_probabilities_hit_profit_or_stop
 from macro_analyser import macro_sentiment, print_upcoming_events
 from technical_analysis import technical_analyse
-from news_websites import check_sentiment_of_news
+from news_analyser import check_sentiment_of_news
 from google_search import check_search_trend
 from reddit import reddit_check
 from youtube import check_bitcoin_youtube_videos_increase
