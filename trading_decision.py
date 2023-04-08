@@ -1,8 +1,25 @@
 import logging
-from position import long_position_is_open, short_position_is_open
+import requests
 
-long_threshold = 0.2
-short_threshold = 0.2
+
+def get_bitcoin_price():
+    """
+    Retrieves the current Bitcoin price in USD from the CoinGecko API.
+    """
+    try:
+        url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            data = response.json()
+            current_price_local = data['bitcoin']['usd']
+            return current_price_local
+        else:
+            logging.error("Error: Could not retrieve Bitcoin price data")
+            raise Exception("Error: Could not retrieve Bitcoin price data")
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Error: Could not connect to CoinGecko API:{e}")
+        raise Exception(f"Error: Could not connect to CoinGecko API:{e}")
 
 
 def make_trading_decision(macro_bullish, macro_bearish,
@@ -14,7 +31,6 @@ def make_trading_decision(macro_bullish, macro_bearish,
                           reddit_bullish, reddit_bearish,
                           youtube_bullish, youtube_bearish,
                           news_bullish, news_bearish):
-
     """
     Makes a trading decision based on the conditions met.
     """
@@ -42,7 +58,7 @@ def make_trading_decision(macro_bullish, macro_bearish,
             weights["youtube"] * youtube_bullish +
             weights["sentiment_of_news"] * news_bullish
     )
-    
+
     weighted_score_down = (
             weights["macro_indicators"] * macro_bearish +
             weights["order_book"] * order_book_bearish +
@@ -55,13 +71,26 @@ def make_trading_decision(macro_bullish, macro_bearish,
             weights["sentiment_of_news"] * news_bearish
     )
 
-    if weighted_score_up > weighted_score_down and weighted_score_up > long_threshold:
-        logging.info('Opening a long position')
-        profit_after_trade, loss_after_trade = long_position_is_open()
-        logging.info(f"profit_after_trade:{profit_after_trade}, loss_after_trade:"
-                     f"{loss_after_trade}")
-    elif weighted_score_down > weighted_score_up and weighted_score_down > short_threshold:
-        logging.info('Opening short position')
-        profit_after_trade, loss_after_trade = short_position_is_open()
-        logging.info(f"profit_after_trade:{profit_after_trade}, "
-                     f"loss_after_trade:{loss_after_trade}")
+    # Normalize the scores
+    total_score = weighted_score_up + weighted_score_down
+
+    normalized_score_up = weighted_score_up / total_score
+    normalized_score_down = weighted_score_down / total_score
+
+    print('normalized_score_up', normalized_score_up)
+    print('normalized_score_down', normalized_score_down)
+
+    return normalized_score_up, normalized_score_down
+
+
+if __name__ == "__main__":
+    score_up, score_down = make_trading_decision(1, 0,
+                                                 0, 1,
+                                                 1, 1,
+                                                 0, 1,
+                                                 1, 0,
+                                                 1, 0,
+                                                 1, 0,
+                                                 1, 0,
+                                                 1, 0)
+    logging.info(f'score_up: {score_up}, score_down{score_down}')

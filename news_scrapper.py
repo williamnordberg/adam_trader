@@ -65,12 +65,23 @@ def check_news_sentiment_scrapper():
             logging.error(f"Error analyzing content: {e}")
             return 0, 0, 0, 0
 
-    return positive_polarity_score / positive_count, negative_polarity_score / negative_count, \
-        positive_count, negative_count
+        # prevent division by zero
+        if positive_count > 0:
+            positive_polarity = positive_polarity_score / positive_count
+        else:
+            positive_polarity = 0
+
+            # prevent division by zero
+        if negative_count > 0:
+            negative_polarity = negative_polarity_score / negative_count
+        else:
+            negative_polarity = 0
+
+        return positive_polarity, negative_polarity, positive_count, negative_count
 
 
 if __name__ == "__main__":
-    positive_polarity_score_outer, negative_polarity_score_outer,\
+    positive_polarity_score_outer, negative_polarity_score_outer, \
         positive_count_outer, negative_count_outer = check_news_sentiment_scrapper()
 
     logging.info(f'positive_polarity: {positive_polarity_score_outer}'

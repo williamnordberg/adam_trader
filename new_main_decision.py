@@ -10,38 +10,18 @@ from news_analyser import check_sentiment_of_news
 from youtube import check_bitcoin_youtube_videos_increase
 from reddit import reddit_check
 from macro_analyser import macro_sentiment, print_upcoming_events
-from new_google_search import check_search_trend
+from google_search import check_search_trend
 from adam_predictor import decision_tree_predictor
 from order_book import get_probabilities
-from trading_decision import make_trading_decision
+from trading_decision import make_trading_decision, get_bitcoin_price
 
 # Constants
 LOOP_COUNTER = 0
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
+long_threshold = 0.6
+short_threshold = 0.6
 
-# Logging setup
 logging.basicConfig(filename='trading.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-
-def get_bitcoin_price():
-    """
-    Retrieves the current Bitcoin price in USD from the CoinGecko API.
-    """
-    try:
-        url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
-        response = requests.get(url)
-
-        if response.status_code == 200:
-            data = response.json()
-            current_price_local = data['bitcoin']['usd']
-            return current_price_local
-        else:
-            logging.error("Error: Could not retrieve Bitcoin price data")
-            raise Exception("Error: Could not retrieve Bitcoin price data")
-    except requests.exceptions.RequestException as e:
-        logging.error(f"Error: Could not connect to CoinGecko API:{e}")
-        raise Exception(f"Error: Could not connect to CoinGecko API:{e}")
-
 
 # Main trading loop
 while True:
@@ -65,11 +45,11 @@ while True:
     google_search_bullish, google_search_bearish = check_search_trend(["Bitcoin", "Cryptocurrency"])
 
     # 5 Check macroeconomic indicators
-    macro_bullish, macro_bearish = macro_sentiment()
+    macro_bullish, macro_bearish, events_date_dict = macro_sentiment()
 
     # remind upcoming macro events
     events_dates = 0
-    print_upcoming_events(events_dates)
+    print_upcoming_events(events_date_dict)
 
     # 6 Reddit
     reddit_bullish, reddit_bearish = reddit_check()
@@ -86,14 +66,25 @@ while True:
     # Make decision about the trade
     current_price = get_bitcoin_price()
 
-    make_trading_decision(macro_bullish, macro_bearish,
-                          order_book_bullish, order_book_bearish,
-                          prediction_bullish, prediction_bearish,
-                          technical_bullish, technical_bearish,
-                          richest_addresses_bullish, richest_addresses_bearish,
-                          google_search_bullish, google_search_bearish,
-                          reddit_bullish, reddit_bearish,
-                          youtube_bullish, youtube_bearish,
-                          news_bullish, news_bearish)
+    weighted_score_up, weighted_score_down = make_trading_decision(
+        macro_bullish, macro_bearish,order_book_bullish, order_book_bearish,
+        prediction_bullish, prediction_bearish,
+        technical_bullish, technical_bearish,
+        richest_addresses_bullish, richest_addresses_bearish,
+        google_search_bullish, google_search_bearish,
+        reddit_bullish, reddit_bearish,
+        youtube_bullish, youtube_bearish,
+        news_bullish, news_bearish)
+
+    if weighted_score_up > weighted_score_down and weighted_score_up > long_threshold:
+        logging.info('Opening a long position')
+        # profit_after_trade, loss_after_trade = long_position_is_open()
+        # logging.info(f"profit_after_trade:{profit_after_trade}, loss_after_trade:"
+           #          f"{loss_after_trade}")
+    elif weighted_score_down > weighted_score_up and weighted_score_down > short_threshold:
+        logging.info('Opening short position')
+        # profit_after_trade, loss_after_trade = short_position_is_open()
+        # logging.info(f"profit_after_trade:{profit_after_trade}, "
+          #           f"loss_after_trade:{loss_after_trade}")
 
     sleep(10)
