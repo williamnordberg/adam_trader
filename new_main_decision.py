@@ -9,7 +9,7 @@ from position import long_position_is_open, short_position_is_open
 from news_analyser import check_sentiment_of_news
 from youtube import check_bitcoin_youtube_videos_increase
 from reddit import reddit_check
-from macro_expected import get_macro_expected_and_real_compare, print_upcoming_events
+from macro_analyser import macro_sentiment, print_upcoming_events
 from new_google_search import check_search_trend
 from adam_predictor import decision_tree_predictor
 from order_book import get_probabilities
@@ -65,7 +65,7 @@ while True:
     google_search_bullish, google_search_bearish = check_search_trend(["Bitcoin", "Cryptocurrency"])
 
     # 5 Check macroeconomic indicators
-    macro_bullish, macro_bearish = get_macro_expected_and_real_compare()
+    macro_bullish, macro_bearish = macro_sentiment()
 
     # remind upcoming macro events
     events_dates = 0

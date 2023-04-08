@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import unittest
 from unittest.mock import MagicMock, patch
-import macro_expected as me
+import macro_analyser as me
 
 
 class TestMacroExpected(unittest.TestCase):
@@ -38,7 +38,7 @@ class TestMacroExpected(unittest.TestCase):
         table_mock.find_all.return_value = event_rows
 
         with patch("macro_expected.BeautifulSoup", return_value=soup_mock):
-            results = me.get_macro_expected_and_real_compare()
+            results = me.macro_sentiment()
 
         # Check if the function returns the expected results
         self.assertEqual(results, (False, False, False,

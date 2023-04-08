@@ -2,7 +2,7 @@ from time import sleep
 import requests
 import pandas as pd
 from order_book import get_probabilities, get_probabilities_hit_profit_or_stop
-from macro_expected import get_macro_expected_and_real_compare, print_upcoming_events
+from macro_analyser import macro_sentiment, print_upcoming_events
 from technical_analysis import technical_analyse
 from news_websites import check_sentiment_of_news
 from google_search import check_search_trend
@@ -88,7 +88,7 @@ def long_position_is_open():
 
         # 3. Macroeconomics data
         cpi_better_than_expected, ppi_better_than_expected, interest_rate_better_than_expected, \
-            events_dates = get_macro_expected_and_real_compare()
+            events_dates = macro_sentiment()
 
         # remind upcoming macro events
         print_upcoming_events(events_dates)
@@ -176,7 +176,7 @@ def short_position_is_open():
 
         # 3. Macroeconomics data
         cpi_better_than_expected, ppi_better_than_expected, interest_rate_better_than_expected, \
-            events_dates = get_macro_expected_and_real_compare()
+            events_dates = macro_sentiment()
 
         # remind upcoming macro events
         print_upcoming_events(events_dates)
