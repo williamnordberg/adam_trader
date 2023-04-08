@@ -1,5 +1,4 @@
 import logging
-import requests
 import pandas as pd
 from time import sleep
 
@@ -18,8 +17,8 @@ from trading_decision import make_trading_decision, get_bitcoin_price
 # Constants
 LOOP_COUNTER = 0
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
-long_threshold = 0.6
-short_threshold = 0.6
+long_threshold = 0.7
+short_threshold = 0.7
 
 logging.basicConfig(filename='trading.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -67,7 +66,7 @@ while True:
     current_price = get_bitcoin_price()
 
     weighted_score_up, weighted_score_down = make_trading_decision(
-        macro_bullish, macro_bearish,order_book_bullish, order_book_bearish,
+        macro_bullish, macro_bearish, order_book_bullish, order_book_bearish,
         prediction_bullish, prediction_bearish,
         technical_bullish, technical_bearish,
         richest_addresses_bullish, richest_addresses_bearish,
@@ -78,13 +77,13 @@ while True:
 
     if weighted_score_up > weighted_score_down and weighted_score_up > long_threshold:
         logging.info('Opening a long position')
-        # profit_after_trade, loss_after_trade = long_position_is_open()
-        # logging.info(f"profit_after_trade:{profit_after_trade}, loss_after_trade:"
-           #          f"{loss_after_trade}")
+        profit_after_trade, loss_after_trade = long_position_is_open()
+        logging.info(f"profit_after_trade:{profit_after_trade}, loss_after_trade:"
+                     f"{loss_after_trade}")
+
     elif weighted_score_down > weighted_score_up and weighted_score_down > short_threshold:
         logging.info('Opening short position')
-        # profit_after_trade, loss_after_trade = short_position_is_open()
-        # logging.info(f"profit_after_trade:{profit_after_trade}, "
-          #           f"loss_after_trade:{loss_after_trade}")
+        profit_after_trade, loss_after_trade = short_position_is_open()
+        logging.info(f"profit_after_trade:{profit_after_trade}, "f"loss_after_trade:{loss_after_trade}")
 
     sleep(10)

@@ -77,9 +77,6 @@ def make_trading_decision(macro_bullish, macro_bearish,
     normalized_score_up = weighted_score_up / total_score
     normalized_score_down = weighted_score_down / total_score
 
-    print('normalized_score_up', normalized_score_up)
-    print('normalized_score_down', normalized_score_down)
-
     return normalized_score_up, normalized_score_down
 
 
