@@ -69,7 +69,6 @@ def get_probabilities(symbols, limit=LIMIT, bid_multiplier=0.995, ask_multiplier
 
     probability_up = bid_volume / (bid_volume + ask_volume)
     probability_down = ask_volume / (bid_volume + ask_volume)
-    print('probability_up, probability_down', probability_up, probability_down)
     order_book_bullish, order_book_bearish = compare_probability(probability_up, probability_down)
 
     return order_book_bullish, order_book_bearish

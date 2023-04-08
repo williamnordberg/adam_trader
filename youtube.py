@@ -119,7 +119,7 @@ def check_bitcoin_youtube_videos_increase():
         # If not, return the last value of the increase
         logging.info('Last youtube update was less than 8 hours ago. Skipping...')
         youtube_bullish = latest_info_saved['youtube_bullish'][0]
-        youtube_bearish = latest_info_saved['last_youtube'][0]
+        youtube_bearish = latest_info_saved['youtube_bearish'][0]
         return youtube_bullish, youtube_bearish
 
 

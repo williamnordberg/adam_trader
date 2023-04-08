@@ -1,13 +1,9 @@
-
-
 def compare_polarity(positive_polarity_24_hours_before, latest_positive_polarity_score,
                      negative_polarity_24_hours_before, latest_negative_polarity_score):
     positive_percentage_increase = (positive_polarity_24_hours_before - latest_positive_polarity_score
                                     ) / latest_positive_polarity_score * 100
-    print('positive_percentage_increase:', positive_percentage_increase)
     negative_percentage_increase = (negative_polarity_24_hours_before - latest_negative_polarity_score
                                     ) / latest_negative_polarity_score * 100
-    print('negative_percentage_increase:', negative_percentage_increase)
 
     if positive_percentage_increase > negative_percentage_increase:
         if positive_percentage_increase >= 50:
