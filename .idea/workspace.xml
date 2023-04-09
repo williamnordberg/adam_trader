@@ -9,14 +9,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="first commit">
+      <change afterPath="$PROJECT_DIR$/position_decision_maker.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adam_predictor.py" beforeDir="false" afterPath="$PROJECT_DIR$/adam_predictor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/latest_info_saved.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_main_decision.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_main_decision.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news_compare_polarity.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_compare_polarity.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news_scrapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_scrapper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_book.py" beforeDir="false" afterPath="$PROJECT_DIR$/order_book.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trading_decision.py" beforeDir="false" afterPath="$PROJECT_DIR$/trading_decision.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/youtube.py" beforeDir="false" afterPath="$PROJECT_DIR$/youtube.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/macro_analyser.py" beforeDir="false" afterPath="$PROJECT_DIR$/macro_analyser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_decision.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_decision.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/position.py" beforeDir="false" afterPath="$PROJECT_DIR$/position.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reddit.py" beforeDir="false" afterPath="$PROJECT_DIR$/reddit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/youtube_token.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/youtube_token.pickle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,8 +93,8 @@
       <recent name="C:\will\Python_project\adam_trader" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.new_main_decision">
-    <configuration name="macro_compare" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.test">
+    <configuration name="main_decision" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -104,7 +106,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/macro_compare.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main_decision.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -134,7 +136,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="news_scrapper" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="position" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -146,7 +148,28 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/news_scrapper.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/position.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="position_decision_maker" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="adam_trader" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="C:\will\Python_project\adam_trader\position_decision_maker.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -176,27 +199,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="trading_decision" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="adam_trader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/trading_decision.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="Unittests with right config" type="tests" factoryName="Unittests">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -214,20 +216,20 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.macro_compare" />
-      <item itemvalue="Python.new_main_decision" />
-      <item itemvalue="Python.news_scrapper" />
-      <item itemvalue="Python.trading_decision" />
+      <item itemvalue="Python.position_decision_maker" />
       <item itemvalue="Python.test" />
+      <item itemvalue="Python.main_decision" />
+      <item itemvalue="Python.new_main_decision" />
+      <item itemvalue="Python.position" />
       <item itemvalue="Python tests.Unittests with right config" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.new_main_decision" />
-        <item itemvalue="Python.news_scrapper" />
-        <item itemvalue="Python.trading_decision" />
         <item itemvalue="Python.test" />
-        <item itemvalue="Python.macro_compare" />
+        <item itemvalue="Python.position_decision_maker" />
+        <item itemvalue="Python.position" />
+        <item itemvalue="Python.main_decision" />
+        <item itemvalue="Python.new_main_decision" />
       </list>
     </recent_temporary>
   </component>
@@ -239,20 +241,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00065" summary="first commit">
-      <created>1678499157253</created>
-      <option name="number" value="00065" />
-      <option name="presentableId" value="LOCAL-00065" />
-      <option name="project" value="LOCAL" />
-      <updated>1678499157253</updated>
-    </task>
-    <task id="LOCAL-00066" summary="first commit">
-      <created>1678499371135</created>
-      <option name="number" value="00066" />
-      <option name="presentableId" value="LOCAL-00066" />
-      <option name="project" value="LOCAL" />
-      <updated>1678499371135</updated>
     </task>
     <task id="LOCAL-00067" summary="first commit">
       <created>1678605022779</created>
@@ -583,7 +571,21 @@
       <option name="project" value="LOCAL" />
       <updated>1680930517576</updated>
     </task>
-    <option name="localTasksCounter" value="114" />
+    <task id="LOCAL-00114" summary="first commit">
+      <created>1680932520129</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1680932520129</updated>
+    </task>
+    <task id="LOCAL-00115" summary="first commit">
+      <created>1680932613161</created>
+      <option name="number" value="00115" />
+      <option name="presentableId" value="LOCAL-00115" />
+      <option name="project" value="LOCAL" />
+      <updated>1680932613161</updated>
+    </task>
+    <option name="localTasksCounter" value="116" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

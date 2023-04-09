@@ -4,7 +4,6 @@ from time import sleep
 
 from reddit import compare
 from technical_analysis import technical_analyse
-from position import long_position_is_open, short_position_is_open
 from news_analyser import check_sentiment_of_news
 from youtube import check_bitcoin_youtube_videos_increase
 from reddit import reddit_check
@@ -12,7 +11,9 @@ from macro_analyser import macro_sentiment, print_upcoming_events
 from google_search import check_search_trend
 from adam_predictor import decision_tree_predictor
 from order_book import get_probabilities
-from trading_decision import make_trading_decision, get_bitcoin_price
+from trading_decision import make_trading_decision
+from long_position_open import long_position
+from short_position_open import short_position
 
 # Constants
 LOOP_COUNTER = 0
@@ -47,7 +48,6 @@ while True:
     macro_bullish, macro_bearish, events_date_dict = macro_sentiment()
 
     # remind upcoming macro events
-    events_dates = 0
     print_upcoming_events(events_date_dict)
 
     # 6 Reddit
@@ -63,8 +63,6 @@ while True:
     technical_bullish, technical_bearish = technical_analyse()
 
     # Make decision about the trade
-    current_price = get_bitcoin_price()
-
     weighted_score_up, weighted_score_down = make_trading_decision(
         macro_bullish, macro_bearish, order_book_bullish, order_book_bearish,
         prediction_bullish, prediction_bearish,
@@ -77,13 +75,13 @@ while True:
 
     if weighted_score_up > weighted_score_down and weighted_score_up > long_threshold:
         logging.info('Opening a long position')
-        profit_after_trade, loss_after_trade = long_position_is_open()
+        profit_after_trade, loss_after_trade = long_position()
         logging.info(f"profit_after_trade:{profit_after_trade}, loss_after_trade:"
                      f"{loss_after_trade}")
 
     elif weighted_score_down > weighted_score_up and weighted_score_down > short_threshold:
         logging.info('Opening short position')
-        profit_after_trade, loss_after_trade = short_position_is_open()
+        profit_after_trade, loss_after_trade = short_position()
         logging.info(f"profit_after_trade:{profit_after_trade}, "f"loss_after_trade:{loss_after_trade}")
 
     sleep(10)
