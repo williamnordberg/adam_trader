@@ -53,11 +53,7 @@ def short_position():
             logging.info('&&&&&&&&&&&&&& STOP LOSS &&&&&&&&&&&&&&&&&&&&&')
             return profit, loss
 
-        # order  book
-        probability_down, probability_up = get_probabilities(
-            SYMBOLS, bid_multiplier=0.995, ask_multiplier=1.005)
-        logging.info(f'Probability of price down: {probability_down} and up:{probability_up}')
-
+        # order  book Hit
         probability_to_hit_stop_loss, probability_to_hit_target = \
             get_probabilities_hit_profit_or_stop(SYMBOLS, 1000, stop_loss, profit_point)
         logging.info(f'profit_probability: {probability_to_hit_target}'
@@ -67,8 +63,10 @@ def short_position():
         prediction_bullish, prediction_bearish = decision_tree_predictor()
 
         # 2 Get probabilities of price going up or down
-        order_book_bullish, order_book_bearish = get_probabilities(SYMBOLS, bid_multiplier=0.995,
-                                                                   ask_multiplier=1.005)
+        order_book_bullish, order_book_bearish = get_probabilities(SYMBOLS, bid_multiplier=0.99,
+                                                                   ask_multiplier=1.01)
+        logging.info(f'order_book_bullish: {order_book_bullish}'
+                     f'  order_book_bearish: {order_book_bearish}')
 
         # 3 Monitor the richest Bitcoin addresses
         latest_info_saved = pd.read_csv('latest_info_saved.csv')

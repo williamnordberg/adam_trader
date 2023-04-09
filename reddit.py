@@ -91,9 +91,6 @@ def reddit_check():
         current_count = count_bitcoin_posts(reddit)
         reddit_bullish, reddit_bearish = compare(current_activity, previous_activity)
 
-        print('current_activity / previous_activity', current_activity, previous_activity)
-        print('current_count / previous_count', current_count, previous_count)
-
         latest_info_saved.loc[0, 'reddit_bullish'] = reddit_bullish
         latest_info_saved.loc[0, 'reddit_bearish'] = reddit_bearish
         latest_info_saved.loc[0, 'previous_activity'] = current_activity

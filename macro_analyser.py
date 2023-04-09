@@ -60,7 +60,7 @@ def macro_sentiment():
         if not table:
             logging.warning("Table not found")
             service.stop()
-            return 0, 0
+            return 0, 0, {}
 
         rate_this_month = None
         rate_month_before = None
@@ -103,7 +103,7 @@ def macro_sentiment():
         return macro_bullish, macro_bearish, events_date_dict
 
     else:
-        return 0, 0
+        return 0, 0, {}
 
 
 if __name__ == "__main__":

@@ -14,6 +14,7 @@ from position_decision_maker import position_decision
 from reddit import compare
 from trading_decision import get_bitcoin_price
 
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 SCORE_MARGIN_TO_CLOSE = 0.7
@@ -22,44 +23,32 @@ SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 LATEST_INFO_FILE = 'latest_info_saved.csv'
 
 
-def short_position():
-    """
-       Monitors a short position for various factors to decide when to close the position.
-       The function continuously checks various factors like probabilities, technical analysis,
-       news sentiment, search trends, Reddit activity, and YouTube trends.
-       It also checks for stop loss and profit points.
-       Returns:
-           float: The profit made after closing the position.
-           float: The loss made after closing the position.
-       """
+def long_position():
     current_price = get_bitcoin_price()
     position_opening_price = current_price
-    profit_point = current_price - (current_price * PROFIT_MARGIN)
-    stop_loss = current_price + (current_price * PROFIT_MARGIN)
+    profit_point = current_price + (current_price * PROFIT_MARGIN)
+    stop_loss = current_price - (current_price * PROFIT_MARGIN)
     logging.info(f'current_price:{current_price}, profit_point:{profit_point},stop_loss:{stop_loss} ')
     profit, loss = 0, 0
 
     while True:
         logging.info('******************************************')
         current_price = get_bitcoin_price()
-        logging.info(f'current_price:{current_price}, profit_point:{profit_point},stop_loss:{stop_loss} ')
+        logging.info(f'current_price:{current_price}, profit_point:{profit_point},stop_loss:{stop_loss}')
+
         # Check if we meet profit or stop loss
-        if current_price < profit_point:
-            profit = position_opening_price - current_price
-            logging.info('&&&&&&&&&&&&&& TARGET HIT &&&&&&&&&&&&&&&&&&&&&')
+        if current_price >= profit_point:
+            profit = current_price - position_opening_price
+            logging.info('&&&&&&&&&&&&&& target hit &&&&&&&&&&&&&&&&&&&&&')
             return profit, loss
-        elif current_price > stop_loss:
-            loss = current_price - position_opening_price
+        elif current_price < stop_loss:
+            loss = position_opening_price - current_price
             logging.info('&&&&&&&&&&&&&& STOP LOSS &&&&&&&&&&&&&&&&&&&&&')
             return profit, loss
 
-        # order  book
-        probability_down, probability_up = get_probabilities(
-            SYMBOLS, bid_multiplier=0.995, ask_multiplier=1.005)
-        logging.info(f'Probability of price down: {probability_down} and up:{probability_up}')
-
-        probability_to_hit_stop_loss, probability_to_hit_target = \
-            get_probabilities_hit_profit_or_stop(SYMBOLS, 1000, stop_loss, profit_point)
+        # Order book Hit
+        probability_to_hit_target, probability_to_hit_stop_loss = \
+            get_probabilities_hit_profit_or_stop(SYMBOLS, 1000, profit_point, stop_loss)
         logging.info(f'profit_probability: {probability_to_hit_target}'
                      f'stop_probability: {probability_to_hit_stop_loss}')
 
@@ -67,8 +56,9 @@ def short_position():
         prediction_bullish, prediction_bearish = decision_tree_predictor()
 
         # 2 Get probabilities of price going up or down
-        order_book_bullish, order_book_bearish = get_probabilities(SYMBOLS, bid_multiplier=0.995,
-                                                                   ask_multiplier=1.005)
+        order_book_bullish, order_book_bearish = get_probabilities(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
+        logging.info(f'order_book_bullish: {order_book_bullish}'
+                     f'  order_book_bearish: {order_book_bearish}')
 
         # 3 Monitor the richest Bitcoin addresses
         latest_info_saved = pd.read_csv('latest_info_saved.csv')
@@ -113,19 +103,19 @@ def short_position():
 
         print('weighted_score_up, weighted_score_down', weighted_score_up, weighted_score_down)
 
-        if weighted_score_down < weighted_score_up and weighted_score_down < SCORE_MARGIN_TO_CLOSE:
-            logging.info('short position clos')
-            if current_price < position_opening_price:
-                profit = position_opening_price - current_price
-                logging.info('short position closed with profit')
+        if weighted_score_down > weighted_score_up and weighted_score_down > SCORE_MARGIN_TO_CLOSE:
+            logging.info('long position clos')
+            if current_price > position_opening_price:
+                profit = current_price - position_opening_price
+                logging.info('long position closed with profit')
             elif current_price > position_opening_price:
                 loss = position_opening_price - current_price
-                logging.info('short position closed with loss')
+                logging.info('long position closed with loss')
             return profit, loss
 
         sleep(5)
 
 
 if __name__ == "__main__":
-    profit_after_trade1, loss_after_trade1 = short_position()
-    logging.info(f"profit_after_trade:{profit_after_trade1}, loss_after_trade:{loss_after_trade1}")
+    profit_after_trade, loss_after_trade = long_position()
+    logging.info(f"profit_after_trade:{profit_after_trade}, loss_after_trade:{loss_after_trade}")
