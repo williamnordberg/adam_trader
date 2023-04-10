@@ -1,13 +1,11 @@
-# Standard library
 import time
 import logging
-
-# Third-party libraries
+import os
+import configparser
 from requests.sessions import Session
 from dateutil.parser import parse
-import configparser
-import os
-
+from typing import Tuple
+from handy_modules import check_internet_connection
 
 # Initialize a session object
 session = Session()
@@ -26,27 +24,30 @@ config.read_string(config_string)
 API_KEY_BLOCKCYPHER = config.get('API', 'Blockcypher')
 
 
-def check_address_transactions_blockcypher(address):
+def get_address_transactions_24h_blockcypher(address: str) -> Tuple[float, float]:
     """
     Check the total Bitcoin received and sent in the last 24 hours for an address using the Blockcypher API.
+
     Args:
         address (str): The Bitcoin address to check.
+
     Returns:
         total_received (float): Total Bitcoin received in the last 24 hours.
         total_sent (float): Total Bitcoin sent in the last 24 hours.
     """
+    logging.info('Checking address transactions at Blockcypher')
 
-    # API requests limit is 20 requests per second and 200 per hour
-    # consider if there is more than 20 more recipient in one transaction than this api do not load more than 2o
+    # Check for internet connection
+    if not check_internet_connection():
+        logging.info('unable to get google trend')
+        return 0, 0
 
-    logging.info('check_blockcypher')
     # Get the current time and time 24 hours ago
     current_time = int(time.time())
     time_24_hours_ago = current_time - 86400
 
     # Construct the API URL to get all transactions for the address
     api_key = API_KEY_BLOCKCYPHER
-    # api_key = '8e20b70ce07248dd90e02aa19d611edf'
     api_url = f"https://api.blockcypher.com/v1/btc/main/addrs/{address}/full?token={api_key}"
 
     # Send the API request and get the response
@@ -75,20 +76,15 @@ def check_address_transactions_blockcypher(address):
         return (total_received / SATOSHI_TO_BITCOIN), (total_sent / SATOSHI_TO_BITCOIN)
 
     elif response.status_code == 429:
-
         logging.info(f"Rate limited for address {address}. Sleeping for a minute.")
-
         time.sleep(60)
-
-        return check_address_transactions_blockcypher(address)
+        return get_address_transactions_24h_blockcypher(address)
 
     else:
-
         logging.info(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")
-
         return 0, 0
 
 
 if __name__ == "__main__":
-    received, sent = check_address_transactions_blockcypher('13nxifM4WUfT8fBd2caeaxTtUe4zeQa9zB')
+    received, sent = get_address_transactions_24h_blockcypher('13nxifM4WUfT8fBd2caeaxTtUe4zeQa9zB')
     logging.info(f'receive: {received}, sent: {sent} ')
