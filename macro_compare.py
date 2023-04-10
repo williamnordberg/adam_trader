@@ -1,4 +1,7 @@
-def compare_interest_rate(rate_this_month, rate_month_before):
+from typing import Tuple
+
+
+def compare_interest_rate(rate_this_month:  float, rate_month_before: float) -> Tuple[float, float]:
 
     rate_decrease = rate_month_before - rate_this_month
 
@@ -25,7 +28,7 @@ def compare_interest_rate(rate_this_month, rate_month_before):
     return 0, 0
 
 
-def compare_cpi_m_to_m(cpi_m_to_m):
+def compare_cpi_m_to_m(cpi_m_to_m: float) -> Tuple[float,  float]:
 
     if cpi_m_to_m <= 0:
         if cpi_m_to_m <= -0.75:
@@ -34,7 +37,7 @@ def compare_cpi_m_to_m(cpi_m_to_m):
             return 0.85, 0.15
         elif cpi_m_to_m <= 0.25:
             return 0.7, 0.3
-        elif cpi_m_to_m >= 0:
+        else:
             return 0.6, 0.4
 
     elif cpi_m_to_m > 0:
@@ -48,16 +51,16 @@ def compare_cpi_m_to_m(cpi_m_to_m):
     return 0, 0
 
 
-def compare_ppi_m_to_m(ppi_m_to_m):
+def compare_ppi_m_to_m(ppi_m_to_m: float) -> Tuple[float, float]:
 
     if ppi_m_to_m <= 0:
         if ppi_m_to_m <= -0.75:
             return 1, 0
-        elif ppi_m_to_m <= 0.5:
+        elif ppi_m_to_m <= -0.5:
             return 0.85, 0.15
-        elif ppi_m_to_m <= 0.25:
+        elif ppi_m_to_m <= - 0.25:
             return 0.7, 0.3
-        elif ppi_m_to_m >= 0:
+        else:
             return 0.6, 0.4
 
     elif ppi_m_to_m > 0:
@@ -71,7 +74,10 @@ def compare_ppi_m_to_m(ppi_m_to_m):
     return 0, 0
 
 
-def calculate_macro_sentiment(rate_this_month, rate_month_before, cpi_m_to_m, ppi_m_to_m):
+def calculate_macro_sentiment(rate_this_month: float, rate_month_before: float,
+                              cpi_m_to_m: float, ppi_m_to_m: float) -> Tuple[float, float]:
+    print(cpi_m_to_m, ppi_m_to_m)
+
     if rate_this_month and rate_month_before:
         rate_bullish, rate_bearish = compare_interest_rate(rate_this_month, rate_month_before)
     else:
@@ -109,7 +115,10 @@ def calculate_macro_sentiment(rate_this_month, rate_month_before, cpi_m_to_m, pp
     total_score = weighted_score_up + weighted_score_down
 
     # Normalize the scores
-    normalized_score_up = weighted_score_up / total_score
-    normalized_score_down = weighted_score_down / total_score
+    if total_score == 0:
+        normalized_score_up, normalized_score_down = 0, 0
+    else:
+        normalized_score_up = weighted_score_up / total_score
+        normalized_score_down = weighted_score_down / total_score
 
     return normalized_score_up, normalized_score_down

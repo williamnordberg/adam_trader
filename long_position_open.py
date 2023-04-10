@@ -17,6 +17,7 @@ from trading_decision import get_bitcoin_price
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+
 SCORE_MARGIN_TO_CLOSE = 0.7
 PROFIT_MARGIN = 0.01
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
@@ -26,15 +27,15 @@ LATEST_INFO_FILE = 'latest_info_saved.csv'
 def long_position():
     current_price = get_bitcoin_price()
     position_opening_price = current_price
-    profit_point = current_price + (current_price * PROFIT_MARGIN)
-    stop_loss = current_price - (current_price * PROFIT_MARGIN)
-    logging.info(f'current_price:{current_price}, profit_point:{profit_point},stop_loss:{stop_loss} ')
+    profit_point = int(current_price + (current_price * PROFIT_MARGIN))
+    stop_loss = int(current_price - (current_price * PROFIT_MARGIN))
+    logging.info(f'Current price: {current_price}, Profit point: {profit_point}, Stop loss: {stop_loss}')
     profit, loss = 0, 0
 
     while True:
         logging.info('******************************************')
         current_price = get_bitcoin_price()
-        logging.info(f'current_price:{current_price}, profit_point:{profit_point},stop_loss:{stop_loss}')
+        logging.info(f'Current_price:{current_price}, Profit_point:{profit_point},Stop_loss:{stop_loss}')
 
         # Check if we meet profit or stop loss
         if current_price >= profit_point:
@@ -49,8 +50,8 @@ def long_position():
         # Order book Hit
         probability_to_hit_target, probability_to_hit_stop_loss = \
             get_probabilities_hit_profit_or_stop(SYMBOLS, 1000, profit_point, stop_loss)
-        logging.info(f'profit_probability: {probability_to_hit_target}'
-                     f'stop_probability: {probability_to_hit_stop_loss}')
+        logging.info(f'Profit probability: {round(probability_to_hit_target, 2)}'
+                     f' Stop probability: {round(probability_to_hit_stop_loss, 2)}')
 
         # 1 Get the prediction
         prediction_bullish, prediction_bearish = decision_tree_predictor()
@@ -77,7 +78,7 @@ def long_position():
         print_upcoming_events(events_date_dict)
 
         # 6 Reddit
-        reddit_bullish, reddit_bearish = reddit_check()
+        reddit_bullish, reddit_bearish = 0, 0 # reddit_check()
 
         # 7 YouTube
         youtube_bullish, youtube_bearish = check_bitcoin_youtube_videos_increase()
@@ -101,7 +102,7 @@ def long_position():
             youtube_bullish, youtube_bearish,
             news_bullish, news_bearish)
 
-        print('weighted_score_up, weighted_score_down', weighted_score_up, weighted_score_down)
+        print('weighted_score_up, weighted_score_down', round(weighted_score_up, 2), round(weighted_score_down, 2))
 
         if weighted_score_down > weighted_score_up and weighted_score_down > SCORE_MARGIN_TO_CLOSE:
             logging.info('long position clos')
