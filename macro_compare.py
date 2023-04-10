@@ -7,7 +7,7 @@ def compare_interest_rate(rate_this_month:  float, rate_month_before: float) -> 
 
     if rate_decrease > 0:
         if rate_decrease >= 0.75:
-            return 1, 0
+            return 1.0, 0
         elif rate_decrease >= 0.5:
             return 0.85, 0.15
         elif rate_decrease >= 0.25:
@@ -70,13 +70,11 @@ def compare_ppi_m_to_m(ppi_m_to_m: float) -> Tuple[float, float]:
             return 0.15, 0.85
         elif ppi_m_to_m >= 0.25:
             return 0.3, 0.7
-
     return 0, 0
 
 
 def calculate_macro_sentiment(rate_this_month: float, rate_month_before: float,
                               cpi_m_to_m: float, ppi_m_to_m: float) -> Tuple[float, float]:
-    print(cpi_m_to_m, ppi_m_to_m)
 
     if rate_this_month and rate_month_before:
         rate_bullish, rate_bearish = compare_interest_rate(rate_this_month, rate_month_before)
@@ -116,9 +114,14 @@ def calculate_macro_sentiment(rate_this_month: float, rate_month_before: float,
 
     # Normalize the scores
     if total_score == 0:
-        normalized_score_up, normalized_score_down = 0, 0
+        normalized_score_up, normalized_score_down = 0.0, 0.0
     else:
         normalized_score_up = weighted_score_up / total_score
         normalized_score_down = weighted_score_down / total_score
 
     return normalized_score_up, normalized_score_down
+
+
+if __name__ == "__main__":
+    macro_bullish_outer, macro_bearish_outer = compare_ppi_m_to_m(-1)
+    print(type(macro_bullish_outer), macro_bearish_outer)
