@@ -6,9 +6,11 @@ import logging
 import os
 import datetime
 
+from handy_modules import check_internet_connection
+
+
 SENTIMENT_POSITIVE_THRESHOLD = 0.1
 SENTIMENT_NEGATIVE_THRESHOLD = -0.001
-
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Load the config file
@@ -18,21 +20,6 @@ config.read(config_path)
 API_NEWSAPI = config.get("API", "Newsapi")
 
 
-def check_internet_connection() -> bool:
-    """
-    Check if there is an internet connection.
-
-    Returns:
-        bool: True if there is an internet connection, False otherwise.
-    """
-    try:
-        requests.get("http://www.google.com", timeout=3)
-        return True
-    except requests.ConnectionError:
-        logging.warning("No internet connection available.")
-        return False
-
-
 def check_news_api_sentiment(start, end):
     # Check for internet connection
     if not check_internet_connection():
@@ -40,7 +27,6 @@ def check_news_api_sentiment(start, end):
         return 0, 0, 0, 0
 
     start_date = start.strftime('%Y-%m-%d')
-
     end_date = end.strftime('%Y-%m-%d')
 
     endpoint = 'https://newsapi.org/v2/everything'
@@ -55,7 +41,7 @@ def check_news_api_sentiment(start, end):
     positive_polarity_score = 0.0
     positive_count = 0
     negative_polarity_score = 0.0
-    negative_count: int = 0
+    negative_count = 0
 
     try:
         response = requests.get(endpoint, params=params)
@@ -77,8 +63,11 @@ def check_news_api_sentiment(start, end):
             except Exception as e:
                 logging.error(f"Error analyzing content: {e}")
 
-        return positive_polarity_score / positive_count, negative_polarity_score / negative_count, \
-            positive_count, negative_count
+        # Handle division by zero cases
+        avg_positive_polarity = positive_polarity_score / positive_count if positive_count > 0 else 0
+        avg_negative_polarity = negative_polarity_score / negative_count if negative_count > 0 else 0
+
+        return avg_positive_polarity, avg_negative_polarity, positive_count, negative_count
 
     except requests.exceptions.RequestException as e:
         logging.error(f'Error occurred: {e}')
@@ -95,7 +84,7 @@ if __name__ == "__main__":
     positive_polarity_score_outer, negative_polarity_score_outer, \
         positive_count_outer, negative_count_outer = check_news_api_sentiment(start_outer, end_outer)
 
-    logging.info(f'positive_polarity: {positive_polarity_score_outer/positive_count_outer}'
-                 f'and negative_polarity: {negative_polarity_score_outer/negative_count_outer}')
+    logging.info(f'positive_polarity: {positive_polarity_score_outer}'
+                 f'and negative_polarity: {negative_polarity_score_outer}')
     logging.info(f'positive_count: {positive_count_outer} '
                  f'negative_count: {negative_count_outer}')
