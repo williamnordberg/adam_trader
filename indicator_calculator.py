@@ -1,10 +1,12 @@
 import numpy as np
 import logging
+from typing import Tuple, List, Union
+import pandas as pd
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def exponential_moving_average(data, window_size):
+def exponential_moving_average(data: Union[List[float], np.ndarray, pd.Series], window_size: int) -> np.ndarray:
     """
     Calculates the exponential moving average (EMA) of a dataset with a specified window size.
 
@@ -32,7 +34,7 @@ def exponential_moving_average(data, window_size):
     return np.array(ema)
 
 
-def bollinger_bands(data, window=20, std_dev=1):
+def bollinger_bands(data: pd.Series, window: int = 20, std_dev: int = 1) -> Tuple[pd.Series, pd.Series, pd.Series]:
     """
        Calculates the upper and lower Bollinger Bands for a dataset.
 
@@ -56,7 +58,7 @@ def bollinger_bands(data, window=20, std_dev=1):
     return upper_band, rolling_mean, lower_band
 
 
-def relative_strength_index(data_rsi, window):
+def relative_strength_index(data_rsi: pd.Series, window: int) -> np.ndarray:
     """
         Calculates the Relative Strength Index (RSI) of a dataset.
 
@@ -95,7 +97,9 @@ def relative_strength_index(data_rsi, window):
     return rsi
 
 
-def macd(data_macd, fast_window=12, slow_window=26, signal_window=9):
+def macd(data_macd: pd.Series, fast_window: int = 12, slow_window: int = 26, signal_window: int = 9)\
+        -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+
     """
       Calculates the Moving Average Convergence Divergence (MACD) of a dataset.
 

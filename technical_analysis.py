@@ -1,34 +1,12 @@
 import pandas as pd
-import requests
 import ccxt
 import logging
+from typing import Tuple
 from indicator_calculator import bollinger_bands, exponential_moving_average, macd, relative_strength_index
+from handy_modules import get_bitcoin_price
+
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-
-def get_bitcoin_price():
-    """
-        Retrieves the current Bitcoin price in USD from the CoinGecko API.
-
-        Returns:
-            float: The current Bitcoin price in USD.
-            None: If there is an error retrieving the price.
-        """
-    try:
-        url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
-        response = requests.get(url)
-
-        if response.status_code == 200:
-            data = response.json()
-            current_price_local = data['bitcoin']['usd']
-            return current_price_local
-        else:
-            logging.error("Error: Could not retrieve Bitcoin price data")
-            return None
-    except requests.exceptions.RequestException as e:
-        logging.error(f"Error: Could not connect to CoinGecko API:{e}")
-        return None
 
 
 def get_historical_data(symbol: str, timeframe: str, limit: int) -> pd.Series:
@@ -52,18 +30,14 @@ def get_historical_data(symbol: str, timeframe: str, limit: int) -> pd.Series:
     return close_series
 
 
-# read the data
-data_close = get_historical_data('BTC/USDT', '1d', 200)
-
-
-def potential_reversal():
+def potential_reversal(data_close: pd.Series) -> Tuple[bool, bool]:
     """
        Identifies whether a potential bullish or bearish reversal is forming.
 
        Returns:
            tuple: A tuple containing the potential bullish and bearish reversal flags as booleans.
        """
-    potential_up_reversal_bullish, Potential_down_reversal_bearish = False, False
+    potential_up_reversal_bullish, potential_down_reversal_bearish = False, False
     upper_band, moving_average, lower_band = bollinger_bands(data_close)
     current_price = int(data_close.iloc[-1])
 
@@ -83,19 +57,19 @@ def potential_reversal():
                 potential_up_reversal_bullish = True
         elif current_price > last_moving_average:
             if (current_price - last_moving_average) > distance_middle_upper:
-                Potential_down_reversal_bearish = True
+                potential_down_reversal_bearish = True
 
     # RSI overbought or oversold
     rsi = relative_strength_index(data_close, 14)
     if rsi[-1] > 30:
         potential_up_reversal_bullish = True
     elif rsi[-1] > 70:
-        Potential_down_reversal_bearish = True
+        potential_down_reversal_bearish = True
 
-    return potential_up_reversal_bullish, Potential_down_reversal_bearish
+    return potential_up_reversal_bullish, potential_down_reversal_bearish
 
 
-def potential_up_trending():
+def potential_up_trending(data_close: pd.Series) -> bool:
     """
        Identifies whether a potential uptrend is forming.
 
@@ -114,15 +88,18 @@ def potential_up_trending():
     return potential_up_trend
 
 
-def technical_analyse():
+def technical_analyse() -> Tuple[float, float]:
     """
        Performs a technical analysis of the Bitcoin market using various indicators.
 
        Returns:
            tuple: A tuple containing the bullish and bearish technical analysis flags as booleans.
        """
-    potential_up_reversal_bullish, Potential_down_reversal_bearish = potential_reversal()
-    potential_up_trend = potential_up_trending()
+    # read the data
+    data_close = get_historical_data('BTC/USDT', '1d', 200)
+
+    potential_up_reversal_bullish, potential_down_reversal_bearish = potential_reversal(data_close)
+    potential_up_trend = potential_up_trending(data_close)
 
     # Set initial value base on ema200
     ema200 = exponential_moving_average(data_close, 200)
@@ -131,31 +108,31 @@ def technical_analyse():
     # check potentials
     if potential_up_reversal_bullish and potential_up_trend and (current_price >= ema200[-1]):
         return 1, 0
-    elif Potential_down_reversal_bearish and not potential_up_trend and (current_price >= ema200[-1]):
+    elif potential_down_reversal_bearish and not potential_up_trend and (current_price >= ema200[-1]):
         return 0, 1
 
-    # potential and ris and macd trend
+    # potential and rsi and macd trend
     elif potential_up_reversal_bullish and potential_up_trend and not(current_price >= ema200[-1]):
         return 0.9, 0.1
-    elif Potential_down_reversal_bearish and not potential_up_trend and (current_price >= ema200[-1]):
+    elif potential_down_reversal_bearish and not potential_up_trend and (current_price >= ema200[-1]):
         return 0.1, 0.9
 
     # just reversal
     elif potential_up_reversal_bullish and not potential_up_trend and (current_price >= ema200[-1]):
         return 0.75, 0.25
-    elif Potential_down_reversal_bearish and potential_up_trend and (current_price >= ema200[-1]):
+    elif potential_down_reversal_bearish and potential_up_trend and (current_price >= ema200[-1]):
         return 0.75, 0.25
 
     # just ris and macd trend
     elif not potential_up_reversal_bullish and potential_up_trend and not (current_price >= ema200[-1]):
         return 0.65, 0.35
-    elif not Potential_down_reversal_bearish and not potential_up_trend and (current_price >= ema200[-1]):
+    elif not potential_down_reversal_bearish and not potential_up_trend and (current_price >= ema200[-1]):
         return 0.35, 0.65
 
     # just EMA
     elif not potential_up_reversal_bullish and not potential_up_trend and (current_price >= ema200[-1]):
         return 0.6, 0.4
-    elif not Potential_down_reversal_bearish and not potential_up_trend and (current_price >= ema200[-1]):
+    elif not potential_down_reversal_bearish and not potential_up_trend and (current_price >= ema200[-1]):
         return 0.4, 0.6
 
     return 0, 0
@@ -163,4 +140,4 @@ def technical_analyse():
 
 if __name__ == '__main__':
     technical_bullish1, technical_bearish1 = technical_analyse()
-    logging.info(f'{technical_bullish1}, {technical_bearish1}')
+    logging.info(f'Bullish: {technical_bullish1}, Bearish: {technical_bearish1}')
