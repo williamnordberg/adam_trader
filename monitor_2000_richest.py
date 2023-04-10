@@ -6,6 +6,7 @@ import logging
 
 # Third-party libraries
 import pandas as pd
+from typing import Tuple, List
 from scrapy.crawler import CrawlerProcess
 import configparser
 
@@ -14,10 +15,11 @@ from spider import BitcoinRichListSpider
 from api_blockchain_info import get_address_transactions_24h
 from api_blockcypher import get_address_transactions_24h_blockcypher
 
-
 SATOSHI_TO_BITCOIN = 100000000
 LATEST_INFO_FILE = 'latest_info_saved.csv'
 BITCOIN_RICH_LIST_FILE = 'bitcoin_rich_list2000.csv'
+UPDATE_INTERVAL_HOURS = 8
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Load the config file
@@ -26,7 +28,7 @@ config.read('config.ini')
 USER_AGENT = 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
 
 
-def read_addresses_from_csv(file_path):
+def read_addresses_from_csv(file_path: str) -> List[str]:
     """
         Read Bitcoin addresses from a CSV file.
         Args:
@@ -42,7 +44,7 @@ def read_addresses_from_csv(file_path):
     return addresses
 
 
-def check_multiple_addresses(addresses):
+def check_multiple_addresses(addresses: List[str]) -> Tuple[float, float]:
     """
     Check the total Bitcoin received and sent in the last 24 hours for a list of addresses.
     Args:
@@ -51,8 +53,8 @@ def check_multiple_addresses(addresses):
         total_received (float): Total Bitcoin received in the last 24 hours for all addresses.
         total_sent (float): Total Bitcoin sent in the last 24 hours for all addresses.
     """
-    total_received = 0
-    total_sent = 0
+    total_received = 0.1
+    total_sent = 0.1
 
     for i, address in enumerate(addresses):
         logging.info(f"*******Checking address {address} and {i}*******")
@@ -78,7 +80,7 @@ def check_multiple_addresses(addresses):
     return total_received, total_sent
 
 
-def monitor_bitcoin_richest_addresses():
+def monitor_bitcoin_richest_addresses() -> Tuple[float, float]:
     """
     Monitor the richest Bitcoin addresses and calculate the total received and sent in the last 24 hours.
     Returns:
@@ -90,7 +92,7 @@ def monitor_bitcoin_richest_addresses():
     last_update_time = latest_info_saved['latest_richest_addresses_update'][0]
     last_update_time = datetime.strptime(last_update_time, '%Y-%m-%d %H:%M:%S')
 
-    if datetime.now() - last_update_time > timedelta(hours=8):
+    if datetime.now() - last_update_time > timedelta(hours=UPDATE_INTERVAL_HOURS):
         process = CrawlerProcess({'USER_AGENT': USER_AGENT})
         process.crawl(BitcoinRichListSpider)
         process.start()

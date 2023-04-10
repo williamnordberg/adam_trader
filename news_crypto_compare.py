@@ -1,7 +1,7 @@
 import requests
 from textblob import TextBlob
 import logging
-
+from handy_modules import check_internet_connection
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 SENTIMENT_THRESHOLD = 0.1
@@ -9,21 +9,6 @@ POSITIVITY_PERCENT = 1.8
 
 SENTIMENT_POSITIVE_THRESHOLD = 0.1
 SENTIMENT_NEGATIVE_THRESHOLD = -0.001
-
-
-def check_internet_connection() -> bool:
-    """
-    Check if there is an internet connection.
-
-    Returns:
-        bool: True if there is an internet connection, False otherwise.
-    """
-    try:
-        requests.get("http://www.google.com", timeout=3)
-        return True
-    except requests.ConnectionError:
-        logging.warning("No internet connection available.")
-        return False
 
 
 def check_news_cryptocompare_sentiment():

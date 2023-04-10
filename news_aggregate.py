@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 import logging
+from typing import Tuple
+
 from newsAPI import check_news_api_sentiment
 from news_crypto_compare import check_news_cryptocompare_sentiment
 from news_scrapper import check_news_sentiment_scrapper
@@ -8,8 +10,16 @@ from news_scrapper import check_news_sentiment_scrapper
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def aggregate_news():
-    # Get aggregated value from 3 function for las 24 hours
+def aggregate_news() -> Tuple[float, float, int, int]:
+    """
+        Aggregates news sentiment from different sources for the last 24 hours.
+
+        Returns:
+            positive_polarity_24_hours_before (float): Average positive polarity score.
+            negative_polarity_24_hours_before (float): Average negative polarity score.
+            positive_count_24_hours_before (int): Total number of positive news articles.
+            negative_count_24_hours_before (int): Total number of negative news articles.
+        """
 
     start = datetime.now() - timedelta(days=1)
     end = datetime.now()
