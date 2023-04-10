@@ -9,11 +9,10 @@ import pandas as pd
 from scrapy.crawler import CrawlerProcess
 import configparser
 
-
 # Local imports
 from spider import BitcoinRichListSpider
-from api_blockchain_info import check_address_transactions_blockchain_info
-from api_blockcypher import check_address_transactions_blockcypher
+from api_blockchain_info import get_address_transactions_24h
+from api_blockcypher import get_address_transactions_24h_blockcypher
 
 
 SATOSHI_TO_BITCOIN = 100000000
@@ -59,15 +58,15 @@ def check_multiple_addresses(addresses):
         logging.info(f"*******Checking address {address} and {i}*******")
         if i % 3 == 0:
             # Use the Blockcypher API
-            received, sent = check_address_transactions_blockcypher(address)
+            received, sent = get_address_transactions_24h_blockcypher(address)
 
         elif i % 3 == 1:
             # Use the Blockchain.info API
-            received, sent = check_address_transactions_blockchain_info(address)
+            received, sent = get_address_transactions_24h(address)
 
         else:
             # Use the Blockcypher API again
-            received, sent = check_address_transactions_blockcypher(address)
+            received, sent = get_address_transactions_24h_blockcypher(address)
 
         total_received += received
         total_sent += sent
