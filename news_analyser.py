@@ -1,6 +1,8 @@
 import logging
 import pandas as pd
 from datetime import datetime, timedelta
+from typing import Tuple
+
 
 from news_compare_polarity import compare_polarity
 from newsAPI import check_news_api_sentiment
@@ -9,7 +11,7 @@ from news_aggregate import aggregate_news
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def check_sentiment_of_news():
+def check_sentiment_of_news() -> Tuple[float, float]:
 
     latest_info_saved = pd.read_csv('latest_info_saved.csv').squeeze("columns")
     last_news_sentiment_str = latest_info_saved['last_news_update_time'][0]
@@ -18,8 +20,8 @@ def check_sentiment_of_news():
 
     if last_update_time_difference < timedelta(hours=24):
         logging.info('Last news sentiment update was less than 24 hours ago. Skipping...')
-        news_bullish = latest_info_saved['news_bullish'][0]
-        news_bearish = latest_info_saved['news_bearish'][0]
+        news_bullish = float(latest_info_saved['news_bullish'][0])
+        news_bearish = float(latest_info_saved['news_bearish'][0])
         return news_bullish, news_bearish
 
     elif timedelta(hours=24) > last_update_time_difference < timedelta(hours=48):
