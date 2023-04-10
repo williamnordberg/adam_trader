@@ -56,7 +56,7 @@ def long_position():
         prediction_bullish, prediction_bearish = decision_tree_predictor()
 
         # 2 Get probabilities of price going up or down
-        order_book_bullish, order_book_bearish = get_probabilities(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
+        order_book_bullish, order_book_bearish = get_probabilities(SYMBOLS, bid_multiplier=0.995, ask_multiplier=1.05)
         logging.info(f'order_book_bullish: {order_book_bullish}'
                      f'  order_book_bearish: {order_book_bearish}')
 

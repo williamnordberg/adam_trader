@@ -79,7 +79,7 @@ def make_trading_decision(macro_bullish, macro_bearish,
 
     return normalized_score_up, normalized_score_down
 
-
+    
 if __name__ == "__main__":
     score_up, score_down = make_trading_decision(1, 0,
                                                  0, 1,
