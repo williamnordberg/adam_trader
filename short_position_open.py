@@ -111,7 +111,7 @@ def short_position():
 
         print('weighted_score_up, weighted_score_down', weighted_score_up, weighted_score_down)
 
-        if weighted_score_down < weighted_score_up and weighted_score_down < SCORE_MARGIN_TO_CLOSE:
+        if weighted_score_up > weighted_score_down and weighted_score_up > SCORE_MARGIN_TO_CLOSE:
             logging.info('short position clos')
             if current_price < position_opening_price:
                 profit = position_opening_price - current_price

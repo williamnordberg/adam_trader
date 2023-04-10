@@ -69,6 +69,7 @@ def get_probabilities(symbols, limit=LIMIT, bid_multiplier=0.995, ask_multiplier
 
     probability_up = bid_volume / (bid_volume + ask_volume)
     probability_down = ask_volume / (bid_volume + ask_volume)
+
     order_book_bullish, order_book_bearish = compare_probability(probability_up, probability_down)
 
     return order_book_bullish, order_book_bearish
@@ -87,12 +88,14 @@ def get_probabilities_hit_profit_or_stop(symbols, limit, profit_target, stop_los
 
     probability_to_hit_target = bid_volume / (bid_volume + ask_volume)
     probability_to_hit_stop_loss = ask_volume / (bid_volume + ask_volume)
+
     return probability_to_hit_target, probability_to_hit_stop_loss
 
 
 if __name__ == '__main__':
     order_book_bullish_outer, order_book_bearish_outer = \
         get_probabilities(SYMBOLS, limit=LIMIT, bid_multiplier=0.995, ask_multiplier=1.005)
+
     order_book_hit_target_outer, order_book_hit_stop_outer = \
         get_probabilities_hit_profit_or_stop(SYMBOLS, LIMIT, 30000, 20000)
 
