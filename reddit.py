@@ -4,6 +4,10 @@ import pandas as pd
 import logging
 from datetime import datetime, timedelta
 import configparser
+from typing import Tuple
+from praw import Reddit
+
+
 
 ONE_DAYS_IN_SECONDS = 24 * 60 * 60
 
@@ -11,7 +15,7 @@ ONE_DAYS_IN_SECONDS = 24 * 60 * 60
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def compare(current_activity, previous_activity):
+def compare(current_activity: float, previous_activity: float) -> Tuple[float, float]:
 
     activity_percentage = (current_activity - previous_activity) / previous_activity * 100
 
@@ -42,7 +46,7 @@ def compare(current_activity, previous_activity):
     return 0, 0
 
 
-def count_bitcoin_posts(reddit):
+def count_bitcoin_posts(reddit: Reddit) -> int:
     """
         Counts the number of Bitcoin-related posts on Reddit in the last 7 days.
 
@@ -63,7 +67,7 @@ def count_bitcoin_posts(reddit):
     return count
 
 
-def reddit_check():
+def reddit_check() -> Tuple[float, float]:
 
     config = configparser.ConfigParser()
     config.read('config.ini')

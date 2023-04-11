@@ -2,6 +2,8 @@ import requests
 import logging
 from typing import Tuple
 
+BINANCE_ENDPOINT_PRICE = "https://api.binance.com/api/v3/ticker/price"
+GECKO_ENDPOINT_PRICE = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -23,24 +25,37 @@ def check_internet_connection() -> bool:
 
 def get_bitcoin_price() -> int:
     """
-    Retrieves the current Bitcoin price in USD from the CoinGecko API.
+    Retrieves the current Bitcoin price in USD from the CoinGecko API and Binance API.
 
     Returns:
-        float: The current Bitcoin price in USD or 0 if an error occurred.
+        Int: The current Bitcoin price in USD or 0 if an error occurred.
     """
-    try:
-        url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
-        response = requests.get(url)
+    if check_internet_connection():
+        errors = []
 
-        if response.status_code == 200:
-            data = response.json()
-            current_price = int(data['bitcoin']['usd'])
-            return current_price
-        else:
-            logging.error("Error: Could not retrieve Bitcoin price data")
-            return 0
-    except requests.exceptions.RequestException as e:
-        logging.error(f"Error: Could not connect to CoinGecko API:{e}")
+        try:
+            response = requests.get(GECKO_ENDPOINT_PRICE)
+            if response.status_code == 200:
+                data = response.json()
+                current_price = int(data['bitcoin']['usd'])
+                return current_price
+        except requests.exceptions.RequestException as e:
+            errors.append(f"Error: Could not connect to CoinGecko API:{e}")
+
+        try:
+            response = requests.get(BINANCE_ENDPOINT_PRICE, params={'symbol': 'BTCUSDT'})
+            if response.status_code == 200:
+                return int(response.json()['price'])
+        except requests.exceptions.RequestException as e:
+            errors.append(f"Error: Could not connect to Binance API:{e}")
+
+        if errors:
+            for error in errors:
+                logging.error(error)
+
+        return 0
+    # no internet connection
+    else:
         return 0
 
 

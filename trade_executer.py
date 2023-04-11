@@ -3,7 +3,6 @@ import logging
 import configparser
 import os
 
-
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Load the config file
@@ -23,7 +22,7 @@ print('api_secret: ', api_secret)
 client = Client(api_key, api_secret)
 
 
-def buy_btc_at_price(btc_amount, price):
+def buy_btc_at_price(btc_amount: float, price: float):
     # Get the latest ticker price for BTC
     ticker = client.get_symbol_ticker(symbol='BTCUSDT')
     latest_price = float(ticker['price'])
@@ -46,5 +45,5 @@ def buy_btc_at_price(btc_amount, price):
         print('Target price has not been reached')
 
 
-# Example usage: Buy 0.01 BTC when the price drops to $50,000
+# Example usage: Buy 0.01 BTC when the price drops to $5,000
 buy_btc_at_price(0.001, 11000)
