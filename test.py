@@ -1,93 +1,134 @@
-from selenium.common import TimeoutException
+from time import sleep
 import pandas as pd
-from selenium.webdriver.support.ui import Select
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium import webdriver
-import os
-import time
 import logging
+from typing import Tuple
+
+from order_book import get_probabilities, get_probabilities_hit_profit_or_stop
+from macro_analyser import macro_sentiment, print_upcoming_events
+from technical_analysis import technical_analyse
+from news_analyser import check_sentiment_of_news
+from google_search import check_search_trend
+from reddit import reddit_check
+from youtube import check_bitcoin_youtube_videos_increase
+from adam_predictor import decision_tree_predictor
+from position_decision_maker import position_decision
+from reddit import compare
+from handy_modules import get_bitcoin_price
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+SCORE_MARGIN_TO_CLOSE = 0.7
+PROFIT_MARGIN = 0.01
+SYMBOLS = ['BTCUSDT', 'BTCBUSD']
+LATEST_INFO_FILE = 'latest_info_saved.csv'
 
-def update_internal_factors():
-    # Read the main dataset from disk
-    main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})
 
-    # Get the latest date in the main dataset
+def short_position() -> Tuple[int, int]:
+    """
+       Monitors a short position for various factors to decide when to close the position.
+       The function continuously checks various factors like probabilities, technical analysis,
+       news sentiment, search trends, Reddit activity, and YouTube trends.
+       It also checks for stop loss and profit points.
+       Returns:
+           float: The profit made after closing the position.
+           float: The loss made after closing the position.
+       """
+    current_price = get_bitcoin_price()
+    position_opening_price = current_price
+    profit_point = current_price - (current_price * PROFIT_MARGIN)
+    stop_loss = current_price + (current_price * PROFIT_MARGIN)
+    logging.info(f'current_price:{current_price}, profit_point:{profit_point},stop_loss:{stop_loss} ')
+    profit, loss = 0, 0
 
-    latest_date = main_dataset.loc[main_dataset['DiffLast'].last_valid_index(), 'Date']
+    while True:
+        logging.info('******************************************')
+        current_price = get_bitcoin_price()
+        logging.info(f'current_price:{current_price}, profit_point:{profit_point},stop_loss:{stop_loss} ')
+        # Check if we meet profit or stop loss
+        if current_price < profit_point:
+            profit = position_opening_price - current_price
+            logging.info('&&&&&&&&&&&&&& TARGET HIT &&&&&&&&&&&&&&&&&&&&&')
+            return profit, loss
+        elif current_price > stop_loss:
+            loss = current_price - position_opening_price
+            logging.info('&&&&&&&&&&&&&& STOP LOSS &&&&&&&&&&&&&&&&&&&&&')
+            return profit, loss
 
-    # Create a new instance of the Firefox driver
-    driver = webdriver.Firefox()
+        # order  book Hit
+        probabilities_hit = get_probabilities_hit_profit_or_stop(SYMBOLS, 1000, stop_loss, profit_point)
+        assert probabilities_hit is not None, "get_probabilities_hit_profit_or_stop returned None"
+        probability_to_hit_stop_loss, probability_to_hit_target = probabilities_hit
 
-    # Open the webpage
-    driver.get("https://coinmetrics.io/community-network-data/")
+        logging.info(f'profit_probability: {probability_to_hit_target}'
+                     f'stop_probability: {probability_to_hit_stop_loss}')
 
-    # Check if the accept button for cookies is present
-    try:
-        accept_button = WebDriverWait(driver, 7).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, "a.fusion-privacy-bar-acceptance")))
-        accept_button.click()
-    except TimeoutException:
-        pass
+        # 1 Get the prediction
+        prediction_bullish, prediction_bearish = decision_tree_predictor()
 
-    # Find and select Bitcoin from the dropdown menu
-    time.sleep(4)
-    selector = Select(WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "#downloadSelect"))))
-    selector.select_by_value("https://raw.githubusercontent.com/coinmetrics/data/master/csv/btc.csv")
+        # 2 Get probabilities of price going up or down
+        probabilities = get_probabilities(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
+        assert probabilities is not None, "get_probabilities returned None"
+        order_book_bullish, order_book_bearish = probabilities
 
-    # Click the Download button
-    download_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button.cm-button")))
-    download_button.click()
-    time.sleep(2)
+        logging.info(f'order_book_bullish: {order_book_bullish}'
+                     f'  order_book_bearish: {order_book_bearish}')
 
-    # Wait for the download to finish
-    wait_for_download = True
-    new_data = None  # Initialize new_data as None
-    while wait_for_download:
-        # Get a list of all files in the Downloads folder, sorted by creation time (new first)
-        files = sorted(os.listdir(os.path.join(os.path.expanduser("~"), "Downloads")),
-                       key=lambda x: os.path.getctime(os.path.join(os.path.expanduser("~"), "Downloads", x)),
-                       reverse=True)
-        for file in files:
-            if file.endswith(".csv"):
-                new_data = pd.read_csv(os.path.join(os.path.expanduser("~"), "Downloads", file), dtype={146: str})
-                wait_for_download = False
-                break
+        # 3 Monitor the richest Bitcoin addresses
+        latest_info_saved = pd.read_csv('latest_info_saved.csv')
+        total_received = latest_info_saved['total_received_coins_in_last_24'][0]
+        total_sent = latest_info_saved['total_sent_coins_in_last_24'][0]
+        richest_addresses_bullish, richest_addresses_bearish = compare(
+            total_received, total_sent)
 
-    # Close the Firefox window
-    driver.quit()
+        # 4 Check Google search trends for Bitcoin and cryptocurrency
+        google_search_bullish, google_search_bearish = check_search_trend(["Bitcoin", "Cryptocurrency"])
 
-    if new_data is not None:
-        # Rename the 'time' column to 'Date'
-        new_data = new_data.rename(columns={'time': 'Date'})
+        # 5 Check macroeconomic indicators
+        macro_bullish, macro_bearish, events_date_dict = macro_sentiment()
 
-        # Filter the new data to only include rows with a date after the latest date in the main dataset
-        new_data = new_data[new_data['Date'] > latest_date]
-        new_data = new_data[['Date', 'DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate']]
-        if len(new_data) > 0:
+        # remind upcoming macro events
+        print_upcoming_events(events_date_dict)
 
-            # check if new data have a same date row with main_dataset
-            if main_dataset['Date'].iloc[-1] == new_data['Date'].iloc[0]:
-                # drop the last row in main datasett
-                main_dataset = main_dataset.drop(main_dataset.index[-1])
+        # 6 Reddit
+        reddit_bullish, reddit_bearish = reddit_check()
 
-            # Append the new rows to the main dataset
-            main_dataset = pd.concat([main_dataset, new_data])
+        # 7 YouTube
+        youtube_bullish, youtube_bearish = check_bitcoin_youtube_videos_increase()
 
-            # Write the updated dataset to disk
-            main_dataset.to_csv('main_dataset.csv', index=False)
+        # 8 Collect data from news websites
+        news_bullish, news_bearish = check_sentiment_of_news()
 
-            logging.info(f"{len(new_data)} new rows of internal factors added.")
-        else:
-            logging.info("internal factors is already up to date.")
-    else:
-        logging.error("Failed to download internal factors.")
+        # 9 Technical analysis
+        technical_bullish, technical_bearish = technical_analyse()
 
-    return None
+        # position decision
+        weighted_score_up, weighted_score_down = position_decision(
+            macro_bullish, macro_bearish,
+            order_book_bullish, order_book_bearish,
+            probability_to_hit_target, probability_to_hit_stop_loss,
+            prediction_bullish, prediction_bearish,
+            technical_bullish, technical_bearish,
+            richest_addresses_bullish, richest_addresses_bearish,
+            google_search_bullish, google_search_bearish,
+            reddit_bullish, reddit_bearish,
+            youtube_bullish, youtube_bearish,
+            news_bullish, news_bearish)
+
+        print('weighted_score_up, weighted_score_down', weighted_score_up, weighted_score_down)
+
+        if weighted_score_up > weighted_score_down and weighted_score_up > SCORE_MARGIN_TO_CLOSE:
+            logging.info('short position clos')
+            if current_price < position_opening_price:
+                profit = position_opening_price - current_price
+                logging.info('short position closed with profit')
+            elif current_price > position_opening_price:
+                loss = position_opening_price - current_price
+                logging.info('short position closed with loss')
+            return profit, loss
+
+        sleep(5)
 
 
 if __name__ == "__main__":
-    update_internal_factors()
+    profit_after_trade1, loss_after_trade1 = short_position()
+    logging.info(f"profit_after_trade:{profit_after_trade1}, loss_after_trade:{loss_after_trade1}")

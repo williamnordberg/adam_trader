@@ -55,8 +55,10 @@ def short_position() -> Tuple[int, int]:
             return profit, loss
 
         # order  book Hit
-        probability_to_hit_stop_loss, probability_to_hit_target = \
-            get_probabilities_hit_profit_or_stop(SYMBOLS, 1000, stop_loss, profit_point)
+        probabilities_hit = get_probabilities_hit_profit_or_stop(SYMBOLS, 1000, stop_loss, profit_point)
+        assert probabilities_hit is not None, "get_probabilities_hit_profit_or_stop returned None"
+        probability_to_hit_stop_loss, probability_to_hit_target = probabilities_hit
+
         logging.info(f'profit_probability: {probability_to_hit_target}'
                      f'stop_probability: {probability_to_hit_stop_loss}')
 
@@ -64,8 +66,10 @@ def short_position() -> Tuple[int, int]:
         prediction_bullish, prediction_bearish = decision_tree_predictor()
 
         # 2 Get probabilities of price going up or down
-        order_book_bullish, order_book_bearish = get_probabilities(SYMBOLS, bid_multiplier=0.99,
-                                                                   ask_multiplier=1.01)
+        probabilities = get_probabilities(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
+        assert probabilities is not None, "get_probabilities returned None"
+        order_book_bullish, order_book_bearish = probabilities
+
         logging.info(f'order_book_bullish: {order_book_bullish}'
                      f'  order_book_bearish: {order_book_bearish}')
 

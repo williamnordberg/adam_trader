@@ -12,7 +12,7 @@ from youtube import check_bitcoin_youtube_videos_increase
 from adam_predictor import decision_tree_predictor
 from position_decision_maker import position_decision
 from reddit import compare
-from trading_decision import get_bitcoin_price
+from handy_modules import get_bitcoin_price
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -78,7 +78,7 @@ def long_position():
         print_upcoming_events(events_date_dict)
 
         # 6 Reddit
-        reddit_bullish, reddit_bearish = 0, 0 # reddit_check()
+        reddit_bullish, reddit_bearish = reddit_check()
 
         # 7 YouTube
         youtube_bullish, youtube_bearish = check_bitcoin_youtube_videos_increase()

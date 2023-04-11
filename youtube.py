@@ -1,13 +1,12 @@
+from typing import Tuple
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
-import datetime
 import pickle
 import os.path
 from google.auth.transport.requests import Request
 import logging
-from datetime import timedelta
-from datetime import datetime
+from datetime import datetime, timedelta
 import pandas as pd
 from reddit import compare
 
@@ -70,7 +69,7 @@ def get_youtube_videos(youtube, published_after, published_before):
     return search_results
 
 
-def check_bitcoin_youtube_videos_increase():
+def check_bitcoin_youtube_videos_increase() -> Tuple[float, float]:
     """
        Checks if there's a 15% or more increase in the number of YouTube videos with the #bitcoin hashtag
        published in the last 24 hours compared to the 24 hours before that, but only if the last update was

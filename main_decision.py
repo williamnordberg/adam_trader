@@ -14,6 +14,7 @@ from order_book import get_probabilities
 from trading_decision import make_trading_decision
 from long_position_open import long_position
 from short_position_open import short_position
+from  visualization import visualize_charts
 
 # Constants
 LOOP_COUNTER = 0
@@ -32,7 +33,9 @@ while True:
     prediction_bullish, prediction_bearish = decision_tree_predictor()
 
     # 2 Get probabilities of price going up or down
-    order_book_bullish, order_book_bearish = get_probabilities(SYMBOLS, bid_multiplier=0.995, ask_multiplier=1.005)
+    probabilities = get_probabilities(SYMBOLS, bid_multiplier=0.995, ask_multiplier=1.005)
+    assert probabilities is not None, "get_probabilities returned None"
+    order_book_bullish, order_book_bearish = probabilities
 
     # 3 Monitor the richest Bitcoin addresses
     latest_info_saved = pd.read_csv('latest_info_saved.csv')
@@ -72,6 +75,12 @@ while True:
         reddit_bullish, reddit_bearish,
         youtube_bullish, youtube_bearish,
         news_bullish, news_bearish)
+
+    visualize_charts(macro_bullish, macro_bearish, order_book_bullish, order_book_bearish, prediction_bullish,
+                     prediction_bearish, technical_bullish, technical_bearish, richest_addresses_bullish,
+                     richest_addresses_bearish, google_search_bullish, google_search_bearish, reddit_bullish,
+                     reddit_bearish, youtube_bullish, youtube_bearish, news_bullish, news_bearish,
+                     weighted_score_up, weighted_score_down)
 
     if weighted_score_up > weighted_score_down and weighted_score_up > long_threshold:
         logging.info('Opening a long position')
