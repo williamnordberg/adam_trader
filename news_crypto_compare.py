@@ -1,6 +1,7 @@
 import requests
 from textblob import TextBlob
 import logging
+from typing import Tuple
 from handy_modules import check_internet_connection
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -11,7 +12,7 @@ SENTIMENT_POSITIVE_THRESHOLD = 0.1
 SENTIMENT_NEGATIVE_THRESHOLD = -0.001
 
 
-def check_news_cryptocompare_sentiment():
+def check_news_cryptocompare_sentiment() -> Tuple[float, float, int, int]:
 
     positive_polarity_score = 0.0
     positive_count = 0
