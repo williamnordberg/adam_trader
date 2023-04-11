@@ -1,36 +1,17 @@
 import logging
-import requests
+from typing import Tuple
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def get_bitcoin_price():
-    """
-    Retrieves the current Bitcoin price in USD from the CoinGecko API.
-    """
-    try:
-        url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
-        response = requests.get(url)
-
-        if response.status_code == 200:
-            data = response.json()
-            current_price_local = data['bitcoin']['usd']
-            return current_price_local
-        else:
-            logging.error("Error: Could not retrieve Bitcoin price data")
-            raise Exception("Error: Could not retrieve Bitcoin price data")
-    except requests.exceptions.RequestException as e:
-        logging.error(f"Error: Could not connect to CoinGecko API:{e}")
-        raise Exception(f"Error: Could not connect to CoinGecko API:{e}")
-
-
-def make_trading_decision(macro_bullish, macro_bearish,
-                          order_book_bullish, order_book_bearish,
-                          prediction_bullish, prediction_bearish,
-                          technical_bullish, technical_bearish,
-                          richest_addresses_bullish, richest_addresses_bearish,
-                          google_search_bullish, google_search_bearish,
-                          reddit_bullish, reddit_bearish,
-                          youtube_bullish, youtube_bearish,
-                          news_bullish, news_bearish):
+def make_trading_decision(macro_bullish: float, macro_bearish: float,
+                          order_book_bullish: float, order_book_bearish: float,
+                          prediction_bullish: float, prediction_bearish: float,
+                          technical_bullish: float, technical_bearish: float,
+                          richest_addresses_bullish: float, richest_addresses_bearish: float,
+                          google_search_bullish: float, google_search_bearish: float,
+                          reddit_bullish: float, reddit_bearish: float,
+                          youtube_bullish: float, youtube_bearish: float,
+                          news_bullish: float, news_bearish: float) -> Tuple[float, float]:
     """
     Makes a trading decision based on the conditions met.
     """
@@ -90,4 +71,4 @@ if __name__ == "__main__":
                                                  1, 0,
                                                  1, 0,
                                                  1, 0)
-    logging.info(f'score_up: {score_up}, score_down{score_down}')
+    logging.info(f'score_up: {score_up}, score_down: {score_down}')

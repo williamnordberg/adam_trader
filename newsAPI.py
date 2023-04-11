@@ -4,8 +4,9 @@ import configparser
 from textblob import TextBlob
 import logging
 import os
-import datetime
+from datetime import datetime, timedelta
 
+from typing import Tuple
 from handy_modules import check_internet_connection
 
 
@@ -20,8 +21,15 @@ config.read(config_path)
 API_NEWSAPI = config.get("API", "Newsapi")
 
 
-def check_news_api_sentiment(start, end):
-    # Check for internet connection
+def check_news_api_sentiment(start: datetime, end: datetime) -> Tuple[float, float, int, int]:
+    """
+        Check the sentiment of news articles about Bitcoin within the specified date range.
+
+        :param start: The start date of the range.
+        :param end: The end date of the range.
+        :return: A tuple containing the average positive polarity, average negative polarity, positive count, and negative count.
+        """
+
     if not check_internet_connection():
         logging.info('unable to get news sentiment')
         return 0, 0, 0, 0
@@ -78,9 +86,8 @@ def check_news_api_sentiment(start, end):
 
 
 if __name__ == "__main__":
-    start_outer = datetime.datetime.now() - datetime.timedelta(days=1)
-    end_outer = datetime.datetime.now()
-
+    start_outer = datetime.now() - timedelta(days=1)
+    end_outer = datetime.now()
     positive_polarity_score_outer, negative_polarity_score_outer, \
         positive_count_outer, negative_count_outer = check_news_api_sentiment(start_outer, end_outer)
 

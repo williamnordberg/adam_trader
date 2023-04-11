@@ -1,19 +1,21 @@
 import logging
+from typing import Tuple
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def position_decision(macro_bullish, macro_bearish,
-                      order_book_bullish, order_book_bearish,
-                      probability_to_hit_target, probability_to_hit_stop_loss,
-                      prediction_bullish, prediction_bearish,
-                      technical_bullish, technical_bearish,
-                      richest_addresses_bullish, richest_addresses_bearish,
-                      google_search_bullish, google_search_bearish,
-                      reddit_bullish, reddit_bearish,
-                      youtube_bullish, youtube_bearish,
-                      news_bullish, news_bearish):
+def position_decision(macro_bullish: float, macro_bearish: float,
+                      order_book_bullish: float, order_book_bearish: float,
+                      probability_to_hit_target: float, probability_to_hit_stop_loss: float,
+                      prediction_bullish: float, prediction_bearish: float,
+                      technical_bullish: float, technical_bearish: float,
+                      richest_addresses_bullish: float, richest_addresses_bearish: float,
+                      google_search_bullish: float, google_search_bearish: float,
+                      reddit_bullish: float, reddit_bearish: float,
+                      youtube_bullish: float, youtube_bearish: float,
+                      news_bullish: float, news_bearish: float) -> Tuple[float, float]:
+
     """
     Makes a trading decision based on the conditions met.
     """

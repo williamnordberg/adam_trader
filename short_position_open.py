@@ -1,6 +1,7 @@
 from time import sleep
 import pandas as pd
 import logging
+from typing import Tuple
 
 from order_book import get_probabilities, get_probabilities_hit_profit_or_stop
 from macro_analyser import macro_sentiment, print_upcoming_events
@@ -12,7 +13,7 @@ from youtube import check_bitcoin_youtube_videos_increase
 from adam_predictor import decision_tree_predictor
 from position_decision_maker import position_decision
 from reddit import compare
-from trading_decision import get_bitcoin_price
+from handy_modules import get_bitcoin_price
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -22,7 +23,7 @@ SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 LATEST_INFO_FILE = 'latest_info_saved.csv'
 
 
-def short_position():
+def short_position() -> Tuple[int, int]:
     """
        Monitors a short position for various factors to decide when to close the position.
        The function continuously checks various factors like probabilities, technical analysis,

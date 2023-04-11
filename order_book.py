@@ -1,32 +1,24 @@
 import requests
 import logging
+from typing import List, Optional, Tuple, Any
+from handy_modules import get_bitcoin_price
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 ENDPOINT_DEPTH = "https://api.binance.com/api/v3/depth"
-ENDPOINT_PRICE = "https://api.binance.com/api/v3/ticker/price"
 LIMIT = 1000
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 
 
-def get_price(symbol, session):
+def get_order_book(symbol: str, limit: int):
     try:
-        response = session.get(ENDPOINT_PRICE, params={'symbol': symbol})
-        return float(response.json()['price'])
-    except requests.exceptions.RequestException as e:
-        logging.error(f"Error getting price for {symbol}: {e}")
-        raise
-
-
-def get_order_book(symbol, limit, session):
-    try:
-        response = session.get(ENDPOINT_DEPTH, params={'symbol': symbol, 'limit': limit})
+        response = requests.get(ENDPOINT_DEPTH, params={'symbol': symbol, 'limit': str(limit)})
         return response.json()
     except requests.exceptions.RequestException as e:
         logging.error(e)
         return None
 
 
-def compare_probability(probability_up, probability_down):
+def compare_probability(probability_up: float, probability_down: float) -> Tuple[float, float]:
 
     if probability_up > probability_down:
         if probability_up >= 0.65:
@@ -55,17 +47,19 @@ def compare_probability(probability_up, probability_down):
     return 0, 0
 
 
-def get_probabilities(symbols, limit=LIMIT, bid_multiplier=0.995, ask_multiplier=1.005):
-    bid_volume, ask_volume = 0.0000001, 0
-    with requests.Session() as session:
-        for symbol in symbols:
-            data = get_order_book(symbol, limit, session)
-            if data is None:
-                return None
+def get_probabilities(symbols: List[str], limit: int = LIMIT, bid_multiplier: float = 0.995,
+                      ask_multiplier: float = 1.005) -> Optional[Tuple[float, float]]:
+    bid_volume, ask_volume = 0.0000001, 0.0
+    for symbol in symbols:
+        data = get_order_book(symbol, limit)
+        if data is None:
+            return None
 
-            current_price = get_price(symbol, session)
-            bid_volume += sum([float(bid[1]) for bid in data['bids'] if float(bid[0]) >= (current_price * bid_multiplier)])
-            ask_volume += sum([float(ask[1]) for ask in data['asks'] if float(ask[0]) <= current_price * ask_multiplier])
+        current_price = get_bitcoin_price()
+        bid_volume += sum([float(bid[1]) for bid in data['bids'] if float(bid[0]) >=
+                           (current_price * bid_multiplier)])
+        ask_volume += sum([float(ask[1]) for ask in data['asks'] if float(ask[0]) <=
+                           current_price * ask_multiplier])
 
     probability_up = bid_volume / (bid_volume + ask_volume)
     probability_down = ask_volume / (bid_volume + ask_volume)
@@ -75,16 +69,22 @@ def get_probabilities(symbols, limit=LIMIT, bid_multiplier=0.995, ask_multiplier
     return order_book_bullish, order_book_bearish
 
 
-def get_probabilities_hit_profit_or_stop(symbols, limit, profit_target, stop_loss):
-    bid_volume, ask_volume = 0, 0
-    with requests.Session() as session:
-        for symbol in symbols:
-            data = get_order_book(symbol, limit, session)
-            if data is None:
-                return None
+def get_probabilities_hit_profit_or_stop(symbols: List[str], limit: int, profit_target: float,
+                                         stop_loss: float) -> Optional[Tuple[float, float]]:
+    bid_volume, ask_volume = 0.0, 0.0
+    for symbol in symbols:
+        data = get_order_book(symbol, limit)
+        if data is None:
+            return None
 
-            bid_volume += sum([float(bid[1]) for bid in data['bids'] if float(bid[0]) >= stop_loss])
-            ask_volume += sum([float(ask[1]) for ask in data['asks'] if float(ask[0]) <= profit_target])
+        bids = data.get('bids')
+        asks = data.get('asks')
+
+        if bids is not None:
+            bid_volume += sum([float(bid[1]) for bid in bids if float(bid[0]) >= stop_loss])
+
+        if asks is not None:
+            ask_volume += sum([float(ask[1]) for ask in asks if float(ask[0]) <= profit_target])
 
     probability_to_hit_target = bid_volume / (bid_volume + ask_volume)
     probability_to_hit_stop_loss = ask_volume / (bid_volume + ask_volume)
@@ -99,9 +99,13 @@ if __name__ == '__main__':
     order_book_hit_target_outer, order_book_hit_stop_outer = \
         get_probabilities_hit_profit_or_stop(SYMBOLS, LIMIT, 30000, 20000)
 
+    assert order_book_bullish_outer is not None and order_book_bearish_outer is not None, \
+        "get_probabilities returned None"
+    assert order_book_hit_target_outer is not None and order_book_hit_stop_outer is not None, \
+        "get_probabilities_hit_profit_or_stop returned None"
+
     logging.info(f'order_book_bullish:{order_book_bullish_outer},'
                  f'order_book_bearish: {order_book_bearish_outer}')
 
     logging.info(f'order_book_hit_target:{order_book_hit_target_outer},'
                  f'order_book_hit_stop: {order_book_hit_stop_outer}')
-

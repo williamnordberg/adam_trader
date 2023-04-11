@@ -2,32 +2,16 @@ import requests
 from bs4 import BeautifulSoup
 from textblob import TextBlob
 import logging
+from typing import Tuple
+from handy_modules import check_internet_connection
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-SENTIMENT_THRESHOLD = 0.1
-POSITIVITY_PERCENT = 1.8
 
 SENTIMENT_POSITIVE_THRESHOLD = 0.1
 SENTIMENT_NEGATIVE_THRESHOLD = -0.001
 
 
-def check_internet_connection() -> bool:
-    """
-    Check if there is an internet connection.
-
-    Returns:
-        bool: True if there is an internet connection, False otherwise.
-    """
-    try:
-        requests.get("http://www.google.com", timeout=3)
-        return True
-    except requests.ConnectionError:
-        logging.warning("No internet connection available.")
-        return False
-
-
-def check_news_sentiment_scrapper():
+def check_news_sentiment_scrapper() -> Tuple[float, float, int, int]:
     positive_polarity_score = 0.0
     positive_count = 0
     negative_polarity_score = 0.0
@@ -65,17 +49,9 @@ def check_news_sentiment_scrapper():
             logging.error(f"Error analyzing content: {e}")
             return 0, 0, 0, 0
 
-            # prevent division by zero
-    if positive_count > 0:
-        positive_polarity = positive_polarity_score / positive_count
-    else:
-        positive_polarity = 0
-
     # prevent division by zero
-    if negative_count > 0:
-        negative_polarity = negative_polarity_score / negative_count
-    else:
-        negative_polarity = 0
+    positive_polarity = positive_polarity_score / positive_count if positive_count > 0 else 0
+    negative_polarity = negative_polarity_score / negative_count if negative_count > 0 else 0
 
     return positive_polarity, negative_polarity, positive_count, negative_count
 
