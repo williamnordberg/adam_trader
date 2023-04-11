@@ -1,6 +1,6 @@
+from typing import List, Optional, Tuple
 import requests
 import logging
-from typing import List, Optional, Tuple, Any
 from handy_modules import get_bitcoin_price
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -93,16 +93,13 @@ def get_probabilities_hit_profit_or_stop(symbols: List[str], limit: int, profit_
 
 
 if __name__ == '__main__':
-    order_book_bullish_outer, order_book_bearish_outer = \
-        get_probabilities(SYMBOLS, limit=LIMIT, bid_multiplier=0.995, ask_multiplier=1.005)
+    probabilities = get_probabilities(SYMBOLS, limit=LIMIT, bid_multiplier=0.995, ask_multiplier=1.005)
+    assert probabilities is not None, "get_probabilities returned None"
+    order_book_bullish_outer, order_book_bearish_outer = probabilities
 
-    order_book_hit_target_outer, order_book_hit_stop_outer = \
-        get_probabilities_hit_profit_or_stop(SYMBOLS, LIMIT, 30000, 20000)
-
-    assert order_book_bullish_outer is not None and order_book_bearish_outer is not None, \
-        "get_probabilities returned None"
-    assert order_book_hit_target_outer is not None and order_book_hit_stop_outer is not None, \
-        "get_probabilities_hit_profit_or_stop returned None"
+    probabilities_hit = get_probabilities_hit_profit_or_stop(SYMBOLS, LIMIT, 30000, 20000)
+    assert probabilities_hit is not None, "get_probabilities_hit_profit_or_stop returned None"
+    order_book_hit_target_outer, order_book_hit_stop_outer = probabilities_hit
 
     logging.info(f'order_book_bullish:{order_book_bullish_outer},'
                  f'order_book_bearish: {order_book_bearish_outer}')
