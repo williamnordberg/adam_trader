@@ -1,13 +1,17 @@
 from selenium.common import TimeoutException
-import pandas as pd
-from selenium.webdriver.support.ui import Select
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 import os
-import time
+import pandas as pd
 import logging
+import time
+
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
@@ -16,11 +20,17 @@ def update_internal_factors():
     main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})
 
     # Get the latest date in the main dataset
-
     latest_date = main_dataset.loc[main_dataset['DiffLast'].last_valid_index(), 'Date']
 
-    # Create a new instance of the Firefox driver
-    driver = webdriver.Firefox()
+    # Set up ChromeDriver options
+    options = Options()
+    options.add_argument('--headless')  # Run ChromeDriver in headless mode
+
+    # Set up ChromeDriver service
+    service = Service('chromedriver.exe')  # Replace with the path to your chromedriver executable
+
+    # Create a new instance of the Chrome driver
+    driver = webdriver.Chrome(service=service, options=options)
 
     # Open the webpage
     driver.get("https://coinmetrics.io/community-network-data/")
@@ -57,13 +67,13 @@ def update_internal_factors():
                 wait_for_download = False
                 break
 
-    # Close the Firefox window
+    # Close the Chrome window
     driver.quit()
 
     if new_data is not None:
         # Rename the 'time' column to 'Date'
         new_data = new_data.rename(columns={'time': 'Date'})
-
+        print(new_data)
         # Filter the new data to only include rows with a date after the latest date in the main dataset
         new_data = new_data[new_data['Date'] > latest_date]
         new_data = new_data[['Date', 'DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate']]
