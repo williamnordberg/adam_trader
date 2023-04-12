@@ -1,134 +1,82 @@
-from time import sleep
-import pandas as pd
-import logging
-from typing import Tuple
+import matplotlib.font_manager as fm
+from matplotlib import rc
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+import plotly.io as pio
 
-from order_book import get_probabilities, get_probabilities_hit_profit_or_stop
-from macro_analyser import macro_sentiment, print_upcoming_events
-from technical_analysis import technical_analyse
-from news_analyser import check_sentiment_of_news
-from google_search import check_search_trend
-from reddit import reddit_check
-from youtube import check_bitcoin_youtube_videos_increase
-from adam_predictor import decision_tree_predictor
-from position_decision_maker import position_decision
-from reddit import compare
-from handy_modules import get_bitcoin_price
+custom_font_path = "RobotoSlab.ttf"
+custom_font = fm.FontProperties(fname=custom_font_path)
+rc('font', family=custom_font.get_name())
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-SCORE_MARGIN_TO_CLOSE = 0.7
-PROFIT_MARGIN = 0.01
-SYMBOLS = ['BTCUSDT', 'BTCBUSD']
-LATEST_INFO_FILE = 'latest_info_saved.csv'
+custom_font_path1 = "Pacifico-Regular.ttf"
+custom_font1 = fm.FontProperties(fname=custom_font_path1)
+rc('font', family=custom_font1.get_name())
 
 
-def short_position() -> Tuple[int, int]:
-    """
-       Monitors a short position for various factors to decide when to close the position.
-       The function continuously checks various factors like probabilities, technical analysis,
-       news sentiment, search trends, Reddit activity, and YouTube trends.
-       It also checks for stop loss and profit points.
-       Returns:
-           float: The profit made after closing the position.
-           float: The loss made after closing the position.
-       """
-    current_price = get_bitcoin_price()
-    position_opening_price = current_price
-    profit_point = current_price - (current_price * PROFIT_MARGIN)
-    stop_loss = current_price + (current_price * PROFIT_MARGIN)
-    logging.info(f'current_price:{current_price}, profit_point:{profit_point},stop_loss:{stop_loss} ')
-    profit, loss = 0, 0
+def create_gauge_chart(bullish, bearish):
+    if bullish == 0 and bearish == 0:
+        value = 50
+    else:
+        value = (bullish / (bullish + bearish)) * 100
 
-    while True:
-        logging.info('******************************************')
-        current_price = get_bitcoin_price()
-        logging.info(f'current_price:{current_price}, profit_point:{profit_point},stop_loss:{stop_loss} ')
-        # Check if we meet profit or stop loss
-        if current_price < profit_point:
-            profit = position_opening_price - current_price
-            logging.info('&&&&&&&&&&&&&& TARGET HIT &&&&&&&&&&&&&&&&&&&&&')
-            return profit, loss
-        elif current_price > stop_loss:
-            loss = current_price - position_opening_price
-            logging.info('&&&&&&&&&&&&&& STOP LOSS &&&&&&&&&&&&&&&&&&&&&')
-            return profit, loss
+    return go.Indicator(
+        mode="gauge+number",
+        value=value,
+        domain={"x": [0, 1], "y": [0, 1]},
+        gauge={
+            "axis": {"range": [0, 100]},
+            "bar": {"color": "darkblue"},
+            "steps": [
+                {"range": [0, 50], "color": "lightcoral"},
+                {"range": [50, 100], "color": "lightgreen"}
+            ],
+            "threshold": {
+                "line": {"color": "red", "width": 4},
+                "thickness": 0.75,
+                "value": 50
+            }
+        },
+        number={"suffix": "%", "font": {"size": 14}},
+    )
 
-        # order  book Hit
-        probabilities_hit = get_probabilities_hit_profit_or_stop(SYMBOLS, 1000, stop_loss, profit_point)
-        assert probabilities_hit is not None, "get_probabilities_hit_profit_or_stop returned None"
-        probability_to_hit_stop_loss, probability_to_hit_target = probabilities_hit
 
-        logging.info(f'profit_probability: {probability_to_hit_target}'
-                     f'stop_probability: {probability_to_hit_stop_loss}')
+def visualize_charts(macro_bullish, macro_bearish, order_book_bullish, order_book_bearish, prediction_bullish,
+                     prediction_bearish, technical_bullish, technical_bearish, richest_addresses_bullish,
+                     richest_addresses_bearish, google_search_bullish, google_search_bearish, reddit_bullish,
+                     reddit_bearish, youtube_bullish, youtube_bearish, news_bullish, news_bearish,
+                     weighted_score_up, weighted_score_down):
+    fig = make_subplots(rows=2, cols=5,
+                        specs=[[{"type": "indicator"}] * 5] * 2,
+                        subplot_titles=["Macro Sentiment", "Order Book", "Prediction", "Technical Analysis",
+                                        "Richest Addresses", "Google Search Trend", "Reddit Sentiment",
+                                        "YouTube Sentiment", "News Sentiment", "Weighted Score"])
 
-        # 1 Get the prediction
-        prediction_bullish, prediction_bearish = decision_tree_predictor()
+    fig.add_trace(create_gauge_chart(macro_bullish, macro_bearish), row=1, col=1)
+    fig.add_trace(create_gauge_chart(order_book_bullish, order_book_bearish), row=1, col=2)
+    fig.add_trace(create_gauge_chart(prediction_bullish, prediction_bearish), row=1, col=3)
+    fig.add_trace(create_gauge_chart(technical_bullish, technical_bearish), row=1, col=4)
+    fig.add_trace(create_gauge_chart(richest_addresses_bullish, richest_addresses_bearish), row=1, col=5)
+    fig.add_trace(create_gauge_chart(google_search_bullish, google_search_bearish), row=2, col=1)
+    fig.add_trace(create_gauge_chart(reddit_bullish, reddit_bearish), row=2, col=2)
+    fig.add_trace(create_gauge_chart(youtube_bullish, youtube_bearish), row=2, col=3)
+    fig.add_trace(create_gauge_chart(news_bullish, news_bearish), row=2, col=4)
+    fig.add_trace(create_gauge_chart(weighted_score_up, weighted_score_down), row=2, col=5)
 
-        # 2 Get probabilities of price going up or down
-        probabilities = get_probabilities(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
-        assert probabilities is not None, "get_probabilities returned None"
-        order_book_bullish, order_book_bearish = probabilities
+    fig.update_layout(
+        font=dict(size=10)
+    )
 
-        logging.info(f'order_book_bullish: {order_book_bullish}'
-                     f'  order_book_bearish: {order_book_bearish}')
-
-        # 3 Monitor the richest Bitcoin addresses
-        latest_info_saved = pd.read_csv('latest_info_saved.csv')
-        total_received = latest_info_saved['total_received_coins_in_last_24'][0]
-        total_sent = latest_info_saved['total_sent_coins_in_last_24'][0]
-        richest_addresses_bullish, richest_addresses_bearish = compare(
-            total_received, total_sent)
-
-        # 4 Check Google search trends for Bitcoin and cryptocurrency
-        google_search_bullish, google_search_bearish = check_search_trend(["Bitcoin", "Cryptocurrency"])
-
-        # 5 Check macroeconomic indicators
-        macro_bullish, macro_bearish, events_date_dict = macro_sentiment()
-
-        # remind upcoming macro events
-        print_upcoming_events(events_date_dict)
-
-        # 6 Reddit
-        reddit_bullish, reddit_bearish = reddit_check()
-
-        # 7 YouTube
-        youtube_bullish, youtube_bearish = check_bitcoin_youtube_videos_increase()
-
-        # 8 Collect data from news websites
-        news_bullish, news_bearish = check_sentiment_of_news()
-
-        # 9 Technical analysis
-        technical_bullish, technical_bearish = technical_analyse()
-
-        # position decision
-        weighted_score_up, weighted_score_down = position_decision(
-            macro_bullish, macro_bearish,
-            order_book_bullish, order_book_bearish,
-            probability_to_hit_target, probability_to_hit_stop_loss,
-            prediction_bullish, prediction_bearish,
-            technical_bullish, technical_bearish,
-            richest_addresses_bullish, richest_addresses_bearish,
-            google_search_bullish, google_search_bearish,
-            reddit_bullish, reddit_bearish,
-            youtube_bullish, youtube_bearish,
-            news_bullish, news_bearish)
-
-        print('weighted_score_up, weighted_score_down', weighted_score_up, weighted_score_down)
-
-        if weighted_score_up > weighted_score_down and weighted_score_up > SCORE_MARGIN_TO_CLOSE:
-            logging.info('short position clos')
-            if current_price < position_opening_price:
-                profit = position_opening_price - current_price
-                logging.info('short position closed with profit')
-            elif current_price > position_opening_price:
-                loss = position_opening_price - current_price
-                logging.info('short position closed with loss')
-            return profit, loss
-
-        sleep(5)
+    pio.write_html(fig, file='chart.html', auto_open=True)
 
 
 if __name__ == "__main__":
-    profit_after_trade1, loss_after_trade1 = short_position()
-    logging.info(f"profit_after_trade:{profit_after_trade1}, loss_after_trade:{loss_after_trade1}")
+    visualize_charts(0.4, 0.6,
+                     0.6, 0.4,
+                     0, 0,
+                     0, 0,
+                     0.4, 0.6,
+                     0.7, 0.3,
+                     0.2, 0.8,
+                     0.4, 0.6,
+                     0.1, 0.9,
+                     1, 0.4)

@@ -97,4 +97,4 @@ while True:
         profit_after_trade, loss_after_trade = short_position()
         logging.info(f"profit_after_trade:{profit_after_trade}, "f"loss_after_trade:{loss_after_trade}")
 
-    sleep(5)
+    sleep(15)
