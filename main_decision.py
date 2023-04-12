@@ -1,6 +1,8 @@
 import logging
 import pandas as pd
 from time import sleep
+import matplotlib.pyplot as plt
+
 
 from reddit import compare
 from technical_analysis import technical_analyse
@@ -14,7 +16,7 @@ from order_book import get_probabilities
 from trading_decision import make_trading_decision
 from long_position_open import long_position
 from short_position_open import short_position
-from  visualization import visualize_charts
+from visualization import visualize_charts
 
 # Constants
 LOOP_COUNTER = 0
@@ -76,12 +78,14 @@ while True:
         youtube_bullish, youtube_bearish,
         news_bullish, news_bearish)
 
+    # Visualization
     visualize_charts(macro_bullish, macro_bearish, order_book_bullish, order_book_bearish, prediction_bullish,
                      prediction_bearish, technical_bullish, technical_bearish, richest_addresses_bullish,
                      richest_addresses_bearish, google_search_bullish, google_search_bearish, reddit_bullish,
                      reddit_bearish, youtube_bullish, youtube_bearish, news_bullish, news_bearish,
                      weighted_score_up, weighted_score_down)
 
+    # Trading decision
     if weighted_score_up > weighted_score_down and weighted_score_up > long_threshold:
         logging.info('Opening a long position')
         profit_after_trade, loss_after_trade = long_position()
@@ -93,4 +97,4 @@ while True:
         profit_after_trade, loss_after_trade = short_position()
         logging.info(f"profit_after_trade:{profit_after_trade}, "f"loss_after_trade:{loss_after_trade}")
 
-    sleep(10)
+    sleep(5)

@@ -45,7 +45,7 @@ def get_bitcoin_price() -> int:
         try:
             response = requests.get(BINANCE_ENDPOINT_PRICE, params={'symbol': 'BTCUSDT'})
             if response.status_code == 200:
-                return int(response.json()['price'])
+                return int(float(response.json()['price']))
         except requests.exceptions.RequestException as e:
             errors.append(f"Error: Could not connect to Binance API:{e}")
 
