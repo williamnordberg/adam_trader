@@ -61,7 +61,6 @@ def train_and_predict(dataset: pd.DataFrame) -> int:
     predictions_tree = int(decision_model.predict(X_test).reshape(-1, 1))
 
     # Save to database
-    print(type(predictions_tree))
     save_value_to_database('predicted_price', predictions_tree)
 
     return predictions_tree
@@ -76,6 +75,11 @@ def decision_tree_predictor() -> tuple:
     prediction = train_and_predict(dataset)
 
     prediction_bullish, prediction_bearish = compare_predicted_price(prediction, get_bitcoin_price())
+
+    # Save to database
+    save_value_to_database('prediction_bullish', prediction_bullish)
+    save_value_to_database('prediction_bearish', prediction_bearish)
+
     return prediction_bullish, prediction_bearish
 
 
