@@ -7,8 +7,6 @@ import configparser
 from typing import Tuple
 from praw import Reddit
 
-
-
 ONE_DAYS_IN_SECONDS = 24 * 60 * 60
 
 

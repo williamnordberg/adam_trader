@@ -1,7 +1,6 @@
 import logging
 import pandas as pd
 from time import sleep
-import matplotlib.pyplot as plt
 
 
 from reddit import compare
