@@ -3,6 +3,7 @@ from typing import List
 import logging
 from pytrends.request import TrendReq as UTrendReq
 
+from database import save_value_to_database
 from pytrends.exceptions import ResponseError
 from handy_modules import check_internet_connection, compare_google_search_trends
 
@@ -71,6 +72,12 @@ def check_search_trend(keywords: List[str]):
 
         # Check the threshold number of increase in the search
         google_bullish, google_bearish = compare_google_search_trends(last_hour, two_hours_before)
+
+        # Save to database
+        save_value_to_database('hourly_google_search', last_hour)
+        save_value_to_database('google_search_bullish', google_bullish)
+        save_value_to_database('google_search_bearish', google_bearish)
+
         return google_bullish, google_bearish
 
     except ResponseError as e:
