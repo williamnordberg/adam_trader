@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 import logging
 from sklearn.tree import DecisionTreeRegressor
 
+from database import save_value_to_database
 from update_dataset_yahoo import update_yahoo_data
 from update_dataset_macro import update_macro_economic
 from update_dataset_internal_factors import update_internal_factors
@@ -58,6 +59,10 @@ def train_and_predict(dataset: pd.DataFrame) -> int:
     decision_model = DecisionTreeRegressor(random_state=0)
     decision_model.fit(X_train, y_train)
     predictions_tree = int(decision_model.predict(X_test).reshape(-1, 1))
+
+    # Save to database
+    print(type(predictions_tree))
+    save_value_to_database('predicted_price', predictions_tree)
 
     return predictions_tree
 
