@@ -1,12 +1,42 @@
 from typing import List, Optional, Tuple
 import requests
 import logging
+from datetime import datetime, timedelta
+
+from database import save_value_to_database
 from handy_modules import get_bitcoin_price
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 ENDPOINT_DEPTH = "https://api.binance.com/api/v3/depth"
 LIMIT = 1000
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
+
+
+# Temporary storage for aggregated values
+aggregated_values = {
+    'bid_volume': [],
+    'ask_volume': [],
+    'order_book_bullish': [],
+    'order_book_bearish': []
+}
+
+
+def aggregate_and_save_values():
+    if not aggregated_values['bid_volume']:  # If there are no values, do nothing
+        return
+
+    # Calculate the average values for each key in the temporary storage
+    avg_values = {key: sum(values) / len(values) for key, values in aggregated_values.items()}
+
+    # Save the average values to the database
+    save_value_to_database('bid_volume', avg_values['bid_volume'])
+    save_value_to_database('ask_volume', avg_values['ask_volume'])
+    save_value_to_database('order_book_bullish', avg_values['order_book_bullish'])
+    save_value_to_database('order_book_bearish', avg_values['order_book_bearish'])
+
+    # Clear the temporary storage
+    for key in aggregated_values:
+        aggregated_values[key] = []
 
 
 def get_order_book(symbol: str, limit: int):
@@ -65,6 +95,18 @@ def get_probabilities(symbols: List[str], limit: int = LIMIT, bid_multiplier: fl
     probability_down = ask_volume / (bid_volume + ask_volume)
 
     order_book_bullish, order_book_bearish = compare_probability(probability_up, probability_down)
+
+    # Add the values to the temporary storage
+    aggregated_values['bid_volume'].append(bid_volume)
+    aggregated_values['ask_volume'].append(ask_volume)
+    aggregated_values['order_book_bullish'].append(order_book_bullish)
+    aggregated_values['order_book_bearish'].append(order_book_bearish)
+
+    # Check if an hour has passed since the last database update
+    current_time = datetime.now()
+    last_hour = current_time.replace(minute=0, second=0, microsecond=0)
+    if current_time - last_hour >= timedelta(hours=1):
+        aggregate_and_save_values()
 
     return order_book_bullish, order_book_bearish
 
