@@ -69,7 +69,7 @@ def potential_reversal(data_close: pd.Series) -> Tuple[bool, bool]:
         potential_down_reversal_bearish = True
 
     save_value_to_database('technical_potential_up_reversal_bullish', potential_up_reversal_bullish)
-    save_value_to_database('technical_potential_down_reversal_bearish',potential_down_reversal_bearish)
+    save_value_to_database('technical_potential_down_reversal_bearish', potential_down_reversal_bearish)
     return potential_up_reversal_bullish, potential_down_reversal_bearish
 
 
