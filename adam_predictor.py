@@ -2,6 +2,8 @@ import pandas as pd
 from datetime import datetime, timedelta
 import logging
 from sklearn.tree import DecisionTreeRegressor
+from sklearn.impute import SimpleImputer
+
 
 from database import save_value_to_database
 from update_dataset_yahoo import update_yahoo_data
@@ -50,6 +52,11 @@ def load_dataset() -> pd.DataFrame:
 
 def train_and_predict(dataset: pd.DataFrame) -> int:
     """Train a DecisionTreeRegressor model and make predictions."""
+    # SimpleImputer to fill missing values
+    imputer = SimpleImputer(strategy='mean')
+    dataset[['DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate', 'Open', 'Rate']] = imputer.fit_transform(
+        dataset[['DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate', 'Open', 'Rate']])
+
     X_train = dataset.iloc[:-1][['DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate', 'Open', 'Rate']]
     y_train = dataset.iloc[:-1][['Close']]
 

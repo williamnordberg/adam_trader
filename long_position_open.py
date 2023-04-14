@@ -1,5 +1,4 @@
 from time import sleep
-import pandas as pd
 import logging
 
 from order_book import get_probabilities, get_probabilities_hit_profit_or_stop
@@ -11,8 +10,8 @@ from reddit import reddit_check
 from youtube import check_bitcoin_youtube_videos_increase
 from adam_predictor import decision_tree_predictor
 from position_decision_maker import position_decision
-from reddit import compare
-from handy_modules import get_bitcoin_price
+from handy_modules import get_bitcoin_price, compare_send_receive_richest_addresses
+from database import save_value_to_database
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -62,11 +61,11 @@ def long_position():
                      f'  order_book_bearish: {order_book_bearish}')
 
         # 3 Monitor the richest Bitcoin addresses
-        latest_info_saved = pd.read_csv('latest_info_saved.csv')
-        total_received = latest_info_saved['total_received_coins_in_last_24'][0]
-        total_sent = latest_info_saved['total_sent_coins_in_last_24'][0]
-        richest_addresses_bullish, richest_addresses_bearish = compare(
-            total_received, total_sent)
+        richest_addresses_bullish, richest_addresses_bearish = compare_send_receive_richest_addresses()
+
+        # Save to database
+        save_value_to_database('richest_addresses_bullish', richest_addresses_bullish)
+        save_value_to_database('richest_addresses_bearish', richest_addresses_bearish)
 
         # 4 Check Google search trends for Bitcoin and cryptocurrency
         google_search_bullish, google_search_bearish = check_search_trend(["Bitcoin", "Cryptocurrency"])

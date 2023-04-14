@@ -14,6 +14,7 @@ import configparser
 from spider import BitcoinRichListSpider
 from api_blockchain_info import get_address_transactions_24h
 from api_blockcypher import get_address_transactions_24h_blockcypher
+from database import save_value_to_database
 
 SATOSHI_TO_BITCOIN = 100000000
 LATEST_INFO_FILE = 'latest_info_saved.csv'
@@ -114,6 +115,11 @@ def monitor_bitcoin_richest_addresses() -> Tuple[float, float]:
 
     # Check the total Bitcoin received and sent in the last 24 hours for all addresses
     total_received, total_sent = check_multiple_addresses(addresses)
+
+    # Save to database
+    save_value_to_database('richest_addresses_total_received', total_received)
+    save_value_to_database('richest_addresses_total_sent', total_sent)
+
     return total_received, total_sent
 
 

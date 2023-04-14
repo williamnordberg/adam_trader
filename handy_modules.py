@@ -1,6 +1,7 @@
 import requests
 import logging
 from typing import Tuple
+import pandas as pd
 
 BINANCE_ENDPOINT_PRICE = "https://api.binance.com/api/v3/ticker/price"
 GECKO_ENDPOINT_PRICE = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
@@ -130,6 +131,40 @@ def compare_google_search_trends(last_hour: int, two_hours_before: int) -> Tuple
         elif two_hours_before >= (last_hour * 1.2):
             return 0.4, 0.6
         return 0, 0
+
+    return 0, 0
+
+
+def compare_send_receive_richest_addresses() -> Tuple[float, float]:
+    latest_info_saved = pd.read_csv('latest_info_saved.csv')
+    total_received = latest_info_saved['total_received_coins_in_last_24'][0]
+    total_sent = latest_info_saved['total_sent_coins_in_last_24'][0]
+
+    activity_percentage = (total_received - total_sent) / total_sent * 100
+
+    if activity_percentage > 0:
+        if activity_percentage >= 50:
+            return 1, 0
+        elif activity_percentage >= 40:
+            return 0.9, 0.1
+        elif activity_percentage >= 30:
+            return 0.8, 0.2
+        elif activity_percentage >= 20:
+            return 0.7, 0.3
+        elif activity_percentage >= 10:
+            return 0.6, 0.4
+
+    elif activity_percentage <= 0:
+        if activity_percentage <= -50:
+            return 0, 1
+        elif activity_percentage <= -40:
+            return 0.1, 0.9
+        elif activity_percentage <= -30:
+            return 0.2, 0.8
+        elif activity_percentage <= -20:
+            return 0.3, 0.7
+        elif activity_percentage <= -10:
+            return 0.4, 0.6
 
     return 0, 0
 
