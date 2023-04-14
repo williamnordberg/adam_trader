@@ -10,23 +10,10 @@
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="11 April">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/adam_predictor.py" beforeDir="false" afterPath="$PROJECT_DIR$/adam_predictor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bitcoin_rich_list2000.csv" beforeDir="false" afterPath="$PROJECT_DIR$/bitcoin_rich_list2000.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chromedriver.exe" beforeDir="false" afterPath="$PROJECT_DIR$/chromedriver.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/database.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database1.csv" beforeDir="false" afterPath="$PROJECT_DIR$/database1.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/geckodriver.log" beforeDir="false" afterPath="$PROJECT_DIR$/geckodriver.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handy_modules.py" beforeDir="false" afterPath="$PROJECT_DIR$/handy_modules.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/latest_info_saved.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/long_position_open.py" beforeDir="false" afterPath="$PROJECT_DIR$/long_position_open.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/macro_analyser.py" beforeDir="false" afterPath="$PROJECT_DIR$/macro_analyser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_dataset.csv" beforeDir="false" afterPath="$PROJECT_DIR$/main_dataset.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_decision.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_decision.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitor_2000_richest.py" beforeDir="false" afterPath="$PROJECT_DIR$/monitor_2000_richest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news_analyser.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_analyser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/short_position_open.py" beforeDir="false" afterPath="$PROJECT_DIR$/short_position_open.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/youtube_token.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/youtube_token.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order_book.py" beforeDir="false" afterPath="$PROJECT_DIR$/order_book.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reddit.py" beforeDir="false" afterPath="$PROJECT_DIR$/reddit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/technical_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/technical_analysis.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,28 +88,7 @@
       <recent name="C:\will\Python_project\adam_trader" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.short_position_open">
-    <configuration name="adam_predictor" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="adam_trader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/adam_predictor.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.technical_analysis">
     <configuration name="long_position_open" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -144,7 +110,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="macro_analyser" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="news_analyser" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -156,7 +122,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/macro_analyser.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/news_analyser.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -165,7 +131,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="monitor_2000_richest" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="order_book" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -177,7 +143,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/monitor_2000_richest.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/order_book.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -207,6 +173,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="technical_analysis" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="adam_trader" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/technical_analysis.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="Unittests with right config" type="tests" factoryName="Unittests">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -225,19 +212,19 @@
     </configuration>
     <list>
       <item itemvalue="Python.long_position_open" />
-      <item itemvalue="Python.macro_analyser" />
-      <item itemvalue="Python.monitor_2000_richest" />
+      <item itemvalue="Python.news_analyser" />
+      <item itemvalue="Python.order_book" />
       <item itemvalue="Python.short_position_open" />
-      <item itemvalue="Python.adam_predictor" />
+      <item itemvalue="Python.technical_analysis" />
       <item itemvalue="Python tests.Unittests with right config" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.technical_analysis" />
+        <item itemvalue="Python.order_book" />
+        <item itemvalue="Python.news_analyser" />
         <item itemvalue="Python.short_position_open" />
         <item itemvalue="Python.long_position_open" />
-        <item itemvalue="Python.monitor_2000_richest" />
-        <item itemvalue="Python.macro_analyser" />
-        <item itemvalue="Python.adam_predictor" />
       </list>
     </recent_temporary>
   </component>
@@ -249,13 +236,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00082" summary="first commit">
-      <created>1679034062501</created>
-      <option name="number" value="00082" />
-      <option name="presentableId" value="LOCAL-00082" />
-      <option name="project" value="LOCAL" />
-      <updated>1679034062501</updated>
     </task>
     <task id="LOCAL-00083" summary="first commit">
       <created>1679034244435</created>
@@ -593,7 +573,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681373290899</updated>
     </task>
-    <option name="localTasksCounter" value="131" />
+    <task id="LOCAL-00131" summary="11 April">
+      <created>1681440954270</created>
+      <option name="number" value="00131" />
+      <option name="presentableId" value="LOCAL-00131" />
+      <option name="project" value="LOCAL" />
+      <updated>1681440954273</updated>
+    </task>
+    <option name="localTasksCounter" value="132" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

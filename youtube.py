@@ -9,6 +9,8 @@ import logging
 from datetime import datetime, timedelta
 import pandas as pd
 from reddit import compare
+from database import save_value_to_database
+
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -112,6 +114,11 @@ def check_bitcoin_youtube_videos_increase() -> Tuple[float, float]:
         latest_info_saved.loc[0, 'youtube_bullish'] = youtube_bullish
         latest_info_saved.loc[0, 'youtube_bearish'] = youtube_bearish
         latest_info_saved.to_csv('latest_info_saved.csv', index=False)
+
+        # Save to database
+        save_value_to_database('last_24_youtube', num_last_24_hours)
+        save_value_to_database('youtube_bullish', youtube_bullish)
+        save_value_to_database('youtube_bearish', youtube_bearish)
 
         return youtube_bullish, youtube_bearish
     else:

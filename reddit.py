@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 import configparser
 from typing import Tuple
 from praw import Reddit
+from database import save_value_to_database
 
 ONE_DAYS_IN_SECONDS = 24 * 60 * 60
 
@@ -103,6 +104,12 @@ def reddit_check() -> Tuple[float, float]:
         now_str = now.strftime('%Y-%m-%d %H:%M:%S')
         latest_info_saved.loc[0, 'last_reddit_update_time'] = now_str
         latest_info_saved.to_csv('latest_info_saved.csv', index=False)
+
+        # Save to database
+        save_value_to_database('reddit_bullish', reddit_bullish)
+        save_value_to_database('reddit_bearish', reddit_bearish)
+        save_value_to_database('reddit_count_bitcoin_posts_24h', current_count)
+        save_value_to_database('reddit_activity_24h', current_activity)
 
         return reddit_bullish, reddit_bearish
 

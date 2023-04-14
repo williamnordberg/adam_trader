@@ -2,8 +2,10 @@ import pandas as pd
 import ccxt
 import logging
 from typing import Tuple
+
 from indicator_calculator import bollinger_bands, exponential_moving_average, macd, relative_strength_index
 from handy_modules import get_bitcoin_price
+from database import save_value_to_database
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -66,6 +68,8 @@ def potential_reversal(data_close: pd.Series) -> Tuple[bool, bool]:
     elif rsi[-1] > 70:
         potential_down_reversal_bearish = True
 
+    save_value_to_database('technical_potential_up_reversal_bullish', potential_up_reversal_bullish)
+    save_value_to_database('technical_potential_down_reversal_bearish',potential_down_reversal_bearish)
     return potential_up_reversal_bullish, potential_down_reversal_bearish
 
 
@@ -85,10 +89,11 @@ def potential_up_trending(data_close: pd.Series) -> bool:
     else:
         potential_up_trend = False
 
+    save_value_to_database('technical_potential_up_trend', potential_up_trend)
     return potential_up_trend
 
 
-def technical_analyse() -> Tuple[float, float]:
+def technical_analyse_wrapper() -> Tuple[float, float]:
     """
        Performs a technical analysis of the Bitcoin market using various indicators.
 
@@ -136,6 +141,18 @@ def technical_analyse() -> Tuple[float, float]:
         return 0.4, 0.6
 
     return 0, 0
+
+
+def technical_analyse() -> Tuple[float, float]:
+    # Call the original technical_analyse function
+    technical_bullish, technical_bearish = technical_analyse_wrapper()
+
+    # Save the values to the database
+    save_value_to_database('technical_bullish', technical_bullish)
+    save_value_to_database('technical_bearish', technical_bearish)
+
+    # Return the same values as the original function
+    return technical_bullish, technical_bearish
 
 
 if __name__ == '__main__':
