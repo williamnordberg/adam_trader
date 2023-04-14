@@ -26,7 +26,9 @@ column_names = [
     "google_search_bullish", "google_search_bearish",
     "reddit_bullish", "reddit_bearish",
     "youtube_bullish", "youtube_bearish",
-    "news_bullish", "news_bearish"
+    "news_bullish", "news_bearish",
+    "news_positive_polarity", "news_negative_polarity",
+    "news_positive_count", "news_negative_count"
 ]
 
 # df = df.astype(column_dtypes)
@@ -71,7 +73,12 @@ column_dtypes = {
     "youtube_bullish": "float",
     "youtube_bearish": "float",
     "news_bullish": "float",
-    "news_bearish": "float"}
+    "news_bearish": "float",
+    "news_positive_polarity": "float",
+    "news_negative_polarity": "float",
+    "news_positive_count": "int",
+    "news_negative_count": "int"
+}
 
 
 def parse_date(date_str):

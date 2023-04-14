@@ -7,6 +7,7 @@ from typing import Tuple
 from news_compare_polarity import compare_polarity
 from newsAPI import check_news_api_sentiment
 from news_aggregate import aggregate_news
+from database import save_value_to_database
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -39,7 +40,7 @@ def check_sentiment_of_news() -> Tuple[float, float]:
         news_bullish, news_bearish = compare_polarity(positive_polarity_24_hours_before, latest_positive_polarity_score,
                                                       negative_polarity_24_hours_before, latest_negative_polarity_score)
 
-        # Save data on disk
+        # Save data on disk for later compare
         latest_info_saved.loc[0, 'positive_polarity_score'] = positive_polarity_24_hours_before
         latest_info_saved.loc[0, 'negative_polarity_score'] = negative_polarity_24_hours_before
         latest_info_saved.loc[0, 'positive_news_count'] = positive_count_24_hours_before
@@ -52,6 +53,14 @@ def check_sentiment_of_news() -> Tuple[float, float]:
         latest_info_saved.loc[0, 'last_news_update_time'] = now_str
         latest_info_saved.to_csv('latest_info_saved.csv', index=False)
         logging.info(f'news data has been updated')
+
+        # Save data on database
+        save_value_to_database('news_positive_polarity', positive_polarity_24_hours_before)
+        save_value_to_database('news_negative_polarity', negative_polarity_24_hours_before)
+        save_value_to_database('news_positive_count', positive_count_24_hours_before)
+        save_value_to_database('news_negative_count', negative_count_24_hours_before)
+        save_value_to_database('news_bullish', news_bullish)
+        save_value_to_database('news_bearish', news_bearish)
 
         return news_bullish, news_bearish
 
@@ -67,7 +76,7 @@ def check_sentiment_of_news() -> Tuple[float, float]:
         start = datetime.now() - timedelta(days=1)
         end = datetime.now()
         positive_polarity_24_hours_before, negative_polarity_24_hours_before, \
-            positive_count_outer_24_hours_before, negative_count_24_hours_before = \
+            positive_count_24_hours_before, negative_count_24_hours_before = \
             check_news_api_sentiment(start, end)
 
         # compare
@@ -92,6 +101,11 @@ def check_sentiment_of_news() -> Tuple[float, float]:
         latest_info_saved.loc[0, 'last_news_update_time'] = now_str
         latest_info_saved.to_csv('latest_info_saved.csv', index=False)
         logging.info(f'news data has been updated')
+
+        # Save on database, we  do not save news_positive_polarity,
+        # news_negative_polarity, news_positive_count,news_negative_count to keep consistency in database
+        save_value_to_database('news_bullish', news_bullish)
+        save_value_to_database('news_bearish', news_bearish)
 
         return news_bullish, news_bearish
 

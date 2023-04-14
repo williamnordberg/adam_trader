@@ -1,11 +1,11 @@
 import os
+import logging
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
 from datetime import datetime
-import logging
 
-
+from database import save_value_to_database
 from macro_compare import calculate_macro_sentiment
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -106,10 +106,17 @@ def macro_sentiment():
                                 ppi_m_to_m = value
 
     service.stop()
-
     if rate_this_month or cpi_m_to_m or ppi_m_to_m:
         macro_bullish, macro_bearish = calculate_macro_sentiment(
             rate_this_month, rate_month_before, cpi_m_to_m, ppi_m_to_m)
+
+        # Save in database
+        save_value_to_database('interest_rate', rate_this_month)
+        save_value_to_database('cpi_m_to_m', cpi_m_to_m)
+        save_value_to_database('ppi_m_to_m', ppi_m_to_m)
+        save_value_to_database('macro_bullish', macro_bullish)
+        save_value_to_database('macro_bearish', macro_bearish)
+
         return macro_bullish, macro_bearish, events_date_dict
 
     else:
