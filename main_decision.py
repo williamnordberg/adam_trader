@@ -1,7 +1,5 @@
 import logging
-import pandas as pd
 from time import sleep
-
 
 from handy_modules import compare_send_receive_richest_addresses
 from technical_analysis import technical_analyse

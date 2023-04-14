@@ -169,6 +169,19 @@ def compare_send_receive_richest_addresses() -> Tuple[float, float]:
     return 0, 0
 
 
+def technical_analyse() -> Tuple[float, float]:
+    # Call the original technical_analyse function
+    technical_bullish, technical_bearish = technical_analyse_wrapper()
+
+    # Save the values to the database
+    save_value_to_database('technical_bullish', technical_bullish)
+    save_value_to_database('technical_bearish', technical_bearish)
+
+    # Return the same values as the original function
+    return technical_bullish, technical_bearish
+
+
+
 if __name__ == '__main__':
     logging.info(f'bitcoin price: {get_bitcoin_price()}')
 
