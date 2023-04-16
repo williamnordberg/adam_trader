@@ -79,43 +79,28 @@ def reddit_check_wrapper() -> Tuple[float, float]:
         user_agent=reddit_config['user_agent']
     )
     latest_info_saved = pd.read_csv('latest_info_saved.csv').squeeze("columns")
-    last_reddit_update_time_str = latest_info_saved['last_reddit_update_time'][0]
-    last_reddit_update_time = datetime.strptime(last_reddit_update_time_str, '%Y-%m-%d %H:%M:%S')
 
-    if datetime.now() - last_reddit_update_time < timedelta(hours=24):
-        logging.info('Last Reddit update was less than 24 hours ago. Skipping...')
-        last_activity_increase = latest_info_saved['reddit_bullish'][0]
-        last_count_increase = latest_info_saved['reddit_bearish'][0]
-        return last_activity_increase, last_count_increase
+    previous_activity = float(latest_info_saved['previous_activity'][0])
+    previous_count = float(latest_info_saved['previous_count'][0])
+    current_activity = reddit.subreddit("Bitcoin").active_user_count
+    current_count = count_bitcoin_posts(reddit)
+    reddit_bullish, reddit_bearish = compare(current_activity, previous_activity)
 
-    else:
-        previous_activity = float(latest_info_saved['previous_activity'][0])
-        previous_count = float(latest_info_saved['previous_count'][0])
-        current_activity = reddit.subreddit("Bitcoin").active_user_count
-        current_count = count_bitcoin_posts(reddit)
-        reddit_bullish, reddit_bearish = compare(current_activity, previous_activity)
+    latest_info_saved.loc[0, 'previous_activity'] = current_activity
+    latest_info_saved.loc[0, 'previous_count'] = current_count
 
-        latest_info_saved.loc[0, 'reddit_bullish'] = reddit_bullish
-        latest_info_saved.loc[0, 'reddit_bearish'] = reddit_bearish
-        latest_info_saved.loc[0, 'previous_activity'] = current_activity
-        latest_info_saved.loc[0, 'previous_count'] = current_count
+    latest_info_saved.to_csv('latest_info_saved.csv', index=False)
 
-        # Save the update time to disk
-        now = datetime.now()
-        now_str = now.strftime('%Y-%m-%d %H:%M:%S')
-        latest_info_saved.loc[0, 'last_reddit_update_time'] = now_str
-        latest_info_saved.to_csv('latest_info_saved.csv', index=False)
+    # Save latest update time
+    save_update_time('reddit')
 
-        # Save latest update time
-        save_update_time('reddit')
+    # Save to database
+    save_value_to_database('reddit_bullish', reddit_bullish)
+    save_value_to_database('reddit_bearish', reddit_bearish)
+    save_value_to_database('reddit_count_bitcoin_posts_24h', current_count)
+    save_value_to_database('reddit_activity_24h', current_activity)
 
-        # Save to database
-        save_value_to_database('reddit_bullish', reddit_bullish)
-        save_value_to_database('reddit_bearish', reddit_bearish)
-        save_value_to_database('reddit_count_bitcoin_posts_24h', current_count)
-        save_value_to_database('reddit_activity_24h', current_activity)
-
-        return reddit_bullish, reddit_bearish
+    return reddit_bullish, reddit_bearish
 
 
 def reddit_check() -> Tuple[float, float]:
