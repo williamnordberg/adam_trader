@@ -2,11 +2,26 @@ import requests
 import logging
 from typing import Tuple
 import pandas as pd
+from datetime import datetime, timedelta
+from database import read_database, save_value_to_database
 
 BINANCE_ENDPOINT_PRICE = "https://api.binance.com/api/v3/ticker/price"
 GECKO_ENDPOINT_PRICE = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
+LATEST_INFO_FILE = "latest_info_saved.csv"
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+update_intervals = {
+    "macro": timedelta(hours=24),
+    "order_book": timedelta(minutes=20),
+    "predicted_price": timedelta(hours=12),
+    "technical_analysis": timedelta(hours=12),
+    "richest_addresses_compare": timedelta(hours=3),
+    "google_search": timedelta(hours=3),
+    "reddit": timedelta(hours=3),
+    "youtube": timedelta(hours=3),
+    "sentiment_of_news": timedelta(hours=1),
+}
 
 
 def check_internet_connection() -> bool:
@@ -135,10 +150,13 @@ def compare_google_search_trends(last_hour: int, two_hours_before: int) -> Tuple
     return 0, 0
 
 
-def compare_send_receive_richest_addresses() -> Tuple[float, float]:
+def compare_send_receive_richest_addresses_wrapper() -> Tuple[float, float]:
     latest_info_saved = pd.read_csv('latest_info_saved.csv')
     total_received = latest_info_saved['total_received_coins_in_last_24'][0]
     total_sent = latest_info_saved['total_sent_coins_in_last_24'][0]
+
+    # Save latest update time
+    save_update_time('richest_addresses_compare')
 
     activity_percentage = (total_received - total_sent) / total_sent * 100
 
@@ -169,17 +187,34 @@ def compare_send_receive_richest_addresses() -> Tuple[float, float]:
     return 0, 0
 
 
-def technical_analyse() -> Tuple[float, float]:
-    # Call the original technical_analyse function
-    technical_bullish, technical_bearish = technical_analyse_wrapper()
+def compare_send_receive_richest_addresses() -> Tuple[float, float]:
+    if should_update('richest_addresses_compare'):
+        richest_addresses_bullish, richest_addresses_bearish = compare_send_receive_richest_addresses_wrapper()
 
-    # Save the values to the database
-    save_value_to_database('technical_bullish', technical_bullish)
-    save_value_to_database('technical_bearish', technical_bearish)
+        # Save to database
+        save_value_to_database('richest_addresses_bullish', richest_addresses_bullish)
+        save_value_to_database('richest_addresses_bearish', richest_addresses_bearish)
 
-    # Return the same values as the original function
-    return technical_bullish, technical_bearish
+        return richest_addresses_bullish, richest_addresses_bearish
+    else:
+        database = read_database()
+        richest_addresses_bullish = database['richest_addresses_bullish'][-1]
+        richest_addresses_bearish = database['richest_addresses_bearish'][-1]
+        return richest_addresses_bullish, richest_addresses_bearish
 
+
+def should_update(factor: str) -> bool:
+    latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
+    last_update_time_str = latest_info_saved.iloc[0][f'latest_{factor}_update']
+    last_update_time = datetime.strptime(last_update_time_str, '%Y-%m-%d %H:%M:%S')
+
+    return datetime.now() - last_update_time > update_intervals[factor]
+
+
+def save_update_time(factor_name: str):
+    latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
+    latest_info_saved.loc[0, f'latest_{factor_name}_update'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    latest_info_saved.to_csv(LATEST_INFO_FILE, index=False)
 
 
 if __name__ == '__main__':
@@ -190,3 +225,4 @@ if __name__ == '__main__':
 
     google_bullish, google_bearish = compare_google_search_trends(10, 13)
     logging.info(f'google_bullish: {google_bullish}, google_bearish: {google_bearish} ')
+

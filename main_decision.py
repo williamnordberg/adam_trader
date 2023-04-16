@@ -32,7 +32,7 @@ while True:
     # 1 Get the prediction
     prediction_bullish, prediction_bearish = decision_tree_predictor()
 
-    # 2 Get probabilities of price going up or down
+    # 2 Order book
     probabilities = get_probabilities(SYMBOLS, bid_multiplier=0.995, ask_multiplier=1.005)
     assert probabilities is not None, "get_probabilities returned None"
     order_book_bullish, order_book_bearish = probabilities
@@ -40,17 +40,11 @@ while True:
     # 3 Monitor the richest Bitcoin addresses
     richest_addresses_bullish, richest_addresses_bearish = compare_send_receive_richest_addresses()
 
-    # Save to database
-    save_value_to_database('richest_addresses_bullish', richest_addresses_bullish)
-    save_value_to_database('richest_addresses_bearish', richest_addresses_bearish)
-
     # 4 Check Google search trends for Bitcoin and cryptocurrency
     google_search_bullish, google_search_bearish = check_search_trend(["Bitcoin", "Cryptocurrency"])
 
-    # 5 Check macroeconomic indicators
+    # 5 Macroeconomic
     macro_bullish, macro_bearish, events_date_dict = macro_sentiment()
-
-    # remind upcoming macro events
     print_upcoming_events(events_date_dict)
 
     # 6 Reddit
@@ -95,4 +89,4 @@ while True:
         profit_after_trade, loss_after_trade = short_position()
         logging.info(f"profit_after_trade:{profit_after_trade}, "f"loss_after_trade:{loss_after_trade}")
 
-    sleep(15)
+    sleep(1200)

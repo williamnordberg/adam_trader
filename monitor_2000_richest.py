@@ -94,18 +94,16 @@ def monitor_bitcoin_richest_addresses() -> Tuple[float, float]:
     last_update_time = datetime.strptime(last_update_time, '%Y-%m-%d %H:%M:%S')
 
     if datetime.now() - last_update_time > timedelta(hours=UPDATE_INTERVAL_HOURS):
-        process = CrawlerProcess({'USER_AGENT': USER_AGENT})
-        process.crawl(BitcoinRichListSpider)
-        process.start()
-
         # Save the update time to disk
         now = datetime.now()
         now_str = now.strftime('%Y-%m-%d %H:%M:%S')
         latest_info_saved['latest_richest_addresses_update'] = now_str
-
-        # Save the latest info to disk
         latest_info_saved.to_csv('latest_info_saved.csv', index=False)
         logging.info(f'dataset been updated {now}')
+
+        process = CrawlerProcess({'USER_AGENT': USER_AGENT})
+        process.crawl(BitcoinRichListSpider)
+        process.start()
 
     else:
         logging.info(f'list of richest addresses is already updated less than 8 hours ago at {last_update_time}')
@@ -130,8 +128,3 @@ if __name__ == "__main__":
     latest_info_saved_outer = pd.read_csv(LATEST_INFO_FILE)
     latest_info_saved_outer['total_received_coins_in_last_24'] = total_received1
     latest_info_saved_outer['total_sent_coins_in_last_24'] = total_sent1
-
-    # Save the latest info to disk
-    now_time = datetime.now()
-    latest_info_saved_outer.to_csv('latest_info_saved.csv', index=False)
-    logging.info(f'total receive and total send updated {now_time}')
