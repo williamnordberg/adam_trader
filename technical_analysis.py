@@ -4,8 +4,8 @@ import logging
 from typing import Tuple
 
 from indicator_calculator import bollinger_bands, exponential_moving_average, macd, relative_strength_index
-from handy_modules import get_bitcoin_price
-from database import save_value_to_database
+from handy_modules import get_bitcoin_price, should_update, save_update_time
+from database import save_value_to_database, read_database
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -143,16 +143,25 @@ def technical_analyse_wrapper() -> Tuple[float, float]:
     return 0, 0
 
 
-def technical_analyse() -> Tuple[float, float]:
-    # Call the original technical_analyse function
+def technical_analyse_rounder():
     technical_bullish, technical_bearish = technical_analyse_wrapper()
-
     # Save the values to the database
     save_value_to_database('technical_bullish', technical_bullish)
     save_value_to_database('technical_bearish', technical_bearish)
+    save_update_time('technical_analyse')
 
     # Return the same values as the original function
     return technical_bullish, technical_bearish
+
+
+def technical_analyse() -> Tuple[float, float]:
+    if should_update('technical_analysis'):
+        return technical_analyse_rounder()
+    else:
+        database = read_database()
+        technical_bullish = database['technical_bullish'][-1]
+        technical_bearish = database['technical_bearish'][-1]
+        return technical_bullish, technical_bearish
 
 
 if __name__ == '__main__':

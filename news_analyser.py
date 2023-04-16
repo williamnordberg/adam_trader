@@ -1,9 +1,10 @@
 import logging
 import pandas as pd
 from datetime import datetime, timedelta
+
+from handy_modules import should_update, save_update_time
 from typing import Tuple
-
-
+from database import read_database
 from news_compare_polarity import compare_polarity
 from newsAPI import check_news_api_sentiment
 from news_aggregate import aggregate_news
@@ -12,20 +13,16 @@ from database import save_value_to_database
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def check_sentiment_of_news() -> Tuple[float, float]:
+def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
+    # Save latest update time
+    save_update_time('sentiment_of_news')
 
     latest_info_saved = pd.read_csv('latest_info_saved.csv').squeeze("columns")
     last_news_sentiment_str = latest_info_saved['last_news_update_time'][0]
     last_news_sentiment = datetime.strptime(last_news_sentiment_str, '%Y-%m-%d %H:%M:%S')
     last_update_time_difference = datetime.now() - last_news_sentiment
 
-    if last_update_time_difference < timedelta(hours=24):
-        logging.info('Last news sentiment update was less than 24 hours ago. Skipping...')
-        news_bullish = float(latest_info_saved['news_bullish'][0])
-        news_bearish = float(latest_info_saved['news_bearish'][0])
-        return news_bullish, news_bearish
-
-    elif timedelta(hours=24) > last_update_time_difference < timedelta(hours=48):
+    if timedelta(hours=24) > last_update_time_difference < timedelta(hours=48):
 
         latest_positive_polarity_score = latest_info_saved['positive_polarity_score'][0]
         latest_negative_polarity_score = latest_info_saved['negative_polarity_score'][0]
@@ -110,6 +107,16 @@ def check_sentiment_of_news() -> Tuple[float, float]:
         return news_bullish, news_bearish
 
     return 0, 0
+
+
+def check_sentiment_of_news() -> Tuple[float, float]:
+    if should_update('sentiment_of_news'):
+        return check_sentiment_of_news_wrapper()
+    else:
+        database = read_database()
+        news_bullish = database['news_bullish'][-1]
+        news_bearish = database['news_bearish'][-1]
+        return news_bullish, news_bearish
 
 
 if __name__ == "__main__":
