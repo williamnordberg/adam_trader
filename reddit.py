@@ -7,7 +7,8 @@ import configparser
 from typing import Tuple
 from praw import Reddit
 from database import save_value_to_database
-
+from handy_modules import save_update_time, should_update
+from database import read_database
 ONE_DAYS_IN_SECONDS = 24 * 60 * 60
 
 
@@ -66,7 +67,7 @@ def count_bitcoin_posts(reddit: Reddit) -> int:
     return count
 
 
-def reddit_check() -> Tuple[float, float]:
+def reddit_check_wrapper() -> Tuple[float, float]:
 
     config = configparser.ConfigParser()
     config.read('config.ini')
@@ -105,12 +106,25 @@ def reddit_check() -> Tuple[float, float]:
         latest_info_saved.loc[0, 'last_reddit_update_time'] = now_str
         latest_info_saved.to_csv('latest_info_saved.csv', index=False)
 
+        # Save latest update time
+        save_update_time('reddit')
+
         # Save to database
         save_value_to_database('reddit_bullish', reddit_bullish)
         save_value_to_database('reddit_bearish', reddit_bearish)
         save_value_to_database('reddit_count_bitcoin_posts_24h', current_count)
         save_value_to_database('reddit_activity_24h', current_activity)
 
+        return reddit_bullish, reddit_bearish
+
+
+def reddit_check() -> Tuple[float, float]:
+    if should_update('reddit'):
+        return reddit_check_wrapper()
+    else:
+        database = read_database()
+        reddit_bullish = database['reddit_bullish'][-1]
+        reddit_bearish = database['reddit_bearish'][-1]
         return reddit_bullish, reddit_bearish
 
 

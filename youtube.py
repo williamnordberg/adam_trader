@@ -10,7 +10,9 @@ from datetime import datetime, timedelta
 import pandas as pd
 from reddit import compare
 from database import save_value_to_database
-
+from handy_modules import compare_predicted_price, get_bitcoin_price, should_update, save_update_time
+from typing import Tuple
+from database import read_database
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -71,61 +73,41 @@ def get_youtube_videos(youtube, published_after, published_before):
     return search_results
 
 
+def youtube_wrapper() -> Tuple[float, float]:
+    # If so, check the increase in the number of YouTube videos with the #bitcoin hashtag
+    youtube = get_authenticated_service()
+
+    now = datetime.utcnow()
+    last_24_hours_start = (now - timedelta(days=1)).strftime('%Y-%m-%dT%H:%M:%SZ')
+    last_48_hours_start = (now - timedelta(days=2)).strftime('%Y-%m-%dT%H:%M:%SZ')
+    last_24_hours_end = now.strftime('%Y-%m-%dT%H:%M:%SZ')
+
+    search_results_last_24_hours = get_youtube_videos(youtube, last_24_hours_start, last_24_hours_end)
+    search_results_last_48_to_24_hours = get_youtube_videos(youtube, last_48_hours_start, last_24_hours_start)
+
+    num_last_24_hours = len(search_results_last_24_hours)
+    num_last_48_to_24_hours = len(search_results_last_48_to_24_hours)
+
+    youtube_bullish, youtube_bearish = compare(num_last_24_hours, num_last_48_to_24_hours)
+
+    # Save latest update time
+    save_update_time('youtube')
+
+    # Save to database
+    save_value_to_database('last_24_youtube', num_last_24_hours)
+    save_value_to_database('youtube_bullish', youtube_bullish)
+    save_value_to_database('youtube_bearish', youtube_bearish)
+
+    return youtube_bullish, youtube_bearish
+
+
 def check_bitcoin_youtube_videos_increase() -> Tuple[float, float]:
-    """
-       Checks if there's a 15% or more increase in the number of YouTube videos with the #bitcoin hashtag
-       published in the last 24 hours compared to the 24 hours before that, but only if the last update was
-       earlier than 8 hours ago.
-
-       Returns:
-        youtube_bullish: a value between 0 (the lowest probability) and 1 (highest probability).
-        youtube_bearish: a value between 0 (the lowest probability) and 1 (highest probability).
-
-
-       """
-    # Read the latest info saved
-    latest_info_saved = pd.read_csv('latest_info_saved.csv').squeeze("columns")
-
-    # Check if the last update was earlier than 8 hours ago
-    last_youtube_update_time_str = latest_info_saved['last_youtube_update_time'][0]
-    last_youtube_update_time = datetime.strptime(last_youtube_update_time_str, '%Y-%m-%d %H:%M:%S')
-    if datetime.now() - last_youtube_update_time > timedelta(hours=8):
-        # If so, check the increase in the number of YouTube videos with the #bitcoin hashtag
-        youtube = get_authenticated_service()
-
-        now = datetime.utcnow()
-        last_24_hours_start = (now - timedelta(days=1)).strftime('%Y-%m-%dT%H:%M:%SZ')
-        last_48_hours_start = (now - timedelta(days=2)).strftime('%Y-%m-%dT%H:%M:%SZ')
-        last_24_hours_end = now.strftime('%Y-%m-%dT%H:%M:%SZ')
-
-        search_results_last_24_hours = get_youtube_videos(youtube, last_24_hours_start, last_24_hours_end)
-        search_results_last_48_to_24_hours = get_youtube_videos(youtube, last_48_hours_start, last_24_hours_start)
-
-        num_last_24_hours = len(search_results_last_24_hours)
-        num_last_48_to_24_hours = len(search_results_last_48_to_24_hours)
-
-        youtube_bullish, youtube_bearish = compare(num_last_24_hours, num_last_48_to_24_hours)
-
-        # Save the update time to disk
-        now = datetime.now()
-        now_str = now.strftime('%Y-%m-%d %H:%M:%S')
-        latest_info_saved.loc[0, 'last_youtube_update_time'] = now_str
-
-        latest_info_saved.loc[0, 'youtube_bullish'] = youtube_bullish
-        latest_info_saved.loc[0, 'youtube_bearish'] = youtube_bearish
-        latest_info_saved.to_csv('latest_info_saved.csv', index=False)
-
-        # Save to database
-        save_value_to_database('last_24_youtube', num_last_24_hours)
-        save_value_to_database('youtube_bullish', youtube_bullish)
-        save_value_to_database('youtube_bearish', youtube_bearish)
-
-        return youtube_bullish, youtube_bearish
+    if should_update('youtube'):
+        return youtube_wrapper()
     else:
-        # If not, return the last value of the increase
-        logging.info('Last youtube update was less than 8 hours ago. Skipping...')
-        youtube_bullish = latest_info_saved['youtube_bullish'][0]
-        youtube_bearish = latest_info_saved['youtube_bearish'][0]
+        database = read_database()
+        youtube_bullish = database['youtube_bullish'][-1]
+        youtube_bearish = database['youtube_bearish'][-1]
         return youtube_bullish, youtube_bearish
 
 
