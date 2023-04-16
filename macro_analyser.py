@@ -4,9 +4,11 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
 from datetime import datetime
+from typing import Tuple, Dict
 
-from database import save_value_to_database
+from database import save_value_to_database, read_database
 from macro_compare import calculate_macro_sentiment
+from handy_modules import save_update_time, should_update
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -50,7 +52,7 @@ def get_service():
     return Service(executable_path=os.environ.get("CHROMEDRIVER_PATH", "chromedriver.exe"))
 
 
-def macro_sentiment():
+def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
     events_list = ["Federal Funds Rate", "CPI m/m", "PPI m/m"]
     url = "https://www.forexfactory.com/calendar"
     options = get_chrome_options()
@@ -117,10 +119,23 @@ def macro_sentiment():
         save_value_to_database('macro_bullish', macro_bullish)
         save_value_to_database('macro_bearish', macro_bearish)
 
+        # Save latest update time
+        save_update_time('macro')
+
         return macro_bullish, macro_bearish, events_date_dict
 
     else:
         return 0, 0, {}
+
+
+def macro_sentiment() -> Tuple[float, float, Dict[str, datetime]]:
+    if should_update('macro'):
+        return macro_sentiment_wrapper()
+    else:
+        database = read_database()
+        macro_bullish = database['macro_bullish'][-1]
+        macro_bearish = database['macro_bearish'][-1]
+        return macro_bullish, macro_bearish, {}
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Optional
 
 
 def compare_interest_rate(rate_this_month:  float, rate_month_before: float) -> Tuple[float, float]:
@@ -73,8 +73,8 @@ def compare_ppi_m_to_m(ppi_m_to_m: float) -> Tuple[float, float]:
     return 0, 0
 
 
-def calculate_macro_sentiment(rate_this_month: float, rate_month_before: float,
-                              cpi_m_to_m: float, ppi_m_to_m: float) -> Tuple[float, float]:
+def calculate_macro_sentiment(rate_this_month: Optional[float], rate_month_before: Optional[float],
+                              cpi_m_to_m: Optional[float], ppi_m_to_m: Optional[float]) -> Tuple[float, float]:
 
     if rate_this_month and rate_month_before:
         rate_bullish, rate_bearish = compare_interest_rate(rate_this_month, rate_month_before)

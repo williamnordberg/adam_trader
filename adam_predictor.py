@@ -3,13 +3,13 @@ from datetime import datetime, timedelta
 import logging
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.impute import SimpleImputer
+from typing import Tuple
 
-
-from database import save_value_to_database
+from database import save_value_to_database, read_database
 from update_dataset_yahoo import update_yahoo_data
 from update_dataset_macro import update_macro_economic
 from update_dataset_internal_factors import update_internal_factors
-from handy_modules import compare_predicted_price, get_bitcoin_price
+from handy_modules import compare_predicted_price, get_bitcoin_price, should_update, save_update_time
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -73,8 +73,9 @@ def train_and_predict(dataset: pd.DataFrame) -> int:
     return predictions_tree
 
 
-def decision_tree_predictor() -> tuple:
+def decision_tree_predictor_wrapper() -> Tuple[float, float]:
     """Main function to check if dataset update is needed, load dataset, train model, and make predictions."""
+    print('problem')
     if should_update_dataset():
         update_dataset()
 
@@ -87,7 +88,20 @@ def decision_tree_predictor() -> tuple:
     save_value_to_database('prediction_bullish', prediction_bullish)
     save_value_to_database('prediction_bearish', prediction_bearish)
 
+    # Save latest update time
+    save_update_time('predicted_price')
+
     return prediction_bullish, prediction_bearish
+
+
+def decision_tree_predictor() -> Tuple[float, float]:
+    if should_update('predicted_price'):
+        return decision_tree_predictor_wrapper()
+    else:
+        database = read_database()
+        prediction_bullish = database['prediction_bullish'][-1]
+        prediction_bearish = database['prediction_bearish'][-1]
+        return prediction_bullish, prediction_bearish
 
 
 if __name__ == "__main__":
