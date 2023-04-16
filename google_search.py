@@ -1,11 +1,11 @@
 from abc import ABC
-from typing import List
+from typing import List, Tuple
 import logging
 from pytrends.request import TrendReq as UTrendReq
 
-from database import save_value_to_database
+from database import save_value_to_database, read_database
 from pytrends.exceptions import ResponseError
-from handy_modules import check_internet_connection, compare_google_search_trends
+from handy_modules import check_internet_connection, compare_google_search_trends, save_update_time, should_update
 
 GET_METHOD = 'get'
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -39,7 +39,7 @@ class TrendReq(UTrendReq, ABC):
         return super()._get_data(url, method=GET_METHOD, trim_chars=trim_chars, headers=headers, **kwargs)
 
 
-def check_search_trend(keywords: List[str]):
+def check_search_trend_wrapper(keywords: List[str]) -> Tuple[float, float]:
     """
     Check if there is a significant increase in search volume for a list of keywords in the past 7 days.
 
@@ -78,11 +78,23 @@ def check_search_trend(keywords: List[str]):
         save_value_to_database('google_search_bullish', google_bullish)
         save_value_to_database('google_search_bearish', google_bearish)
 
+        save_update_time('google_search')
+
         return google_bullish, google_bearish
 
     except ResponseError as e:
         logging.error(f"An error occurred: {e}")
         return 0, 0
+
+
+def check_search_trend(keywords: List[str]) -> Tuple[float, float]:
+    if should_update('google_search'):
+        return check_search_trend_wrapper(keywords)
+    else:
+        database = read_database()
+        google_search_bullish = database['google_search_bullish'][-1]
+        google_search_bearish = database['google_search_bearish'][-1]
+        return google_search_bullish, google_search_bearish
 
 
 if __name__ == "__main__":

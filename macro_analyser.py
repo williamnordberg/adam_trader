@@ -53,6 +53,9 @@ def get_service():
 
 
 def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
+    # Save latest update time
+    save_update_time('macro')
+
     events_list = ["Federal Funds Rate", "CPI m/m", "PPI m/m"]
     url = "https://www.forexfactory.com/calendar"
     options = get_chrome_options()
@@ -118,9 +121,6 @@ def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
         save_value_to_database('ppi_m_to_m', ppi_m_to_m)
         save_value_to_database('macro_bullish', macro_bullish)
         save_value_to_database('macro_bearish', macro_bearish)
-
-        # Save latest update time
-        save_update_time('macro')
 
         return macro_bullish, macro_bearish, events_date_dict
 
