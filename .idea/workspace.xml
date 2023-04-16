@@ -10,13 +10,7 @@
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="11 April">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/database.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/google_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/google_search.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/latest_info_saved.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/macro_analyser.py" beforeDir="false" afterPath="$PROJECT_DIR$/macro_analyser.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reddit.py" beforeDir="false" afterPath="$PROJECT_DIR$/reddit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/youtube.py" beforeDir="false" afterPath="$PROJECT_DIR$/youtube.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/youtube_token.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/youtube_token.pickle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +88,7 @@
       <recent name="C:\will\Python_project\adam_trader\tests_old" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.youtube">
+  <component name="RunManager" selected="Python.reddit">
     <configuration name="google_search" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -226,8 +220,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.youtube" />
         <item itemvalue="Python.reddit" />
+        <item itemvalue="Python.youtube" />
         <item itemvalue="Python.macro_analyser" />
         <item itemvalue="Python.google_search" />
         <item itemvalue="Python.handy_modules" />
@@ -242,20 +236,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00088" summary="first commit">
-      <created>1679547226672</created>
-      <option name="number" value="00088" />
-      <option name="presentableId" value="LOCAL-00088" />
-      <option name="project" value="LOCAL" />
-      <updated>1679547226672</updated>
-    </task>
-    <task id="LOCAL-00089" summary="first commit">
-      <created>1679548893631</created>
-      <option name="number" value="00089" />
-      <option name="presentableId" value="LOCAL-00089" />
-      <option name="project" value="LOCAL" />
-      <updated>1679548893632</updated>
     </task>
     <task id="LOCAL-00090" summary="first commit">
       <created>1679552282626</created>
@@ -586,7 +566,21 @@
       <option name="project" value="LOCAL" />
       <updated>1681619162559</updated>
     </task>
-    <option name="localTasksCounter" value="137" />
+    <task id="LOCAL-00137" summary="11 April">
+      <created>1681637594457</created>
+      <option name="number" value="00137" />
+      <option name="presentableId" value="LOCAL-00137" />
+      <option name="project" value="LOCAL" />
+      <updated>1681637594457</updated>
+    </task>
+    <task id="LOCAL-00138" summary="11 April">
+      <created>1681637802753</created>
+      <option name="number" value="00138" />
+      <option name="presentableId" value="LOCAL-00138" />
+      <option name="project" value="LOCAL" />
+      <updated>1681637802753</updated>
+    </task>
+    <option name="localTasksCounter" value="139" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
