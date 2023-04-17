@@ -3,8 +3,8 @@ from unittest.mock import patch, MagicMock
 import pandas as pd
 from monitor_2000_richest import read_addresses_from_csv, check_multiple_addresses,\
     monitor_bitcoin_richest_addresses
-from api_blockcypher import check_address_transactions_blockcypher
-from api_blockchain_info import  check_address_transactions_blockchain_info
+from api_blockcypher import get_address_transactions_24h_blockcypher
+from api_blockchain_info import  get_address_transactions_24h
 
 
 class TestMonitor2000Richest(unittest.TestCase):

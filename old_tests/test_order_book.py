@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from order_book import get_price, get_order_book, get_probabilities, get_probabilities_hit_profit_or_stop
-
+from order_book import get_order_book, get_probabilities, get_probabilities_hit_profit_or_stop
+from handy_modules import get_bitcoin_price
 
 class TestOrderBook(unittest.TestCase):
     @patch('order_book.requests.Session')

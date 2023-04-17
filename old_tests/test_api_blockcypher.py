@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from api_blockcypher import check_address_transactions_blockcypher
+from api_blockcypher import get_address_transactions_24h_blockcypher
 from requests.sessions import Session
 
 
