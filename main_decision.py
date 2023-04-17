@@ -14,7 +14,6 @@ from trading_decision import make_trading_decision
 from long_position_open import long_position
 from short_position_open import short_position
 from visualization import visualize_charts
-from database import save_value_to_database
 
 # Constants
 LOOP_COUNTER = 0

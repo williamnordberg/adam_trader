@@ -2,6 +2,7 @@ from fredapi import Fred
 import pandas as pd
 import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+from database import save_value_to_database
 
 
 def update_macro_economic():
@@ -19,6 +20,9 @@ def update_macro_economic():
     # Check if the latest federal funds rate is already in the main dataset
     latest_rate = fred_dataset.iloc[-1]
     latest_date_in_main_dataset = main_dataset.loc[main_dataset['Close'].last_valid_index(), 'Date']
+
+    # Save to database
+    save_value_to_database('interest_rate', latest_rate)
 
     if latest_rate == main_dataset['Rate'].iloc[-1]:
         logging.info("interest rate data is already up to date.")
