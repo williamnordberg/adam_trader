@@ -18,8 +18,8 @@ from visualization import visualize_charts
 # Constants
 LOOP_COUNTER = 0
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
-long_threshold = 0.7
-short_threshold = 0.7
+long_threshold = 0.8
+short_threshold = 0.8
 
 logging.basicConfig(filename='trading.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
