@@ -1,6 +1,6 @@
 from unittest import TestCase
 from unittest.mock import patch, MagicMock
-from api_blockchain_info import check_address_transactions_blockchain_info
+from api_blockchain_info import get_address_transactions_24h
 
 
 class TestApiBlockchainInfo(TestCase):
@@ -50,7 +50,7 @@ class TestApiBlockchainInfo(TestCase):
         mock_get.return_value = MagicMock(status_code=200, json=lambda: mock_response_json)
 
         # Call the function with the test address
-        total_received, total_sent = check_address_transactions_blockchain_info(
+        total_received, total_sent = get_address_transactions_24h(
             "bc1q0584qslzdwmjh8et2gaazls6d6e6g7sqejwlxj")
 
         # Assert the expected values

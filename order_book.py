@@ -1,7 +1,9 @@
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Dict
 import requests
 import logging
 from datetime import datetime, timedelta
+from retry import retry
+
 
 from database import save_value_to_database
 from handy_modules import get_bitcoin_price
@@ -13,7 +15,7 @@ SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 
 
 # Temporary storage for aggregated values
-aggregated_values = {
+aggregated_values: Dict[str, List[float]] = {
     'bid_volume': [],
     'ask_volume': [],
     'order_book_bullish': [],
@@ -39,6 +41,7 @@ def aggregate_and_save_values():
         aggregated_values[key] = []
 
 
+@retry(tries=3, delay=2, backoff=2)
 def get_order_book(symbol: str, limit: int):
     try:
         response = requests.get(ENDPOINT_DEPTH, params={'symbol': symbol, 'limit': str(limit)})
