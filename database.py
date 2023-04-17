@@ -201,4 +201,4 @@ def save_value_to_database(column: str, value):
 
 
 if __name__ == '__main__':
-    save_value_to_database('predicted_price', 0.12)
+    save_value_to_database('predicted_price', 32289)
