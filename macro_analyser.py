@@ -90,10 +90,12 @@ def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
                         events_date_dict[event] = datetime.utcfromtimestamp(int(row['data-timestamp']))
                         interest_cell = event_cell.find_next_sibling(
                             "td", class_="calendar__cell calendar__forecast forecast")
-                        forecast_value = interest_cell.find("span", class_="calendar-forecast").text if interest_cell else None
+                        forecast_value = interest_cell.find("span", class_="calendar-forecast")\
+                            .text if interest_cell else None
 
                         actual_cell = row.find("td", class_="calendar__cell calendar__actual actual")
-                        actual_value = actual_cell.text.strip().rstrip('%') if actual_cell and actual_cell.text.strip() else None
+                        actual_value = actual_cell.text.strip().rstrip('%') if actual_cell and actual_cell\
+                            .text.strip() else None
 
                         previous_value_cell = row.find("td", class_="calendar__cell calendar__previous previous")
                         previous_value = previous_value_cell.text.strip() if previous_value_cell else None
