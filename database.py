@@ -196,7 +196,6 @@ def save_value_to_database(column: str, value):
 
     # Save the updated DataFrame back to the CSV file without the index
     df.reset_index(inplace=True)
-
     df.to_csv('database.csv', index=False)
 
 
