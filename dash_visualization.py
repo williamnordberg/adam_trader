@@ -1,3 +1,6 @@
+import dash
+from dash import dcc
+from dash import html
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
@@ -13,16 +16,17 @@ def create_gauge_chart(bullish, bearish, show_number=True):
     else:
         value = (bullish / (bullish + bearish)) * 100
         gauge_steps = [
-            {"range": [0, 100], "color": "lightcoral"}
+            {"range": [0, 100], "color": "lightcoral"},
+            {"range": [50, 100], "color": "lightcoral"},
         ]
-        title = "Bull" if bullish > bearish else "Bear"
+        title = ""
         bar_thickness = 1
 
     return go.Indicator(
         mode="gauge+number+delta" if show_number and title == "" else "gauge",
         value=value,
         title={"text": title, "font": {"size": 13, "color": "green" if title == "Bull" else "Red"}},
-        domain={"x": [0, 1], "y": [0, 1]},
+        domain={"x": [0, 1], "y": [0.05, 0.95]},  # Adjust the domain here
         gauge={
             "axis": {"range": [0, 100]},
             "bar": {"color": "green", "thickness": bar_thickness},
@@ -56,20 +60,29 @@ def visualize_charts(macro_bullish, macro_bearish, order_book_bullish, order_boo
     fig.add_trace(create_gauge_chart(weighted_score_up, weighted_score_down, show_number=True), row=2, col=5)
 
     fig.update_layout(
-        font=dict(size=10)
+        font=dict(size=10),
+        margin=dict(t=30)  # Add this line to adjust the top margin
     )
 
-    fig.show()
+    return fig  # Return the figure instead of showing it
 
 
-if __name__ == "__main__":
-    visualize_charts(0.4, 0.6,
-                     0.6, 0.4,
-                     0, 0,
-                     0, 0,
-                     0.4, 0.6,
-                     0.7, 0.3,
-                     0.2, 0.8,
-                     0.4, 0.6,
-                     0.1, 0.9,
-                     0.6, 0.4)
+app = dash.Dash(__name__)
+
+app.layout = html.Div([
+    html.H1('Example Dash App with Plotly Chart'),
+
+    dcc.Graph(id='example-chart', figure=visualize_charts(0.4, 0.6,
+                                                          0.6, 0.4,
+                                                          0, 0,
+                                                          0, 0,
+                                                          0.4, 0.6,
+                                                          0.7, 0.3,
+                                                          0.2, 0.8,
+                                                          0.4, 0.6,
+                                                          0.1, 0.9,
+                                                          0.6, 0.4)),
+])
+
+if __name__ == '__main__':
+    app.run_server(debug=True)
