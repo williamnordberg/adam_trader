@@ -75,7 +75,6 @@ def train_and_predict(dataset: pd.DataFrame) -> int:
 
 def decision_tree_predictor_wrapper() -> Tuple[float, float]:
     """Main function to check if dataset update is needed, load dataset, train model, and make predictions."""
-    print('problem')
     if should_update_dataset():
         update_dataset()
 

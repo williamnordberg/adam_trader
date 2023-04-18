@@ -2,7 +2,6 @@ from typing import List, Optional, Tuple, Dict
 import requests
 import logging
 from datetime import datetime, timedelta
-from retry import retry
 
 
 from database import save_value_to_database
@@ -41,7 +40,7 @@ def aggregate_and_save_values():
         aggregated_values[key] = []
 
 
-@retry(tries=3, delay=2, backoff=2)
+# @retry(tries=3, delay=2, backoff=2)
 def get_order_book(symbol: str, limit: int):
     try:
         response = requests.get(ENDPOINT_DEPTH, params={'symbol': symbol, 'limit': str(limit)})

@@ -1,6 +1,33 @@
 import logging
-from typing import Tuple
+from database import save_value_to_database
+from typing import Dict, List, Tuple
+from datetime import datetime, timedelta
+
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+
+# Temporary storage for aggregated values
+aggregated_values: Dict[str, List[float]] = {
+    'weighted_score_up': [],
+    'weighted_score_down': []
+}
+
+
+def aggregate_and_save_values():
+    if not aggregated_values['weighted_score_up']:  # If there are no values, do nothing
+        return
+
+    # Calculate the average values for each key in the temporary storage
+    avg_values = {key: sum(values) / len(values) for key, values in aggregated_values.items()}
+
+    # Save the average values to the database
+    save_value_to_database('weighted_score_up', avg_values['weighted_score_up'])
+    save_value_to_database('weighted_score_down', avg_values['weighted_score_down'])
+
+    # Clear the temporary storage
+    for key in aggregated_values:
+        aggregated_values[key] = []
 
 
 def make_trading_decision(macro_bullish: float, macro_bearish: float,
@@ -57,6 +84,12 @@ def make_trading_decision(macro_bullish: float, macro_bearish: float,
 
     normalized_score_up = weighted_score_up / total_score
     normalized_score_down = weighted_score_down / total_score
+
+    # Save to database Check if an hour has passed since the last database update
+    current_time = datetime.now()
+    last_hour = current_time.replace(minute=0, second=0, microsecond=0)
+    if current_time - last_hour >= timedelta(hours=1):
+        aggregate_and_save_values()
 
     return normalized_score_up, normalized_score_down
 
