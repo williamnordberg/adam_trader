@@ -14,8 +14,8 @@ column_names = [
     "hourly_google_search",
     "reddit_count_bitcoin_posts_24h", "reddit_activity_24h",
     "last_24_youtube",
-    "positive_polarity_24_hours", "negative_polarity_24_hours",
-    "positive_count_24_hours", "negative_count_24_hours",
+    "news_positive_polarity", "news_negative_polarity",
+    "news_positive_count", "news_negative_count",
     "weighted_score_up",
     "weighted_score_down",
     "macro_bullish", "macro_bearish",
@@ -27,8 +27,6 @@ column_names = [
     "reddit_bullish", "reddit_bearish",
     "youtube_bullish", "youtube_bearish",
     "news_bullish", "news_bearish",
-    "news_positive_polarity", "news_negative_polarity",
-    "news_positive_count", "news_negative_count"
 ]
 
 # df = df.astype(column_dtypes)
@@ -50,10 +48,10 @@ column_dtypes = {
     "reddit_count_bitcoin_posts_24h": "int",
     "reddit_activity_24h": "int",
     "last_24_youtube": "int",
-    "positive_polarity_24_hours": "float",
-    "negative_polarity_24_hours": "float",
-    "positive_count_24_hours": "int",
-    "negative_count_24_hours": "int",
+    "news_positive_polarity": "float",
+    "news_negative_polarity": "float",
+    "news_positive_count": "int",
+    "news_negative_count": "int",
     "weighted_score_up": "float",
     "weighted_score_down": "float",
     "macro_bullish": "float",
@@ -74,10 +72,6 @@ column_dtypes = {
     "youtube_bearish": "float",
     "news_bullish": "float",
     "news_bearish": "float",
-    "news_positive_polarity": "float",
-    "news_negative_polarity": "float",
-    "news_positive_count": "int",
-    "news_negative_count": "int"
 }
 
 

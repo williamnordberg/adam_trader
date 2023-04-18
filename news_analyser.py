@@ -56,8 +56,6 @@ def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
         save_value_to_database('news_negative_polarity', negative_polarity_24_hours_before)
         save_value_to_database('news_positive_count', positive_count_24_hours_before)
         save_value_to_database('news_negative_count', negative_count_24_hours_before)
-        save_value_to_database('news_bullish', news_bullish)
-        save_value_to_database('news_bearish', news_bearish)
 
         return news_bullish, news_bearish
 
@@ -101,9 +99,6 @@ def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
 
         # Save on database, we  do not save news_positive_polarity,
         # news_negative_polarity, news_positive_count,news_negative_count to keep consistency in database
-        save_value_to_database('news_bullish', news_bullish)
-        save_value_to_database('news_bearish', news_bearish)
-
         return news_bullish, news_bearish
 
     return 0, 0
@@ -111,7 +106,10 @@ def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
 
 def check_sentiment_of_news() -> Tuple[float, float]:
     if should_update('sentiment_of_news'):
-        return check_sentiment_of_news_wrapper()
+        news_bullish, news_bearish = check_sentiment_of_news_wrapper()
+        save_value_to_database('news_bullish', news_bullish)
+        save_value_to_database('news_bearish', news_bearish)
+        return news_bullish, news_bearish
     else:
         database = read_database()
         news_bullish = database['news_bullish'][-1]
