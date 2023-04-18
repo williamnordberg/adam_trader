@@ -1,15 +1,5 @@
-import matplotlib.font_manager as fm
-from matplotlib import rc
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-
-custom_font_path = "RobotoSlab.ttf"
-custom_font = fm.FontProperties(fname=custom_font_path)
-rc('font', family=custom_font.get_name())
-
-custom_font_path1 = "Pacifico-Regular.ttf"
-custom_font1 = fm.FontProperties(fname=custom_font_path1)
-rc('font', family=custom_font1.get_name())
 
 
 def create_gauge_chart(bullish, bearish, show_number=True):
@@ -58,7 +48,8 @@ def visualize_charts(macro_bullish, macro_bearish, order_book_bullish, order_boo
     fig.add_trace(create_gauge_chart(order_book_bullish, order_book_bearish, show_number=False), row=1, col=2)
     fig.add_trace(create_gauge_chart(prediction_bullish, prediction_bearish, show_number=False), row=1, col=3)
     fig.add_trace(create_gauge_chart(technical_bullish, technical_bearish, show_number=False), row=1, col=4)
-    fig.add_trace(create_gauge_chart(richest_addresses_bullish, richest_addresses_bearish, show_number=False), row=1, col=5)
+    fig.add_trace(create_gauge_chart(richest_addresses_bullish, richest_addresses_bearish,
+                                     show_number=False), row=1, col=5)
     fig.add_trace(create_gauge_chart(google_search_bullish, google_search_bearish, show_number=False), row=2, col=1)
     fig.add_trace(create_gauge_chart(reddit_bullish, reddit_bearish, show_number=False), row=2, col=2)
     fig.add_trace(create_gauge_chart(youtube_bullish, youtube_bearish, show_number=False), row=2, col=3)
