@@ -14,6 +14,7 @@ from trading_decision import make_trading_decision
 from long_position_open import long_position
 from short_position_open import short_position
 from visualization import visualize_charts
+from database_visualization import visualize_database
 
 # Constants
 LOOP_COUNTER = 0
@@ -76,6 +77,9 @@ while True:
                      reddit_bearish, youtube_bullish, youtube_bearish, news_bullish, news_bearish,
                      weighted_score_up, weighted_score_down)
 
+    # visualize database
+    visualize_database()
+    print('pass it')
     # Trading decision
     if weighted_score_up > weighted_score_down and weighted_score_up > long_threshold:
         logging.info('Opening a long position')
