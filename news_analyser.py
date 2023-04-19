@@ -49,7 +49,6 @@ def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
         now_str = now.strftime('%Y-%m-%d %H:%M:%S')
         latest_info_saved.loc[0, 'last_news_update_time'] = now_str
         latest_info_saved.to_csv('latest_info_saved.csv', index=False)
-        logging.info(f'news data has been updated')
 
         # Save data on database
         save_value_to_database('news_positive_polarity', positive_polarity_24_hours_before)

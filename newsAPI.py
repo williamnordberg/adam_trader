@@ -27,7 +27,8 @@ def check_news_api_sentiment(start: datetime, end: datetime) -> Tuple[float, flo
 
         :param start: The start date of the range.
         :param end: The end date of the range.
-        :return: A tuple containing the average positive polarity, average negative polarity, positive count, and negative count.
+        :return: A tuple containing the average positive polarity,
+         average negative polarity, positive count, and negative count.
         """
 
     if not check_internet_connection():
