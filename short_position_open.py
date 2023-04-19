@@ -12,30 +12,20 @@ from youtube import check_bitcoin_youtube_videos_increase
 from adam_predictor import decision_tree_predictor
 from position_decision_maker import position_decision
 from handy_modules import get_bitcoin_price, compare_send_receive_richest_addresses
-from database import save_value_to_database
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 SCORE_MARGIN_TO_CLOSE = 0.7
 PROFIT_MARGIN = 0.01
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
-LATEST_INFO_FILE = 'latest_info_saved.csv'
 
 
 def short_position() -> Tuple[int, int]:
-    """
-       Monitors a short position for various factors to decide when to close the position.
-       The function continuously checks various factors like probabilities, technical analysis,
-       news sentiment, search trends, Reddit activity, and YouTube trends.
-       It also checks for stop loss and profit points.
-       Returns:
-           float: The profit made after closing the position.
-           float: The loss made after closing the position.
-       """
+
     current_price = get_bitcoin_price()
     position_opening_price = current_price
-    profit_point = current_price - (current_price * PROFIT_MARGIN)
-    stop_loss = current_price + (current_price * PROFIT_MARGIN)
+    profit_point = int(current_price - (current_price * PROFIT_MARGIN))
+    stop_loss = int(current_price + (current_price * PROFIT_MARGIN))
     logging.info(f'current_price:{current_price}, profit_point:{profit_point},stop_loss:{stop_loss} ')
     profit, loss = 0, 0
 
@@ -43,13 +33,14 @@ def short_position() -> Tuple[int, int]:
         logging.info('******************************************')
         current_price = get_bitcoin_price()
         logging.info(f'current_price:{current_price}, profit_point:{profit_point},stop_loss:{stop_loss} ')
+
         # Check if we meet profit or stop loss
         if current_price < profit_point:
-            profit = position_opening_price - current_price
+            profit = int(position_opening_price - current_price)
             logging.info('&&&&&&&&&&&&&& TARGET HIT &&&&&&&&&&&&&&&&&&&&&')
             return profit, loss
         elif current_price > stop_loss:
-            loss = current_price - position_opening_price
+            loss = int(current_price - position_opening_price)
             logging.info('&&&&&&&&&&&&&& STOP LOSS &&&&&&&&&&&&&&&&&&&&&')
             return profit, loss
 
@@ -69,15 +60,8 @@ def short_position() -> Tuple[int, int]:
         assert probabilities is not None, "get_probabilities returned None"
         order_book_bullish, order_book_bearish = probabilities
 
-        logging.info(f'order_book_bullish: {order_book_bullish}'
-                     f'  order_book_bearish: {order_book_bearish}')
-
         # 3 Monitor the richest Bitcoin addresses
         richest_addresses_bullish, richest_addresses_bearish = compare_send_receive_richest_addresses()
-
-        # Save to database
-        save_value_to_database('richest_addresses_bullish', richest_addresses_bullish)
-        save_value_to_database('richest_addresses_bearish', richest_addresses_bearish)
 
         # 4 Check Google search trends for Bitcoin and cryptocurrency
         google_search_bullish, google_search_bearish = check_search_trend(["Bitcoin", "Cryptocurrency"])
@@ -113,21 +97,22 @@ def short_position() -> Tuple[int, int]:
             youtube_bullish, youtube_bearish,
             news_bullish, news_bearish)
 
-        print('weighted_score_up, weighted_score_down', weighted_score_up, weighted_score_down)
+        logging.info(f'weighted_score_up: {round(weighted_score_up, 2)}, '
+                     f'weighted_score_down: {round(weighted_score_down, 2)}')
 
         if weighted_score_up > weighted_score_down and weighted_score_up > SCORE_MARGIN_TO_CLOSE:
             logging.info('short position clos')
             if current_price < position_opening_price:
-                profit = position_opening_price - current_price
+                profit = int(position_opening_price - current_price)
                 logging.info('short position closed with profit')
             elif current_price > position_opening_price:
-                loss = position_opening_price - current_price
+                loss = int(position_opening_price - current_price)
                 logging.info('short position closed with loss')
             return profit, loss
 
-        sleep(5)
+        sleep(60 * 5)
 
 
 if __name__ == "__main__":
-    profit_after_trade1, loss_after_trade1 = short_position()
-    logging.info(f"profit_after_trade:{profit_after_trade1}, loss_after_trade:{loss_after_trade1}")
+    profit_after_trade_outer, loss_after_trade_outer = short_position()
+    logging.info(f"profit_after_trade:{profit_after_trade_outer}, loss_after_trade:{loss_after_trade_outer}")
