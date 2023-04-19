@@ -1,5 +1,6 @@
 from time import sleep
 import logging
+from typing import Tuple
 
 from order_book import get_probabilities, get_probabilities_hit_profit_or_stop
 from macro_analyser import macro_sentiment, print_upcoming_events
@@ -11,19 +12,17 @@ from youtube import check_bitcoin_youtube_videos_increase
 from adam_predictor import decision_tree_predictor
 from position_decision_maker import position_decision
 from handy_modules import get_bitcoin_price, compare_send_receive_richest_addresses
-from database import save_value_to_database
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-SCORE_MARGIN_TO_CLOSE = 0.7
+SCORE_MARGIN_TO_CLOSE = 0.8
 PROFIT_MARGIN = 0.01
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
-LATEST_INFO_FILE = 'latest_info_saved.csv'
 
 
-def long_position():
+def long_position() -> Tuple[int, int]:
     current_price = get_bitcoin_price()
     position_opening_price = current_price
     profit_point = int(current_price + (current_price * PROFIT_MARGIN))
@@ -38,17 +37,19 @@ def long_position():
 
         # Check if we meet profit or stop loss
         if current_price >= profit_point:
-            profit = current_price - position_opening_price
+            profit = int(current_price - position_opening_price)
             logging.info('&&&&&&&&&&&&&& target hit &&&&&&&&&&&&&&&&&&&&&')
             return profit, loss
         elif current_price < stop_loss:
-            loss = position_opening_price - current_price
+            loss = int(position_opening_price - current_price)
             logging.info('&&&&&&&&&&&&&& STOP LOSS &&&&&&&&&&&&&&&&&&&&&')
             return profit, loss
 
         # Order book Hit
-        probability_to_hit_target, probability_to_hit_stop_loss = \
-            get_probabilities_hit_profit_or_stop(SYMBOLS, 1000, profit_point, stop_loss)
+        probabilities_hit = get_probabilities_hit_profit_or_stop(SYMBOLS, 1000, profit_point, stop_loss)
+        assert probabilities_hit is not None, "get_probabilities_hit_profit_or_stop returned None"
+        probability_to_hit_target, probability_to_hit_stop_loss = probabilities_hit
+
         logging.info(f'Profit probability: {round(probability_to_hit_target, 2)}'
                      f' Stop probability: {round(probability_to_hit_stop_loss, 2)}')
 
@@ -56,16 +57,12 @@ def long_position():
         prediction_bullish, prediction_bearish = decision_tree_predictor()
 
         # 2 Get probabilities of price going up or down
-        order_book_bullish, order_book_bearish = get_probabilities(SYMBOLS, bid_multiplier=0.995, ask_multiplier=1.05)
-        logging.info(f'order_book_bullish: {order_book_bullish}'
-                     f'  order_book_bearish: {order_book_bearish}')
+        probabilities = get_probabilities(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
+        assert probabilities is not None, "get_probabilities returned None"
+        order_book_bullish, order_book_bearish = probabilities
 
         # 3 Monitor the richest Bitcoin addresses
         richest_addresses_bullish, richest_addresses_bearish = compare_send_receive_richest_addresses()
-
-        # Save to database
-        save_value_to_database('richest_addresses_bullish', richest_addresses_bullish)
-        save_value_to_database('richest_addresses_bearish', richest_addresses_bearish)
 
         # 4 Check Google search trends for Bitcoin and cryptocurrency
         google_search_bullish, google_search_bearish = check_search_trend(["Bitcoin", "Cryptocurrency"])
@@ -101,19 +98,21 @@ def long_position():
             youtube_bullish, youtube_bearish,
             news_bullish, news_bearish)
 
-        print('weighted_score_up, weighted_score_down', round(weighted_score_up, 2), round(weighted_score_down, 2))
+        logging.info(f'weighted_score_up: {round(weighted_score_up, 2)}, '
+                     f'weighted_score_down: {round(weighted_score_down, 2)}')
 
+        # Check if weighed score show high chance to position loss
         if weighted_score_down > weighted_score_up and weighted_score_down > SCORE_MARGIN_TO_CLOSE:
             logging.info('long position clos')
             if current_price > position_opening_price:
-                profit = current_price - position_opening_price
+                profit = int(current_price - position_opening_price)
                 logging.info('long position closed with profit')
-            elif current_price > position_opening_price:
-                loss = position_opening_price - current_price
+            elif current_price <= position_opening_price:
+                loss = int(position_opening_price - current_price)
                 logging.info('long position closed with loss')
             return profit, loss
 
-        sleep(5)
+        sleep(60 * 5)
 
 
 if __name__ == "__main__":
