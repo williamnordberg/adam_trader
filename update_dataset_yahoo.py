@@ -15,7 +15,7 @@ def update_yahoo_data():
     ticker = yf.Ticker("BTC-USD")
     new_data = ticker.history(start=latest_date, end=end_date)
 
-    new_data.index = new_data.index.strftime('%Y-%m-%d')
+    new_data.index = new_data.index.to_series().dt.strftime('%Y-%m-%d')
     new_data['Date'] = new_data.index
 
     # check if the dataset is already update
