@@ -1,4 +1,3 @@
-from typing import Tuple
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
@@ -7,10 +6,9 @@ import os.path
 from google.auth.transport.requests import Request
 import logging
 from datetime import datetime, timedelta
-import pandas as pd
 from reddit import compare
 from database import save_value_to_database
-from handy_modules import compare_predicted_price, get_bitcoin_price, should_update, save_update_time
+from handy_modules import should_update, save_update_time
 from typing import Tuple
 from database import read_database
 

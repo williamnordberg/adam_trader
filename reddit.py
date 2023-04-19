@@ -2,7 +2,6 @@ import praw
 import time
 import pandas as pd
 import logging
-from datetime import datetime, timedelta
 import configparser
 from typing import Tuple
 from praw import Reddit
@@ -81,7 +80,7 @@ def reddit_check_wrapper() -> Tuple[float, float]:
     latest_info_saved = pd.read_csv('latest_info_saved.csv').squeeze("columns")
 
     previous_activity = float(latest_info_saved['previous_activity'][0])
-    previous_count = float(latest_info_saved['previous_count'][0])
+    # previous_count = float(latest_info_saved['previous_count'][0])
     current_activity = reddit.subreddit("Bitcoin").active_user_count
     current_count = count_bitcoin_posts(reddit)
     reddit_bullish, reddit_bearish = compare(current_activity, previous_activity)

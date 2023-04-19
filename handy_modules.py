@@ -226,4 +226,3 @@ if __name__ == '__main__':
 
     google_bullish, google_bearish = compare_google_search_trends(10, 13)
     logging.info(f'google_bullish: {google_bullish}, google_bearish: {google_bearish} ')
-
