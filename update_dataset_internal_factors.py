@@ -16,7 +16,6 @@ def update_internal_factors():
     main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})
 
     # Get the latest date in the main dataset
-
     latest_date = main_dataset.loc[main_dataset['DiffLast'].last_valid_index(), 'Date']
 
     # Create a new instance of the Firefox driver
@@ -71,7 +70,7 @@ def update_internal_factors():
 
             # check if new data have a same date row with main_dataset
             if main_dataset['Date'].iloc[-1] == new_data['Date'].iloc[0]:
-                # drop the last row in main datasett
+                # drop the last row in main dataset
                 main_dataset = main_dataset.drop(main_dataset.index[-1])
 
             # Append the new rows to the main dataset

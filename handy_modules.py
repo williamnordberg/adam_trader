@@ -12,6 +12,7 @@ LATEST_INFO_FILE = "latest_info_saved.csv"
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 update_intervals = {
+    "dataset": timedelta(hours=24),
     "macro": timedelta(hours=24),
     "order_book": timedelta(minutes=20),
     "predicted_price": timedelta(hours=12),
