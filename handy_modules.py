@@ -2,6 +2,9 @@ import requests
 import logging
 from typing import Tuple
 import pandas as pd
+import time
+from functools import wraps
+
 from datetime import datetime, timedelta
 from database import read_database, save_value_to_database
 
@@ -74,6 +77,24 @@ def get_bitcoin_price() -> int:
     # no internet connection
     else:
         return 0
+
+
+def retry_on_error(max_retries: int = 3, delay: int = 5, allowed_exceptions: tuple = ()):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            retries = 0
+            while retries < max_retries:
+                try:
+                    return func(*args, **kwargs)
+                except allowed_exceptions as e:
+                    retries += 1
+                    logging.warning(f"Attempt {retries} failed with error: {e}. Retrying in {delay} seconds...")
+                    time.sleep(delay)
+            logging.error(f"All {max_retries} attempts failed. Returning fallback values (0, 0).")
+            return 0, 0
+        return wrapper
+    return decorator
 
 
 def compare_predicted_price(predicted_price: int, current_price: int) -> Tuple[float, float]:
