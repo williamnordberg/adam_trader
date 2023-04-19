@@ -1,14 +1,26 @@
 from fredapi import Fred
 import pandas as pd
 import logging
+import configparser
+import os
+
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-from database import save_value_to_database
+# Load the config file
+config = configparser.ConfigParser()
+config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.ini')
+
+with open(config_path, 'r') as f:
+    config_string = f.read()
+
+config.read_string(config_string)
+API_KEY_FRED = config.get('API', 'freed')
 
 
 def update_macro_economic():
-    # Connect to FRED API and get the latest federal funds rate data
+    """ Connect to FRED API and get the latest federal funds rate data"""
     try:
-        fred = Fred(api_key='8f7cbcbc1210c7efa87ee9484e159c21')
+        fred = Fred(api_key=API_KEY_FRED)
         fred_dataset = fred.get_series('FEDFUNDS')
     except Exception as e:
         logging.error(f"Error: {e}")
@@ -21,12 +33,10 @@ def update_macro_economic():
     latest_rate = fred_dataset.iloc[-1]
     latest_date_in_main_dataset = main_dataset.loc[main_dataset['Close'].last_valid_index(), 'Date']
 
-    # Save to database
-    save_value_to_database('interest_rate', latest_rate)
-
     if latest_rate == main_dataset['Rate'].iloc[-1]:
         logging.info("interest rate data is already up to date.")
         return
+
     # Update the last row of the Rate column with the latest federal funds rate data
     main_dataset.loc[main_dataset['Date'] == latest_date_in_main_dataset, 'Rate'] = latest_rate
 
@@ -34,7 +44,7 @@ def update_macro_economic():
     main_dataset['Rate'].fillna(method='bfill', limit=30, inplace=True)
 
     # Print a message indicating that the new rate has been added to the main dataset
-    logging.info("interest rate added to the main dataset.")
+    logging.info("interest rate added to the main dataset")
 
     # Save the updated main dataset to a CSV file
     main_dataset.to_csv('main_dataset.csv', index=False)
