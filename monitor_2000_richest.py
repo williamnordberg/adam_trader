@@ -1,5 +1,5 @@
 # Standard library
-from datetime import datetime, timedelta
+from datetime import datetime
 import time
 import csv
 import logging
@@ -13,7 +13,7 @@ import configparser
 from bs4_scraper import scrape_bitcoin_rich_list
 from api_blockchain_info import get_address_transactions_24h
 from api_blockcypher import get_address_transactions_24h_blockcypher
-from database import save_value_to_database
+from handy_modules import should_update, save_value_to_database
 
 SATOSHI_TO_BITCOIN = 100000000
 LATEST_INFO_FILE = 'data/latest_info_saved.csv'
@@ -87,21 +87,8 @@ def monitor_bitcoin_richest_addresses() -> Tuple[float, float]:
         total_received (float): Total Bitcoin received in the last 24 hours for the richest addresses.
         total_sent (float): Total Bitcoin sent in the last 24 hours for the richest addresses.
     """
-    # Update if last update is older than 4 hours
-    latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
-    last_update_time = latest_info_saved['latest_richest_addresses_update'][0]
-    last_update_time = datetime.strptime(last_update_time, '%Y-%m-%d %H:%M:%S')
-
-    if datetime.now() - last_update_time > timedelta(hours=UPDATE_INTERVAL_HOURS):
-        # Save the update time to disk
-        now = datetime.now()
-        now_str = now.strftime('%Y-%m-%d %H:%M:%S')
-        latest_info_saved['latest_richest_addresses_update'] = now_str
-        latest_info_saved.to_csv('latest_info_saved.csv', index=False)
-        logging.info(f'dataset been updated {now}')
-
+    if should_update('richest_addresses_scrap'):
         scrape_bitcoin_rich_list()
-
     else:
         logging.info(f'list of richest addresses is already updated less than 8 hours ago at {last_update_time}')
 
