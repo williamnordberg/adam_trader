@@ -26,8 +26,8 @@ def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
 
         latest_positive_polarity_score = latest_info_saved['positive_polarity_score'][0]
         latest_negative_polarity_score = latest_info_saved['negative_polarity_score'][0]
-        latest_positive_count = latest_info_saved['positive_news_count'][0]
-        latest_negative_count = latest_info_saved['negative_news_count'][0]
+        # latest_positive_count = latest_info_saved['positive_news_count'][0]
+        # latest_negative_count = latest_info_saved['negative_news_count'][0]
 
         # Get aggregated value from 3 function for las 24 hours
         positive_polarity_24_hours_before, negative_polarity_24_hours_before,\

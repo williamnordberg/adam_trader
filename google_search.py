@@ -21,7 +21,19 @@ headers = {
               '__Secure-3PAPISID=KfHQoj6zAoeJrRhN/AZGz-e4rIsEIWn-zq; OTZ=6939745_24_24__24_; '
               '__Secure-ENID=10.SE=JzKxg8vqIe3XA3L8AVE6Vm09jpYUapluLI'
               '-kpQofoUxagjKBAqqERYLCkq38zb0klsJUqWDe_tMZROp9tKkmf'
-              '-bdEJ6_IuPO3KL1yosV5AXh5gbrgcgi9vBIYqHqb31L1S8YL41cCl6khD_4XCjTjW9ZWGl2GpHUXuolBxHGIykZK3q4jmmR4MxxzZTAJDi0qy2FCUrrh75C3yFBwGrxiBy8IvI1TyJVy32C8XBj91yaNNax3Ee5UUM1MLOCC28; SID=UQhiy40z7t2NhHM1Tr6UniEB2LvmMi-jUpkRvgTJk8BgUlAc00dpxOSKR6Lo_HRlvbsazg.; __Secure-1PSID=UQhiy40z7t2NhHM1Tr6UniEB2LvmMi-jUpkRvgTJk8BgUlAcQO8pudJIJ5UZg1yCC9cYDA.; __Secure-3PSID=UQhiy40z7t2NhHM1Tr6UniEB2LvmMi-jUpkRvgTJk8BgUlAcKd-UKPPF35ymeX68Y5-DYQ.; AEC=ARSKqsJAD0RYX5-ggzgPAFUm7wkTASa0sFmRIZN4ZCmaBFblt0hybhUfRII; NID=511=NzwgWD41u6HoiCqNuP6-icjT7OfMFPjuco0hWDvGgDZMBvKzHUaormjRv_bAeCxaa0OVOp7v2Q5nCjYJF0_51UR1_DjkHHgx-8Xs_p6_EMupwpXdaaZo71UAxP44371Uu-fc11zJKFZAeaAsWu-hB75kqXp5kTN9vKV6Y8NDFQVyCymlb50vdY9R5BHGTPzl51rUtZd4OAu2oOPPBey3zMBq8cp8fbHEToAEFXZ0DXhRmpo0vgG45AMGHikrAW8NovwRizDD5TjAsx8v1_kdHl8lbkIww4bLdcocdFD3rNkmV3LtGqkA_7NxPA; 1P_JAR=2023-03-20-03; SEARCH_SAMESITE=CgQI7JcB; SIDCC=AFvIBn97Z5tqN1lOcWMfnnQTL6eYY9mf3PJto5W-CI0WYhF2_AUiXKcU14i3vrklMaEZhnQRJdZj; __Secure-1PSIDCC=AFvIBn-IRyl5VIEsBO4EPxaUcHTrFbevt10xjF1V7XCa8EO4qchX1-Li_cb1sLrUbY1b8PtojyEm; __Secure-3PSIDCC=AFvIBn8WyGqiNET2Y6s8FXDRGpkKzeIK7y8xMqpkav1j-XQnRqy7UZRyvttdLDRDZx5bKjgJ8EGE',
+              '-bdEJ6_IuPO3KL1yosV5AXh5gbrgcgi9vBIYqHqb31L1S8YL41cCl6khD_4XCjTjW9ZWGl2GpHUXuolBxHGIykZK3q4'
+              'jmmR4MxxzZTAJDi0qy2FCUrrh75C3yFBwGrxiBy8IvI1TyJVy32C8XBj91yaNNax3Ee5UUM1MLOCC28; SID=UQhiy4'
+              '0z7t2NhHM1Tr6UniEB2LvmMi-jUpkRvgTJk8BgUlAc00dpxOSKR6Lo_HRlvbsazg.; __Secure-1PSID=UQhiy40z7t'
+              '2NhHM1Tr6UniEB2LvmMi-jUpkRvgTJk8BgUlAcQO8pudJIJ5UZg1yCC9cYDA.; __Secure-3PSID=UQhiy40z7t2NhHM1'
+              'Tr6UniEB2LvmMi-jUpkRvgTJk8BgUlAcKd-UKPPF35ymeX68Y5-DYQ.; AEC=ARSKqsJAD0RYX5-ggzgPAFUm7wkTASa0sF'
+              'mRIZN4ZCmaBFblt0hybhUfRII; NID=511=NzwgWD41u6HoiCqNuP6-icjT7OfMFPjuco0hWDvGgDZMBvKzHUaormjRv_'
+              'bAeCxaa0OVOp7v2Q5nCjYJF0_51UR1_DjkHHgx-8Xs_p6_EMupwpXdaaZo71UAxP44371Uu-fc11zJKFZAeaAsWu-hB75'
+              'kqXp5kTN9vKV6Y8NDFQVyCymlb50vdY9R5BHGTPzl51rUtZd4OAu2oOPPBey3zMBq8cp8fbHEToAEFXZ0DXhRmpo0vgG4'
+              '5AMGHikrAW8NovwRizDD5TjAsx8v1_kdHl8lbkIww4bLdcocdFD3rNkmV3LtGqkA_7NxPA; 1P_JAR=2023-03-20-03;'
+              ' SEARCH_SAMESITE=CgQI7JcB; SIDCC=AFvIBn97Z5tqN1lOcWMfnnQTL6eYY9mf3PJto5W-CI0WYhF2_AUiXKcU14i3'
+              'vrklMaEZhnQRJdZj; __Secure-1PSIDCC=AFvIBn-IRyl5VIEsBO4EPxaUcHTrFbevt10xjF1V7XCa8EO4qchX1-Li_c'
+              'b1sLrUbY1b8PtojyEm; __Secure-3PSIDCC=AFvIBn8WyGqiNET2Y6s8FXDRGpkKzeIK7y8xMqpkav1j-XQnRqy7UZRy'
+              'vttdLDRDZx5bKjgJ8EGE',
     'referer': 'https://trends.google.com/',
     'sec-ch-ua': '"Brave";v="111", "Not(A:Brand";v="8", "Chromium";v="111"',
     'sec-ch-ua-mobile': '?0',
@@ -101,5 +113,5 @@ def check_search_trend(keywords: List[str]) -> Tuple[float, float]:
 
 
 if __name__ == "__main__":
-    google_bullish_outer, google_bearish_outer = check_search_trend(["Bitcoin"])
+    google_bullish_outer, google_bearish_outer = check_search_trend_wrapper(["Bitcoin"])
     logging.info(f'google_bullish: {google_bullish_outer}   google_bearish:{google_bearish_outer}')

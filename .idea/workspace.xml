@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="AnalysisUIOptions">
-    <option name="SPLITTER_PROPORTION" value="0.3292789" />
+    <option name="SPLITTER_PROPORTION" value="0.61619717" />
     <option name="ANALYZE_INJECTED_CODE" value="false" />
   </component>
   <component name="AutoImportSettings">
@@ -9,17 +9,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="11 April">
-      <change afterPath="$PROJECT_DIR$/reddit_no_proxy.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.ini" beforeDir="false" afterPath="$PROJECT_DIR$/config.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/database.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handy_modules.py" beforeDir="false" afterPath="$PROJECT_DIR$/handy_modules.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/latest_info_saved.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adam_predictor.py" beforeDir="false" afterPath="$PROJECT_DIR$/adam_predictor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_blockcypher.py" beforeDir="false" afterPath="$PROJECT_DIR$/api_blockcypher.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/newsAPI.py" beforeDir="false" afterPath="$PROJECT_DIR$/newsAPI.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analyser.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_analyser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_scrapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_scrapper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old_tests/test_api_blockchain_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_api_blockchain_info.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old_tests/test_api_blockcypher.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_api_blockcypher.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old_tests/test_google_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_google_search.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old_tests/test_news_analyser.py" beforeDir="false" afterPath="$PROJECT_DIR$/old_tests/test_news_analyser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/position_decision_maker.py" beforeDir="false" afterPath="$PROJECT_DIR$/position_decision_maker.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reddit.py" beforeDir="false" afterPath="$PROJECT_DIR$/reddit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/youtube.py" beforeDir="false" afterPath="$PROJECT_DIR$/youtube.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/youtube_token.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/youtube_token.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reddit_no_proxy.py" beforeDir="false" afterPath="$PROJECT_DIR$/reddit_no_proxy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/update_dataset_internal_factors.py" beforeDir="false" afterPath="$PROJECT_DIR$/update_dataset_internal_factors.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,11 +93,11 @@
       <recent name="C:\will\Python_project\adam_trader\tests" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\will\Python_project\adam_trader\.gitignore" />
       <recent name="C:\will\Python_project\adam_trader\old_tests" />
       <recent name="C:\will\Python_project\adam_trader" />
       <recent name="C:\will\Python_project\adam_trader\tests" />
       <recent name="C:\will\Python_project\adam_trader\tests_passed" />
-      <recent name="C:\will\Python_project\adam_trader\tests_old" />
     </key>
   </component>
   <component name="RunManager" selected="Python.main_decision">
@@ -245,27 +248,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00114" summary="first commit">
-      <created>1680932520129</created>
-      <option name="number" value="00114" />
-      <option name="presentableId" value="LOCAL-00114" />
-      <option name="project" value="LOCAL" />
-      <updated>1680932520129</updated>
-    </task>
-    <task id="LOCAL-00115" summary="first commit">
-      <created>1680932613161</created>
-      <option name="number" value="00115" />
-      <option name="presentableId" value="LOCAL-00115" />
-      <option name="project" value="LOCAL" />
-      <updated>1680932613161</updated>
-    </task>
-    <task id="LOCAL-00116" summary="first commit">
-      <created>1681030149300</created>
-      <option name="number" value="00116" />
-      <option name="presentableId" value="LOCAL-00116" />
-      <option name="project" value="LOCAL" />
-      <updated>1681030149300</updated>
     </task>
     <task id="LOCAL-00117" summary="first commit">
       <created>1681092619432</created>
@@ -589,7 +571,28 @@
       <option name="project" value="LOCAL" />
       <updated>1681959537391</updated>
     </task>
-    <option name="localTasksCounter" value="163" />
+    <task id="LOCAL-00163" summary="11 April">
+      <created>1681970447401</created>
+      <option name="number" value="00163" />
+      <option name="presentableId" value="LOCAL-00163" />
+      <option name="project" value="LOCAL" />
+      <updated>1681970447401</updated>
+    </task>
+    <task id="LOCAL-00164" summary="11 April">
+      <created>1681970837857</created>
+      <option name="number" value="00164" />
+      <option name="presentableId" value="LOCAL-00164" />
+      <option name="project" value="LOCAL" />
+      <updated>1681970837857</updated>
+    </task>
+    <task id="LOCAL-00165" summary="11 April">
+      <created>1681970846479</created>
+      <option name="number" value="00165" />
+      <option name="presentableId" value="LOCAL-00165" />
+      <option name="project" value="LOCAL" />
+      <updated>1681970846480</updated>
+    </task>
+    <option name="localTasksCounter" value="166" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
