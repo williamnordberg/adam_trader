@@ -2,7 +2,7 @@ import pandas as pd
 import yfinance as yf
 from datetime import datetime
 import logging
-from handy_modules import retry_on_error
+from handy_modules import retry_on_error_with_fallback
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -12,7 +12,7 @@ class UpdateYahooData(Exception):
     pass
 
 
-@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(UpdateYahooData, Exception))
+@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(UpdateYahooData, Exception))
 def update_yahoo_data():
     # Read the main dataset from disk
     main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})

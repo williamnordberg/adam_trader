@@ -47,6 +47,30 @@ def retry_on_error(max_retries: int = 3, delay: int = 5, allowed_exceptions: tup
 
 
 def retry_on_error_with_fallback(max_retries: int = 3, delay: int = 5,
+                                 allowed_exceptions: tuple = (), fallback_values=None):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            retries = 0
+            while retries < max_retries:
+                try:
+                    return func(*args, **kwargs)
+                except allowed_exceptions as e:
+                    retries += 1
+                    logging.warning(f"Attempt {retries} failed with error: {e}. Retrying in {delay} seconds...")
+                    time.sleep(delay)
+            logging.error(f"All {max_retries} attempts failed.")
+            if fallback_values is not None:
+                logging.error(f"Returning fallback values {fallback_values}.")
+                return fallback_values
+            else:
+                raise
+        return wrapper
+    return decorator
+
+
+
+def retry_on_error_with_fallback_old(max_retries: int = 3, delay: int = 5,
                                  allowed_exceptions: tuple = (), fallback_values=(0, 0, 0, 0)):
     def decorator(func):
         @wraps(func)

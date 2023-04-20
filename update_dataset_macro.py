@@ -3,7 +3,7 @@ import pandas as pd
 import logging
 import configparser
 import os
-from handy_modules import retry_on_error
+from handy_modules import retry_on_error_with_fallback
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -18,7 +18,7 @@ config.read_string(config_string)
 API_KEY_FRED = config.get('API', 'freed')
 
 
-@retry_on_error(max_retries=3, delay=5)
+@retry_on_error_with_fallback(max_retries=3, delay=5)
 def update_macro_economic():
     """ Connect to FRED API and get the latest federal funds rate data"""
     try:
