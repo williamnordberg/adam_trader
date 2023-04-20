@@ -17,15 +17,15 @@ from api_blockcypher import get_address_transactions_24h_blockcypher
 from database import save_value_to_database
 
 SATOSHI_TO_BITCOIN = 100000000
-LATEST_INFO_FILE = 'latest_info_saved.csv'
-BITCOIN_RICH_LIST_FILE = 'bitcoin_rich_list2000.csv'
+LATEST_INFO_FILE = 'data/latest_info_saved.csv'
+BITCOIN_RICH_LIST_FILE = 'data/bitcoin_rich_list2000.csv'
 UPDATE_INTERVAL_HOURS = 8
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Load the config file
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('config/config.ini')
 USER_AGENT = 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
 
 

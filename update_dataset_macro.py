@@ -9,7 +9,7 @@ from handy_modules import retry_on_error_with_fallback
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 # Load the config file
 config = configparser.ConfigParser()
-config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.ini')
+config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config/config.ini')
 
 with open(config_path, 'r') as f:
     config_string = f.read()
@@ -49,7 +49,7 @@ def update_macro_economic():
     logging.info("interest rate added to the main dataset")
 
     # Save the updated main dataset to a CSV file
-    main_dataset.to_csv('main_dataset.csv', index=False)
+    main_dataset.to_csv('data/main_dataset.csv', index=False)
 
 
 if __name__ == "__main__":

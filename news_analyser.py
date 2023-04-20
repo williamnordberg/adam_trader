@@ -17,7 +17,7 @@ def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
     # Save latest update time
     save_update_time('sentiment_of_news')
 
-    latest_info_saved = pd.read_csv('latest_info_saved.csv').squeeze("columns")
+    latest_info_saved = pd.read_csv('data/latest_info_saved.csv').squeeze("columns")
     last_news_sentiment_str = latest_info_saved['last_news_update_time'][0]
     last_news_sentiment = datetime.strptime(last_news_sentiment_str, '%Y-%m-%d %H:%M:%S')
     last_update_time_difference = datetime.now() - last_news_sentiment

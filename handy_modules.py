@@ -10,7 +10,7 @@ from database import read_database, save_value_to_database
 
 BINANCE_ENDPOINT_PRICE = "https://api.binance.com/api/v3/ticker/price"
 GECKO_ENDPOINT_PRICE = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
-LATEST_INFO_FILE = "latest_info_saved.csv"
+LATEST_INFO_FILE = "data/latest_info_saved.csv"
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -204,7 +204,7 @@ def compare_google_search_trends(last_hour: int, two_hours_before: int) -> Tuple
 
 
 def compare_send_receive_richest_addresses_wrapper() -> Tuple[float, float]:
-    latest_info_saved = pd.read_csv('latest_info_saved.csv')
+    latest_info_saved = pd.read_csv('data/latest_info_saved.csv')
     total_received = latest_info_saved['total_received_coins_in_last_24'][0]
     total_sent = latest_info_saved['total_sent_coins_in_last_24'][0]
 

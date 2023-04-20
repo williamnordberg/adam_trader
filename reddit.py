@@ -66,7 +66,7 @@ def count_bitcoin_posts(reddit: Reddit) -> int:
 def reddit_check_wrapper() -> Tuple[float, float]:
 
     config = configparser.ConfigParser()
-    config.read('config.ini')
+    config.read('config/config.ini')
 
     reddit_config = config['reddit']
 
@@ -79,7 +79,7 @@ def reddit_check_wrapper() -> Tuple[float, float]:
         requestor_class=ProxyRequestor
     )
 
-    latest_info_saved = pd.read_csv('latest_info_saved.csv').squeeze("columns")
+    latest_info_saved = pd.read_csv('data/latest_info_saved.csv').squeeze("columns")
 
     previous_activity = float(latest_info_saved['previous_activity'][0])
     # previous_count = float(latest_info_saved['previous_count'][0])
@@ -91,7 +91,7 @@ def reddit_check_wrapper() -> Tuple[float, float]:
         latest_info_saved.loc[0, 'previous_activity'] = current_activity
         latest_info_saved.loc[0, 'previous_count'] = current_count
 
-        latest_info_saved.to_csv('latest_info_saved.csv', index=False)
+        latest_info_saved.to_csv('data/latest_info_saved.csv', index=False)
 
         # Save latest update time
         save_update_time('reddit')

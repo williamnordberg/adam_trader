@@ -4,7 +4,7 @@ from plotly.subplots import make_subplots
 
 
 def visualize_database_ten_rows():
-    df = pd.read_csv('database.csv')
+    df = pd.read_csv('data/database.csv')
 
     # Convert the 'date' column to datetime objects
     df['date'] = pd.to_datetime(df['date'])
@@ -125,7 +125,7 @@ def visualize_database_ten_rows():
 
 
 def visualize_database_two_rows():
-    df = pd.read_csv('database.csv')
+    df = pd.read_csv('data/database.csv')
 
     # Convert the 'date' column to datetime objects
     df['date'] = pd.to_datetime(df['date'])
@@ -246,7 +246,7 @@ def visualize_database_two_rows():
 
 
 def visualize_database_one_chart():
-    df = pd.read_csv('database.csv')
+    df = pd.read_csv('data/database.csv')
 
     # Convert the 'date' column to datetime objects
     df['date'] = pd.to_datetime(df['date'])
