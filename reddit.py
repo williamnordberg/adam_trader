@@ -11,7 +11,7 @@ from urllib3.exceptions import MaxRetryError
 
 
 from database import save_value_to_database
-from handy_modules import save_update_time, should_update, retry_on_error
+from handy_modules import save_update_time, should_update, retry_on_error_fallback_0_0
 from database import read_database
 
 
@@ -50,7 +50,7 @@ def compare(current_activity: float, previous_activity: float) -> Tuple[float, f
     return 0, 0
 
 
-@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(RequestException,))
+@retry_on_error_fallback_0_0(max_retries=3, delay=5, allowed_exceptions=(RequestException,))
 def count_bitcoin_posts(reddit: Reddit) -> int:
     """
         Counts the number of Bitcoin-related posts on Reddit in the last 7 days.
@@ -72,7 +72,7 @@ def count_bitcoin_posts(reddit: Reddit) -> int:
     return count
 
 
-@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(SSLError, MaxRetryError,))
+@retry_on_error_fallback_0_0(max_retries=3, delay=5, allowed_exceptions=(SSLError, MaxRetryError,))
 def reddit_check_wrapper() -> Tuple[float, float]:
 
     config = configparser.ConfigParser()

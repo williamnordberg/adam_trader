@@ -8,7 +8,7 @@ import logging
 from datetime import datetime, timedelta
 from reddit import compare
 from database import save_value_to_database
-from handy_modules import should_update, save_update_time, retry_on_error
+from handy_modules import should_update, save_update_time, retry_on_error_fallback_0_0
 from typing import Tuple
 from database import read_database
 from googleapiclient.errors import HttpError
@@ -51,7 +51,7 @@ def get_authenticated_service():
     return youtube
 
 
-@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(HttpError,))
+@retry_on_error_fallback_0_0(max_retries=3, delay=5, allowed_exceptions=(HttpError,))
 def get_youtube_videos(youtube, published_after, published_before):
     search_request = youtube.search().list(
         part="id,snippet",

@@ -4,7 +4,7 @@ import logging
 from datetime import datetime, timedelta
 
 from database import save_value_to_database
-from handy_modules import get_bitcoin_price, retry_on_error
+from handy_modules import get_bitcoin_price, retry_on_error_fallback_0_0
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 ENDPOINT_DEPTH = "https://api.binance.com/api/v3/depth"
@@ -39,7 +39,7 @@ def aggregate_and_save_values():
         aggregated_values[key] = []
 
 
-@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(requests.exceptions.RequestException,))
+@retry_on_error_fallback_0_0(max_retries=3, delay=5, allowed_exceptions=(requests.exceptions.RequestException,))
 def get_order_book(symbol: str, limit: int):
     try:
         response = requests.get(ENDPOINT_DEPTH, params={'symbol': symbol, 'limit': str(limit)})

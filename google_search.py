@@ -5,7 +5,7 @@ from pytrends.request import TrendReq as UTrendReq
 
 from database import save_value_to_database, read_database
 from pytrends.exceptions import ResponseError
-from handy_modules import check_internet_connection, retry_on_error,\
+from handy_modules import check_internet_connection, retry_on_error_fallback_0_0,\
     compare_google_search_trends, save_update_time, should_update
 
 
@@ -41,7 +41,7 @@ class TrendReq(UTrendReq, ABC):
         return super()._get_data(url, method=GET_METHOD, trim_chars=trim_chars, headers=headers, **kwargs)
 
 
-@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(ResponseError,))
+@retry_on_error_fallback_0_0(max_retries=3, delay=5, allowed_exceptions=(ResponseError,))
 def check_search_trend_wrapper(keywords: List[str]) -> Tuple[float, float]:
     """
     Check if there is a significant increase in search volume for a list of keywords in the past 7 days.
