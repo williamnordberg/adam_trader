@@ -22,7 +22,7 @@ class UpdateInternalFactorsError(Exception):
         UpdateInternalFactorsError, WebDriverException))
 def update_internal_factors():
     # Read the main dataset from disk
-    main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})
+    main_dataset = pd.read_csv('data/main_dataset.csv', dtype={146: str})
 
     # Get the latest date in the main dataset
     latest_date = main_dataset.loc[main_dataset['DiffLast'].last_valid_index(), 'Date']

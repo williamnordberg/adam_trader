@@ -29,7 +29,7 @@ def update_macro_economic():
         raise Exception("Failed to update macroeconomic data.")
 
     # Load the main dataset into a DataFrame
-    main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})
+    main_dataset = pd.read_csv('data/main_dataset.csv', dtype={146: str})
 
     # Check if the latest federal funds rate is already in the main dataset
     latest_rate = fred_dataset.iloc[-1]

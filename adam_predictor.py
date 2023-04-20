@@ -12,7 +12,7 @@ from handy_modules import compare_predicted_price, get_bitcoin_price, should_upd
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-MAIN_DATASET_FILE = 'main_dataset.csv'
+MAIN_DATASET_FILE = 'data/main_dataset.csv'
 
 
 def load_dataset() -> pd.DataFrame:
