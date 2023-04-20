@@ -8,10 +8,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="11 April">
-      <change beforePath="$PROJECT_DIR$/.gitignore/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="11 April" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -82,9 +79,9 @@
       <recent name="C:\will\Python_project\adam_trader\tests" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\will\Python_project\adam_trader" />
       <recent name="C:\will\Python_project\adam_trader\.gitignore" />
       <recent name="C:\will\Python_project\adam_trader\old_tests" />
-      <recent name="C:\will\Python_project\adam_trader" />
       <recent name="C:\will\Python_project\adam_trader\tests" />
       <recent name="C:\will\Python_project\adam_trader\tests_passed" />
     </key>
@@ -237,20 +234,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00118" summary="first commit">
-      <created>1681102697630</created>
-      <option name="number" value="00118" />
-      <option name="presentableId" value="LOCAL-00118" />
-      <option name="project" value="LOCAL" />
-      <updated>1681102697630</updated>
-    </task>
-    <task id="LOCAL-00119" summary="first commit">
-      <created>1681110801280</created>
-      <option name="number" value="00119" />
-      <option name="presentableId" value="LOCAL-00119" />
-      <option name="project" value="LOCAL" />
-      <updated>1681110801280</updated>
     </task>
     <task id="LOCAL-00120" summary="first commit">
       <created>1681113965392</created>
@@ -581,7 +564,21 @@
       <option name="project" value="LOCAL" />
       <updated>1681972645063</updated>
     </task>
-    <option name="localTasksCounter" value="167" />
+    <task id="LOCAL-00167" summary="11 April">
+      <created>1681975283791</created>
+      <option name="number" value="00167" />
+      <option name="presentableId" value="LOCAL-00167" />
+      <option name="project" value="LOCAL" />
+      <updated>1681975283791</updated>
+    </task>
+    <task id="LOCAL-00168" summary="11 April">
+      <created>1681975341552</created>
+      <option name="number" value="00168" />
+      <option name="presentableId" value="LOCAL-00168" />
+      <option name="project" value="LOCAL" />
+      <updated>1681975341552</updated>
+    </task>
+    <option name="localTasksCounter" value="169" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
