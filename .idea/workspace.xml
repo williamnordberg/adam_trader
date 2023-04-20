@@ -10,6 +10,8 @@
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="11 April">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/geckodriver.log" beforeDir="false" afterPath="$PROJECT_DIR$/geckodriver.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handy_modules.py" beforeDir="false" afterPath="$PROJECT_DIR$/handy_modules.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +89,7 @@
       <recent name="C:\will\Python_project\adam_trader\tests_old" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.update_dataset_macro">
+  <component name="RunManager" selected="Python.test">
     <configuration name="long_position_open" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -219,8 +221,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.update_dataset_macro" />
         <item itemvalue="Python.test" />
+        <item itemvalue="Python.update_dataset_macro" />
         <item itemvalue="Python.update_dataset_internal_factors" />
         <item itemvalue="Python.short_position_open" />
         <item itemvalue="Python.long_position_open" />
@@ -235,13 +237,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00112" summary="first commit">
-      <created>1680926352236</created>
-      <option name="number" value="00112" />
-      <option name="presentableId" value="LOCAL-00112" />
-      <option name="project" value="LOCAL" />
-      <updated>1680926352236</updated>
     </task>
     <task id="LOCAL-00113" summary="first commit">
       <created>1680930517576</created>
@@ -579,7 +574,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681956995345</updated>
     </task>
-    <option name="localTasksCounter" value="161" />
+    <task id="LOCAL-00161" summary="11 April">
+      <created>1681957871834</created>
+      <option name="number" value="00161" />
+      <option name="presentableId" value="LOCAL-00161" />
+      <option name="project" value="LOCAL" />
+      <updated>1681957871834</updated>
+    </task>
+    <option name="localTasksCounter" value="162" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">

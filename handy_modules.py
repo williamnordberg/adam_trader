@@ -28,7 +28,7 @@ update_intervals = {
 }
 
 
-def retry_on_error(max_retries: int = 3, delay: int = 5, allowed_exceptions: tuple = ()):
+def retry_on_error_fallback_0_0(max_retries: int = 3, delay: int = 5, allowed_exceptions: tuple = ()):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -42,7 +42,9 @@ def retry_on_error(max_retries: int = 3, delay: int = 5, allowed_exceptions: tup
                     time.sleep(delay)
             logging.error(f"All {max_retries} attempts failed. Returning fallback values (0, 0).")
             return 0, 0
+
         return wrapper
+
     return decorator
 
 
@@ -65,31 +67,13 @@ def retry_on_error_with_fallback(max_retries: int = 3, delay: int = 5,
                 return fallback_values
             else:
                 raise
+
         return wrapper
+
     return decorator
 
 
-
-def retry_on_error_with_fallback_old(max_retries: int = 3, delay: int = 5,
-                                 allowed_exceptions: tuple = (), fallback_values=(0, 0, 0, 0)):
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            retries = 0
-            while retries < max_retries:
-                try:
-                    return func(*args, **kwargs)
-                except allowed_exceptions as e:
-                    retries += 1
-                    logging.warning(f"Attempt {retries} failed with error: {e}. Retrying in {delay} seconds...")
-                    time.sleep(delay)
-            logging.error(f"All {max_retries} attempts failed. Returning fallback values {fallback_values}.")
-            return fallback_values
-        return wrapper
-    return decorator
-
-
-@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(requests.ConnectionError,))
+@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(requests.ConnectionError,))
 def check_internet_connection() -> bool:
     """
     Check if there is an internet connection.
@@ -105,7 +89,7 @@ def check_internet_connection() -> bool:
         return False
 
 
-@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(requests.exceptions.RequestException,))
+@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(requests.exceptions.RequestException,))
 def get_bitcoin_price() -> int:
     """
     Retrieves the current Bitcoin price in USD from the CoinGecko API and Binance API.
