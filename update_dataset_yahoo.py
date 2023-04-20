@@ -15,7 +15,7 @@ class UpdateYahooData(Exception):
 @retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(UpdateYahooData, Exception))
 def update_yahoo_data():
     # Read the main dataset from disk
-    main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})
+    main_dataset = pd.read_csv('data/main_dataset.csv', dtype={146: str})
     latest_date = main_dataset.loc[main_dataset['Open'].last_valid_index(), 'Date']
     end_date = datetime.today().strftime('%Y-%m-%d')
 
