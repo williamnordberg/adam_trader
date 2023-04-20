@@ -5,9 +5,9 @@ from sklearn.impute import SimpleImputer
 from typing import Tuple
 
 from database import save_value_to_database, read_database
-from update_dataset_yahoo import update_yahoo_data
+from update_dataset_yahoo import update_yahoo_data, UpdateYahooData
 from update_dataset_macro import update_macro_economic
-from update_dataset_internal_factors import update_internal_factors
+from update_dataset_internal_factors import update_internal_factors, UpdateInternalFactorsError
 from handy_modules import compare_predicted_price, get_bitcoin_price, should_update, save_update_time
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -22,6 +22,17 @@ def load_dataset() -> pd.DataFrame:
     main_dataset.fillna(method='ffill', limit=1, inplace=True)
 
     return main_dataset
+
+
+def update_dataset():
+    try:
+        update_internal_factors()
+        update_yahoo_data()
+        update_macro_economic()
+        logging.info('dataset has been updated')
+        save_update_time('dataset')
+    except UpdateInternalFactorsError as e:
+        logging.error(f"Failed to update internal factors: {e}")
 
 
 def train_and_predict(dataset: pd.DataFrame) -> int:
@@ -50,11 +61,7 @@ def train_and_predict(dataset: pd.DataFrame) -> int:
 def decision_tree_predictor_wrapper() -> Tuple[float, float]:
     """Main function to check if dataset update is needed, load dataset, train model, and make predictions."""
     if should_update('dataset'):
-        update_internal_factors()
-        update_yahoo_data()
-        update_macro_economic()
-        logging.info('dataset has been updated')
-        save_update_time('dataset')
+        update_dataset()
 
     dataset = load_dataset()
     prediction = train_and_predict(dataset)

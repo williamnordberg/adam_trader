@@ -8,9 +8,11 @@ import logging
 from datetime import datetime, timedelta
 from reddit import compare
 from database import save_value_to_database
-from handy_modules import should_update, save_update_time
+from handy_modules import should_update, save_update_time, retry_on_error
 from typing import Tuple
 from database import read_database
+from googleapiclient.errors import HttpError
+
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -49,6 +51,7 @@ def get_authenticated_service():
     return youtube
 
 
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(HttpError,))
 def get_youtube_videos(youtube, published_after, published_before):
     search_request = youtube.search().list(
         part="id,snippet",
@@ -80,21 +83,25 @@ def youtube_wrapper() -> Tuple[float, float]:
     last_48_hours_start = (now - timedelta(days=2)).strftime('%Y-%m-%dT%H:%M:%SZ')
     last_24_hours_end = now.strftime('%Y-%m-%dT%H:%M:%SZ')
 
-    search_results_last_24_hours = get_youtube_videos(youtube, last_24_hours_start, last_24_hours_end)
-    search_results_last_48_to_24_hours = get_youtube_videos(youtube, last_48_hours_start, last_24_hours_start)
+    try:
+        search_results_last_24_hours = get_youtube_videos(youtube, last_24_hours_start, last_24_hours_end)
+        search_results_last_48_to_24_hours = get_youtube_videos(youtube, last_48_hours_start, last_24_hours_start)
 
-    num_last_24_hours = len(search_results_last_24_hours)
-    num_last_48_to_24_hours = len(search_results_last_48_to_24_hours)
+        num_last_24_hours = len(search_results_last_24_hours)
+        num_last_48_to_24_hours = len(search_results_last_48_to_24_hours)
 
-    youtube_bullish, youtube_bearish = compare(num_last_24_hours, num_last_48_to_24_hours)
+        youtube_bullish, youtube_bearish = compare(num_last_24_hours, num_last_48_to_24_hours)
 
-    # Save latest update time
-    save_update_time('youtube')
+        # Save latest update time
+        save_update_time('youtube')
 
-    # Save to database
-    save_value_to_database('last_24_youtube', num_last_24_hours)
-    save_value_to_database('youtube_bullish', youtube_bullish)
-    save_value_to_database('youtube_bearish', youtube_bearish)
+        # Save to database
+        save_value_to_database('last_24_youtube', num_last_24_hours)
+        save_value_to_database('youtube_bullish', youtube_bullish)
+        save_value_to_database('youtube_bearish', youtube_bearish)
+    except Exception as e:
+        logging.error(f"Error occurred: {e}")
+        youtube_bullish, youtube_bearish = 0, 0
 
     return youtube_bullish, youtube_bearish
 

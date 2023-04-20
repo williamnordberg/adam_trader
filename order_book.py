@@ -3,9 +3,8 @@ import requests
 import logging
 from datetime import datetime, timedelta
 
-
 from database import save_value_to_database
-from handy_modules import get_bitcoin_price
+from handy_modules import get_bitcoin_price, retry_on_error
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 ENDPOINT_DEPTH = "https://api.binance.com/api/v3/depth"
@@ -40,7 +39,7 @@ def aggregate_and_save_values():
         aggregated_values[key] = []
 
 
-# @retry(tries=3, delay=2, backoff=2)
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(requests.exceptions.RequestException,))
 def get_order_book(symbol: str, limit: int):
     try:
         response = requests.get(ENDPOINT_DEPTH, params={'symbol': symbol, 'limit': str(limit)})
@@ -82,12 +81,12 @@ def compare_probability(probability_up: float, probability_down: float) -> Tuple
 def get_probabilities(symbols: List[str], limit: int = LIMIT, bid_multiplier: float = 0.995,
                       ask_multiplier: float = 1.005) -> Optional[Tuple[float, float]]:
     bid_volume, ask_volume = 0.0000001, 0.0
+    current_price = get_bitcoin_price()
     for symbol in symbols:
         data = get_order_book(symbol, limit)
         if data is None:
-            return None
+            return 0, 0
 
-        current_price = get_bitcoin_price()
         bid_volume += sum([float(bid[1]) for bid in data['bids'] if float(bid[0]) >=
                            (current_price * bid_multiplier)])
         ask_volume += sum([float(ask[1]) for ask in data['asks'] if float(ask[0]) <=

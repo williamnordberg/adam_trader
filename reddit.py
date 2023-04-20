@@ -5,12 +5,17 @@ import logging
 import configparser
 from typing import Tuple
 from praw import Reddit
+from prawcore.exceptions import RequestException
+from requests.exceptions import SSLError
+from urllib3.exceptions import MaxRetryError
+
+
 from database import save_value_to_database
-from handy_modules import save_update_time, should_update
+from handy_modules import save_update_time, should_update, retry_on_error
 from database import read_database
+
+
 ONE_DAYS_IN_SECONDS = 24 * 60 * 60
-
-
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
@@ -45,6 +50,7 @@ def compare(current_activity: float, previous_activity: float) -> Tuple[float, f
     return 0, 0
 
 
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(RequestException,))
 def count_bitcoin_posts(reddit: Reddit) -> int:
     """
         Counts the number of Bitcoin-related posts on Reddit in the last 7 days.
@@ -66,6 +72,7 @@ def count_bitcoin_posts(reddit: Reddit) -> int:
     return count
 
 
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(SSLError, MaxRetryError,))
 def reddit_check_wrapper() -> Tuple[float, float]:
 
     config = configparser.ConfigParser()
@@ -81,23 +88,27 @@ def reddit_check_wrapper() -> Tuple[float, float]:
 
     previous_activity = float(latest_info_saved['previous_activity'][0])
     # previous_count = float(latest_info_saved['previous_count'][0])
-    current_activity = reddit.subreddit("Bitcoin").active_user_count
-    current_count = count_bitcoin_posts(reddit)
-    reddit_bullish, reddit_bearish = compare(current_activity, previous_activity)
+    try:
+        current_activity = reddit.subreddit("Bitcoin").active_user_count
+        current_count = count_bitcoin_posts(reddit)
+        reddit_bullish, reddit_bearish = compare(current_activity, previous_activity)
 
-    latest_info_saved.loc[0, 'previous_activity'] = current_activity
-    latest_info_saved.loc[0, 'previous_count'] = current_count
+        latest_info_saved.loc[0, 'previous_activity'] = current_activity
+        latest_info_saved.loc[0, 'previous_count'] = current_count
 
-    latest_info_saved.to_csv('latest_info_saved.csv', index=False)
+        latest_info_saved.to_csv('latest_info_saved.csv', index=False)
 
-    # Save latest update time
-    save_update_time('reddit')
+        # Save latest update time
+        save_update_time('reddit')
 
-    # Save to database
-    save_value_to_database('reddit_bullish', reddit_bullish)
-    save_value_to_database('reddit_bearish', reddit_bearish)
-    save_value_to_database('reddit_count_bitcoin_posts_24h', current_count)
-    save_value_to_database('reddit_activity_24h', current_activity)
+        # Save to database
+        save_value_to_database('reddit_bullish', reddit_bullish)
+        save_value_to_database('reddit_bearish', reddit_bearish)
+        save_value_to_database('reddit_count_bitcoin_posts_24h', current_count)
+        save_value_to_database('reddit_activity_24h', current_activity)
+    except Exception as e:
+        logging.error(f"Error occurred: {e}")
+        reddit_bullish, reddit_bearish = 0, 0
 
     return reddit_bullish, reddit_bearish
 

@@ -2,9 +2,17 @@ import pandas as pd
 import yfinance as yf
 from datetime import datetime
 import logging
+from handy_modules import retry_on_error
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
+class UpdateYahooData(Exception):
+    """Raised when there is an issue updating yahoo data."""
+    pass
+
+
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(UpdateYahooData, Exception))
 def update_yahoo_data():
     # Read the main dataset from disk
     main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})
@@ -12,11 +20,15 @@ def update_yahoo_data():
     end_date = datetime.today().strftime('%Y-%m-%d')
 
     # Download the new data from Yahoo Finance
-    ticker = yf.Ticker("BTC-USD")
-    new_data = ticker.history(start=latest_date, end=end_date)
+    try:
+        ticker = yf.Ticker("BTC-USD")
+        new_data = ticker.history(start=latest_date, end=end_date)
+        new_data.index = new_data.index.to_series().dt.strftime('%Y-%m-%d')
+        new_data['Date'] = new_data.index
 
-    new_data.index = new_data.index.to_series().dt.strftime('%Y-%m-%d')
-    new_data['Date'] = new_data.index
+    except Exception as e:
+        logging.error(f"Error: {e}")
+        raise UpdateYahooData("Failed to update macroeconomic data.")
 
     # check if the dataset is already update
     if latest_date == new_data['Date'].iloc[-1]:
