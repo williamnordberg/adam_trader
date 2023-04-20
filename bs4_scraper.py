@@ -1,6 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+from handy_modules import save_update_time
+
+LATEST_INFO_FILE = 'data/latest_info_saved.csv'
 
 
 def scrape_bitcoin_rich_list():
@@ -28,6 +31,9 @@ def scrape_bitcoin_rich_list():
 
     df.dropna(subset=["address"], inplace=True)
     df.to_csv("data/bitcoin_rich_list2000.csv", index=False)
+
+    # Save update time
+    save_update_time('richest_addresses_scrap')
 
 
 if __name__ == "__main__":

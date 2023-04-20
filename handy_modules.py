@@ -25,6 +25,7 @@ update_intervals = {
     "reddit": timedelta(hours=3),
     "youtube": timedelta(hours=3),
     "sentiment_of_news": timedelta(hours=1),
+    "richest_addresses_scrap": timedelta(hours=24)
 }
 
 
