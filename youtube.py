@@ -20,7 +20,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 def get_authenticated_service():
     api_service_name = "youtube"
     api_version = "v3"
-    client_secrets_file = "youtube_client_secret.json"
+    client_secrets_file = "config/youtube_client_secret.json"
     scopes = ["https://www.googleapis.com/auth/youtube.force-ssl"]
 
     creds = None

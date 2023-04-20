@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 # Load the config file
 config = configparser.ConfigParser()
-config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.ini')
+config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config/config.ini')
 
 with open(config_path, 'r') as f:
     config_string = f.read()

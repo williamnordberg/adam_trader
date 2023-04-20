@@ -86,7 +86,7 @@ def update_internal_factors():
             main_dataset = pd.concat([main_dataset, new_data])
 
             # Write the updated dataset to disk
-            main_dataset.to_csv('main_dataset.csv', index=False)
+            main_dataset.to_csv('data/main_dataset.csv', index=False)
 
             if len(new_data) > 1:
                 logging.info(f"{len(new_data)} new rows of internal factors added.")

@@ -45,7 +45,7 @@ def update_yahoo_data():
                 main_dataset.loc[main_dataset['Date'] == date, ['Open', 'Close']] = [open_value, close_value]
     else:
         logging.info("Yahoo data is already up to date.")
-    main_dataset.to_csv('main_dataset.csv', index=False)
+    main_dataset.to_csv('data/main_dataset.csv', index=False)
     return None
 
 
