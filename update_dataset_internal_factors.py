@@ -4,13 +4,21 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import WebDriverException
 from selenium import webdriver
 import os
 import time
 import logging
+from handy_modules import retry_on_error
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
+class UpdateInternalFactorsError(Exception):
+    """Raised when there is an issue with updating internal factors."""
+    pass
+
+
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(UpdateInternalFactorsError, WebDriverException))
 def update_internal_factors():
     # Read the main dataset from disk
     main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})
@@ -66,7 +74,7 @@ def update_internal_factors():
         # Filter the new data to only include rows with a date after the latest date in the main dataset
         new_data = new_data[new_data['Date'] > latest_date]
         new_data = new_data[['Date', 'DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate']]
-        if len(new_data) > 0:
+        if len(new_data) > 1:
 
             # check if new data have a same date row with main_dataset
             if main_dataset['Date'].iloc[-1] == new_data['Date'].iloc[0]:
@@ -79,13 +87,13 @@ def update_internal_factors():
             # Write the updated dataset to disk
             main_dataset.to_csv('main_dataset.csv', index=False)
 
-            logging.info(f"{len(new_data)} new rows of internal factors added.")
+            if len(new_data) > 1:
+                logging.info(f"{len(new_data)} new rows of internal factors added.")
         else:
             logging.info("internal factors is already up to date.")
     else:
         logging.error("Failed to download internal factors.")
-
-    return None
+        raise UpdateInternalFactorsError("Failed to download internal factors.")
 
 
 if __name__ == "__main__":

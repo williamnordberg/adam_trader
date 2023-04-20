@@ -3,6 +3,7 @@ import pandas as pd
 import logging
 import configparser
 import os
+from handy_modules import retry_on_error
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -17,6 +18,7 @@ config.read_string(config_string)
 API_KEY_FRED = config.get('API', 'freed')
 
 
+@retry_on_error(max_retries=3, delay=5)
 def update_macro_economic():
     """ Connect to FRED API and get the latest federal funds rate data"""
     try:
@@ -24,7 +26,7 @@ def update_macro_economic():
         fred_dataset = fred.get_series('FEDFUNDS')
     except Exception as e:
         logging.error(f"Error: {e}")
-        return
+        raise Exception("Failed to update macroeconomic data.")
 
     # Load the main dataset into a DataFrame
     main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})
