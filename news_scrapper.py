@@ -11,7 +11,8 @@ SENTIMENT_POSITIVE_THRESHOLD = 0.1
 SENTIMENT_NEGATIVE_THRESHOLD = -0.001
 
 
-@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(Exception, requests.exceptions.RequestException),
+@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(
+        Exception, requests.exceptions.RequestException),
                               fallback_values=(0, 0, 0, 0))
 def check_news_sentiment_scrapper() -> Tuple[float, float, int, int]:
     positive_polarity_score = 0.0

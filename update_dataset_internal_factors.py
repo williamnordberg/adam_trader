@@ -18,8 +18,8 @@ class UpdateInternalFactorsError(Exception):
     pass
 
 
-@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=
-(UpdateInternalFactorsError, WebDriverException))
+@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(
+        UpdateInternalFactorsError, WebDriverException))
 def update_internal_factors():
     # Read the main dataset from disk
     main_dataset = pd.read_csv('main_dataset.csv', dtype={146: str})
