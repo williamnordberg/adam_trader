@@ -7,11 +7,10 @@ import logging
 # Third-party libraries
 import pandas as pd
 from typing import Tuple, List
-from scrapy.crawler import CrawlerProcess
 import configparser
 
 # Local imports
-from spider import BitcoinRichListSpider
+from bs4_scraper import scrape_bitcoin_rich_list
 from api_blockchain_info import get_address_transactions_24h
 from api_blockcypher import get_address_transactions_24h_blockcypher
 from database import save_value_to_database
@@ -101,9 +100,7 @@ def monitor_bitcoin_richest_addresses() -> Tuple[float, float]:
         latest_info_saved.to_csv('latest_info_saved.csv', index=False)
         logging.info(f'dataset been updated {now}')
 
-        process = CrawlerProcess({'USER_AGENT': USER_AGENT})
-        process.crawl(BitcoinRichListSpider)
-        process.start()
+        scrape_bitcoin_rich_list()
 
     else:
         logging.info(f'list of richest addresses is already updated less than 8 hours ago at {last_update_time}')
