@@ -17,8 +17,6 @@ from database import read_database
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-
-
 ONE_DAYS_IN_SECONDS = 24 * 60 * 60
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -87,6 +85,7 @@ def reddit_check_wrapper() -> Tuple[float, float]:
     # previous_count = float(latest_info_saved['previous_count'][0])
     try:
         current_activity = reddit.subreddit("Bitcoin").active_user_count
+        print(current_activity)
         current_count = count_bitcoin_posts(reddit)
         reddit_bullish, reddit_bearish = compare_reddit(current_activity, previous_activity)
 

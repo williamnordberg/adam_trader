@@ -6,7 +6,7 @@ import os.path
 from google.auth.transport.requests import Request
 import logging
 from datetime import datetime, timedelta
-from reddit import compare
+from handy_modules import compare_reddit
 from database import save_value_to_database
 from handy_modules import should_update, save_update_time, retry_on_error_fallback_0_0
 from typing import Tuple
@@ -90,7 +90,7 @@ def youtube_wrapper() -> Tuple[float, float]:
         num_last_24_hours = len(search_results_last_24_hours)
         num_last_48_to_24_hours = len(search_results_last_48_to_24_hours)
 
-        youtube_bullish, youtube_bearish = compare(num_last_24_hours, num_last_48_to_24_hours)
+        youtube_bullish, youtube_bearish = compare_reddit(num_last_24_hours, num_last_48_to_24_hours)
 
         # Save latest update time
         save_update_time('youtube')

@@ -73,7 +73,8 @@ def retry_on_error_with_fallback(max_retries: int = 3, delay: int = 5,
     return decorator
 
 
-@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(requests.ConnectionError,))
+@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(
+        requests.ConnectionError,), fallback_values=False)
 def check_internet_connection() -> bool:
     """
     Check if there is an internet connection.
@@ -82,14 +83,15 @@ def check_internet_connection() -> bool:
         bool: True if there is an internet connection, False otherwise.
     """
     try:
-        with requests.get("http://www.google.com", timeout=3) as response:
-            return True
+        requests.get("http://www.google.com", timeout=3)
+        return True
     except requests.ConnectionError:
         logging.warning("No internet connection available.")
         return False
 
 
-@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(requests.exceptions.RequestException,))
+@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(
+        requests.exceptions.RequestException,), fallback_values=0)
 def get_bitcoin_price() -> int:
     """
     Retrieves the current Bitcoin price in USD from the CoinGecko API and Binance API.
@@ -266,6 +268,37 @@ def save_update_time(factor_name: str):
     latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
     latest_info_saved.loc[0, f'latest_{factor_name}_update'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     latest_info_saved.to_csv(LATEST_INFO_FILE, index=False)
+
+
+def compare_reddit(current_activity: float, previous_activity: float) -> Tuple[float, float]:
+
+    activity_percentage = (current_activity - previous_activity) / previous_activity * 100
+
+    if activity_percentage > 0:
+        if activity_percentage >= 50:
+            return 1, 0
+        elif activity_percentage >= 40:
+            return 0.9, 0.1
+        elif activity_percentage >= 30:
+            return 0.8, 0.2
+        elif activity_percentage >= 20:
+            return 0.7, 0.3
+        elif activity_percentage >= 10:
+            return 0.6, 0.4
+
+    elif activity_percentage <= 0:
+        if activity_percentage <= -50:
+            return 0, 1
+        elif activity_percentage <= -40:
+            return 0.1, 0.9
+        elif activity_percentage <= -30:
+            return 0.2, 0.8
+        elif activity_percentage <= -20:
+            return 0.3, 0.7
+        elif activity_percentage <= -10:
+            return 0.4, 0.6
+
+    return 0, 0
 
 
 if __name__ == '__main__':
