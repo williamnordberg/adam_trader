@@ -6,6 +6,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import WebDriverException
 from selenium import webdriver
+from selenium.webdriver.firefox.service import Service
+
 import os
 import time
 import logging
@@ -28,7 +30,8 @@ def update_internal_factors():
     latest_date = main_dataset.loc[main_dataset['DiffLast'].last_valid_index(), 'Date']
 
     # Create a new instance of the Firefox driver
-    driver = webdriver.Firefox()
+    driver = webdriver.Firefox(
+        service=Service(executable_path='geckodriver', log_path=os.path.join(os.getcwd(), "logs", "geckodriver.log")))
 
     # Open the webpage
     driver.get("https://coinmetrics.io/community-network-data/")
