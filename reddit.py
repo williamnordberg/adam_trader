@@ -19,6 +19,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 ONE_DAYS_IN_SECONDS = 24 * 60 * 60
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
 
 
 class ProxyRequestor(Requestor):
@@ -79,7 +80,7 @@ def reddit_check_wrapper() -> Tuple[float, float]:
         requestor_class=ProxyRequestor
     )
 
-    latest_info_saved = pd.read_csv('data/latest_info_saved.csv').squeeze("columns")
+    latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
 
     previous_activity = float(latest_info_saved['previous_activity'][0])
     # previous_count = float(latest_info_saved['previous_count'][0])
@@ -91,7 +92,7 @@ def reddit_check_wrapper() -> Tuple[float, float]:
         latest_info_saved.loc[0, 'previous_activity'] = current_activity
         latest_info_saved.loc[0, 'previous_count'] = current_count
 
-        latest_info_saved.to_csv('data/latest_info_saved.csv', index=False)
+        latest_info_saved.to_csv(LATEST_INFO_SAVED, index=False)
 
         # Save latest update time
         save_update_time('reddit')
