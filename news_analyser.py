@@ -50,7 +50,7 @@ def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
         now = datetime.now()
         now_str = now.strftime('%Y-%m-%d %H:%M:%S')
         latest_info_saved.loc[0, 'last_news_update_time'] = now_str
-        latest_info_saved.to_csv('latest_info_saved.csv', index=False)
+        latest_info_saved.to_csv(LATEST_INFO_SAVED_PATH, index=False)
 
         # Save data on database
         save_value_to_database('news_positive_polarity', round(last_24_hours_positive_polarity, 3))
@@ -95,7 +95,7 @@ def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
         now = datetime.now()
         now_str = now.strftime('%Y-%m-%d %H:%M:%S')
         latest_info_saved.loc[0, 'last_news_update_time'] = now_str
-        latest_info_saved.to_csv('latest_info_saved.csv', index=False)
+        latest_info_saved.to_csv(LATEST_INFO_SAVED_PATH, index=False)
         logging.info(f'news data has been updated')
 
         # Save on database, we  do not save news_positive_polarity,
