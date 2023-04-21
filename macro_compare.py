@@ -7,7 +7,7 @@ def compare_interest_rate(rate_this_month:  float, rate_month_before: float) -> 
 
     if rate_decrease > 0:
         if rate_decrease >= 0.75:
-            return 1.0, 0
+            return 1.0, 0.0
         elif rate_decrease >= 0.5:
             return 0.85, 0.15
         elif rate_decrease >= 0.25:
@@ -16,61 +16,41 @@ def compare_interest_rate(rate_this_month:  float, rate_month_before: float) -> 
             return 0.6, 0.4
 
     elif rate_decrease <= 0:
-        if rate_decrease <= 0.75:
-            return 0, 1
-        elif rate_decrease <= 0.5:
+        if rate_decrease <= -0.75:
+            return 0.0, 1.0
+        elif rate_decrease <= -0.5:
             return 0.15, 0.85
-        elif rate_decrease <= 0.25:
+        elif rate_decrease <= -0.25:
             return 0.3, 0.7
-        elif rate_decrease <= 0:
+        elif rate_decrease < 0:
             return 0.4, 0.6
 
-    return 0, 0
+    return 0.0, 0.0
 
 
-def compare_cpi_m_to_m(cpi_m_to_m: float) -> Tuple[float,  float]:
+def compare_cpi_ppi_m_to_m(cpi_m_to_m: float) -> Tuple[float,  float]:
 
     if cpi_m_to_m <= 0:
         if cpi_m_to_m <= -0.75:
-            return 1, 0
+            return 1.0, 0.0
         elif cpi_m_to_m <= 0.5:
             return 0.85, 0.15
         elif cpi_m_to_m <= 0.25:
             return 0.7, 0.3
-        else:
+        elif cpi_m_to_m <= 0.0:
             return 0.6, 0.4
 
     elif cpi_m_to_m > 0:
         if cpi_m_to_m >= 0.75:
-            return 0, 1
+            return 0.0, 1.0
         elif cpi_m_to_m >= 0.5:
             return 0.15, 0.85
         elif cpi_m_to_m >= 0.25:
             return 0.3, 0.7
+        elif cpi_m_to_m > 0.0:
+            return 0.4, 0.6
 
-    return 0, 0
-
-
-def compare_ppi_m_to_m(ppi_m_to_m: float) -> Tuple[float, float]:
-
-    if ppi_m_to_m <= 0:
-        if ppi_m_to_m <= -0.75:
-            return 1, 0
-        elif ppi_m_to_m <= -0.5:
-            return 0.85, 0.15
-        elif ppi_m_to_m <= - 0.25:
-            return 0.7, 0.3
-        else:
-            return 0.6, 0.4
-
-    elif ppi_m_to_m > 0:
-        if ppi_m_to_m >= 0.75:
-            return 0, 1
-        elif ppi_m_to_m >= 0.5:
-            return 0.15, 0.85
-        elif ppi_m_to_m >= 0.25:
-            return 0.3, 0.7
-    return 0, 0
+    return 0.0, 0.0
 
 
 def calculate_macro_sentiment(rate_this_month: Optional[float], rate_month_before: Optional[float],
@@ -79,17 +59,17 @@ def calculate_macro_sentiment(rate_this_month: Optional[float], rate_month_befor
     if rate_this_month and rate_month_before:
         rate_bullish, rate_bearish = compare_interest_rate(rate_this_month, rate_month_before)
     else:
-        rate_bullish, rate_bearish = 0, 0
+        rate_bullish, rate_bearish = 0.0, 0.0
 
     if cpi_m_to_m:
-        cpi_bullish, cpi_bearish = compare_cpi_m_to_m(cpi_m_to_m)
+        cpi_bullish, cpi_bearish = compare_cpi_ppi_m_to_m(cpi_m_to_m)
     else:
-        cpi_bullish, cpi_bearish = 0, 0
+        cpi_bullish, cpi_bearish = 0.0, 0.0
 
     if ppi_m_to_m:
-        ppi_bullish, ppi_bearish = compare_ppi_m_to_m(ppi_m_to_m)
+        ppi_bullish, ppi_bearish = compare_cpi_ppi_m_to_m(ppi_m_to_m)
     else:
-        ppi_bullish, ppi_bearish = 0, 0
+        ppi_bullish, ppi_bearish = 0.0, 0.0
 
     weights = {
         "interest_rate": 0.5,
@@ -123,5 +103,4 @@ def calculate_macro_sentiment(rate_this_month: Optional[float], rate_month_befor
 
 
 if __name__ == "__main__":
-    macro_bullish_outer, macro_bearish_outer = compare_ppi_m_to_m(-1)
-    print(type(macro_bullish_outer), macro_bearish_outer)
+    print(calculate_macro_sentiment(1, 0, -1, -1))
