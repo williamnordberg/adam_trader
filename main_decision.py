@@ -14,7 +14,7 @@ from trading_decision import make_trading_decision
 from long_position_open import long_position
 from short_position_open import short_position
 from factors_states_visualization import visualize_charts
-from database_visualization import visualize_database_two_rows
+from database_visualization import visualize_database_one_chart
 
 # Constants
 LOOP_COUNTER = 0
@@ -78,7 +78,7 @@ while True:
                      weighted_score_up, weighted_score_down)
 
     # visualize database
-    visualize_database_two_rows()
+    visualize_database_one_chart()
     # Trading decision
     if weighted_score_up > weighted_score_down and weighted_score_up > long_threshold:
         logging.info('Opening a long position')

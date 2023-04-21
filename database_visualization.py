@@ -245,22 +245,32 @@ def visualize_database_two_rows():
     fig.show()
 
 
+def normalize_columns(df):
+    normalized_df = df.copy()
+
+    for column in df.columns:
+        if column == 'date' or column == "technical_potential_up_reversal_bullish" \
+                or column == "technical_potential_down_reversal_bearish" or column == "technical_potential_up_trend":
+            continue
+        if pd.api.types.is_numeric_dtype(df[column]) and df[column].max() > 1:
+            normalized_df[column] = (df[column] - df[column].min()) / (df[column].max() - df[column].min())
+
+    return normalized_df
+
+
 def visualize_database_one_chart():
     df = pd.read_csv('data/database.csv')
-
-    # Convert the 'date' column to datetime objects
-    df['date'] = pd.to_datetime(df['date'])
 
     # Convert boolean columns to integers
     bool_columns = ["technical_potential_up_reversal_bullish",
                     "technical_potential_down_reversal_bearish", "technical_potential_up_trend"]
     df[bool_columns] = df[bool_columns].astype(int)
 
-    # Normalize the data
-    normalized_df = (df - df.min()) / (df.max() - df.min())
+    # Normalize only the columns with values bigger than 1
+    normalized_df = normalize_columns(df)
 
     # Set the 'date' column as the index
-    df.set_index('date', inplace=True)
+    normalized_df.set_index('date', inplace=True)
 
     # Create an empty figure
     fig = go.Figure()
