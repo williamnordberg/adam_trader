@@ -11,6 +11,8 @@ from handy_modules import check_internet_connection
 session = Session()
 
 SATOSHI_TO_BITCOIN = 100000000
+API_BASE_URL = "https://api.blockcypher.com/v1/btc/main/addrs/"
+SLEEP_TIME = 60
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Load the config file
@@ -48,7 +50,7 @@ def get_address_transactions_24h_blockcypher(address: str) -> Tuple[float, float
 
     # Construct the API URL to get all transactions for the address
     api_key = API_KEY_BLOCKCYPHER
-    api_url = f"https://api.blockcypher.com/v1/btc/main/addrs/{address}/full?token={api_key}"
+    api_url = f"{API_BASE_URL}{address}/full?token={api_key}"
 
     # Send the API request and get the response
     response = session.get(api_url)
@@ -77,7 +79,7 @@ def get_address_transactions_24h_blockcypher(address: str) -> Tuple[float, float
 
     elif response.status_code == 429:
         logging.info(f"Rate limited for address {address}. Sleeping for a minute.")
-        time.sleep(60)
+        time.sleep(SLEEP_TIME)
         return get_address_transactions_24h_blockcypher(address)
 
     else:

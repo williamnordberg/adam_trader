@@ -8,6 +8,9 @@ from handy_modules import check_internet_connection
 session = Session()
 
 SATOSHI_TO_BITCOIN = 100000000
+API_URL = "https://blockchain.info/rawaddr/"
+SLEEP_TIME = 60
+MAX_RETRIES = 3
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
@@ -34,7 +37,7 @@ def get_address_transactions_24h(address: str) -> Tuple[float, float]:
     time_24_hours_ago = current_time - 86400
 
     # Construct the API URL to get all transactions for the address
-    api_url = f"https://blockchain.info/rawaddr/{address}"
+    api_url = f"{API_URL}{address}"
 
     # Send the API request and get the response
     response = session.get(api_url)
@@ -66,7 +69,7 @@ def get_address_transactions_24h(address: str) -> Tuple[float, float]:
 
     elif response.status_code == 429:
         logging.info(f"Rate limited for address {address}. Sleeping for a minute.")
-        time.sleep(60)
+        time.sleep(SLEEP_TIME)
         return get_address_transactions_24h(address)
     else:
         logging.info(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")

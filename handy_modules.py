@@ -64,8 +64,12 @@ def retry_on_error_with_fallback(max_retries: int = 3, delay: int = 5,
                     time.sleep(delay)
             logging.error(f"All {max_retries} attempts failed.")
             if fallback_values is not None:
-                logging.error(f"Returning fallback values {fallback_values}.")
-                return fallback_values
+                if fallback_values == "pass":
+                    logging.error("Fallback value is 'pass'. Skipping this function.")
+                    return
+                else:
+                    logging.error(f"Returning fallback values {fallback_values}.")
+                    return fallback_values
             else:
                 raise
 
