@@ -6,11 +6,8 @@ def compare_polarity(last_24_hours_positive_polarity: float, saved_positive_pola
         -> Tuple[float, float]:
     positive_percentage_increase = (last_24_hours_positive_polarity - saved_positive_polarity
                                     ) / saved_positive_polarity * 100
-    print('positive_percentage_increase', positive_percentage_increase)
     negative_percentage_increase = (last_24_hours_negative_polarity - saved_negative_polarity
                                     ) / saved_negative_polarity * 100
-    print('negative_percentage_increase', negative_percentage_increase)
-
     if positive_percentage_increase > negative_percentage_increase:
         if positive_percentage_increase >= 50:
             return 1, 0
