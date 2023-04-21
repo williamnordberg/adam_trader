@@ -59,7 +59,7 @@ def check_news_cryptocompare_sentiment() -> Tuple[float, float, int, int]:
             except Exception as e:
                 logging.error(f"Error analyzing content: {e}")
                 return 0, 0, 0, 0
-        return positive_polarity_score / positive_count, negative_polarity_score / negative_count, \
+        return positive_polarity_score / positive_count, abs(negative_polarity_score / negative_count), \
             positive_count, negative_count
 
     else:

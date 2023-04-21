@@ -77,7 +77,7 @@ def check_news_api_sentiment(start: datetime, end: datetime) -> Tuple[float, flo
         avg_positive_polarity = positive_polarity_score / positive_count if positive_count > 0 else 0
         avg_negative_polarity = negative_polarity_score / negative_count if negative_count > 0 else 0
 
-        return avg_positive_polarity, avg_negative_polarity, positive_count, negative_count
+        return avg_positive_polarity, abs(avg_negative_polarity), positive_count, negative_count
 
     except requests.exceptions.RequestException as e:
         logging.error(f'Error occurred: {e}')
