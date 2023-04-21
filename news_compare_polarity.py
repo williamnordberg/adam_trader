@@ -1,13 +1,15 @@
 from typing import Tuple
 
 
-def compare_polarity(positive_polarity_24_hours_before: float, latest_positive_polarity_score: float,
-                     negative_polarity_24_hours_before: float, latest_negative_polarity_score: float)\
+def compare_polarity(last_24_hours_positive_polarity: float, saved_positive_polarity: float,
+                     last_24_hours_negative_polarity: float, saved_negative_polarity: float)\
         -> Tuple[float, float]:
-    positive_percentage_increase = (positive_polarity_24_hours_before - latest_positive_polarity_score
-                                    ) / latest_positive_polarity_score * 100
-    negative_percentage_increase = (negative_polarity_24_hours_before - latest_negative_polarity_score
-                                    ) / latest_negative_polarity_score * 100
+    positive_percentage_increase = (last_24_hours_positive_polarity - saved_positive_polarity
+                                    ) / saved_positive_polarity * 100
+    print('positive_percentage_increase', positive_percentage_increase)
+    negative_percentage_increase = (last_24_hours_negative_polarity - saved_negative_polarity
+                                    ) / saved_negative_polarity * 100
+    print('negative_percentage_increase', negative_percentage_increase)
 
     if positive_percentage_increase > negative_percentage_increase:
         if positive_percentage_increase >= 50:
@@ -37,9 +39,7 @@ def compare_polarity(positive_polarity_24_hours_before: float, latest_positive_p
 
 
 if __name__ == '__main__':
-    positive_polarity_24_hours_before_outer, latest_positive_polarity_score_outer, \
-        negative_polarity_24_hours_before_outer, latest_negative_polarity_score_outer = \
-        0.3868055555555555, 0.27497351851851853, -0.10, -0.01
-    x, y = compare_polarity(positive_polarity_24_hours_before_outer, latest_positive_polarity_score_outer,
-                            negative_polarity_24_hours_before_outer, latest_negative_polarity_score_outer)
+    # last_24_hours_positive_polarity, saved_positive_polarity,
+    # last_24_hours_negative_polarity, saved_negative_polarity
+    x, y = compare_polarity(2, 1, 2, 2)
     print(f'bullish: {x}, bearish: {y}')

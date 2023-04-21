@@ -56,7 +56,7 @@ def check_news_sentiment_scrapper() -> Tuple[float, float, int, int]:
     positive_polarity = positive_polarity_score / positive_count if positive_count > 0 else 0
     negative_polarity = negative_polarity_score / negative_count if negative_count > 0 else 0
 
-    return positive_polarity, negative_polarity, positive_count, negative_count
+    return positive_polarity, abs(negative_polarity), positive_count, negative_count
 
 
 if __name__ == "__main__":
