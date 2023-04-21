@@ -19,8 +19,8 @@ from database_visualization import visualize_database_two_rows
 # Constants
 LOOP_COUNTER = 0
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
-long_threshold = 0.8
-short_threshold = 0.8
+long_threshold = 0.99
+short_threshold = 0.99
 
 logging.basicConfig(filename='trading.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
