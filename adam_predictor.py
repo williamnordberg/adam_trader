@@ -25,6 +25,7 @@ def load_dataset() -> pd.DataFrame:
 
 
 def update_dataset():
+    """Update the dataset with new data from different sources."""
     try:
         update_internal_factors()
         update_yahoo_data()
@@ -36,7 +37,15 @@ def update_dataset():
 
 
 def train_and_predict(dataset: pd.DataFrame) -> int:
-    """Train a DecisionTreeRegressor model and make predictions."""
+    """
+       Train a DecisionTreeRegressor model on the given data.
+
+       Args:
+        dataset (pd.DataFrame): dataset.
+
+       Returns:
+        int: The predicted value.
+       """
     # SimpleImputer to fill missing values
     imputer = SimpleImputer(strategy='mean')
     dataset[['DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate', 'Open', 'Rate']] = imputer.fit_transform(
