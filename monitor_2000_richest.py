@@ -1,5 +1,4 @@
 # Standard library
-from datetime import datetime
 import time
 import csv
 import logging
@@ -90,7 +89,7 @@ def monitor_bitcoin_richest_addresses() -> Tuple[float, float]:
     if should_update('richest_addresses_scrap'):
         scrape_bitcoin_rich_list()
     else:
-        logging.info(f'list of richest addresses is already updated less than 8 hours ago at {last_update_time}')
+        logging.info(f'list of richest addresses is already updated')
 
     # Read addresses from the CSV file
     addresses = read_addresses_from_csv(BITCOIN_RICH_LIST_FILE)
