@@ -270,6 +270,14 @@ def should_update(factor: str) -> bool:
 
 
 def save_update_time(factor_name: str):
+    """
+    save update time
+
+    Args:
+        factor_name (str): the factor that get updated
+
+    """
+
     latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
     latest_info_saved.loc[0, f'latest_{factor_name}_update'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     latest_info_saved.to_csv(LATEST_INFO_FILE, index=False)
