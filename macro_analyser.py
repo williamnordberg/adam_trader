@@ -113,6 +113,7 @@ def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
                                 ppi_m_to_m = value
 
     service.stop()
+    print(rate_this_month, rate_month_before)
     if rate_this_month or cpi_m_to_m or ppi_m_to_m:
         macro_bullish, macro_bearish = calculate_macro_sentiment(
             rate_this_month, rate_month_before, cpi_m_to_m, ppi_m_to_m)
@@ -144,3 +145,4 @@ if __name__ == "__main__":
     macro_bullish_outer, macro_bearish_outer, events_date_dict_outer = macro_sentiment()
     logging.info(f"{macro_bullish_outer}, {macro_bearish_outer}, event: {events_date_dict_outer}")
     print_upcoming_events(events_date_dict_outer)
+    calculate_macro_sentiment(5, 4.75, 0.1, -0.5)
