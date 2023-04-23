@@ -99,8 +99,9 @@ def calculate_macro_sentiment(rate_this_month: Optional[float], rate_month_befor
         normalized_score_up = weighted_score_up / total_score
         normalized_score_down = weighted_score_down / total_score
 
-    return normalized_score_up, normalized_score_down
+    return round(normalized_score_up, 2), round(normalized_score_down, 2)
 
 
 if __name__ == "__main__":
-    print(calculate_macro_sentiment(1, 0, -1, -1))
+    # print(calculate_macro_sentiment(1, 0, -1, -1))
+    print(calculate_macro_sentiment(5, 4.75, 0.1, -0.5))
