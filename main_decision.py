@@ -33,7 +33,7 @@ while True:
     prediction_bullish, prediction_bearish = decision_tree_predictor()
 
     # 2 Order book
-    probabilities = get_probabilities(SYMBOLS, bid_multiplier=0.995, ask_multiplier=1.005)
+    probabilities = get_probabilities(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
     assert probabilities is not None, "get_probabilities returned None"
     order_book_bullish, order_book_bearish = probabilities
 
