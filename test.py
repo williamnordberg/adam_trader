@@ -21,28 +21,18 @@ aggregated_values: Dict[str, List[float]] = {
 }
 
 
-# Add a global variable to store the last time data was saved
-last_saved_time: Optional[datetime] = None
-
-
 def aggregate_and_save_values():
-    global last_saved_time
-    current_time = datetime.now()
-
     if not aggregated_values['bid_volume']:  # If there are no values, do nothing
         return
 
     # Calculate the average values for each key in the temporary storage
     avg_values = {key: sum(values) / len(values) for key, values in aggregated_values.items()}
 
-    # If it's the first run in the current hour, save the values to the database
-    if last_saved_time is None or current_time.hour != last_saved_time.hour:
-        for key, value in avg_values.items():
-            save_value_to_database(key, value)
-        last_saved_time = current_time
-    else:  # If it's not the first run, update the values in the database
-        for key, value in avg_values.items():
-            save_value_to_database(key, value)
+    # Save the average values to the database
+    save_value_to_database('bid_volume', avg_values['bid_volume'])
+    save_value_to_database('ask_volume', avg_values['ask_volume'])
+    save_value_to_database('order_book_bullish', avg_values['order_book_bullish'])
+    save_value_to_database('order_book_bearish', avg_values['order_book_bearish'])
 
     # Clear the temporary storage
     for key in aggregated_values:
@@ -101,9 +91,12 @@ def get_probabilities(symbols: List[str], limit: int = LIMIT, bid_multiplier: fl
                            (current_price * bid_multiplier)])
         ask_volume += sum([float(ask[1]) for ask in data['asks'] if float(ask[0]) <=
                            current_price * ask_multiplier])
-
+    print('bid_volume', bid_volume)
+    print('ask vol', ask_volume)
     probability_up = bid_volume / (bid_volume + ask_volume)
     probability_down = ask_volume / (bid_volume + ask_volume)
+    print('probability_up', probability_up)
+    print('probability_down', probability_down)
 
     order_book_bullish, order_book_bearish = compare_probability(probability_up, probability_down)
 
@@ -118,6 +111,13 @@ def get_probabilities(symbols: List[str], limit: int = LIMIT, bid_multiplier: fl
     last_hour = current_time.replace(minute=0, second=0, microsecond=0)
     if current_time - last_hour >= timedelta(hours=1):
         aggregate_and_save_values()
+
+    # Save the value in database for a run before an hour pass
+    else:
+        save_value_to_database('bid_volume', bid_volume)
+        save_value_to_database('ask_volume', ask_volume)
+        save_value_to_database('order_book_bullish', order_book_bullish)
+        save_value_to_database('order_book_bearish', order_book_bearish)
 
     return order_book_bullish, order_book_bearish
 
@@ -146,7 +146,7 @@ def get_probabilities_hit_profit_or_stop(symbols: List[str], limit: int, profit_
 
 
 if __name__ == '__main__':
-    probabilities = get_probabilities(SYMBOLS, limit=LIMIT, bid_multiplier=0.995, ask_multiplier=1.005)
+    probabilities = get_probabilities(SYMBOLS, limit=LIMIT, bid_multiplier=0.99, ask_multiplier=1.01)
     assert probabilities is not None, "get_probabilities returned None"
     order_book_bullish_outer, order_book_bearish_outer = probabilities
 
@@ -159,6 +159,3 @@ if __name__ == '__main__':
 
     logging.info(f'order_book_hit_target:{order_book_hit_target_outer},'
                  f'order_book_hit_stop: {order_book_hit_stop_outer}')
-
-if __name__ == "__main__":
-    print(get_probabilities(SYMBOLS))
