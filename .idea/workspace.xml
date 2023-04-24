@@ -10,7 +10,6 @@
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="11 April">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,7 +88,7 @@
       <recent name="C:\will\Python_project\adam_trader\.gitignore" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main_decision">
+  <component name="RunManager" selected="Python.test">
     <configuration name="macro_analyser" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -221,8 +220,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.main_decision" />
         <item itemvalue="Python.test" />
+        <item itemvalue="Python.main_decision" />
         <item itemvalue="Python.macro_compare" />
         <item itemvalue="Python.macro_analyser" />
         <item itemvalue="Python.update_dataset_internal_factors" />
@@ -237,20 +236,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00139" summary="11 April">
-      <created>1681638335712</created>
-      <option name="number" value="00139" />
-      <option name="presentableId" value="LOCAL-00139" />
-      <option name="project" value="LOCAL" />
-      <updated>1681638335712</updated>
-    </task>
-    <task id="LOCAL-00140" summary="11 April">
-      <created>1681640507345</created>
-      <option name="number" value="00140" />
-      <option name="presentableId" value="LOCAL-00140" />
-      <option name="project" value="LOCAL" />
-      <updated>1681640507345</updated>
     </task>
     <task id="LOCAL-00141" summary="11 April">
       <created>1681691228417</created>
@@ -581,7 +566,21 @@
       <option name="project" value="LOCAL" />
       <updated>1682298336067</updated>
     </task>
-    <option name="localTasksCounter" value="188" />
+    <task id="LOCAL-00188" summary="11 April">
+      <created>1682301165650</created>
+      <option name="number" value="00188" />
+      <option name="presentableId" value="LOCAL-00188" />
+      <option name="project" value="LOCAL" />
+      <updated>1682301165650</updated>
+    </task>
+    <task id="LOCAL-00189" summary="11 April">
+      <created>1682301217706</created>
+      <option name="number" value="00189" />
+      <option name="presentableId" value="LOCAL-00189" />
+      <option name="project" value="LOCAL" />
+      <updated>1682301217706</updated>
+    </task>
+    <option name="localTasksCounter" value="190" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">

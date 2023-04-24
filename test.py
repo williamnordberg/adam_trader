@@ -29,8 +29,8 @@ def aggregate_and_save_values():
     avg_values = {key: sum(values) / len(values) for key, values in aggregated_values.items()}
 
     # Save the average values to the database
-    save_value_to_database('bid_volume', avg_values['bid_volume'])
-    save_value_to_database('ask_volume', avg_values['ask_volume'])
+    save_value_to_database('bid_volume', round(avg_values['bid_volume'], 2))
+    save_value_to_database('ask_volume', round(avg_values['ask_volume'], 2))
     save_value_to_database('order_book_bullish', avg_values['order_book_bullish'])
     save_value_to_database('order_book_bearish', avg_values['order_book_bearish'])
 
@@ -114,8 +114,8 @@ def get_probabilities(symbols: List[str], limit: int = LIMIT, bid_multiplier: fl
 
     # Save the value in database for a run before an hour pass
     else:
-        save_value_to_database('bid_volume', bid_volume)
-        save_value_to_database('ask_volume', ask_volume)
+        save_value_to_database('bid_volume', round(bid_volume, 2))
+        save_value_to_database('ask_volume', round(ask_volume, 2))
         save_value_to_database('order_book_bullish', order_book_bullish)
         save_value_to_database('order_book_bearish', order_book_bearish)
 
