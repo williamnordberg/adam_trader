@@ -106,6 +106,7 @@ def technical_analyse_wrapper() -> Tuple[float, float]:
     potential_up_reversal_bullish, potential_down_reversal_bearish = potential_reversal(data_close)
     potential_up_trend = potential_up_trending(data_close)
 
+    
     # Set initial value base on ema200
     ema200 = exponential_moving_average(data_close, 200)
     current_price = get_bitcoin_price()
@@ -165,5 +166,5 @@ def technical_analyse() -> Tuple[float, float]:
 
 
 if __name__ == '__main__':
-    technical_bullish1, technical_bearish1 = technical_analyse()
+    technical_bullish1, technical_bearish1 = technical_analyse_wrapper()
     logging.info(f'Bullish: {technical_bullish1}, Bearish: {technical_bearish1}')

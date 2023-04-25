@@ -1,161 +1,100 @@
-from typing import List, Optional, Tuple, Dict
-import requests
+import praw
+import time
+import pandas as pd
 import logging
-from datetime import datetime, timedelta
+import configparser
+from typing import Tuple
+from praw import Reddit
+from prawcore.exceptions import RequestException
+from requests.exceptions import SSLError
+from urllib3.exceptions import MaxRetryError
+
 
 from database import save_value_to_database
-from handy_modules import get_bitcoin_price, retry_on_error_fallback_0_0
+from handy_modules import save_update_time, should_update, retry_on_error_with_fallback, compare_reddit
+from database import read_database
 
+
+ONE_DAYS_IN_SECONDS = 24 * 60 * 60
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-ENDPOINT_DEPTH = "https://api.binance.com/api/v3/depth"
-LIMIT = 1000
-SYMBOLS = ['BTCUSDT', 'BTCBUSD']
+LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
+CONFIG_PATH = 'config/config.ini'
 
 
-# Temporary storage for aggregated values
-aggregated_values: Dict[str, List[float]] = {
-    'bid_volume': [],
-    'ask_volume': [],
-    'order_book_bullish': [],
-    'order_book_bearish': []
-}
+@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(RequestException,), fallback_values=0)
+def count_bitcoin_posts(reddit: Reddit) -> int:
+    """
+        Counts the number of Bitcoin-related posts on Reddit in the last 7 days.
+
+        Args:
+            reddit (praw.Reddit): An authenticated Reddit instance.
+
+        Returns:
+            int: The number of Bitcoin-related posts in the last 7 days.
+
+        """
+    subreddit = reddit.subreddit("all")
+    bitcoin_posts = subreddit.search("#Crypto ", limit=1000)
+    count = 0
+    for post in bitcoin_posts:
+        if post.created_utc > (time.time() - ONE_DAYS_IN_SECONDS):
+            count += 1
+
+    return count
 
 
-def aggregate_and_save_values():
-    if not aggregated_values['bid_volume']:  # If there are no values, do nothing
-        return
+@retry_on_error_with_fallback(
+    max_retries=3, delay=5, allowed_exceptions=(SSLError, MaxRetryError,), fallback_values=(0, 0))
+def reddit_check_wrapper() -> Tuple[float, float]:
 
-    # Calculate the average values for each key in the temporary storage
-    avg_values = {key: sum(values) / len(values) for key, values in aggregated_values.items()}
+    config = configparser.ConfigParser()
+    config.read(CONFIG_PATH)
 
-    # Save the average values to the database
-    save_value_to_database('bid_volume', round(avg_values['bid_volume'], 2))
-    save_value_to_database('ask_volume', round(avg_values['ask_volume'], 2))
-    save_value_to_database('order_book_bullish', avg_values['order_book_bullish'])
-    save_value_to_database('order_book_bearish', avg_values['order_book_bearish'])
+    reddit_config = config['reddit']
+    reddit = praw.Reddit(
+        client_id=reddit_config['client_id'],
+        client_secret=reddit_config['client_secret'],
+        user_agent=reddit_config['user_agent']
+    )
+    latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
 
-    # Clear the temporary storage
-    for key in aggregated_values:
-        aggregated_values[key] = []
-
-
-@retry_on_error_fallback_0_0(max_retries=3, delay=5, allowed_exceptions=(requests.exceptions.RequestException,))
-def get_order_book(symbol: str, limit: int):
+    previous_activity = float(latest_info_saved['previous_activity'][0])
+    # previous_count = float(latest_info_saved['previous_count'][0])
     try:
-        response = requests.get(ENDPOINT_DEPTH, params={'symbol': symbol, 'limit': str(limit)})
-        return response.json()
-    except requests.exceptions.RequestException as e:
-        logging.error(e)
-        return None
+        current_activity = reddit.subreddit("Bitcoin").active_user_count
+        current_count = count_bitcoin_posts(reddit)
+        reddit_bullish, reddit_bearish = compare_reddit(current_activity, previous_activity)
+
+        latest_info_saved.loc[0, 'previous_activity'] = current_activity
+        latest_info_saved.loc[0, 'previous_count'] = current_count
+
+        latest_info_saved.to_csv(LATEST_INFO_SAVED, index=False)
+
+        # Save latest update time
+        save_update_time('reddit')
+
+        # Save to database
+        save_value_to_database('reddit_bullish', reddit_bullish)
+        save_value_to_database('reddit_bearish', reddit_bearish)
+        save_value_to_database('reddit_count_bitcoin_posts_24h', current_count)
+        save_value_to_database('reddit_activity_24h', current_activity)
+    except Exception as e:
+        logging.error(f"Error occurred: {e}")
+        reddit_bullish, reddit_bearish = 0, 0
+
+    return reddit_bullish, reddit_bearish
 
 
-def compare_probability(probability_up: float, probability_down: float) -> Tuple[float, float]:
-
-    if probability_up > probability_down:
-        if probability_up >= 0.65:
-            return 1, 0
-        elif probability_up >= 0.62:
-            return 0.9, 0.1
-        elif probability_up >= 0.59:
-            return 0.8, 0.2
-        elif probability_up >= 0.56:
-            return 0.7, 0.3
-        elif probability_up >= 0.53:
-            return 0.6, 0.4
-
-    elif probability_up < probability_down:
-        if probability_down >= 0.65:
-            return 0, 1
-        elif probability_down >= 0.62:
-            return 0.1, 0.9
-        elif probability_down >= 0.59:
-            return 0.2, 0.8
-        elif probability_down >= 0.56:
-            return 0.3, 0.7
-        elif probability_down >= 0.53:
-            return 0.4, 0.6
-
-    return 0, 0
-
-
-def get_probabilities(symbols: List[str], limit: int = LIMIT, bid_multiplier: float = 0.995,
-                      ask_multiplier: float = 1.005) -> Optional[Tuple[float, float]]:
-    bid_volume, ask_volume = 0.0000001, 0.0
-    current_price = get_bitcoin_price()
-    for symbol in symbols:
-        data = get_order_book(symbol, limit)
-        if data is None:
-            return 0, 0
-
-        bid_volume += sum([float(bid[1]) for bid in data['bids'] if float(bid[0]) >=
-                           (current_price * bid_multiplier)])
-        ask_volume += sum([float(ask[1]) for ask in data['asks'] if float(ask[0]) <=
-                           current_price * ask_multiplier])
-    print('bid_volume', bid_volume)
-    print('ask vol', ask_volume)
-    probability_up = bid_volume / (bid_volume + ask_volume)
-    probability_down = ask_volume / (bid_volume + ask_volume)
-    print('probability_up', probability_up)
-    print('probability_down', probability_down)
-
-    order_book_bullish, order_book_bearish = compare_probability(probability_up, probability_down)
-
-    # Add the values to the temporary storage
-    aggregated_values['bid_volume'].append(bid_volume)
-    aggregated_values['ask_volume'].append(ask_volume)
-    aggregated_values['order_book_bullish'].append(order_book_bullish)
-    aggregated_values['order_book_bearish'].append(order_book_bearish)
-
-    # Check if an hour has passed since the last database update
-    current_time = datetime.now()
-    last_hour = current_time.replace(minute=0, second=0, microsecond=0)
-    if current_time - last_hour >= timedelta(hours=1):
-        aggregate_and_save_values()
-
-    # Save the value in database for a run before an hour pass
+def reddit_check() -> Tuple[float, float]:
+    if should_update('reddit'):
+        return reddit_check_wrapper()
     else:
-        save_value_to_database('bid_volume', round(bid_volume, 2))
-        save_value_to_database('ask_volume', round(ask_volume, 2))
-        save_value_to_database('order_book_bullish', order_book_bullish)
-        save_value_to_database('order_book_bearish', order_book_bearish)
-
-    return order_book_bullish, order_book_bearish
-
-
-def get_probabilities_hit_profit_or_stop(symbols: List[str], limit: int, profit_target: float,
-                                         stop_loss: float) -> Optional[Tuple[float, float]]:
-    bid_volume, ask_volume = 0.0, 0.0
-    for symbol in symbols:
-        data = get_order_book(symbol, limit)
-        if data is None:
-            return None
-
-        bids = data.get('bids')
-        asks = data.get('asks')
-
-        if bids is not None:
-            bid_volume += sum([float(bid[1]) for bid in bids if float(bid[0]) >= stop_loss])
-
-        if asks is not None:
-            ask_volume += sum([float(ask[1]) for ask in asks if float(ask[0]) <= profit_target])
-
-    probability_to_hit_target = bid_volume / (bid_volume + ask_volume)
-    probability_to_hit_stop_loss = ask_volume / (bid_volume + ask_volume)
-
-    return probability_to_hit_target, probability_to_hit_stop_loss
+        database = read_database()
+        reddit_bullish = database['reddit_bullish'][-1]
+        reddit_bearish = database['reddit_bearish'][-1]
+        return reddit_bullish, reddit_bearish
 
 
 if __name__ == '__main__':
-    probabilities = get_probabilities(SYMBOLS, limit=LIMIT, bid_multiplier=0.99, ask_multiplier=1.01)
-    assert probabilities is not None, "get_probabilities returned None"
-    order_book_bullish_outer, order_book_bearish_outer = probabilities
-
-    probabilities_hit = get_probabilities_hit_profit_or_stop(SYMBOLS, LIMIT, 30000, 20000)
-    assert probabilities_hit is not None, "get_probabilities_hit_profit_or_stop returned None"
-    order_book_hit_target_outer, order_book_hit_stop_outer = probabilities_hit
-
-    logging.info(f'order_book_bullish:{order_book_bullish_outer},'
-                 f'order_book_bearish: {order_book_bearish_outer}')
-
-    logging.info(f'order_book_hit_target:{order_book_hit_target_outer},'
-                 f'order_book_hit_stop: {order_book_hit_stop_outer}')
+    reddit_bullish_outer, reddit_bearish_outer = reddit_check_wrapper()
+    logging.info(f", reddit_bullish: {reddit_bullish_outer}, reddit_bearish: {reddit_bearish_outer}")

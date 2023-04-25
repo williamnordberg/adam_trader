@@ -184,24 +184,24 @@ def compare_google_search_trends(last_hour: int, two_hours_before: int) -> Tuple
         tuple: bullish and bearish probabilities based on the search trends.
     """
     if last_hour >= two_hours_before:
-        if last_hour >= (two_hours_before * 1.8):
+        if last_hour >= (two_hours_before * 1.25):
             return 1, 0
-        elif last_hour >= (two_hours_before * 1.6):
+        elif last_hour >= (two_hours_before * 1.20):
             return 0.85, 0.15
-        elif last_hour >= (two_hours_before * 1.35):
+        elif last_hour >= (two_hours_before * 1.15):
             return 0.75, 0.25
-        elif last_hour >= (two_hours_before * 1.2):
+        elif last_hour >= (two_hours_before * 1.1):
             return 0.6, 0.4
         return 0, 0
 
     elif last_hour <= two_hours_before:
-        if two_hours_before >= (last_hour * 1.8):
+        if two_hours_before >= (last_hour * 1.25):
             return 0, 1
-        elif two_hours_before >= (last_hour * 1.6):
-            return 0.15, 0.85
-        elif two_hours_before >= (last_hour * 1.35):
-            return 0.25, 0.75
         elif two_hours_before >= (last_hour * 1.2):
+            return 0.15, 0.85
+        elif two_hours_before >= (last_hour * 1.15):
+            return 0.25, 0.75
+        elif two_hours_before >= (last_hour * 1.1):
             return 0.4, 0.6
         return 0, 0
 
@@ -209,7 +209,7 @@ def compare_google_search_trends(last_hour: int, two_hours_before: int) -> Tuple
 
 
 def compare_send_receive_richest_addresses_wrapper() -> Tuple[float, float]:
-    latest_info_saved = pd.read_csv('data/latest_info_saved.csv')
+    latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
     total_received = latest_info_saved['total_received_coins_in_last_24'][0]
     total_sent = latest_info_saved['total_sent_coins_in_last_24'][0]
 
@@ -317,8 +317,4 @@ def compare_reddit(current_activity: float, previous_activity: float) -> Tuple[f
 if __name__ == '__main__':
     logging.info(f'bitcoin price: {get_bitcoin_price()}')
 
-    predicted_bullish, predicted_bearish = compare_predicted_price(200, 198)
-    logging.info(f'predicted_bullish: {predicted_bullish}, predicted_bearish: {predicted_bearish} ')
 
-    google_bullish, google_bearish = compare_google_search_trends(10, 13)
-    logging.info(f'google_bullish: {google_bullish}, google_bearish: {google_bearish} ')
