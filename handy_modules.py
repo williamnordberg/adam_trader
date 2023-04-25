@@ -286,29 +286,28 @@ def save_update_time(factor_name: str):
 def compare_reddit(current_activity: float, previous_activity: float) -> Tuple[float, float]:
 
     activity_percentage = (current_activity - previous_activity) / previous_activity * 100
-
     if activity_percentage > 0:
-        if activity_percentage >= 50:
+        if activity_percentage >= 30:
             return 1, 0
-        elif activity_percentage >= 40:
-            return 0.9, 0.1
-        elif activity_percentage >= 30:
-            return 0.8, 0.2
         elif activity_percentage >= 20:
-            return 0.7, 0.3
+            return 0.9, 0.1
+        elif activity_percentage >= 15:
+            return 0.8, 0.2
         elif activity_percentage >= 10:
+            return 0.7, 0.3
+        elif activity_percentage >= 5:
             return 0.6, 0.4
 
     elif activity_percentage <= 0:
-        if activity_percentage <= -50:
+        if activity_percentage <= -30:
             return 0, 1
-        elif activity_percentage <= -40:
-            return 0.1, 0.9
-        elif activity_percentage <= -30:
-            return 0.2, 0.8
         elif activity_percentage <= -20:
-            return 0.3, 0.7
+            return 0.1, 0.9
+        elif activity_percentage <= -15:
+            return 0.2, 0.8
         elif activity_percentage <= -10:
+            return 0.3, 0.7
+        elif activity_percentage <= -5:
             return 0.4, 0.6
 
     return 0, 0

@@ -119,5 +119,5 @@ def check_sentiment_of_news() -> Tuple[float, float]:
 
 
 if __name__ == "__main__":
-    news_bullish_outer, news_bearish_outer = check_sentiment_of_news()
+    news_bullish_outer, news_bearish_outer = check_sentiment_of_news_wrapper()
     logging.info(f'news_bullish: {news_bullish_outer}, and news_bearish: {news_bearish_outer}')
