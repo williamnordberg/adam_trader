@@ -36,7 +36,5 @@ def compare_polarity(last_24_hours_positive_polarity: float, saved_positive_pola
 
 
 if __name__ == '__main__':
-    # last_24_hours_positive_polarity, saved_positive_polarity,
-    # last_24_hours_negative_polarity, saved_negative_polarity
-    x, y = compare_polarity(2, 1, 2, 2)
+    x, y = compare_polarity(1, 2, 2, 1)
     print(f'bullish: {x}, bearish: {y}')

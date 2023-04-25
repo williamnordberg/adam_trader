@@ -9,11 +9,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="11 April">
-      <change afterPath="$PROJECT_DIR$/output_file.pstats" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore/requirements.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config/bitcoin_rich_list2000.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_news_compare_polarity.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_scrape_bitcoin_rich_list.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/latest_info_saved.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adam_predictor.py" beforeDir="false" afterPath="$PROJECT_DIR$/adam_predictor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_compare_polarity.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_compare_polarity.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +76,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/will/Python_project/adam_trader",
+    "last_opened_file_path": "C:/will/Python_project/adam_trader/config",
     "run.code.analysis.last.selected.profile": "aDefault",
     "settings.editor.selected.configurable": "preferences.lookFeel"
   }
@@ -94,7 +95,7 @@
       <recent name="C:\will\Python_project\adam_trader\.gitignore" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main_decision">
+  <component name="RunManager" selected="Python tests.Unittests with right config">
     <configuration name="main_decision" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -116,7 +117,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="news_analyser" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="news_compare_polarity" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -128,28 +129,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/news_analyser.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="reddit" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="adam_trader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reddit.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/news_compare_polarity.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -204,8 +184,8 @@
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="C:\will\Python_project\adam_trader\interpreter\Scripts\python.exe" />
-      <option name="SDK_NAME" value="Python 3.10 (adam_trader)" />
+      <option name="SDK_HOME" value="C:\will\Python_project\adam_trader\adam_interpreter\Scripts\python.exe" />
+      <option name="SDK_NAME" value="Python 3.10 (adam_trader) (2)" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -217,20 +197,18 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.news_compare_polarity" />
       <item itemvalue="Python.main_decision" />
-      <item itemvalue="Python.news_analyser" />
-      <item itemvalue="Python.reddit" />
       <item itemvalue="Python.trading_decision" />
       <item itemvalue="Python.test" />
       <item itemvalue="Python tests.Unittests with right config" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.news_compare_polarity" />
         <item itemvalue="Python.main_decision" />
         <item itemvalue="Python.trading_decision" />
         <item itemvalue="Python.test" />
-        <item itemvalue="Python.news_analyser" />
-        <item itemvalue="Python.reddit" />
       </list>
     </recent_temporary>
   </component>
@@ -242,13 +220,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00147" summary="11 April">
-      <created>1681701053896</created>
-      <option name="number" value="00147" />
-      <option name="presentableId" value="LOCAL-00147" />
-      <option name="project" value="LOCAL" />
-      <updated>1681701053896</updated>
     </task>
     <task id="LOCAL-00148" summary="11 April">
       <created>1681704899205</created>
@@ -586,7 +557,14 @@
       <option name="project" value="LOCAL" />
       <updated>1682393837294</updated>
     </task>
-    <option name="localTasksCounter" value="196" />
+    <task id="LOCAL-00196" summary="11 April">
+      <created>1682396439860</created>
+      <option name="number" value="00196" />
+      <option name="presentableId" value="LOCAL-00196" />
+      <option name="project" value="LOCAL" />
+      <updated>1682396439860</updated>
+    </task>
+    <option name="localTasksCounter" value="197" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
