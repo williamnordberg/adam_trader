@@ -91,6 +91,11 @@ def make_trading_decision(macro_bullish: float, macro_bearish: float,
     if current_time - last_hour >= timedelta(hours=1):
         aggregate_and_save_values()
 
+    # Save the value in database for a run before an hour pass
+    else:
+        save_value_to_database('weighted_score_up', round(normalized_score_up, 2))
+        save_value_to_database('weighted_score_down', round(normalized_score_down, 2))
+
     return normalized_score_up, normalized_score_down
 
     
