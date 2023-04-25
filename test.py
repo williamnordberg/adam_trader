@@ -1,100 +1,126 @@
-import praw
-import time
-import pandas as pd
 import logging
-import configparser
+import pandas as pd
+from datetime import datetime, timedelta
+
+from handy_modules import should_update, save_update_time
 from typing import Tuple
-from praw import Reddit
-from prawcore.exceptions import RequestException
-from requests.exceptions import SSLError
-from urllib3.exceptions import MaxRetryError
-
-
-from database import save_value_to_database
-from handy_modules import save_update_time, should_update, retry_on_error_with_fallback, compare_reddit
 from database import read_database
+from news_compare_polarity import compare_polarity
+from newsAPI import check_news_api_sentiment
+from news_aggregate import aggregate_news
+from database import save_value_to_database
 
-
-ONE_DAYS_IN_SECONDS = 24 * 60 * 60
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
-CONFIG_PATH = 'config/config.ini'
+
+LATEST_INFO_SAVED_PATH = 'data/latest_info_saved.csv'
 
 
-@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(RequestException,), fallback_values=0)
-def count_bitcoin_posts(reddit: Reddit) -> int:
-    """
-        Counts the number of Bitcoin-related posts on Reddit in the last 7 days.
+def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
+    # Save latest update time
+    save_update_time('sentiment_of_news')
 
-        Args:
-            reddit (praw.Reddit): An authenticated Reddit instance.
+    latest_info_saved = pd.read_csv(LATEST_INFO_SAVED_PATH).squeeze("columns")
+    last_news_sentiment_str = latest_info_saved['last_news_update_time'][0]
+    last_news_sentiment = datetime.strptime(last_news_sentiment_str, '%Y-%m-%d %H:%M:%S')
+    last_update_time_difference = datetime.now() - last_news_sentiment
 
-        Returns:
-            int: The number of Bitcoin-related posts in the last 7 days.
+    if timedelta(hours=24) > last_update_time_difference < timedelta(hours=48):
 
-        """
-    subreddit = reddit.subreddit("all")
-    bitcoin_posts = subreddit.search("#Crypto ", limit=1000)
-    count = 0
-    for post in bitcoin_posts:
-        if post.created_utc > (time.time() - ONE_DAYS_IN_SECONDS):
-            count += 1
+        saved_positive_polarity = latest_info_saved['positive_polarity_score'][0]
+        saved_negative_polarity = latest_info_saved['negative_polarity_score'][0]
+        # latest_positive_count = latest_info_saved['positive_news_count'][0]
+        # latest_negative_count = latest_info_saved['negative_news_count'][0]
 
-    return count
+        # Get aggregated value from 3 function for las 24 hours
+        last_24_hours_positive_polarity, last_24_hours_negative_polarity,\
+            positive_count_24_hours_before, negative_count_24_hours_before = aggregate_news()
+
+        # compare last 24 hours polarity with last 48 hours polarity
+        print('last_24_hours_positive_polarity, saved_positive_polarity,last_24_hours_negative_polarity, saved_negative_polarity', last_24_hours_positive_polarity, saved_positive_polarity,
+                                                      last_24_hours_negative_polarity, saved_negative_polarity)
+
+        news_bullish, news_bearish = compare_polarity(last_24_hours_positive_polarity, saved_positive_polarity,
+                                                      last_24_hours_negative_polarity, saved_negative_polarity)
+
+        # Save data on disk for later compare
+        latest_info_saved.loc[0, 'positive_polarity_score'] = last_24_hours_positive_polarity
+        latest_info_saved.loc[0, 'negative_polarity_score'] = last_24_hours_negative_polarity
+        latest_info_saved.loc[0, 'positive_news_count'] = positive_count_24_hours_before
+        latest_info_saved.loc[0, 'negative_news_count'] = negative_count_24_hours_before
+        latest_info_saved.loc[0, 'news_bullish'] = news_bullish
+        latest_info_saved.loc[0, 'news_bearish'] = news_bearish
+
+        now = datetime.now()
+        now_str = now.strftime('%Y-%m-%d %H:%M:%S')
+        latest_info_saved.loc[0, 'last_news_update_time'] = now_str
+        latest_info_saved.to_csv(LATEST_INFO_SAVED_PATH, index=False)
+
+        # Save data on database
+        save_value_to_database('news_positive_polarity', round(last_24_hours_positive_polarity, 3))
+        save_value_to_database('news_negative_polarity', round(last_24_hours_negative_polarity, 3))
+        save_value_to_database('news_positive_count', positive_count_24_hours_before)
+        save_value_to_database('news_negative_count', negative_count_24_hours_before)
+
+        return news_bullish, news_bearish
+
+    elif last_update_time_difference > timedelta(hours=48):
+        # Get the values for 48 to 24 hours before
+        start = datetime.now() - timedelta(days=2)
+        end = datetime.now() - timedelta(days=1)
+        positive_polarity_48_hours_before, negative_polarity_48_hours_before, \
+            positive_count_outer_48_hours_before, negative_count_48_hours_before = \
+            check_news_api_sentiment(start, end)
+
+        # Get the values for las 24 hours
+        start = datetime.now() - timedelta(days=1)
+        end = datetime.now()
+        last_24_hours_positive_polarity, last_24_hours_negative_polarity, \
+            positive_count_24_hours_before, negative_count_24_hours_before = \
+            check_news_api_sentiment(start, end)
+
+        # compare
+        news_bullish, news_bearish = compare_polarity(
+            last_24_hours_positive_polarity, positive_polarity_48_hours_before,
+            last_24_hours_negative_polarity, negative_polarity_48_hours_before)
+
+        # Get aggregated value from 3 function for las 24 hours
+        positive_polarity_24_hours_to_save, negative_polarity_24_hours_to_save, \
+            positive_count_24_hours_to_save, negative_count_24_hours_to_save = aggregate_news()
+
+        # Save data on disk
+        latest_info_saved.loc[0, 'positive_polarity_score'] = positive_polarity_24_hours_to_save
+        latest_info_saved.loc[0, 'negative_polarity_score'] = negative_polarity_24_hours_to_save
+        latest_info_saved.loc[0, 'positive_news_count'] = positive_count_24_hours_to_save
+        latest_info_saved.loc[0, 'negative_news_count'] = negative_count_24_hours_to_save
+        latest_info_saved.loc[0, 'news_bullish'] = news_bullish
+        latest_info_saved.loc[0, 'news_bearish'] = news_bearish
+
+        now = datetime.now()
+        now_str = now.strftime('%Y-%m-%d %H:%M:%S')
+        latest_info_saved.loc[0, 'last_news_update_time'] = now_str
+        latest_info_saved.to_csv(LATEST_INFO_SAVED_PATH, index=False)
+        logging.info(f'news data has been updated')
+
+        # Save on database, we  do not save news_positive_polarity,
+        # news_negative_polarity, news_positive_count,news_negative_count to keep consistency in database
+        return news_bullish, news_bearish
+
+    return 0, 0
 
 
-@retry_on_error_with_fallback(
-    max_retries=3, delay=5, allowed_exceptions=(SSLError, MaxRetryError,), fallback_values=(0, 0))
-def reddit_check_wrapper() -> Tuple[float, float]:
-
-    config = configparser.ConfigParser()
-    config.read(CONFIG_PATH)
-
-    reddit_config = config['reddit']
-    reddit = praw.Reddit(
-        client_id=reddit_config['client_id'],
-        client_secret=reddit_config['client_secret'],
-        user_agent=reddit_config['user_agent']
-    )
-    latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
-
-    previous_activity = float(latest_info_saved['previous_activity'][0])
-    # previous_count = float(latest_info_saved['previous_count'][0])
-    try:
-        current_activity = reddit.subreddit("Bitcoin").active_user_count
-        current_count = count_bitcoin_posts(reddit)
-        reddit_bullish, reddit_bearish = compare_reddit(current_activity, previous_activity)
-
-        latest_info_saved.loc[0, 'previous_activity'] = current_activity
-        latest_info_saved.loc[0, 'previous_count'] = current_count
-
-        latest_info_saved.to_csv(LATEST_INFO_SAVED, index=False)
-
-        # Save latest update time
-        save_update_time('reddit')
-
-        # Save to database
-        save_value_to_database('reddit_bullish', reddit_bullish)
-        save_value_to_database('reddit_bearish', reddit_bearish)
-        save_value_to_database('reddit_count_bitcoin_posts_24h', current_count)
-        save_value_to_database('reddit_activity_24h', current_activity)
-    except Exception as e:
-        logging.error(f"Error occurred: {e}")
-        reddit_bullish, reddit_bearish = 0, 0
-
-    return reddit_bullish, reddit_bearish
-
-
-def reddit_check() -> Tuple[float, float]:
-    if should_update('reddit'):
-        return reddit_check_wrapper()
+def check_sentiment_of_news() -> Tuple[float, float]:
+    if should_update('sentiment_of_news'):
+        news_bullish, news_bearish = check_sentiment_of_news_wrapper()
+        save_value_to_database('news_bullish', news_bullish)
+        save_value_to_database('news_bearish', news_bearish)
+        return news_bullish, news_bearish
     else:
         database = read_database()
-        reddit_bullish = database['reddit_bullish'][-1]
-        reddit_bearish = database['reddit_bearish'][-1]
-        return reddit_bullish, reddit_bearish
+        news_bullish = database['news_bullish'][-1]
+        news_bearish = database['news_bearish'][-1]
+        return news_bullish, news_bearish
 
 
-if __name__ == '__main__':
-    reddit_bullish_outer, reddit_bearish_outer = reddit_check_wrapper()
-    logging.info(f", reddit_bullish: {reddit_bullish_outer}, reddit_bearish: {reddit_bearish_outer}")
+if __name__ == "__main__":
+    news_bullish_outer, news_bearish_outer = check_sentiment_of_news_wrapper()
+    logging.info(f'news_bullish: {news_bullish_outer}, and news_bearish: {news_bearish_outer}')
