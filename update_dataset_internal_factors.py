@@ -57,6 +57,8 @@ def update_internal_factors():
     # Wait for the download to finish
     wait_for_download = True
     new_data = None  # Initialize new_data as None
+    file = None  # Initialize file as None
+
     while wait_for_download:
         # Get a list of all files in the Downloads folder, sorted by creation time (new first)
         files = sorted(os.listdir(os.path.join(os.path.expanduser("~"), "Downloads")),
@@ -90,6 +92,8 @@ def update_internal_factors():
 
             # Write the updated dataset to disk
             main_dataset.to_csv('data/main_dataset.csv', index=False)
+
+            os.remove(os.path.join(os.path.expanduser("~"), "Downloads", file))
 
             if len(new_data) > 1:
                 logging.info(f"{len(new_data)} new rows of internal factors added.")

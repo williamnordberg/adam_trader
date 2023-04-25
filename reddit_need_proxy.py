@@ -4,54 +4,45 @@ import pandas as pd
 import logging
 import configparser
 from typing import Tuple
-from praw import Reddit
 from prawcore.exceptions import RequestException
 from requests.exceptions import SSLError
 from urllib3.exceptions import MaxRetryError
+from praw import Reddit
+from prawcore import Requestor
 
 
 from database import save_value_to_database
-from handy_modules import save_update_time, should_update, retry_on_error_fallback_0_0
+from handy_modules import save_update_time, should_update, retry_on_error_with_fallback, compare_reddit
 from database import read_database
-
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 ONE_DAYS_IN_SECONDS = 24 * 60 * 60
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
+CONFIG_PATH = 'config/config.ini'
 
 
-def compare(current_activity: float, previous_activity: float) -> Tuple[float, float]:
+class ProxyRequestor(Requestor):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.proxies = {
+            'http': 'http://137.74.167.5:9898',
+            'https': 'http://137.74.167.5:9898'
+        }
 
-    activity_percentage = (current_activity - previous_activity) / previous_activity * 100
+    def request(self, *args, **kwargs):
+        kwargs['verify'] = False  # Bypass SSL certificate verification
+        return super().request(*args, proxies=self.proxies, **kwargs)
 
-    if activity_percentage > 0:
-        if activity_percentage >= 50:
-            return 1, 0
-        elif activity_percentage >= 40:
-            return 0.9, 0.1
-        elif activity_percentage >= 30:
-            return 0.8, 0.2
-        elif activity_percentage >= 20:
-            return 0.7, 0.3
-        elif activity_percentage >= 10:
-            return 0.6, 0.4
-
-    elif activity_percentage <= 0:
-        if activity_percentage <= -50:
-            return 0, 1
-        elif activity_percentage <= -40:
-            return 0.1, 0.9
-        elif activity_percentage <= -30:
-            return 0.2, 0.8
-        elif activity_percentage <= -20:
-            return 0.3, 0.7
-        elif activity_percentage <= -10:
-            return 0.4, 0.6
-
-    return 0, 0
+    def _prepare(self, *args, **kwargs):
+        request = super()._prepare(*args, **kwargs)
+        request.proxies = self.proxies
+        return request
 
 
-@retry_on_error_fallback_0_0(max_retries=3, delay=5, allowed_exceptions=(RequestException,))
+@retry_on_error_with_fallback(
+    max_retries=3, delay=5, allowed_exceptions=(RequestException,), fallback_values=0)
 def count_bitcoin_posts(reddit: Reddit) -> int:
     """
         Counts the number of Bitcoin-related posts on Reddit in the last 7 days.
@@ -69,22 +60,27 @@ def count_bitcoin_posts(reddit: Reddit) -> int:
     for post in bitcoin_posts:
         if post.created_utc > (time.time() - ONE_DAYS_IN_SECONDS):
             count += 1
-
     return count
 
 
-@retry_on_error_fallback_0_0(max_retries=3, delay=5, allowed_exceptions=(SSLError, MaxRetryError,))
+@retry_on_error_with_fallback(
+    max_retries=3, delay=5, allowed_exceptions=(SSLError, MaxRetryError,), fallback_values=(0, 0))
 def reddit_check_wrapper() -> Tuple[float, float]:
 
     config = configparser.ConfigParser()
-    config.read('config.ini')
+    config.read(CONFIG_PATH)
 
     reddit_config = config['reddit']
-    reddit = praw.Reddit(
+
+    reddit = Reddit(
         client_id=reddit_config['client_id'],
         client_secret=reddit_config['client_secret'],
-        user_agent=reddit_config['user_agent']
+        user_agent=reddit_config['user_agent'],
+        password=reddit_config['password'],
+        username=reddit_config['username'],
+        requestor_class=ProxyRequestor
     )
+
     latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
 
     previous_activity = float(latest_info_saved['previous_activity'][0])
@@ -92,7 +88,7 @@ def reddit_check_wrapper() -> Tuple[float, float]:
     try:
         current_activity = reddit.subreddit("Bitcoin").active_user_count
         current_count = count_bitcoin_posts(reddit)
-        reddit_bullish, reddit_bearish = compare(current_activity, previous_activity)
+        reddit_bullish, reddit_bearish = compare_reddit(current_activity, previous_activity)
 
         latest_info_saved.loc[0, 'previous_activity'] = current_activity
         latest_info_saved.loc[0, 'previous_count'] = current_count
