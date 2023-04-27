@@ -1,20 +1,14 @@
-from selenium.common import TimeoutException
+from coinmetrics.api_client import CoinMetricsClient
 import pandas as pd
-from selenium.webdriver.support.ui import Select
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import WebDriverException
-from selenium import webdriver
-from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.firefox.options import Options
-
-
-import os
-import time
 import logging
+from datetime import datetime, timedelta
+import warnings
 from handy_modules import retry_on_error_with_fallback
+
+warnings.filterwarnings('ignore', category=FutureWarning)
+warnings.filterwarnings('ignore', category=RuntimeWarning)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+DATASET_PATH = 'data/main_dataset.csv'
 
 
 class UpdateInternalFactorsError(Exception):
@@ -22,94 +16,73 @@ class UpdateInternalFactorsError(Exception):
     pass
 
 
-firefox_options = Options()
-firefox_options.add_argument('-headless')
+def get_date_string(date_obj):
+    return date_obj.strftime("%Y-%m-%d")
 
 
-@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(
-        UpdateInternalFactorsError, WebDriverException))
+@retry_on_error_with_fallback(max_retries=3, delay=5)
 def update_internal_factors():
     # Read the main dataset from disk
-    main_dataset = pd.read_csv('data/main_dataset.csv', dtype={146: str})
+    main_dataset = pd.read_csv(DATASET_PATH, dtype={146: str})
 
     # Get the latest date in the main dataset
     latest_date = main_dataset.loc[main_dataset['DiffLast'].last_valid_index(), 'Date']
 
-    # Create a new instance of the Firefox driver
-    driver = webdriver.Firefox(
-        options=firefox_options,
-        service=Service(executable_path='geckodriver', log_path=os.path.join(os.getcwd(), "logs", "geckodriver.log"))
-    )
+    # Initialize CoinMetricsClient
+    client = CoinMetricsClient()
 
-    # Open the webpage
-    driver.get("https://coinmetrics.io/community-network-data/")
+    # Get the latest available data
+    end_date = get_date_string(datetime.now() - timedelta(days=1))
+    start_date = get_date_string(pd.to_datetime(latest_date) + timedelta(days=1))
 
-    # Check if the accept button for cookies is present
+    # Check if the start_date is later than the end_date
+    if pd.to_datetime(start_date) > pd.to_datetime(end_date):
+        logging.info("Dataset is already up to date.")
+        return
+
     try:
-        accept_button = WebDriverWait(driver, 7).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, "a.fusion-privacy-bar-acceptance")))
-        accept_button.click()
-    except TimeoutException:
-        pass
+        # Request the required metrics for Bitcoin
+        metric_ids = "DiffLast,DiffMean,CapAct1yrUSD,HashRate"
+        asset_id = "btc"
+        response = client.get_asset_metrics(
+            assets=asset_id,
+            metrics=metric_ids,
+            start_time=start_date,
+            end_time=end_date,
+            frequency="1d",
+        )
+    except Exception as e:
+        logging.error(f"Error: {e}")
+        raise Exception("Failed to update dataset internal factors.")
 
-    # Find and select Bitcoin from the dropdown menu
-    time.sleep(4)
-    selector = Select(WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "#downloadSelect"))))
-    selector.select_by_value("https://raw.githubusercontent.com/coinmetrics/data/master/csv/btc.csv")
+    # Extract the data from the response and convert it to a DataFrame
+    new_data = response.to_dataframe()
 
-    # Click the Download button
-    download_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button.cm-button")))
-    download_button.click()
-    time.sleep(2)
+    # Format the DataFrame
+    new_data = new_data.rename(columns={'time': 'Date'})
+    new_data['Date'] = pd.to_datetime(new_data['Date'], unit='s').dt.strftime('%Y-%m-%d')
 
-    # Wait for the download to finish
-    wait_for_download = True
-    new_data = None  # Initialize new_data as None
-    file = None  # Initialize file as None
+    for column in new_data.columns:
+        if new_data.at[new_data.index[-1], column] == 'btc':
+            new_data = new_data.drop(columns=[column])
+            break
 
-    while wait_for_download:
-        # Get a list of all files in the Downloads folder, sorted by creation time (new first)
-        files = sorted(os.listdir(os.path.join(os.path.expanduser("~"), "Downloads")),
-                       key=lambda x: os.path.getctime(os.path.join(os.path.expanduser("~"), "Downloads", x)),
-                       reverse=True)
-        for file in files:
-            if file.endswith(".csv"):
-                new_data = pd.read_csv(os.path.join(os.path.expanduser("~"), "Downloads", file), dtype={146: str})
-                wait_for_download = False
-                break
+    # Check if there is new data to append
+    if len(new_data) > 0:
+        # check if new data have the same date row as the main_dataset
+        if main_dataset['Date'].iloc[-1] == new_data['Date'].iloc[0]:
+            # drop the last row in main dataset
+            main_dataset = main_dataset.drop(main_dataset.index[-1])
 
-    # Close the Firefox window
-    driver.quit()
+        # Append the new rows to the main dataset
+        main_dataset = pd.concat([main_dataset, new_data])
 
-    if new_data is not None:
-        # Rename the 'time' column to 'Date'
-        new_data = new_data.rename(columns={'time': 'Date'})
+        # Write the updated dataset to disk
+        main_dataset.to_csv(DATASET_PATH, index=False)
 
-        # Filter the new data to only include rows with a date after the latest date in the main dataset
-        new_data = new_data[new_data['Date'] > latest_date]
-        new_data = new_data[['Date', 'DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate']]
-        if len(new_data) > 1:
-
-            # check if new data have a same date row with main_dataset
-            if main_dataset['Date'].iloc[-1] == new_data['Date'].iloc[0]:
-                # drop the last row in main dataset
-                main_dataset = main_dataset.drop(main_dataset.index[-1])
-
-            # Append the new rows to the main dataset
-            main_dataset = pd.concat([main_dataset, new_data])
-
-            # Write the updated dataset to disk
-            main_dataset.to_csv('data/main_dataset.csv', index=False)
-
-            os.remove(os.path.join(os.path.expanduser("~"), "Downloads", file))
-
-            if len(new_data) > 1:
-                logging.info(f"{len(new_data)} new rows of internal factors added.")
-        else:
-            logging.info("internal factors is already up to date.")
+        logging.info(f"{len(new_data)} new rows of internal factors added.")
     else:
-        logging.error("Failed to download internal factors.")
-        raise UpdateInternalFactorsError("Failed to download internal factors.")
+        logging.info("Internal factors are already up to date.")
 
 
 if __name__ == "__main__":

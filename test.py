@@ -1,128 +1,99 @@
-from selenium.common import TimeoutException
-import pandas as pd
-from selenium.webdriver.support.ui import Select
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import WebDriverException
-from selenium import webdriver
-from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.firefox.options import Options
-
-
-import os
-import time
 import logging
-from handy_modules import retry_on_error_with_fallback
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+from time import sleep
 
+from handy_modules import compare_send_receive_richest_addresses
+from technical_analysis import technical_analyse
+from news_analyser import check_sentiment_of_news
+from youtube import check_bitcoin_youtube_videos_increase
+from reddit import reddit_check
+from macro_analyser import macro_sentiment, print_upcoming_events
+from google_search import check_search_trend
+from adam_predictor import decision_tree_predictor
+from order_book import get_probabilities
+from trading_decision import make_trading_decision
+from long_position_open import long_position
+from short_position_open import short_position
+from factors_states_visualization import visualize_charts
+from database_visualization import visualize_database_one_chart
 
-class UpdateInternalFactorsError(Exception):
-    """Raised when there is an issue with updating internal factors."""
-    pass
+# Constants
+LOOP_COUNTER = 0
+SYMBOLS = ['BTCUSDT', 'BTCBUSD']
+long_threshold = 0.99
+short_threshold = 0.99
 
+logging.basicConfig(filename='trading.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-downloads_path = os.path.join(os.getcwd(), "Downloads")
-if not os.path.exists(downloads_path):
-    os.makedirs(downloads_path)
+# Main trading loop
+while True:
+    LOOP_COUNTER += 1
+    logging.info(f"LOOP_COUNTER: {LOOP_COUNTER}")
 
+    # 1 Get the prediction
+    prediction_bullish, prediction_bearish = decision_tree_predictor()
 
-firefox_options = Options()
-firefox_options.add_argument('-headless')
+    # 2 Order book
+    probabilities = get_probabilities(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
+    assert probabilities is not None, "get_probabilities returned None"
+    order_book_bullish, order_book_bearish = probabilities
 
-# Specify the download path for Firefox
-firefox_options.set_preference("browser.download.folderList", 2)
-firefox_options.set_preference("browser.download.manager.showWhenStarting", False)
-firefox_options.set_preference("browser.download.dir", downloads_path)
-firefox_options.set_preference("browser.helperApps.neverAsk.saveToDisk", "text/csv")
+    # 3 Monitor the richest Bitcoin addresses
+    richest_addresses_bullish, richest_addresses_bearish = compare_send_receive_richest_addresses()
 
+    # 4 Check Google search trends for Bitcoin and cryptocurrency
+    google_search_bullish, google_search_bearish = check_search_trend(["Bitcoin", "Cryptocurrency"])
 
-@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(
-        UpdateInternalFactorsError, WebDriverException))
-def update_internal_factors():
-    # Read the main dataset from disk
-    main_dataset = pd.read_csv('data/main_dataset.csv', dtype={146: str})
+    # 5 Macroeconomic
+    macro_bullish, macro_bearish, events_date_dict = macro_sentiment()
+    print_upcoming_events(events_date_dict)
 
-    # Get the latest date in the main dataset
-    latest_date = main_dataset.loc[main_dataset['DiffLast'].last_valid_index(), 'Date']
+    # 6 Reddit
+    reddit_bullish, reddit_bearish = reddit_check()
 
-    # Create a new instance of the Firefox driver
-    time.sleep(7)  # Add a 5-second delay before starting the webdriver
-    driver = webdriver.Firefox(
-        options=firefox_options,
-        service=Service(executable_path='geckodriver', log_path=os.path.join(os.getcwd(), "logs", "geckodriver.log"))
-    )
+    # 7 YouTube
+    youtube_bullish, youtube_bearish = check_bitcoin_youtube_videos_increase()
 
-    # Open the webpage
-    driver.get("https://coinmetrics.io/community-network-data/")
+    logging.info(' 8 check_sentiment_of_news')
+    # 8 Collect data from news websites
+    news_bullish, news_bearish = check_sentiment_of_news()
 
-    # Check if the accept button for cookies is present
-    try:
-        accept_button = WebDriverWait(driver, 7).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, "a.fusion-privacy-bar-acceptance")))
-        accept_button.click()
-    except TimeoutException:
-        pass
+    logging.info('9 Technical analysis')
 
-    # Find and select Bitcoin from the dropdown menu
-    time.sleep(4)
-    selector = Select(WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "#downloadSelect"))))
-    selector.select_by_value("https://raw.githubusercontent.com/coinmetrics/data/master/csv/btc.csv")
+    # 9 Technical analysis
+    technical_bullish, technical_bearish = technical_analyse()
 
-    # Click the Download button
-    download_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button.cm-button")))
-    download_button.click()
-    time.sleep(2)
+    # Make decision about the trade
+    weighted_score_up, weighted_score_down = make_trading_decision(
+        macro_bullish, macro_bearish, order_book_bullish, order_book_bearish,
+        prediction_bullish, prediction_bearish,
+        technical_bullish, technical_bearish,
+        richest_addresses_bullish, richest_addresses_bearish,
+        google_search_bullish, google_search_bearish,
+        reddit_bullish, reddit_bearish,
+        youtube_bullish, youtube_bearish,
+        news_bullish, news_bearish)
+    logging.info('Visualization')
+    # Visualization
+    visualize_charts(macro_bullish, macro_bearish, order_book_bullish, order_book_bearish, prediction_bullish,
+                     prediction_bearish, technical_bullish, technical_bearish, richest_addresses_bullish,
+                     richest_addresses_bearish, google_search_bullish, google_search_bearish, reddit_bullish,
+                     reddit_bearish, youtube_bullish, youtube_bearish, news_bullish, news_bearish,
+                     weighted_score_up, weighted_score_down)
 
-    # Wait for the download to finish
-    wait_for_download = True
-    new_data = None  # Initialize new_data as None
-    file = None  # Initialize file as None
+    # visualize database
+    visualize_database_one_chart()
+    logging.info('    # visualize database')
 
-    while wait_for_download:
-        # Get a list of all files in the Downloads folder, sorted by creation time (new first)
-        files = sorted(os.listdir(downloads_path),
-                       key=lambda x: os.path.getctime(os.path.join(downloads_path, x)),
-                       reverse=True)
-        for file in files:
-            if file.endswith(".csv"):
-                new_data = pd.read_csv(os.path.join(downloads_path, file), dtype={146: str})
-                wait_for_download = False
-                break
+    # Trading decision
+    if weighted_score_up > weighted_score_down and weighted_score_up > long_threshold:
+        logging.info('Opening a long position')
+        profit_after_trade, loss_after_trade = long_position()
+        logging.info(f"profit_after_trade:{profit_after_trade}, loss_after_trade:"
+                     f"{loss_after_trade}")
 
-    # Close the Firefox window
-    driver.quit()
-
-    if new_data is not None:
-        # Rename the 'time' column to 'Date'
-        new_data = new_data.rename(columns={'time': 'Date'})
-
-        # Filter the new data to only include rows with a date after the latest date in the main dataset
-        new_data = new_data[new_data['Date'] > latest_date]
-        new_data = new_data[['Date', 'DiffLast', 'DiffMean', 'CapAct1yrUSD', 'HashRate']]
-        if len(new_data) > 1:
-
-            # check if new data have a same date row with main_dataset
-            if main_dataset['Date'].iloc[-1] == new_data['Date'].iloc[0]:
-                # drop the last row in main dataset
-                main_dataset = main_dataset.drop(main_dataset.index[-1])
-
-            # Append the new rows to the main dataset
-            main_dataset = pd.concat([main_dataset, new_data])
-
-            # Write the updated dataset to disk
-            main_dataset.to_csv('data/main_dataset.csv', index=False)
-
-            os.remove(os.path.join(downloads_path, file))
-
-            if len(new_data) > 1:
-                logging.info(f"{len(new_data)} new rows of internal factors added.")
-        else:
-            logging.info("internal factors is already up to date.")
-    else:
-        logging.error("Failed to download internal factors.")
-        raise UpdateInternalFactorsError("Failed to download internal factors.")
-
-
-if __name__ == "__main__":
-    update_internal_factors()
+    elif weighted_score_down > weighted_score_up and weighted_score_down > short_threshold:
+        logging.info('Opening short position')
+        profit_after_trade, loss_after_trade = short_position()
+        logging.info(f"profit_after_trade:{profit_after_trade}, "f"loss_after_trade:{loss_after_trade}")
+    logging.info('   loop ends')
+    sleep(20 * 60)
