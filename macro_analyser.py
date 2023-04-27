@@ -142,7 +142,7 @@ def macro_sentiment() -> Tuple[float, float, Dict[str, datetime]]:
 
 
 if __name__ == "__main__":
-    macro_bullish_outer, macro_bearish_outer, events_date_dict_outer = macro_sentiment()
+    macro_bullish_outer, macro_bearish_outer, events_date_dict_outer = macro_sentiment_wrapper()
     logging.info(f"{macro_bullish_outer}, {macro_bearish_outer}, event: {events_date_dict_outer}")
     print_upcoming_events(events_date_dict_outer)
     calculate_macro_sentiment(5, 4.75, 0.1, -0.5)

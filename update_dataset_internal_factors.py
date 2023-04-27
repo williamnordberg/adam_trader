@@ -7,6 +7,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import WebDriverException
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.firefox.options import Options
+
 
 import os
 import time
@@ -20,6 +22,10 @@ class UpdateInternalFactorsError(Exception):
     pass
 
 
+firefox_options = Options()
+firefox_options.add_argument('-headless')
+
+
 @retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(
         UpdateInternalFactorsError, WebDriverException))
 def update_internal_factors():
@@ -31,7 +37,9 @@ def update_internal_factors():
 
     # Create a new instance of the Firefox driver
     driver = webdriver.Firefox(
-        service=Service(executable_path='geckodriver', log_path=os.path.join(os.getcwd(), "logs", "geckodriver.log")))
+        options=firefox_options,
+        service=Service(executable_path='geckodriver', log_path=os.path.join(os.getcwd(), "logs", "geckodriver.log"))
+    )
 
     # Open the webpage
     driver.get("https://coinmetrics.io/community-network-data/")
