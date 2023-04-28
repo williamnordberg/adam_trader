@@ -1,6 +1,9 @@
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import dash
+from dash import dcc
+from dash import html
 
 
 def visualize_database_ten_rows():
@@ -269,6 +272,9 @@ def visualize_database_one_chart():
     # Normalize only the columns with values bigger than 1
     normalized_df = normalize_columns(df)
 
+    # Convert the 'date' column to a datetime object
+    normalized_df['date'] = pd.to_datetime(normalized_df['date'])
+
     # Set the 'date' column as the index
     normalized_df.set_index('date', inplace=True)
 
@@ -276,108 +282,114 @@ def visualize_database_one_chart():
     fig = go.Figure()
 
     # Chart 1
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["interest_rate"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["interest_rate"],
                              mode='lines', name='Interest Rate'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["cpi_m_to_m"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["cpi_m_to_m"],
                              mode='lines', name='cpi_m_to_m'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["ppi_m_to_m"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["ppi_m_to_m"],
                              mode='lines', name='ppi_m_to_m'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["macro_bullish"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["macro_bullish"],
                              mode='lines', name='macro_bullish'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["macro_bearish"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["macro_bearish"],
                              mode='lines', name='macro_bearish'))
 
     # Chart 2
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["bid_volume"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["bid_volume"],
                              mode='lines', name='Bid Volume'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["ask_volume"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["ask_volume"],
                              mode='lines', name='Ask Volume'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["order_book_bullish"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["order_book_bullish"],
                              mode='lines', name='Order Book Bullish'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["order_book_bearish"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["order_book_bearish"],
                              mode='lines', name='Order Book Bearish'))
 
     # Chart 3
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["predicted_price"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["predicted_price"],
                              mode='lines', name='Predicted Price'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["prediction_bullish"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["prediction_bullish"],
                              mode='lines', name='Prediction Bullish'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["prediction_bearish"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["prediction_bearish"],
                              mode='lines', name='Prediction Bearish'))
 
     # Chart 4
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["technical_potential_up_reversal_bullish"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["technical_potential_up_reversal_bullish"],
                              mode='lines', name='Technical Up Reversal Bullish'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["technical_potential_down_reversal_bearish"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["technical_potential_down_reversal_bearish"],
                              mode='lines', name='Technical Down Reversal Bearish'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["technical_potential_up_trend"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["technical_potential_up_trend"],
                              mode='lines', name='Technical Up Trend'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["technical_bullish"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["technical_bullish"],
                              mode='lines', name='Technical Bullish'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["technical_bearish"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["technical_bearish"],
                              mode='lines', name='technical_bearish'))
 
     # Chart 5
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["richest_addresses_total_received"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["richest_addresses_total_received"],
                              mode='lines', name='Richest Addresses Total Received'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["richest_addresses_total_sent"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["richest_addresses_total_sent"],
                              mode='lines', name='Richest Addresses Total Sent'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["richest_addresses_bullish"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["richest_addresses_bullish"],
                              mode='lines', name='Richest Addresses Bullish'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["richest_addresses_bearish"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["richest_addresses_bearish"],
                              mode='lines', name='Richest Addresses Bearish'))
 
     # Chart 6
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["hourly_google_search"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["hourly_google_search"],
                              mode='lines', name='Hourly Google Search'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["google_search_bullish"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["google_search_bullish"],
                              mode='lines', name='Google Search Bullish'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["google_search_bearish"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["google_search_bearish"],
                              mode='lines', name='Google Search Bearish'))
 
     # Chart 7
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["reddit_count_bitcoin_posts_24h"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["reddit_count_bitcoin_posts_24h"],
                              mode='lines', name='Reddit Count Bitcoin Posts 24h'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["reddit_activity_24h"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["reddit_activity_24h"],
                              mode='lines', name='Reddit Activity 24h'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["reddit_bullish"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["reddit_bullish"],
                              mode='lines', name='Reddit Bullish'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["reddit_bearish"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["reddit_bearish"],
                              mode='lines', name='Reddit Bearish'))
 
     # Chart 8
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["last_24_youtube"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["last_24_youtube"],
                              mode='lines', name='Last 24 YouTube'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["youtube_bullish"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["youtube_bullish"],
                              mode='lines', name='YouTube Bullish'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["youtube_bearish"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["youtube_bearish"],
                              mode='lines', name='YouTube Bearish'))
 
     # Chart 9
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["news_positive_polarity"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["news_positive_polarity"],
                              mode='lines', name='News Positive Polarity'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["news_negative_polarity"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["news_negative_polarity"],
                              mode='lines', name='News Negative Polarity'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["news_positive_count"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["news_positive_count"],
                              mode='lines', name='News Positive Count'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["news_negative_count"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["news_negative_count"],
                              mode='lines', name='News Negative Count'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["news_bullish"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["news_bullish"],
                              mode='lines', name='News Bullish'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["news_bearish"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["news_bearish"],
                              mode='lines', name='News Bearish'))
 
     # Chart 10
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["weighted_score_up"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["weighted_score_up"],
                              mode='lines', name='weighted_score_up'))
-    fig.add_trace(go.Scatter(x=df.index, y=normalized_df["weighted_score_down"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["weighted_score_down"],
                              mode='lines', name='weighted_score_down'))
 
     # Update the layout and show the plot
     fig.update_layout(title='',
                       xaxis_title='Date',
                       yaxis_title='Normalized Value')
-    fig.show()
+
+    app = dash.Dash(__name__)
+
+    app.layout = html.Div([
+        dcc.Graph(id='example-chart', figure=fig, style={'width': '100%', 'height': '100vh'}),
+    ])
+    app.run_server(debug=True)
 
 
 if __name__ == "__main__":
