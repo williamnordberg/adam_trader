@@ -1,8 +1,5 @@
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-import dash
-from dash import dcc
-from dash import html
 
 
 def create_gauge_chart(bullish, bearish, show_number=True):
@@ -35,28 +32,11 @@ def create_gauge_chart(bullish, bearish, show_number=True):
     )
 
 
-def visualize_charts(shared_data):
-    macro_bullish = shared_data['macro_bullish']
-    macro_bearish = shared_data['macro_bearish']
-    order_book_bullish = shared_data['order_book_bullish']
-    order_book_bearish = shared_data['order_book_bearish']
-    prediction_bullish = shared_data['prediction_bullish']
-    prediction_bearish = shared_data['prediction_bearish']
-    technical_bullish = shared_data['technical_bullish']
-    technical_bearish = shared_data['technical_bearish']
-    richest_addresses_bullish = shared_data['richest_addresses_bullish']
-    richest_addresses_bearish = shared_data['richest_addresses_bearish']
-    google_search_bullish = shared_data['google_search_bullish']
-    google_search_bearish = shared_data['google_search_bearish']
-    reddit_bullish = shared_data['reddit_bullish']
-    reddit_bearish = shared_data['reddit_bearish']
-    youtube_bullish = shared_data['youtube_bullish']
-    youtube_bearish = shared_data['youtube_bearish']
-    news_bullish = shared_data['news_bullish']
-    news_bearish = shared_data['news_bearish']
-    weighted_score_up = shared_data['weighted_score_up']
-    weighted_score_down = shared_data['weighted_score_down']
-
+def visualize_charts(macro_bullish, macro_bearish, order_book_bullish, order_book_bearish, prediction_bullish,
+                     prediction_bearish, technical_bullish, technical_bearish, richest_addresses_bullish,
+                     richest_addresses_bearish, google_search_bullish, google_search_bearish, reddit_bullish,
+                     reddit_bearish, youtube_bullish, youtube_bearish, news_bullish, news_bearish,
+                     weighted_score_up, weighted_score_down):
     fig = make_subplots(rows=2, cols=5,
                         specs=[[{"type": "indicator"}] * 5] * 2,
                         subplot_titles=["Macro Sentiment", "Order Book", "Prediction", "Technical Analysis",
@@ -79,36 +59,17 @@ def visualize_charts(shared_data):
         font=dict(size=10)
     )
 
-    app = dash.Dash(__name__)
-
-    app.layout = html.Div([
-        dcc.Graph(id='example-chart', figure=fig, style={'width': '100%', 'height': '100vh'}),
-    ])
-    app.run_server(host='0.0.0.0', port=8051, debug=False)
+    fig.show()
 
 
 if __name__ == "__main__":
-    shared_data_outer = {
-        'macro_bullish': 0,
-        'macro_bearish': 0,
-        'order_book_bullish': 0,
-        'order_book_bearish': 0,
-        'prediction_bullish': 0,
-        'prediction_bearish': 0,
-        'technical_bullish': 0,
-        'technical_bearish': 0,
-        'richest_addresses_bullish': 0,
-        'richest_addresses_bearish': 0,
-        'google_search_bullish': 0,
-        'google_search_bearish': 0,
-        'reddit_bullish': 0,
-        'reddit_bearish': 0,
-        'youtube_bullish': 0,
-        'youtube_bearish': 0,
-        'news_bullish': 0,
-        'news_bearish': 0,
-        'weighted_score_up': 0,
-        'weighted_score_down': 0,
-    }
-
-    visualize_charts(shared_data_outer)
+    visualize_charts(0.4, 0.6,
+                     0.6, 0.4,
+                     0, 0,
+                     0, 0,
+                     0.4, 0.6,
+                     0.7, 0.3,
+                     0.2, 0.8,
+                     0.4, 0.6,
+                     0.1, 0.9,
+                     0.6, 0.4)

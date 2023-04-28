@@ -4,6 +4,10 @@ from plotly.subplots import make_subplots
 import dash
 from dash import dcc
 from dash import html
+import logging
+
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 
 def visualize_database_ten_rows():
@@ -261,7 +265,7 @@ def normalize_columns(df):
     return normalized_df
 
 
-def visualize_database_one_chart():
+def visualize_database_one_chart(run_dash=True):
     df = pd.read_csv('data/database.csv')
 
     # Convert boolean columns to integers
@@ -384,16 +388,14 @@ def visualize_database_one_chart():
                       xaxis_title='Date',
                       yaxis_title='Normalized Value')
 
-    app = dash.Dash(__name__)
+    if run_dash:
+        app = dash.Dash(__name__)
 
-    app.layout = html.Div([
-        dcc.Graph(id='example-chart', figure=fig, style={'width': '100%', 'height': '100vh'}),
-    ])
-    app.run_server(debug=True)
+        app.layout = html.Div([
+            dcc.Graph(id='example-chart', figure=fig, style={'width': '100%', 'height': '100vh'}),
+        ])
+        app.run_server(host='0.0.0.0', port=8050, debug=False)
 
 
 if __name__ == "__main__":
-    visualize_database_ten_rows()
-    visualize_database_two_rows()
     visualize_database_one_chart()
-
