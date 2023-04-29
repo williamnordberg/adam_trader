@@ -9,14 +9,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="11 April">
-      <change afterPath="$PROJECT_DIR$/test2_holdint old.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/youtube_token.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/config/youtube_token.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_blockchain_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/api_blockchain_info.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_blockcypher.py" beforeDir="false" afterPath="$PROJECT_DIR$/api_blockcypher.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bs4_scraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/bs4_scraper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/bitcoin_rich_list2000.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/bitcoin_rich_list2000.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/latest_info_saved.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_visualization.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/factors_states_visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/factors_states_visualization.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_decision.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_decision.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitor_2000_richest.py" beforeDir="false" afterPath="$PROJECT_DIR$/monitor_2000_richest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -163,7 +163,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="order_book" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="monitor_2000_richest" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -175,7 +175,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/order_book.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/monitor_2000_richest.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -223,7 +223,7 @@
     </configuration>
     <list>
       <item itemvalue="Python.factors_states_visualization" />
-      <item itemvalue="Python.order_book" />
+      <item itemvalue="Python.monitor_2000_richest" />
       <item itemvalue="Python.database_visualization" />
       <item itemvalue="Python.main_decision" />
       <item itemvalue="Python.test" />
@@ -232,10 +232,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.test" />
+        <item itemvalue="Python.monitor_2000_richest" />
         <item itemvalue="Python.factors_states_visualization" />
         <item itemvalue="Python.database_visualization" />
         <item itemvalue="Python.main_decision" />
-        <item itemvalue="Python.order_book" />
       </list>
     </recent_temporary>
   </component>
@@ -247,20 +247,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00154" summary="11 April">
-      <created>1681861357044</created>
-      <option name="number" value="00154" />
-      <option name="presentableId" value="LOCAL-00154" />
-      <option name="project" value="LOCAL" />
-      <updated>1681861357044</updated>
-    </task>
-    <task id="LOCAL-00155" summary="11 April">
-      <created>1681863090909</created>
-      <option name="number" value="00155" />
-      <option name="presentableId" value="LOCAL-00155" />
-      <option name="project" value="LOCAL" />
-      <updated>1681863090909</updated>
     </task>
     <task id="LOCAL-00156" summary="11 April">
       <created>1681865335690</created>
@@ -591,7 +577,21 @@
       <option name="project" value="LOCAL" />
       <updated>1682661534782</updated>
     </task>
-    <option name="localTasksCounter" value="203" />
+    <task id="LOCAL-00203" summary="11 April">
+      <created>1682664719395</created>
+      <option name="number" value="00203" />
+      <option name="presentableId" value="LOCAL-00203" />
+      <option name="project" value="LOCAL" />
+      <updated>1682664719395</updated>
+    </task>
+    <task id="LOCAL-00204" summary="11 April">
+      <created>1682664731420</created>
+      <option name="number" value="00204" />
+      <option name="presentableId" value="LOCAL-00204" />
+      <option name="project" value="LOCAL" />
+      <updated>1682664731420</updated>
+    </task>
+    <option name="localTasksCounter" value="205" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">

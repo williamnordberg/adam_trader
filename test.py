@@ -2,6 +2,7 @@ import logging
 from time import sleep
 from multiprocessing import Process
 
+from monitor_2000_richest import monitor_bitcoin_richest_addresses
 from database import read_database
 from handy_modules import compare_send_receive_richest_addresses
 from technical_analysis import technical_analyse
@@ -24,6 +25,13 @@ long_threshold = 0.99
 short_threshold = 0.99
 
 logging.basicConfig(filename='trading.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+
+def run_minitor_richest_addresses():
+    while True:
+        logging.info('Monitoring total send and receive by richest addresses')
+        monitor_bitcoin_richest_addresses()
+        sleep(60)
 
 
 def run_visualize_factors_states():
@@ -126,6 +134,10 @@ def trading_loop():
 
 
 if __name__ == "__main__":
+    # Start visualization processes
+    visualization_process = Process(target=run_minitor_richest_addresses)
+    visualization_process.start()
+
     # Start visualization processes
     visualization_process = Process(target=run_visualize_database)
     visualization_process.start()

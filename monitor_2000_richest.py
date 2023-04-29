@@ -52,11 +52,11 @@ def check_multiple_addresses(addresses: List[str]) -> Tuple[float, float]:
         total_received (float): Total Bitcoin received in the last 24 hours for all addresses.
         total_sent (float): Total Bitcoin sent in the last 24 hours for all addresses.
     """
-    total_received = 0.1
-    total_sent = 0.1
+    total_received = 0.0001
+    total_sent = 0.0001
+    logging.info('Start monitoring richest addresses')
 
     for i, address in enumerate(addresses):
-        logging.info(f"*******Checking address {address} and {i}*******")
         if i % 3 == 0:
             # Use the Blockcypher API
             received, sent = get_address_transactions_24h_blockcypher(address)
@@ -71,11 +71,10 @@ def check_multiple_addresses(addresses: List[str]) -> Tuple[float, float]:
 
         total_received += received
         total_sent += sent
-
-        logging.info(f"Total received: {total_received} BTC")
-        logging.info(f"Total sent: {total_sent} BTC")
         time.sleep(3)
 
+    logging.info(f"Total received: {total_received} BTC")
+    logging.info(f"Total sent: {total_sent} BTC")
     return total_received, total_sent
 
 
