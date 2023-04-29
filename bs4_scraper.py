@@ -18,6 +18,7 @@ logging.basicConfig(level=logging.INFO)
                               allowed_exceptions=(requests.exceptions.RequestException,),
                               fallback_values='pass')
 def scrape_bitcoin_rich_list():
+    logging.info('start scrapping list of bitcoin richest addresses')
     df = pd.DataFrame(columns=["address"])
 
     for i in range(1, 4):

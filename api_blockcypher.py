@@ -37,11 +37,10 @@ def get_address_transactions_24h_blockcypher(address: str) -> Tuple[float, float
         total_received (float): Total Bitcoin received in the last 24 hours.
         total_sent (float): Total Bitcoin sent in the last 24 hours.
     """
-    logging.info('Checking address transactions at Blockcypher')
 
     # Check for internet connection
     if not check_internet_connection():
-        logging.info('unable to get google trend')
+        logging.info('unable to connect to Internet')
         return 0, 0
 
     # Get the current time and time 24 hours ago

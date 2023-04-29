@@ -25,7 +25,6 @@ def get_address_transactions_24h(address: str) -> Tuple[float, float]:
         total_received (float): Total Bitcoin received in the last 24 hours.
         total_sent (float): Total Bitcoin sent in the last 24 hours.
     """
-    logging.info('Checking address transactions at blockchain.info')
 
     # Check for internet connection
     if not check_internet_connection():
