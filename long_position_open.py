@@ -17,7 +17,7 @@ from handy_modules import get_bitcoin_price, compare_send_receive_richest_addres
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-SCORE_MARGIN_TO_CLOSE = 0.8
+SCORE_MARGIN_TO_CLOSE = 0.68
 PROFIT_MARGIN = 0.01
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 

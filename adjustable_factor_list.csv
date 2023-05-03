@@ -1,0 +1,12 @@
+"macro_indicators":,compare func ,adjust weights = {"interest_rate": 0.5 "cpi": 0.25 "ppi": 0.25}
+"order_book":,compare func,  bid and ask volume percentage
+"predicted_price":,compare func, model, training data time range,factors to train model
+"technical_analysis":,compare func, indicator,
+"richest_addresses":,compare func, number of richhest adresses
+"google_search":,compare func,
+"reddit":,compare func,
+"youtube":,compare func,
+"sentiment_of_news":,compare func,
+weighted_score_up,factor weight,
+weighted_score_down,factor weight,
+long_threshold, short_threshold
