@@ -106,14 +106,13 @@ def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
 
                             if event == "Federal Funds Rate":
                                 rate_this_month = value
-                                rate_month_before = float(previous_value)
+                                rate_month_before = float(previous_value.rstrip('%'))
                             elif event == "CPI m/m":
                                 cpi_m_to_m = value
                             elif event == "PPI m/m":
                                 ppi_m_to_m = value
 
     service.stop()
-    print(rate_this_month, rate_month_before)
     if rate_this_month or cpi_m_to_m or ppi_m_to_m:
         macro_bullish, macro_bearish = calculate_macro_sentiment(
             rate_this_month, rate_month_before, cpi_m_to_m, ppi_m_to_m)
