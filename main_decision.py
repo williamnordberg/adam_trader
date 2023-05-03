@@ -20,8 +20,8 @@ from database_visualization import visualize_database_one_chart
 
 # Constants
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
-long_threshold = 0.99
-short_threshold = 0.99
+long_threshold = 0.68
+short_threshold = 0.68
 
 logging.basicConfig(filename='trading.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 

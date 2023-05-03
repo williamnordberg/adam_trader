@@ -316,12 +316,6 @@ def visualize_database_one_chart(run_dash=True):
                              mode='lines', name='Prediction Bearish'))
 
     # Chart 4
-    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["technical_potential_up_reversal_bullish"],
-                             mode='lines', name='Technical Up Reversal Bullish'))
-    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["technical_potential_down_reversal_bearish"],
-                             mode='lines', name='Technical Down Reversal Bearish'))
-    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["technical_potential_up_trend"],
-                             mode='lines', name='Technical Up Trend'))
     fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["technical_bullish"],
                              mode='lines', name='Technical Bullish'))
     fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["technical_bearish"],
@@ -346,8 +340,7 @@ def visualize_database_one_chart(run_dash=True):
                              mode='lines', name='Google Search Bearish'))
 
     # Chart 7
-    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["reddit_count_bitcoin_posts_24h"],
-                             mode='lines', name='Reddit Count Bitcoin Posts 24h'))
+
     fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["reddit_activity_24h"],
                              mode='lines', name='Reddit Activity 24h'))
     fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["reddit_bullish"],
@@ -356,31 +349,21 @@ def visualize_database_one_chart(run_dash=True):
                              mode='lines', name='Reddit Bearish'))
 
     # Chart 8
-    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["last_24_youtube"],
-                             mode='lines', name='Last 24 YouTube'))
     fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["youtube_bullish"],
                              mode='lines', name='YouTube Bullish'))
     fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["youtube_bearish"],
                              mode='lines', name='YouTube Bearish'))
 
     # Chart 9
-    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["news_positive_polarity"],
-                             mode='lines', name='News Positive Polarity'))
-    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["news_negative_polarity"],
-                             mode='lines', name='News Negative Polarity'))
-    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["news_positive_count"],
-                             mode='lines', name='News Positive Count'))
-    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["news_negative_count"],
-                             mode='lines', name='News Negative Count'))
     fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["news_bullish"],
                              mode='lines', name='News Bullish'))
     fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["news_bearish"],
                              mode='lines', name='News Bearish'))
 
     # Chart 10
-    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["weighted_score_up"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=df["weighted_score_up"],
                              mode='lines', name='weighted_score_up'))
-    fig.add_trace(go.Scatter(x=normalized_df.index, y=normalized_df["weighted_score_down"],
+    fig.add_trace(go.Scatter(x=normalized_df.index, y=df["weighted_score_down"],
                              mode='lines', name='weighted_score_down'))
 
     # Update the layout and show the plot
