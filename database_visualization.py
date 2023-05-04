@@ -8,10 +8,12 @@ import logging
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
+TRADE_RESULT_PATH = 'data/trades_results.csv'
+DATABASE_PATH = 'data/database.csv'
 
 
 def visualize_database_ten_rows():
-    df = pd.read_csv('data/database.csv')
+    df = pd.read_csv(DATABASE_PATH)
 
     # Convert the 'date' column to datetime objects
     df['date'] = pd.to_datetime(df['date'])
@@ -132,7 +134,7 @@ def visualize_database_ten_rows():
 
 
 def visualize_database_two_rows():
-    df = pd.read_csv('data/database.csv')
+    df = pd.read_csv(DATABASE_PATH)
 
     # Convert the 'date' column to datetime objects
     df['date'] = pd.to_datetime(df['date'])
@@ -266,7 +268,7 @@ def normalize_columns(df):
 
 
 def visualize_database_one_chart(run_dash=True):
-    df = pd.read_csv('data/database.csv')
+    df = pd.read_csv(DATABASE_PATH)
 
     # Convert boolean columns to integers
     bool_columns = ["technical_potential_up_reversal_bullish",
@@ -378,6 +380,35 @@ def visualize_database_one_chart(run_dash=True):
             dcc.Graph(id='example-chart', figure=fig, style={'width': '100%', 'height': '100vh'}),
         ])
         app.run_server(host='0.0.0.0', port=8050, debug=False)
+
+
+def visualize_trade_results(run_dash=True):
+    df = pd.read_csv(TRADE_RESULT_PATH)
+
+    # Create an empty figure
+    fig = go.Figure()
+
+    # Add a bar chart for PNL
+    fig.add_trace(go.Bar(x=df['model_name'], y=df["PNL"],
+                         name='PNL'))
+
+    # Add a bar chart for number_of_trades
+    fig.add_trace(go.Bar(x=df['model_name'], y=df["number_of_trades"],
+                         name='Number of Trades'))
+
+    # Update the layout and show the plot
+    fig.update_layout(title='Trade Results',
+                      xaxis_title='Model Name',
+                      yaxis_title='Value',
+                      barmode='group')
+
+    if run_dash:
+        app = dash.Dash(__name__)
+
+        app.layout = html.Div([
+            dcc.Graph(id='trade-results-chart', figure=fig, style={'width': '100%', 'height': '100vh'}),
+        ])
+        app.run_server(host='0.0.0.0', port=8052, debug=False)
 
 
 if __name__ == "__main__":
