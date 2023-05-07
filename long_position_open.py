@@ -12,6 +12,7 @@ from youtube import check_bitcoin_youtube_videos_increase
 from adam_predictor import decision_tree_predictor
 from position_decision_maker import position_decision
 from handy_modules import get_bitcoin_price, compare_send_receive_richest_addresses
+from testnet_spot_trade_executor import place_limit_buy_order
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -29,6 +30,9 @@ def long_position() -> Tuple[int, int]:
     stop_loss = int(current_price - (current_price * PROFIT_MARGIN))
     logging.info(f'Current price: {current_price}, Profit point: {profit_point}, Stop loss: {stop_loss}')
     profit, loss = 0, 0
+
+    # Place an order on testnet
+    place_limit_buy_order(0.001, current_price)
 
     while True:
         logging.info('******************************************')

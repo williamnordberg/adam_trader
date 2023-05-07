@@ -5,8 +5,10 @@ from datetime import datetime, timedelta
 import warnings
 from handy_modules import retry_on_error_with_fallback
 
+
 warnings.filterwarnings('ignore', category=FutureWarning)
 warnings.filterwarnings('ignore', category=RuntimeWarning)
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 DATASET_PATH = 'data/main_dataset.csv'
 
@@ -59,13 +61,14 @@ def update_internal_factors():
     new_data = response.to_dataframe()
 
     # Format the DataFrame
-    new_data = new_data.rename(columns={'time': 'Date'})
-    new_data['Date'] = pd.to_datetime(new_data['Date'], unit='s').dt.strftime('%Y-%m-%d')
+    if len(new_data) > 0:
+        new_data = new_data.rename(columns={'time': 'Date'})
+        new_data['Date'] = pd.to_datetime(new_data['Date'], unit='s').dt.strftime('%Y-%m-%d')
 
-    for column in new_data.columns:
-        if new_data.at[new_data.index[-1], column] == 'btc':
-            new_data = new_data.drop(columns=[column])
-            break
+        for column in new_data.columns:
+            if new_data.at[new_data.index[-1], column] == 'btc':
+                new_data = new_data.drop(columns=[column])
+                break
 
     # Check if there is new data to append
     if len(new_data) > 0:

@@ -211,4 +211,4 @@ if __name__ == "__main__":
     for i in range(1, 6):
         process = Process(target=trading_loop, args=(models[f'model{i}']))
         process.start()
-        time.sleep(5)
+        time.sleep(60)
