@@ -12,12 +12,15 @@ from youtube import check_bitcoin_youtube_videos_increase
 from adam_predictor import decision_tree_predictor
 from position_decision_maker import position_decision
 from handy_modules import get_bitcoin_price, compare_send_receive_richest_addresses
-
+from testnet_future_short_trade import short_market, close_shorts_open_positions
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 SCORE_MARGIN_TO_CLOSE_OUTER = 0.68
 PROFIT_MARGIN = 0.01
+SYMBOL = 'BTCUSDT'
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
+POSITION_SIZE = 0.001
+LEVERAGE = 10
 
 
 def short_position(score_margin_to_close: float, profit_margin: float) -> Tuple[int, int]:
@@ -28,6 +31,9 @@ def short_position(score_margin_to_close: float, profit_margin: float) -> Tuple[
     stop_loss = int(current_price + (current_price * profit_margin))
     logging.info(f'current_price:{current_price}, profit_point:{profit_point},stop_loss:{stop_loss} ')
     profit, loss = 0, 0
+
+    # Place an order on testnet
+    short_market(POSITION_SIZE, current_price, LEVERAGE, 'isolated')  # 5x leverage and isolated margin mode
 
     while True:
         logging.info('******************************************')
@@ -102,11 +108,12 @@ def short_position(score_margin_to_close: float, profit_margin: float) -> Tuple[
 
         if weighted_score_up > weighted_score_down and weighted_score_up > score_margin_to_close:
             logging.info('short position clos')
+            close_shorts_open_positions(SYMBOL)
             if current_price < position_opening_price:
-                profit = int(position_opening_price - current_price)
+                profit = int(position_opening_price - current_price) * LEVERAGE
                 logging.info('short position closed with profit')
-            elif current_price > position_opening_price:
-                loss = int(position_opening_price - current_price)
+            elif current_price >= position_opening_price:
+                loss = int(current_price - position_opening_price) * LEVERAGE
                 logging.info('short position closed with loss')
             return profit, loss
 
