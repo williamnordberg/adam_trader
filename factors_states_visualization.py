@@ -3,6 +3,45 @@ from plotly.subplots import make_subplots
 import dash
 from dash import dcc
 from dash import html
+import pandas as pd
+from datetime import datetime
+
+LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
+latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
+
+
+def calculate_upcoming_events():
+    fed = datetime.strptime(latest_info_saved['interest_rate_announcement_date'][0], "%Y-%m-%d %H:%M:%S")
+    cpi = datetime.strptime(latest_info_saved['cpi_announcement_date'][0], "%Y-%m-%d %H:%M:%S")
+    ppi = datetime.strptime(latest_info_saved['ppi_announcement_date'][0], "%Y-%m-%d %H:%M:%S")
+
+    now = datetime.utcnow()
+
+    time_until_fed = fed - now
+    time_until_cpi = cpi - now
+    time_until_ppi = ppi - now
+
+    fed_announcement = "N/A"
+    cpi_fed_announcement = "N/A"
+    ppi_fed_announcement = "N/A"
+
+    if time_until_fed.days > 0:
+        hours, remainder = divmod(time_until_fed.seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        fed_announcement = f"Next FED: {time_until_fed.days}D, {hours}H,, {minutes}m"
+
+    if time_until_cpi.days > 0:
+        hours, remainder = divmod(time_until_cpi.seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        cpi_fed_announcement = f"Next CPI: {time_until_cpi.days}D, {hours}H, {minutes}m"
+
+    if time_until_ppi.days > 0:
+        hours, remainder = divmod(time_until_ppi.seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        ppi_fed_announcement = f"Next PPI: {time_until_ppi.days}D, {hours}H, {minutes}m"
+
+    return fed_announcement, cpi_fed_announcement, ppi_fed_announcement, \
+        time_until_fed.days <= 2, time_until_cpi.days <= 2, time_until_ppi.days <= 2
 
 
 def create_gauge_chart(bullish, bearish, show_number=True):
@@ -79,28 +118,60 @@ def visualize_charts(shared_data):
         font=dict(size=10)
     )
 
-    app = dash.Dash(__name__)
+    fed_rate_m_to_m_read = float(latest_info_saved['fed_rate_m_to_m'][0])
+    fed_rate_m_to_m = f'Fed rate MtoM: {fed_rate_m_to_m_read}'
 
+    cpi_m_to_m_read = float(latest_info_saved['cpi_m_to_m'][0])
+    cpi_m_to_m = f'CPI MtoM: {cpi_m_to_m_read}'
+
+    ppi_m_to_m_read = float(latest_info_saved['ppi_m_to_m'][0])
+    ppi_m_to_m = f'PPI MtoM: {ppi_m_to_m_read}'
+
+    latest_info_saved.to_csv(LATEST_INFO_SAVED, index=False)
+
+    fed_announcement, cpi_fed_announcement, ppi_fed_announcement, \
+        fed_within_2_days, cpi_within_2_days, ppi_within_2_days = calculate_upcoming_events()
+
+    app = dash.Dash(__name__)
     app.layout = html.Div([
-        dcc.Graph(id='example-chart', figure=fig, style={'width': '100%', 'height': '100vh'}),
+        dcc.Graph(id='example-chart', figure=fig, style={'width': '90%', 'height': '100vh', 'display': 'inline-block'}),
+        html.Div([
+            html.P(fed_rate_m_to_m, style={'fontSize': '12px'}),
+            html.P(cpi_m_to_m, style={'fontSize': '12px'}),
+            html.P(ppi_m_to_m, style={'fontSize': '12px'}),
+            html.P(fed_announcement if fed_announcement != "N/A" else "",
+                   style={'fontSize': '11px',
+                          'color': 'red' if fed_within_2_days else None,
+                          'fontWeight': 'bold' if fed_within_2_days else None}),
+            html.P(cpi_fed_announcement if cpi_fed_announcement != "N/A" else "",
+                   style={'fontSize': '11px',
+                          'color': 'red' if cpi_within_2_days else None,
+                          'fontWeight': 'bold' if cpi_within_2_days else None}),
+            html.P(ppi_fed_announcement if ppi_fed_announcement != "N/A" else "",
+                   style={'fontSize': '11px',
+                          'color': 'red' if ppi_within_2_days else None,
+                          'fontWeight': 'bold' if ppi_within_2_days else None}),
+
+        ], style={'width': '10%', 'height': '100vh', 'display': 'inline-block', 'verticalAlign': 'top'}),
     ])
+
     app.run_server(host='0.0.0.0', port=8051, debug=False)
 
 
 if __name__ == "__main__":
     shared_data_outer = {
-        'macro_bullish': 0,
+        'macro_bullish': 1,
         'macro_bearish': 0,
-        'order_book_bullish': 0,
+        'order_book_bullish': 1,
         'order_book_bearish': 0,
         'prediction_bullish': 0,
-        'prediction_bearish': 0,
+        'prediction_bearish': 1,
         'technical_bullish': 0,
         'technical_bearish': 0,
-        'richest_addresses_bullish': 0,
+        'richest_addresses_bullish': 1,
         'richest_addresses_bearish': 0,
-        'google_search_bullish': 0,
-        'google_search_bearish': 0,
+        'google_search_bullish': 0.5,
+        'google_search_bearish': 0.5,
         'reddit_bullish': 0,
         'reddit_bearish': 0,
         'youtube_bullish': 0,
