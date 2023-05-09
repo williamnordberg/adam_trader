@@ -5,12 +5,14 @@ from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
 from datetime import datetime
 from typing import Tuple, Dict
+import pandas as pd
 
 from database import save_value_to_database, read_database
 from macro_compare import calculate_macro_sentiment
 from handy_modules import save_update_time, should_update
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
 
 
 def print_upcoming_events(events_date_dict):
@@ -43,6 +45,8 @@ def print_upcoming_events(events_date_dict):
 def get_chrome_options():
     options = webdriver.ChromeOptions()
     options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
     options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)"
                          " Chrome/87.0.4280.67 Safari/537.36")
     return options
@@ -53,6 +57,8 @@ def get_service():
 
 
 def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
+    latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
+
     # Save latest update time
     save_update_time('macro')
 
@@ -88,6 +94,13 @@ def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
                     currency_cell = row.find("td", class_="calendar__cell calendar__currency currency")
                     if currency_cell and (currency_cell.string.strip() == "USD"):
                         events_date_dict[event] = datetime.utcfromtimestamp(int(row['data-timestamp']))
+                        if event == 'Federal Funds Rate':
+                            latest_info_saved.loc[0, 'interest_rate_announcement_date'] = events_date_dict[event]
+                        elif event == 'CPI m/m':
+                            latest_info_saved.loc[0, 'cpi_announcement_date'] = events_date_dict[event]
+                        elif event == 'PPI m/m':
+                            latest_info_saved.loc[0, 'ppi_announcement_date'] = events_date_dict[event]
+
                         interest_cell = event_cell.find_next_sibling(
                             "td", class_="calendar__cell calendar__forecast forecast")
                         forecast_value = interest_cell.find("span", class_="calendar-forecast")\
@@ -113,6 +126,7 @@ def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
                                 ppi_m_to_m = value
 
     service.stop()
+
     if rate_this_month or cpi_m_to_m or ppi_m_to_m:
         macro_bullish, macro_bearish = calculate_macro_sentiment(
             rate_this_month, rate_month_before, cpi_m_to_m, ppi_m_to_m)
@@ -124,6 +138,7 @@ def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
         save_value_to_database('macro_bullish', macro_bullish)
         save_value_to_database('macro_bearish', macro_bearish)
 
+        latest_info_saved.to_csv(LATEST_INFO_SAVED, index=False)
         return macro_bullish, macro_bearish, events_date_dict
 
     else:
@@ -144,4 +159,4 @@ if __name__ == "__main__":
     macro_bullish_outer, macro_bearish_outer, events_date_dict_outer = macro_sentiment_wrapper()
     logging.info(f"{macro_bullish_outer}, {macro_bearish_outer}, event: {events_date_dict_outer}")
     print_upcoming_events(events_date_dict_outer)
-    calculate_macro_sentiment(5, 4.75, 0.1, -0.5)
+    print('events_date_dict_outer', events_date_dict_outer)
