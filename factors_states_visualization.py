@@ -5,9 +5,12 @@ from dash import dcc
 from dash import html
 import pandas as pd
 from datetime import datetime
+from database import read_database
+from handy_modules import get_bitcoin_price
 
 LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
 latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
+database = read_database()
 
 
 def calculate_upcoming_events():
@@ -25,17 +28,17 @@ def calculate_upcoming_events():
     cpi_fed_announcement = "N/A"
     ppi_fed_announcement = "N/A"
 
-    if time_until_fed.days > 0:
+    if time_until_fed.days >= 0:
         hours, remainder = divmod(time_until_fed.seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
         fed_announcement = f"Next FED: {time_until_fed.days}D, {hours}H,, {minutes}m"
 
-    if time_until_cpi.days > 0:
+    if time_until_cpi.days >= 0:
         hours, remainder = divmod(time_until_cpi.seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
         cpi_fed_announcement = f"Next CPI: {time_until_cpi.days}D, {hours}H, {minutes}m"
 
-    if time_until_ppi.days > 0:
+    if time_until_ppi.days >= 0:
         hours, remainder = divmod(time_until_ppi.seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
         ppi_fed_announcement = f"Next PPI: {time_until_ppi.days}D, {hours}H, {minutes}m"
@@ -48,14 +51,14 @@ def create_gauge_chart(bullish, bearish, show_number=True):
     if bullish == 0 and bearish == 0:
         value = 50
         gauge_steps = [
-            {"range": [0, 100], "color": "lightgray"},
+            {"range": [0, 1], "color": "lightgray"},
         ]
         title = ""
         bar_thickness = 0
     else:
-        value = (bullish / (bullish + bearish)) * 100
+        value = (bullish / (bullish + bearish)) * 1
         gauge_steps = [
-            {"range": [0, 100], "color": "lightcoral"}
+            {"range": [0, 1], "color": "lightcoral"}
         ]
         title = "Bull" if bullish > bearish else "Bear"
         bar_thickness = 1
@@ -66,7 +69,7 @@ def create_gauge_chart(bullish, bearish, show_number=True):
         title={"text": title, "font": {"size": 13, "color": "green" if title == "Bull" else "Red"}},
         domain={"x": [0, 1], "y": [0, 1]},
         gauge={
-            "axis": {"range": [0, 100]},
+            "axis": {"range": [0, 1]},
             "bar": {"color": "green", "thickness": bar_thickness},
             "steps": gauge_steps,
         },
@@ -127,6 +130,15 @@ def visualize_charts(shared_data):
     ppi_m_to_m_read = float(latest_info_saved['ppi_m_to_m'][0])
     ppi_m_to_m = f'PPI MtoM: {ppi_m_to_m_read}'
 
+    bid = database['bid_volume'][-1]
+    bid_volume = f'Bid vol: {bid}'
+
+    ask = database['ask_volume'][-1]
+    ask_vol = f'Ask vol: {ask}'
+
+    predicted_price = database['predicted_price'][-1]
+    current_price = get_bitcoin_price()
+
     latest_info_saved.to_csv(LATEST_INFO_SAVED, index=False)
 
     fed_announcement, cpi_fed_announcement, ppi_fed_announcement, \
@@ -136,21 +148,33 @@ def visualize_charts(shared_data):
     app.layout = html.Div([
         dcc.Graph(id='example-chart', figure=fig, style={'width': '90%', 'height': '100vh', 'display': 'inline-block'}),
         html.Div([
-            html.P(fed_rate_m_to_m, style={'fontSize': '12px'}),
-            html.P(cpi_m_to_m, style={'fontSize': '12px'}),
-            html.P(ppi_m_to_m, style={'fontSize': '12px'}),
-            html.P(fed_announcement if fed_announcement != "N/A" else "",
-                   style={'fontSize': '11px',
-                          'color': 'red' if fed_within_2_days else None,
-                          'fontWeight': 'bold' if fed_within_2_days else None}),
-            html.P(cpi_fed_announcement if cpi_fed_announcement != "N/A" else "",
-                   style={'fontSize': '11px',
-                          'color': 'red' if cpi_within_2_days else None,
-                          'fontWeight': 'bold' if cpi_within_2_days else None}),
-            html.P(ppi_fed_announcement if ppi_fed_announcement != "N/A" else "",
-                   style={'fontSize': '11px',
-                          'color': 'red' if ppi_within_2_days else None,
-                          'fontWeight': 'bold' if ppi_within_2_days else None}),
+            html.Div([
+                html.P(fed_rate_m_to_m, style={'fontSize': '12px'}),
+                html.P(cpi_m_to_m, style={'fontSize': '12px'}),
+                html.P(ppi_m_to_m, style={'fontSize': '12px'}),
+                html.P(fed_announcement if fed_announcement != "N/A" else "",
+                       style={'fontSize': '11px',
+                              'color': 'red' if fed_within_2_days else None,
+                              'fontWeight': 'bold' if fed_within_2_days else None}),
+                html.P(cpi_fed_announcement if cpi_fed_announcement != "N/A" else "",
+                       style={'fontSize': '11px',
+                              'color': 'red' if cpi_within_2_days else None,
+                              'fontWeight': 'bold' if cpi_within_2_days else None}),
+                html.P(ppi_fed_announcement if ppi_fed_announcement != "N/A" else "",
+                       style={'fontSize': '11px',
+                              'color': 'red' if ppi_within_2_days else None,
+                              'fontWeight': 'bold' if ppi_within_2_days else None}),
+            ]),
+            html.Div([
+                html.P(bid_volume, style={'fontSize': '12px'}),
+                html.P(ask_vol, style={'fontSize': '12px'}),
+            ], style={'borderTop': '1px solid black'}),
+
+            html.Div([
+                html.P(f'Predicted: {predicted_price}', style={'fontSize': '12px', 'margin': '0'}),
+                html.P(f'Current: {current_price}', style={'fontSize': '12px', 'margin': '0'}),
+                html.P(f'Diff: {current_price - predicted_price}', style={'fontSize': '12px', 'margin': '0'}),
+            ], style={'borderTop': '1px solid black', 'lineHeight': '1.8'})
 
         ], style={'width': '10%', 'height': '100vh', 'display': 'inline-block', 'verticalAlign': 'top'}),
     ])

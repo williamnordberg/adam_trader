@@ -208,7 +208,7 @@ if __name__ == "__main__":
     }
 
     # Run models
-    for i in range(1, 6):
+    for i in range(1, 4):
         process = Process(target=trading_loop, args=(models[f'model{i}']))
         process.start()
-        time.sleep(120)
+        time.sleep(20)

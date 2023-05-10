@@ -156,3 +156,4 @@ if __name__ == '__main__':
 
     logging.info(f'order_book_hit_target:{order_book_hit_target_outer},'
                  f'order_book_hit_stop: {order_book_hit_stop_outer}')
+
