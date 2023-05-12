@@ -6,6 +6,45 @@ import pandas as pd
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
+def simple_moving_average(data: np.ndarray, window: int) -> np.ndarray:
+    sma = np.cumsum(data, dtype=float)
+    sma[window:] = sma[window:] - sma[:-window]
+    sma[:window - 1] = np.nan
+    sma /= window
+    return sma
+
+
+def relative_strength_index(data_rsi: pd.Series, window: int) -> np.ndarray:
+    """
+        Calculates the Relative Strength Index (RSI) of a dataset.
+
+        Args:
+            data_rsi (pandas.Series): The input dataset.
+            window (int): The size of the window used to calculate the RSI.
+
+        Returns:
+            numpy array: The RSI of the input dataset.
+        """
+    delta = data_rsi - np.roll(data_rsi, 1)
+    gain = np.where(delta > 0, delta, 0)
+    loss = np.where(delta < 0, -delta, 0)
+    avg_gain = simple_moving_average(gain, window)
+    avg_loss = simple_moving_average(loss, window)
+
+    # Replace NaN values with zero to avoid division by zero error
+    avg_gain = np.nan_to_num(avg_gain)
+    avg_loss = np.nan_to_num(avg_loss)
+
+    # Add a small constant to avoid division by zero
+    avg_loss = np.nan_to_num(avg_loss) + 1e-10
+
+    # Calculate RS and RSI
+    rs = avg_gain / avg_loss
+    rsi = 100.0 - (100.0 / (1.0 + rs))
+
+    return rsi
+
+
 def exponential_moving_average(data: Union[List[float], np.ndarray, pd.Series], window_size: int) -> np.ndarray:
     """
     Calculates the exponential moving average (EMA) of a dataset with a specified window size.
@@ -34,7 +73,7 @@ def exponential_moving_average(data: Union[List[float], np.ndarray, pd.Series], 
     return np.array(ema)
 
 
-def bollinger_bands(data: pd.Series, window: int = 20, std_dev: int = 1) -> Tuple[pd.Series, pd.Series, pd.Series]:
+def bollinger_bands(data: pd.Series, window: int = 20, std_dev: int = 2) -> Tuple[pd.Series, pd.Series, pd.Series]:
     """
        Calculates the upper and lower Bollinger Bands for a dataset.
 
@@ -58,7 +97,7 @@ def bollinger_bands(data: pd.Series, window: int = 20, std_dev: int = 1) -> Tupl
     return upper_band, rolling_mean, lower_band
 
 
-def relative_strength_index(data_rsi: pd.Series, window: int) -> np.ndarray:
+def relative_strength_index1(data_rsi: pd.Series, window: int) -> np.ndarray:
     """
         Calculates the Relative Strength Index (RSI) of a dataset.
 

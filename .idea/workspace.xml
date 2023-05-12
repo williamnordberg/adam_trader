@@ -8,15 +8,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="11 April">
+    <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="11May">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adjustable_factor_list.csv" beforeDir="false" afterPath="$PROJECT_DIR$/adjustable_factor_list.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/youtube_token.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/config/youtube_token.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dash_visualization.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/data/database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/latest_info_saved.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/main_dataset.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/main_dataset.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database_visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_visualization.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/factors_states_visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/factors_states_visualization.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_main_decision.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_main_decision.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_book.py" beforeDir="false" afterPath="$PROJECT_DIR$/order_book.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/indicator_calculator.py" beforeDir="false" afterPath="$PROJECT_DIR$/indicator_calculator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/long_position_open.py" beforeDir="false" afterPath="$PROJECT_DIR$/long_position_open.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_decision.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_decision.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_long_position_open.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_main_decision.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_short_position_open.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_aggregate.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_aggregate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analyser.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_analyser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_compare_polarity.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/short_position_open.py" beforeDir="false" afterPath="$PROJECT_DIR$/short_position_open.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/technical_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/technical_analysis.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -99,7 +111,7 @@
       <recent name="C:\will\Python_project\adam_trader\.gitignore" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.new_main_decision">
+  <component name="RunManager" selected="Python.main_decision">
     <configuration name="factors_states_visualization" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -121,7 +133,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="macro_analyser" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="main_decision" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -133,7 +145,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/macro_analyser.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main_decision.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -142,7 +154,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="new_main_decision" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="news_aggregate" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -154,7 +166,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/new_main_decision.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/news_aggregate.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -163,7 +175,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="order_book" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="news_analyser" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -175,7 +187,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/order_book.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/news_analyser.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -184,7 +196,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="youtube" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -196,7 +208,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/youtube.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -222,20 +234,20 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.order_book" />
+      <item itemvalue="Python.main_decision" />
+      <item itemvalue="Python.news_aggregate" />
+      <item itemvalue="Python.news_analyser" />
+      <item itemvalue="Python.youtube" />
       <item itemvalue="Python.factors_states_visualization" />
-      <item itemvalue="Python.macro_analyser" />
-      <item itemvalue="Python.new_main_decision" />
-      <item itemvalue="Python.test" />
       <item itemvalue="Python tests.Unittests with right config" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.new_main_decision" />
+        <item itemvalue="Python.main_decision" />
+        <item itemvalue="Python.youtube" />
         <item itemvalue="Python.factors_states_visualization" />
-        <item itemvalue="Python.test" />
-        <item itemvalue="Python.order_book" />
-        <item itemvalue="Python.macro_analyser" />
+        <item itemvalue="Python.news_analyser" />
+        <item itemvalue="Python.news_aggregate" />
       </list>
     </recent_temporary>
   </component>
@@ -247,13 +259,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00162" summary="11 April">
-      <created>1681959537391</created>
-      <option name="number" value="00162" />
-      <option name="presentableId" value="LOCAL-00162" />
-      <option name="project" value="LOCAL" />
-      <updated>1681959537391</updated>
     </task>
     <task id="LOCAL-00163" summary="11 April">
       <created>1681970447401</created>
@@ -591,7 +596,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683621719145</updated>
     </task>
-    <option name="localTasksCounter" value="211" />
+    <task id="LOCAL-00211" summary="11May">
+      <created>1683762813410</created>
+      <option name="number" value="00211" />
+      <option name="presentableId" value="LOCAL-00211" />
+      <option name="project" value="LOCAL" />
+      <updated>1683762813410</updated>
+    </task>
+    <option name="localTasksCounter" value="212" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -750,6 +762,7 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="first commit" />
     <MESSAGE value="11 April" />
-    <option name="LAST_COMMIT_MESSAGE" value="11 April" />
+    <MESSAGE value="11May" />
+    <option name="LAST_COMMIT_MESSAGE" value="11May" />
   </component>
 </project>
