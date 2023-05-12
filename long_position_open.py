@@ -12,27 +12,23 @@ from youtube import check_bitcoin_youtube_videos_increase
 from adam_predictor import decision_tree_predictor
 from position_decision_maker import position_decision
 from handy_modules import get_bitcoin_price, compare_send_receive_richest_addresses
-from testnet_spot_trade_executor import place_limit_buy_order
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-SCORE_MARGIN_TO_CLOSE = 0.68
+SCORE_MARGIN_TO_CLOSE = 0.65
 PROFIT_MARGIN = 0.01
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 
 
-def long_position() -> Tuple[int, int]:
+def long_position(score_margin_to_close: float, profit_margin: float) -> Tuple[int, int]:
     current_price = get_bitcoin_price()
     position_opening_price = current_price
-    profit_point = int(current_price + (current_price * PROFIT_MARGIN))
-    stop_loss = int(current_price - (current_price * PROFIT_MARGIN))
+    profit_point = int(current_price + (current_price * profit_margin))
+    stop_loss = int(current_price - (current_price * profit_margin))
     logging.info(f'Current price: {current_price}, Profit point: {profit_point}, Stop loss: {stop_loss}')
     profit, loss = 0, 0
-
-    # Place an order on testnet
-    place_limit_buy_order(0.001, current_price)
 
     while True:
         logging.info('******************************************')
@@ -106,7 +102,7 @@ def long_position() -> Tuple[int, int]:
                      f'weighted_score_down: {round(weighted_score_down, 2)}')
 
         # Check if weighed score show high chance to position loss
-        if weighted_score_down > weighted_score_up and weighted_score_down > SCORE_MARGIN_TO_CLOSE:
+        if weighted_score_down > weighted_score_up and weighted_score_down > score_margin_to_close:
             logging.info('long position clos')
             if current_price > position_opening_price:
                 profit = int(current_price - position_opening_price)
@@ -120,5 +116,5 @@ def long_position() -> Tuple[int, int]:
 
 
 if __name__ == "__main__":
-    profit_after_trade, loss_after_trade = long_position()
+    profit_after_trade, loss_after_trade = long_position(SCORE_MARGIN_TO_CLOSE, PROFIT_MARGIN)
     logging.info(f"profit_after_trade:{profit_after_trade}, loss_after_trade:{loss_after_trade}")

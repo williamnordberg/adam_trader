@@ -412,4 +412,5 @@ def visualize_trade_results(run_dash=True):
 
 
 if __name__ == "__main__":
-    visualize_database_one_chart()
+    # visualize_database_one_chart()
+    visualize_database_two_rows()

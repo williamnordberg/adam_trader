@@ -130,14 +130,25 @@ def visualize_charts(shared_data):
     ppi_m_to_m_read = float(latest_info_saved['ppi_m_to_m'][0])
     ppi_m_to_m = f'PPI MtoM: {ppi_m_to_m_read}'
 
-    bid = database['bid_volume'][-1]
+    bid = int(database['bid_volume'][-1])
     bid_volume = f'Bid vol: {bid}'
 
-    ask = database['ask_volume'][-1]
+    ask = int(database['ask_volume'][-1])
     ask_vol = f'Ask vol: {ask}'
 
     predicted_price = database['predicted_price'][-1]
     current_price = get_bitcoin_price()
+
+    rsi = float(latest_info_saved['latest_rsi'][0])
+    over_200EMA = latest_info_saved['over_200EMA'][0]
+    MACD_uptrend = database['technical_potential_up_trend'][-1]
+    bb_MA_distance = latest_info_saved['bb_band_MA_distance'][0]
+
+    BTC_received = int(latest_info_saved['total_received_coins_in_last_24'][0])
+    BTC_send = int(latest_info_saved['total_sent_coins_in_last_24'][0])
+
+    positive_news_polarity_change = round(latest_info_saved['positive_news_polarity_change'][0], 0)
+    negative_news_polarity_change = round(latest_info_saved['negative_news_polarity_change'][0], 0)
 
     latest_info_saved.to_csv(LATEST_INFO_SAVED, index=False)
 
@@ -174,7 +185,26 @@ def visualize_charts(shared_data):
                 html.P(f'Predicted: {predicted_price}', style={'fontSize': '12px', 'margin': '0'}),
                 html.P(f'Current: {current_price}', style={'fontSize': '12px', 'margin': '0'}),
                 html.P(f'Diff: {current_price - predicted_price}', style={'fontSize': '12px', 'margin': '0'}),
-            ], style={'borderTop': '1px solid black', 'lineHeight': '1.8'})
+            ], style={'borderTop': '1px solid black', 'lineHeight': '1.8'}),
+
+            html.Div([
+                html.P(f'RSI: {rsi}', style={'fontSize': '12px', 'margin': '0'}),
+                html.P(f'Over 200EMA: {over_200EMA}', style={'fontSize': '12px', 'margin': '0'}),
+                html.P(f'MACD up trend: {MACD_uptrend}', style={'fontSize': '12px', 'margin': '0'}),
+                html.P(f'bb distance MA: {bb_MA_distance}', style={'fontSize': '12px', 'margin': '0'}),
+            ], style={'borderTop': '1px solid black', 'lineHeight': '1.8'}),
+
+            html.Div([
+                html.P(f'Rich receive: {BTC_received}', style={'fontSize': '12px', 'margin': '0'}),
+                html.P(f'Rich send: {BTC_send}', style={'fontSize': '12px', 'margin': '0'}),
+            ], style={'borderTop': '1px solid black', 'lineHeight': '1.8'}),
+
+            html.Div([
+                html.P(f'+ news increase: {positive_news_polarity_change}',
+                       style={'fontSize': '12px', 'margin': '0'}),
+                html.P(f'- news increase: {negative_news_polarity_change}',
+                       style={'fontSize': '12px', 'margin': '0'}),
+            ], style={'borderTop': '1px solid black', 'lineHeight': '1.8'}),
 
         ], style={'width': '10%', 'height': '100vh', 'display': 'inline-block', 'verticalAlign': 'top'}),
     ])
