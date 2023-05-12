@@ -10,26 +10,9 @@
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="11May">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/adjustable_factor_list.csv" beforeDir="false" afterPath="$PROJECT_DIR$/adjustable_factor_list.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/youtube_token.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/config/youtube_token.pickle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dash_visualization.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/data/database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/latest_info_saved.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/main_dataset.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/main_dataset.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_visualization.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/factors_states_visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/factors_states_visualization.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/indicator_calculator.py" beforeDir="false" afterPath="$PROJECT_DIR$/indicator_calculator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/long_position_open.py" beforeDir="false" afterPath="$PROJECT_DIR$/long_position_open.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_decision.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_decision.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_long_position_open.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_main_decision.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_short_position_open.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/news_aggregate.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_aggregate.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news_analyser.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_analyser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news_compare_polarity.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/short_position_open.py" beforeDir="false" afterPath="$PROJECT_DIR$/short_position_open.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/technical_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/technical_analysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -244,8 +227,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.main_decision" />
-        <item itemvalue="Python.youtube" />
         <item itemvalue="Python.factors_states_visualization" />
+        <item itemvalue="Python.youtube" />
         <item itemvalue="Python.news_analyser" />
         <item itemvalue="Python.news_aggregate" />
       </list>
@@ -259,13 +242,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00164" summary="11 April">
-      <created>1681970837857</created>
-      <option name="number" value="00164" />
-      <option name="presentableId" value="LOCAL-00164" />
-      <option name="project" value="LOCAL" />
-      <updated>1681970837857</updated>
     </task>
     <task id="LOCAL-00165" summary="11 April">
       <created>1681970846479</created>
@@ -603,7 +579,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683875117778</updated>
     </task>
-    <option name="localTasksCounter" value="213" />
+    <task id="LOCAL-00213" summary="11May">
+      <created>1683875127115</created>
+      <option name="number" value="00213" />
+      <option name="presentableId" value="LOCAL-00213" />
+      <option name="project" value="LOCAL" />
+      <updated>1683875127115</updated>
+    </task>
+    <option name="localTasksCounter" value="214" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">

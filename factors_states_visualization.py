@@ -184,7 +184,7 @@ def visualize_charts(shared_data):
             html.Div([
                 html.P(f'Predicted: {predicted_price}', style={'fontSize': '12px', 'margin': '0'}),
                 html.P(f'Current: {current_price}', style={'fontSize': '12px', 'margin': '0'}),
-                html.P(f'Diff: {current_price - predicted_price}', style={'fontSize': '12px', 'margin': '0'}),
+                html.P(f'Diff: {predicted_price - current_price}', style={'fontSize': '12px', 'margin': '0'}),
             ], style={'borderTop': '1px solid black', 'lineHeight': '1.8'}),
 
             html.Div([
