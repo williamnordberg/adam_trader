@@ -85,7 +85,7 @@ def get_probabilities(symbols: List[str], limit: int = LIMIT, bid_multiplier: fl
     for symbol in symbols:
         data = get_order_book(symbol, limit)
         if data is None:
-            return 0, 0
+            return 0.5, 0.5
 
         bid_volume += sum([float(bid[1]) for bid in data['bids'] if float(bid[0]) >=
                            (current_price * bid_multiplier)])
@@ -125,7 +125,7 @@ def get_probabilities_hit_profit_or_stop(symbols: List[str], limit: int, profit_
     for symbol in symbols:
         data = get_order_book(symbol, limit)
         if data is None:
-            return None
+            return 0.5, 0.5
 
         bids = data.get('bids')
         asks = data.get('asks')

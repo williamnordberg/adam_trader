@@ -102,4 +102,3 @@ if __name__ == "__main__":
     logging.info(f"predicted bullish: {prediction_bullish_outer}")
     logging.info(f"predicted bearish: {prediction_bearish_outer}")
     print(should_update('predicted_price'))
-
