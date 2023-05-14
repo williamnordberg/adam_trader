@@ -1,1 +1,2 @@
-model_name,trade_open_time,trade_close_time,PNL
+model_name,position_opening_time,position_closing_time,opening_price,close_price,position_type,PNL
+

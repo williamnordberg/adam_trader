@@ -1,6 +1,6 @@
-model_name,PNL,number_of_trades
-model1,0,0
-model2,0,0
-model3,0,0
-model4,0,0
-model5,200,3
+model_name,PNL,long_trades,short_trades,total_trades
+model1,0,0,0,0
+model2,0,0,0,0
+model3,0,0,0,0
+model4,0,0,0,0
+model5,200,3,2,1
