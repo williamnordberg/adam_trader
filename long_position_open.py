@@ -12,6 +12,7 @@ from youtube import check_bitcoin_youtube_videos_increase
 from adam_predictor import decision_tree_predictor
 from position_decision_maker import position_decision
 from handy_modules import get_bitcoin_price, compare_send_receive_richest_addresses
+from testnet_spot_trade_executor import place_market_buy_order, close_position_at_market, get_btc_open_positions
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -20,6 +21,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 SCORE_MARGIN_TO_CLOSE = 0.65
 PROFIT_MARGIN = 0.01
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
+POSITION_SIZE = 0.3
 
 
 def long_position(score_margin_to_close: float, profit_margin: float) -> Tuple[int, int]:
@@ -27,20 +29,23 @@ def long_position(score_margin_to_close: float, profit_margin: float) -> Tuple[i
     position_opening_price = current_price
     profit_point = int(current_price + (current_price * profit_margin))
     stop_loss = int(current_price - (current_price * profit_margin))
-    logging.info(f'Current price: {current_price}, Profit point: {profit_point}, Stop loss: {stop_loss}')
     profit, loss = 0, 0
 
+    # Place order o spot testnet
+    place_market_buy_order(POSITION_SIZE)
+
     while True:
-        logging.info('******************************************')
         current_price = get_bitcoin_price()
         logging.info(f'Current_price:{current_price}, Profit_point:{profit_point},Stop_loss:{stop_loss}')
 
         # Check if we meet profit or stop loss
         if current_price >= profit_point:
+            close_position_at_market(POSITION_SIZE)
             profit = int(current_price - position_opening_price)
             logging.info('&&&&&&&&&&&&&& target hit &&&&&&&&&&&&&&&&&&&&&')
             return profit, loss
         elif current_price < stop_loss:
+            close_position_at_market(POSITION_SIZE)
             loss = int(position_opening_price - current_price)
             logging.info('&&&&&&&&&&&&&& STOP LOSS &&&&&&&&&&&&&&&&&&&&&')
             return profit, loss
@@ -103,6 +108,7 @@ def long_position(score_margin_to_close: float, profit_margin: float) -> Tuple[i
 
         # Check if weighed score show high chance to position loss
         if weighted_score_down > weighted_score_up and weighted_score_down > score_margin_to_close:
+            close_position_at_market(POSITION_SIZE)
             logging.info('long position clos')
             if current_price > position_opening_price:
                 profit = int(current_price - position_opening_price)
@@ -111,8 +117,8 @@ def long_position(score_margin_to_close: float, profit_margin: float) -> Tuple[i
                 loss = int(position_opening_price - current_price)
                 logging.info('long position closed with loss')
             return profit, loss
-
-        sleep(60 * 5)
+        get_btc_open_positions()
+        sleep(60 * 1)
 
 
 if __name__ == "__main__":

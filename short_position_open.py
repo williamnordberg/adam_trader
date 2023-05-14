@@ -12,15 +12,16 @@ from youtube import check_bitcoin_youtube_videos_increase
 from adam_predictor import decision_tree_predictor
 from position_decision_maker import position_decision
 from handy_modules import get_bitcoin_price, compare_send_receive_richest_addresses
-from testnet_future_short_trade import short_market, close_shorts_open_positions
+from testnet_future_short_trade import short_market, close_shorts_open_positions, get_open_futures_positions
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 SCORE_MARGIN_TO_CLOSE_OUTER = 0.68
 PROFIT_MARGIN = 0.01
 SYMBOL = 'BTCUSDT'
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
-POSITION_SIZE = 0.001
+POSITION_SIZE = 0.01
 LEVERAGE = 10
+MARGIN_MODE = 'isolated'
 
 
 def short_position(score_margin_to_close: float, profit_margin: float) -> Tuple[int, int]:
@@ -29,11 +30,10 @@ def short_position(score_margin_to_close: float, profit_margin: float) -> Tuple[
     position_opening_price = current_price
     profit_point = int(current_price - (current_price * profit_margin))
     stop_loss = int(current_price + (current_price * profit_margin))
-    logging.info(f'current_price:{current_price}, profit_point:{profit_point},stop_loss:{stop_loss} ')
     profit, loss = 0, 0
 
     # Place an order on testnet
-    short_market(POSITION_SIZE, current_price, LEVERAGE, 'isolated')  # 5x leverage and isolated margin mode
+    short_market(POSITION_SIZE, LEVERAGE, MARGIN_MODE)  # 5x leverage and isolated margin mode
 
     while True:
         logging.info('******************************************')
@@ -42,10 +42,12 @@ def short_position(score_margin_to_close: float, profit_margin: float) -> Tuple[
 
         # Check if we meet profit or stop loss
         if current_price < profit_point:
+            close_shorts_open_positions(SYMBOL)
             profit = int(position_opening_price - current_price)
             logging.info('&&&&&&&&&&&&&& TARGET HIT &&&&&&&&&&&&&&&&&&&&&')
             return profit, loss
         elif current_price > stop_loss:
+            close_shorts_open_positions(SYMBOL)
             loss = int(current_price - position_opening_price)
             logging.info('&&&&&&&&&&&&&& STOP LOSS &&&&&&&&&&&&&&&&&&&&&')
             return profit, loss
@@ -116,8 +118,8 @@ def short_position(score_margin_to_close: float, profit_margin: float) -> Tuple[
                 loss = int(current_price - position_opening_price) * LEVERAGE
                 logging.info('short position closed with loss')
             return profit, loss
-
-        sleep(60 * 5)
+        get_open_futures_positions()
+        sleep(20)
 
 
 if __name__ == "__main__":
