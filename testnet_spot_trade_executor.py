@@ -2,6 +2,7 @@ from binance.client import Client
 import logging
 import configparser
 import os
+from datetime import datetime
 
 
 CONFIG_PATH = 'config/config.ini'
@@ -29,8 +30,6 @@ def initialized_client():
     return client
 
 
-from datetime import datetime
-
 def get_trade_history(symbol: str):
     # Fetch and display the trade history for a given symbol
     # Params: symbol - trading pair symbol (e.g. 'BTCUSDT')
@@ -42,6 +41,7 @@ def get_trade_history(symbol: str):
         dt_object = datetime.fromtimestamp(timestamp)
         logging.info(f"Trade ID: {trade['id']} - Timestamp: {dt_object} - Side: {trade['isBuyer']} "
                      f"- Quantity: {trade['qty']} - Price: {trade['price']}")
+
 
 def get_account_assets():
     # Fetch and display the asset balances in the account
@@ -222,14 +222,14 @@ def get_btc_open_positions():
 
 if __name__ == '__main__':
     # get_open_positions()
-    # close_position_at_market(5)
+    # close_position_at_market(3.80100000)
     # get_open_positions()
     # get_trade_history(SYMBOL)
     # get_account_assets()
-    # get_asset_pnl()
+    get_asset_pnl()
     # calculate_total_profit_loss(SYMBOL)
     # cancel_all_open_orders(SYMBOL)
     # place_market_buy_order(1)
-    get_open_orders(SYMBOL)
+    # get_open_orders(SYMBOL)
     get_btc_open_positions()
-    get_trade_history(SYMBOL)
+    # get_trade_history(SYMBOL)
