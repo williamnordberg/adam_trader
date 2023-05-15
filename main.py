@@ -26,7 +26,7 @@ SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 LONG_THRESHOLD = 0.65
 SHORT_THRESHOLD = 0.65
 SCORE_MARGIN_TO_CLOSE = 0.65
-PROFIT_MARGIN = 0.01
+PROFIT_MARGIN = 0.005
 VISUALIZATION_SLEEP_TIME = 20 * 60
 TRADE_RESULT_PATH = 'data/trades_results.csv'
 TRADE_DETAILS_PATH = 'data/trades_details.csv'
@@ -221,11 +221,11 @@ if __name__ == "__main__":
     visualization_trade_result_process.start()
 
     models = {
-        'model1': [0.65, 0.65, 0.65, 0.1, 'model1'],
-        'model2': [0.70, 0.70, 0.70, 0.1, 'model2'],
-        'model3': [0.75, 0.75, 0.75, 0.1, 'model3'],
-        'model4': [0.80, 0.80, 0.80, 0.1, 'model4'],
-        'model5': [0.85, 0.85, 0.85, 0.1, 'model5']
+        'model1': [0.65, 0.65, 0.65, 0.005, 'model1'],
+        'model2': [0.70, 0.70, 0.70, 0.005, 'model2'],
+        'model3': [0.75, 0.70, 0.70, 0.005, 'model3'],
+        'model4': [0.80, 0.80, 0.80, 0.005, 'model4'],
+        'model5': [0.85, 0.85, 0.85, 0.005, 'model5']
     }
 
     # Run models
