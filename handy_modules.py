@@ -19,11 +19,11 @@ update_intervals = {
     "macro": timedelta(hours=24),
     "order_book": timedelta(minutes=20),
     "predicted_price": timedelta(hours=12),
-    "technical_analysis": timedelta(hours=12),
+    "technical_analysis": timedelta(hours=4),
     "richest_addresses_compare": timedelta(hours=3),
     "google_search": timedelta(hours=3),
-    "reddit": timedelta(hours=3),
-    "youtube": timedelta(hours=3),
+    "reddit": timedelta(hours=8),
+    "youtube": timedelta(hours=4),
     "sentiment_of_news": timedelta(hours=1),
     "richest_addresses_scrap": timedelta(hours=24)
 }
