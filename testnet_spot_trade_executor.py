@@ -29,6 +29,8 @@ def initialized_client():
     return client
 
 
+from datetime import datetime
+
 def get_trade_history(symbol: str):
     # Fetch and display the trade history for a given symbol
     # Params: symbol - trading pair symbol (e.g. 'BTCUSDT')
@@ -36,9 +38,10 @@ def get_trade_history(symbol: str):
     trades = client.get_my_trades(symbol=symbol)
     logging.info(f"Trade history for {symbol}:")
     for trade in trades:
-        logging.info(f"Trade ID: {trade['id']} - Timestamp: {trade['time']} - Side: {trade['isBuyer']} "
+        timestamp = trade['time'] / 1000.0
+        dt_object = datetime.fromtimestamp(timestamp)
+        logging.info(f"Trade ID: {trade['id']} - Timestamp: {dt_object} - Side: {trade['isBuyer']} "
                      f"- Quantity: {trade['qty']} - Price: {trade['price']}")
-
 
 def get_account_assets():
     # Fetch and display the asset balances in the account
@@ -229,3 +232,4 @@ if __name__ == '__main__':
     # place_market_buy_order(1)
     get_open_orders(SYMBOL)
     get_btc_open_positions()
+    get_trade_history(SYMBOL)
