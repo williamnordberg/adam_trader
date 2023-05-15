@@ -55,8 +55,8 @@ def long_position(score_margin_to_close: float, profit_margin: float) -> Tuple[i
         assert probabilities_hit is not None, "get_probabilities_hit_profit_or_stop returned None"
         probability_to_hit_target, probability_to_hit_stop_loss = probabilities_hit
 
-        logging.info(f'Profit probability: {round(probability_to_hit_target, 2)}'
-                     f' Stop probability: {round(probability_to_hit_stop_loss, 2)}')
+        logging.info(f'Profit probability: {round(probability_to_hit_target, 1)}'
+                     f' Stop probability: {round(probability_to_hit_stop_loss, 1)}')
 
         # 1 Get the prediction
         prediction_bullish, prediction_bearish = decision_tree_predictor()
@@ -103,9 +103,6 @@ def long_position(score_margin_to_close: float, profit_margin: float) -> Tuple[i
             youtube_bullish, youtube_bearish,
             news_bullish, news_bearish)
 
-        logging.info(f'weighted_score_up: {round(weighted_score_up, 2)}, '
-                     f'weighted_score_down: {round(weighted_score_down, 2)}')
-
         # Check if weighed score show high chance to position loss
         if weighted_score_down > weighted_score_up and weighted_score_down > score_margin_to_close:
             close_position_at_market(POSITION_SIZE)
@@ -118,7 +115,7 @@ def long_position(score_margin_to_close: float, profit_margin: float) -> Tuple[i
                 logging.info('long position closed with loss')
             return profit, loss
         get_btc_open_positions()
-        sleep(60 * 1)
+        sleep(60 * 3)
 
 
 if __name__ == "__main__":
