@@ -75,7 +75,7 @@ def retry_on_error_with_fallback(max_retries: int = 3, delay: int = 5,
                     logging.error(f"Returning fallback values {fallback_values}.")
                     return fallback_values
             else:
-                raise
+                raise Exception(f"All {max_retries} attempts failed without a fallback value.")
 
         return wrapper
 
@@ -92,7 +92,7 @@ def check_internet_connection() -> bool:
         bool: True if there is an internet connection, False otherwise.
     """
     try:
-        requests.get("http://www.google.com", timeout=3)
+        requests.get("http://www.google.com", timeout=5)
         return True
     except requests.ConnectionError:
         logging.warning("No internet connection available.")
