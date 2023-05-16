@@ -16,7 +16,7 @@ from testnet_future_short_trade import short_market, close_shorts_open_positions
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 SCORE_MARGIN_TO_CLOSE_OUTER = 0.68
-PROFIT_MARGIN = 0.01
+PROFIT_MARGIN = 0.005
 SYMBOL = 'BTCUSDT'
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 POSITION_SIZE = 0.01

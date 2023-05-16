@@ -10,16 +10,10 @@
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/youtube_token.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/config/youtube_token.pickle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/bitcoin_rich_list2000.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/bitcoin_rich_list2000.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/latest_info_saved.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/trades_details.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/trades_details.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/trades_results.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/trades_results.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handy_modules.py" beforeDir="false" afterPath="$PROJECT_DIR$/handy_modules.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitor_2000_richest.py" beforeDir="false" afterPath="$PROJECT_DIR$/monitor_2000_richest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/short_position_open.py" beforeDir="false" afterPath="$PROJECT_DIR$/short_position_open.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testnet_future_short_trade.py" beforeDir="false" afterPath="$PROJECT_DIR$/testnet_future_short_trade.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +96,7 @@
       <recent name="C:\will\Python_project\adam_trader\.gitignore" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.testnet_future_short_trade">
+  <component name="RunManager" selected="Python.main">
     <configuration name="handy_modules" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -166,7 +160,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="reddit" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="short_position_open" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -178,7 +172,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reddit.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/short_position_open.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -225,20 +219,20 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.short_position_open" />
       <item itemvalue="Python.testnet_future_short_trade" />
       <item itemvalue="Python.handy_modules" />
       <item itemvalue="Python.monitor_2000_richest" />
-      <item itemvalue="Python.reddit" />
       <item itemvalue="Python.main" />
       <item itemvalue="Python tests.Unittests with right config" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.testnet_future_short_trade" />
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.short_position_open" />
+        <item itemvalue="Python.testnet_future_short_trade" />
         <item itemvalue="Python.handy_modules" />
         <item itemvalue="Python.monitor_2000_richest" />
-        <item itemvalue="Python.reddit" />
       </list>
     </recent_temporary>
   </component>
@@ -250,13 +244,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00173" summary="11 April">
-      <created>1681979883562</created>
-      <option name="number" value="00173" />
-      <option name="presentableId" value="LOCAL-00173" />
-      <option name="project" value="LOCAL" />
-      <updated>1681979883562</updated>
     </task>
     <task id="LOCAL-00174" summary="11 April">
       <created>1681979894353</created>
@@ -594,7 +581,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684122619108</updated>
     </task>
-    <option name="localTasksCounter" value="222" />
+    <task id="LOCAL-00222" summary="commit">
+      <created>1684206358487</created>
+      <option name="number" value="00222" />
+      <option name="presentableId" value="LOCAL-00222" />
+      <option name="project" value="LOCAL" />
+      <updated>1684206358487</updated>
+    </task>
+    <option name="localTasksCounter" value="223" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">

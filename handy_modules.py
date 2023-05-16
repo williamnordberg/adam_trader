@@ -107,7 +107,7 @@ def get_bitcoin_future_market_price() -> int:
         client = initialized_future_client()
         try:
             ticker = client.get_symbol_ticker(symbol=SYMBOL)
-            current_price = int(ticker['price'])
+            current_price = int(float(ticker['price']))
             return current_price
 
         except (BinanceAPIException, BinanceRequestException) as e:
