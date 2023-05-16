@@ -138,6 +138,19 @@ def short_market(btc_amount: float, leverage: int, margin_mode: str):
     logging.info('Short order placed successfully')
 
 
+def check_no_open_future_position(symbol: str):
+    client = initialized_future_client()
+    open_positions = client.futures_position_information()
+
+    for position in open_positions:
+        # check if position for the specified symbol exists and its amount is non-zero
+        if position['symbol'] == symbol and float(position['positionAmt']) != 0:
+            return False  # open position exists
+
+    return True  # no open position
+
+
+
 if __name__ == '__main__':
     # short_market(0.03, 28000, 10, 'isolated')  # 5x leverage and isolated margin mode
     # close_shorts_open_positions(SYMBOL)
@@ -145,8 +158,5 @@ if __name__ == '__main__':
     # print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
     # close_shorts_open_positions(SYMBOL)
     # short_market(0.1, 3, 'isolated')
-    # get_open_futures_positions()
-    print('future', get_future_price(SYMBOL))
-    get_future_price(SYMBOL)
-    print('spot:', get_bitcoin_price())
+    get_open_futures_positions()
 

@@ -20,9 +20,11 @@ from long_position_open import long_position
 from short_position_open import short_position
 from factors_states_visualization import visualize_charts
 from database_visualization import visualize_database_one_chart, visualize_trade_results
+from testnet_future_short_trade import check_no_open_future_position
 
 # Constants
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
+SYMBOL = 'BTCUSDT'
 LONG_THRESHOLD = 0.65
 SHORT_THRESHOLD = 0.65
 SCORE_MARGIN_TO_CLOSE = 0.65
@@ -191,7 +193,8 @@ def trading_loop(long_threshold: float, short_threshold: float,
             logging.info(f"profit_after_trade:{profit_after_trade}, loss_after_trade:"
                          f"{loss_after_trade}")
 
-        elif weighted_score_down > weighted_score_up and weighted_score_down > short_threshold:
+        elif weighted_score_down > weighted_score_up and weighted_score_down > short_threshold and \
+                check_no_open_future_position(SYMBOL):
             logging.info('Opening short position')
             trade_open_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             opening_price = get_bitcoin_price()
@@ -232,5 +235,4 @@ if __name__ == "__main__":
     for i in range(1, 4):
         process = Process(target=trading_loop, args=(models[f'model{i}']))
         process.start()
-        time.sleep(20)
-
+        time.sleep(120)
