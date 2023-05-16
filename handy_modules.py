@@ -7,10 +7,14 @@ from functools import wraps
 
 from datetime import datetime, timedelta
 from database import read_database, save_value_to_database
+from binance.exceptions import BinanceAPIException, BinanceRequestException
+from testnet_future_short_trade import initialized_future_client
+
 
 BINANCE_ENDPOINT_PRICE = "https://api.binance.com/api/v3/ticker/price"
 GECKO_ENDPOINT_PRICE = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
 LATEST_INFO_FILE = "data/latest_info_saved.csv"
+SYMBOL = 'BTCUSDT'
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -93,6 +97,22 @@ def check_internet_connection() -> bool:
     except requests.ConnectionError:
         logging.warning("No internet connection available.")
         return False
+
+
+@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(
+        BinanceAPIException, BinanceRequestException,), fallback_values=0)
+def get_bitcoin_future_market_price() -> int:
+
+    if check_internet_connection():
+        client = initialized_future_client()
+        try:
+            ticker = client.get_symbol_ticker(symbol=SYMBOL)
+            current_price = int(ticker['price'])
+            return current_price
+
+        except (BinanceAPIException, BinanceRequestException) as e:
+            logging.error(f"Error: Could not connect to Binance API:{e}")
+            return 0
 
 
 @retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(
