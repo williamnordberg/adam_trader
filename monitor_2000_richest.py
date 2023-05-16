@@ -110,3 +110,4 @@ if __name__ == "__main__":
     latest_info_saved_outer = pd.read_csv(LATEST_INFO_FILE)
     latest_info_saved_outer['total_received_coins_in_last_24'] = total_received1
     latest_info_saved_outer['total_sent_coins_in_last_24'] = total_sent1
+    latest_info_saved_outer.to_csv(LATEST_INFO_FILE, index=False)

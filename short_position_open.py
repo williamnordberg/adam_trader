@@ -11,7 +11,7 @@ from reddit import reddit_check
 from youtube import check_bitcoin_youtube_videos_increase
 from adam_predictor import decision_tree_predictor
 from position_decision_maker import position_decision
-from handy_modules import get_bitcoin_price, compare_send_receive_richest_addresses
+from handy_modules import compare_send_receive_richest_addresses, get_bitcoin_future_market_price
 from testnet_future_short_trade import short_market, close_shorts_open_positions, get_open_futures_positions
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -26,7 +26,7 @@ MARGIN_MODE = 'isolated'
 
 def short_position(score_margin_to_close: float, profit_margin: float) -> Tuple[int, int]:
 
-    current_price = get_bitcoin_price()
+    current_price = get_bitcoin_future_market_price()
     position_opening_price = current_price
     profit_point = int(current_price - (current_price * profit_margin))
     stop_loss = int(current_price + (current_price * profit_margin))
@@ -37,7 +37,7 @@ def short_position(score_margin_to_close: float, profit_margin: float) -> Tuple[
 
     while True:
         logging.info('******************************************')
-        current_price = get_bitcoin_price()
+        current_price = get_bitcoin_future_market_price()
         logging.info(f'current_price:{current_price}, profit_point:{profit_point},stop_loss:{stop_loss} ')
 
         # Check if we meet profit or stop loss

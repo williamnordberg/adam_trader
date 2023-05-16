@@ -3,7 +3,6 @@ import logging
 import configparser
 import os
 
-
 CONFIG_PATH = 'config/config.ini'
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 SYMBOL = 'BTCUSDT'
@@ -142,10 +141,12 @@ def short_market(btc_amount: float, leverage: int, margin_mode: str):
 if __name__ == '__main__':
     # short_market(0.03, 28000, 10, 'isolated')  # 5x leverage and isolated margin mode
     # close_shorts_open_positions(SYMBOL)
-    get_open_futures_positions()
-    print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-    close_shorts_open_positions(SYMBOL)
+    # get_open_futures_positions()
+    # print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+    # close_shorts_open_positions(SYMBOL)
     # short_market(0.1, 3, 'isolated')
-    get_open_futures_positions()
-
+    # get_open_futures_positions()
+    print('future', get_future_price(SYMBOL))
+    get_future_price(SYMBOL)
+    print('spot:', get_bitcoin_price())
 

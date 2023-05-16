@@ -1,2 +1,2 @@
 model_name,position_opening_time,position_closing_time,opening_price,close_price,position_type,PNL
-
+model1,2023-05-16 09:34:26,2023-05-16 09:35:18,27123,26870,short,253
