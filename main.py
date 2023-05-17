@@ -1,9 +1,11 @@
 import logging
 from time import sleep
-from multiprocessing import Process
+from multiprocessing import Process, Lock, Queue
 import datetime
 import time
 import pandas as pd
+import warnings
+
 
 from database import read_database
 from handy_modules import compare_send_receive_richest_addresses, get_bitcoin_price
@@ -33,7 +35,7 @@ VISUALIZATION_SLEEP_TIME = 20 * 60
 TRADE_RESULT_PATH = 'data/trades_results.csv'
 TRADE_DETAILS_PATH = 'data/trades_details.csv'
 
-
+warnings.filterwarnings("ignore", message="file_cache is only supported with oauth2client<4.0.0")
 logging.basicConfig(filename='trading.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
@@ -129,13 +131,21 @@ def run_visualize_trade_result():
         sleep(VISUALIZATION_SLEEP_TIME)  # Update visualization every 20 minutes
 
 
-def trading_loop(long_threshold: float, short_threshold: float,
+def trading_loop(queue, lock, long_threshold: float, short_threshold: float,
                  score_margin_to_close: float, profit_margin: float, model_name: str):
     LOOP_COUNTER = 0
     # Main trading loop
     while True:
+        with lock:
+            # Check if it's this model's turn to run
+            if queue.get() != model_name:
+                # If not, sleep for a bit and continue to the next iteration
+                sleep(20)
+                continue
+
+        # Trading logic goes here...
         LOOP_COUNTER += 1
-        logging.info(f'Model run with threshold:{long_threshold} LOOP_COUNTER: {LOOP_COUNTER}')
+        logging.info(f'Model with threshold:{long_threshold} and loop counter: {LOOP_COUNTER} RUNS')
 
         # 1 Get the prediction
         prediction_bullish, prediction_bearish = decision_tree_predictor()
@@ -207,21 +217,35 @@ def trading_loop(long_threshold: float, short_threshold: float,
             save_trade_details(model_name, trade_open_time, trade_close_time, 'short', opening_price, close_price, pnl)
 
             logging.info(f"profit_after_trade:{profit_after_trade}, "f"loss_after_trade:{loss_after_trade}")
-        logging.info('End of loop and sleeping')
-        sleep(20 * 60)
+        logging.info(f' Model with threshold:{long_threshold} and loop counter: {LOOP_COUNTER} SLEEPS')
+
+        # After the model has finished running, put the next model's identifier in the queue
+        with lock:
+            if model_name == 'model1':
+                queue.put('model2')
+            elif model_name == 'model2':
+                queue.put('model3')
+            elif model_name == 'model3':
+                queue.put('model4')
+            elif model_name == 'model4':
+                queue.put('model5')
+            else:
+                queue.put('model1')
+
+        sleep(20 * 60)  # Sleep for 20 minutes
 
 
 if __name__ == "__main__":
 
     # Start visualization processes
-    visualization_process = Process(target=run_visualize_database)
-    visualization_process.start()
+    # visualization_process = Process(target=run_visualize_database)
+    # visualization_process.start()
 
     visualization_charts_process = Process(target=run_visualize_factors_states)
     visualization_charts_process.start()
 
-    visualization_trade_result_process = Process(target=run_visualize_trade_result)
-    visualization_trade_result_process.start()
+    # visualization_trade_result_process = Process(target=run_visualize_trade_result)
+    # visualization_trade_result_process.start()
 
     models = {
         'model1': [0.65, 0.65, 0.65, 0.005, 'model1'],
@@ -230,9 +254,14 @@ if __name__ == "__main__":
         'model4': [0.80, 0.80, 0.80, 0.005, 'model4'],
         'model5': [0.85, 0.85, 0.85, 0.005, 'model5']
     }
+    queue = Queue()
+    lock_outer = Lock()
+
+    # Put the first model's identifier in the queue
+    queue.put('model1')
 
     # Run models
-    for i in range(1, 4):
-        process = Process(target=trading_loop, args=(models[f'model{i}']))
+    for i in range(1, 6):
+        process = Process(target=trading_loop, args=(queue, lock_outer, *models[f'model{i}']))
         process.start()
-        time.sleep(120)
+        time.sleep(60)

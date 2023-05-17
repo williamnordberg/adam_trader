@@ -12,13 +12,11 @@ from handy_modules import should_update, save_update_time, retry_on_error_fallba
 from typing import Tuple
 from database import read_database
 from googleapiclient.errors import HttpError
-import warnings
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def get_authenticated_service():
-    warnings.filterwarnings("ignore", message="file_cache is only supported with oauth2client<4.0.0")
     api_service_name = "youtube"
     api_version = "v3"
     client_secrets_file = "config/youtube_client_secret.json"
