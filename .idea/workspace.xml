@@ -99,7 +99,7 @@
       <recent name="C:\will\Python_project\adam_trader\.gitignore" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.test">
+  <component name="RunManager" selected="Python.main">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -231,8 +231,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.test" />
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.test" />
         <item itemvalue="Python.youtube" />
         <item itemvalue="Python.monitor_2000_richest" />
         <item itemvalue="Python.testnet_future_short_trade" />

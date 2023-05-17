@@ -6,7 +6,6 @@ import time
 import pandas as pd
 import warnings
 
-
 from database import read_database
 from handy_modules import compare_send_receive_richest_addresses, get_bitcoin_price
 from technical_analysis import technical_analyse
@@ -254,14 +253,14 @@ if __name__ == "__main__":
         'model4': [0.80, 0.80, 0.80, 0.005, 'model4'],
         'model5': [0.85, 0.85, 0.85, 0.005, 'model5']
     }
-    queue = Queue()
+    queue_outer = Queue()
     lock_outer = Lock()
 
     # Put the first model's identifier in the queue
-    queue.put('model1')
+    queue_outer.put('model1')
 
     # Run models
     for i in range(1, 6):
-        process = Process(target=trading_loop, args=(queue, lock_outer, *models[f'model{i}']))
+        process = Process(target=trading_loop, args=(queue_outer, lock_outer, *models[f'model{i}']))
         process.start()
         time.sleep(60)
