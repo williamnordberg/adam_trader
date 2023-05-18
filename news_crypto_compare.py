@@ -41,7 +41,6 @@ def check_news_cryptocompare_sentiment() -> Tuple[float, float, int, int]:
         # Extract the news articles from the response JSON
         data = response_json['Data']
 
-        # Print the titles of the news articles
         for article in data:
             content = article['body']
 

@@ -222,10 +222,6 @@ def trading_loop(queue, lock, long_threshold: float, short_threshold: float,
                 queue.put('model2')
             elif model_name == 'model2':
                 queue.put('model3')
-            elif model_name == 'model3':
-                queue.put('model4')
-            elif model_name == 'model4':
-                queue.put('model5')
             else:
                 queue.put('model1')
 
@@ -258,7 +254,7 @@ if __name__ == "__main__":
     queue_outer.put('model1')
 
     # Run models
-    for i in range(1, 6):
+    for i in range(1, 4):
         process = Process(target=trading_loop, args=(queue_outer, lock_outer, *models[f'model{i}']))
         process.start()
         time.sleep(60)
