@@ -53,7 +53,7 @@ def get_chrome_options():
 
 
 def get_service():
-    return Service(executable_path=os.environ.get("CHROMEDRIVER_PATH", "chromedriver.exe"))
+    return Service(executable_path=os.environ.get("CHROMEDRIVER_PATH", "tests/chromedriver.exe"))
 
 
 def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:

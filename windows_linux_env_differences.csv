@@ -7,4 +7,6 @@ ubuntu:
 def get_service():
     return Service(executable_path=os.environ.get("CHROMEDRIVER_PATH", "chromedriver"))
 
-2.
+2.chrome driver is diggerent in windows and ubuntu
+
+
