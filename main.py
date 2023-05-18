@@ -4,7 +4,6 @@ from multiprocessing import Process, Lock, Queue
 import datetime
 import time
 import pandas as pd
-import warnings
 
 from database import read_database
 from handy_modules import compare_send_receive_richest_addresses, get_bitcoin_price
@@ -34,7 +33,6 @@ VISUALIZATION_SLEEP_TIME = 20 * 60
 TRADE_RESULT_PATH = 'data/trades_results.csv'
 TRADE_DETAILS_PATH = 'data/trades_details.csv'
 
-warnings.filterwarnings("ignore", message="file_cache is only supported with oauth2client<4.0.0")
 logging.basicConfig(filename='trading.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
