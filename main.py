@@ -1,8 +1,7 @@
 import logging
 from time import sleep
-from multiprocessing import Process, Lock, Queue
+from multiprocessing import Process
 import datetime
-import time
 import pandas as pd
 
 from database import read_database
@@ -36,7 +35,7 @@ TRADE_DETAILS_PATH = 'data/trades_details.csv'
 logging.basicConfig(filename='trading.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def save_trade_details(model_name: str, position_opening_time: str,
+def save_trade_details(model_name: float, position_opening_time: str,
                        position_closing_time: str, position_type: str,
                        opening_price: int, close_price: int, pnl: float):
 
@@ -67,11 +66,20 @@ def save_trade_details(model_name: str, position_opening_time: str,
     df.to_csv(TRADE_DETAILS_PATH, index=False)
 
 
-def save_trade_result(pnl: float, model_name: str, trade_type: str):
+def save_trade_result(pnl: float, weighted_score: float, trade_type: str):
     df = pd.read_csv(TRADE_RESULT_PATH)
 
+    if 0.65 <= weighted_score < 0.70:
+        weighted_score_category = '65to70'
+    elif 0.70 <= weighted_score < 0.75:
+        weighted_score_category = '70to75'
+    elif 0.75 <= weighted_score < 0.80:
+        weighted_score_category = '75to80'
+    else:
+        weighted_score_category = '80to100'
+
     # Locate the row with the specific model_name
-    row_index = df[df['model_name'] == model_name].index[0]
+    row_index = df[df['wighted_score_category'] == weighted_score_category].index[0]
 
     # Update the number_of_trades and PNL values for the specific model
     df.loc[row_index, 'total_trades'] += 1
@@ -128,21 +136,11 @@ def run_visualize_trade_result():
         sleep(VISUALIZATION_SLEEP_TIME)  # Update visualization every 20 minutes
 
 
-def trading_loop(queue, lock, long_threshold: float, short_threshold: float,
-                 score_margin_to_close: float, profit_margin: float, model_name: str):
+def trading_loop(long_threshold: float, short_threshold: float, profit_margin: float):
     LOOP_COUNTER = 0
-    # Main trading loop
     while True:
-        with lock:
-            # Check if it's this model's turn to run
-            if queue.get() != model_name:
-                # If not, sleep for a bit and continue to the next iteration
-                sleep(20)
-                continue
-
-        # Trading logic goes here...
         LOOP_COUNTER += 1
-        logging.info(f'Model with threshold:{long_threshold} and loop counter: {LOOP_COUNTER} RUNS')
+        logging.info(f'threshold:{long_threshold} and loop counter: {LOOP_COUNTER} RUNS')
 
         # 1 Get the prediction
         prediction_bullish, prediction_bearish = decision_tree_predictor()
@@ -190,13 +188,23 @@ def trading_loop(queue, lock, long_threshold: float, short_threshold: float,
             logging.info('Opening a long position')
             trade_open_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             opening_price = get_bitcoin_price()
+
+            if 0.65 <= weighted_score_down < 0.70:
+                score_margin_to_close = 0.65
+            elif 0.70 <= weighted_score_down < 0.75:
+                score_margin_to_close = 0.68
+            elif 0.75 <= weighted_score_down < 0.80:
+                score_margin_to_close = 0.7
+            else:
+                score_margin_to_close = 0.65
+
             profit_after_trade, loss_after_trade = long_position(score_margin_to_close, profit_margin)
             pnl = profit_after_trade - loss_after_trade
             trade_close_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             close_price = get_bitcoin_price()
 
-            save_trade_result(pnl, model_name, 'long')
-            save_trade_details(model_name, trade_open_time, trade_close_time, 'long', opening_price, close_price, pnl)
+            save_trade_result(pnl, weighted_score_up, 'long')
+            save_trade_details(weighted_score_up, trade_open_time, trade_close_time, 'long', opening_price, close_price, pnl)
             logging.info(f"profit_after_trade:{profit_after_trade}, loss_after_trade:"
                          f"{loss_after_trade}")
 
@@ -205,27 +213,28 @@ def trading_loop(queue, lock, long_threshold: float, short_threshold: float,
             logging.info('Opening short position')
             trade_open_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             opening_price = get_bitcoin_price()
+
+            if 0.65 <= weighted_score_up < 0.70:
+                score_margin_to_close = 0.65
+            elif 0.70 <= weighted_score_up < 0.75:
+                score_margin_to_close = 0.68
+            elif 0.75 <= weighted_score_up < 0.80:
+                score_margin_to_close = 0.7
+            else:
+                score_margin_to_close = 0.65
+
             profit_after_trade, loss_after_trade = short_position(score_margin_to_close, profit_margin)
             pnl = profit_after_trade - loss_after_trade
             trade_close_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             close_price = get_bitcoin_price()
 
-            save_trade_result(pnl, model_name, 'short')
-            save_trade_details(model_name, trade_open_time, trade_close_time, 'short', opening_price, close_price, pnl)
+            save_trade_result(pnl, weighted_score_down, 'short')
+            save_trade_details(weighted_score_down, trade_open_time, trade_close_time, 'short', opening_price, close_price, pnl)
 
             logging.info(f"profit_after_trade:{profit_after_trade}, "f"loss_after_trade:{loss_after_trade}")
-        logging.info(f' Model with threshold:{long_threshold} and loop counter: {LOOP_COUNTER} SLEEPS')
+        logging.info(f'Threshold:{long_threshold} and loop counter: {LOOP_COUNTER} SLEEPS')
 
-        # After the model has finished running, put the next model's identifier in the queue
-        with lock:
-            if model_name == 'model1':
-                queue.put('model2')
-            elif model_name == 'model2':
-                queue.put('model3')
-            else:
-                queue.put('model1')
-
-        sleep(20 * 60)  # Sleep for 20 minutes
+        sleep(60 * 20)  # Sleep for 20 minutes
 
 
 if __name__ == "__main__":
@@ -242,20 +251,10 @@ if __name__ == "__main__":
     # visualization_trade_result_process.start()
 
     models = {
-        'model1': [0.65, 0.65, 0.65, 0.005, 'model1'],
-        'model2': [0.70, 0.70, 0.70, 0.005, 'model2'],
-        'model3': [0.75, 0.70, 0.70, 0.005, 'model3'],
-        'model4': [0.80, 0.80, 0.80, 0.005, 'model4'],
-        'model5': [0.85, 0.85, 0.85, 0.005, 'model5']
+        'model1': [0.65, 0.65, 0.005],
+        'model2': [0.70, 0.70, 0.005],
+        'model3': [0.75, 0.70, 0.005]
     }
-    queue_outer = Queue()
-    lock_outer = Lock()
 
-    # Put the first model's identifier in the queue
-    queue_outer.put('model1')
-
-    # Run models
-    for i in range(1, 4):
-        process = Process(target=trading_loop, args=(queue_outer, lock_outer, *models[f'model{i}']))
-        process.start()
-        time.sleep(60)
+    process = Process(target=trading_loop, args=[0.65, 0.65, 0.005])
+    process.start()

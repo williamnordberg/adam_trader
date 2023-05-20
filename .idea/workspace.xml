@@ -14,10 +14,9 @@
       <change beforePath="$PROJECT_DIR$/data/database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/latest_info_saved.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/main_dataset.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/main_dataset.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/macro_analyser.py" beforeDir="false" afterPath="$PROJECT_DIR$/macro_analyser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/trades_details.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/trades_details.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/trades_results.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/trades_results.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/windows_linux_env_differences.csv" beforeDir="false" afterPath="$PROJECT_DIR$/windows_linux_env_differences.csv" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +99,7 @@
       <recent name="C:\will\Python_project\adam_trader" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.test">
+  <component name="RunManager" selected="Python.main">
     <configuration name="macro_analyser" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -143,7 +142,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="monitor_2000_richest" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="main_visualization" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -155,7 +154,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/monitor_2000_richest.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main_visualization.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -223,20 +222,20 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.main_visualization" />
       <item itemvalue="Python.macro_analyser" />
       <item itemvalue="Python.test" />
       <item itemvalue="Python.youtube" />
-      <item itemvalue="Python.monitor_2000_richest" />
       <item itemvalue="Python.main" />
       <item itemvalue="Python tests.Unittests with right config" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.main_visualization" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python.macro_analyser" />
         <item itemvalue="Python.youtube" />
-        <item itemvalue="Python.monitor_2000_richest" />
-        <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
   </component>
@@ -248,20 +247,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00181" summary="11 April">
-      <created>1682052050895</created>
-      <option name="number" value="00181" />
-      <option name="presentableId" value="LOCAL-00181" />
-      <option name="project" value="LOCAL" />
-      <updated>1682052050895</updated>
-    </task>
-    <task id="LOCAL-00182" summary="11 April">
-      <created>1682052705220</created>
-      <option name="number" value="00182" />
-      <option name="presentableId" value="LOCAL-00182" />
-      <option name="project" value="LOCAL" />
-      <updated>1682052705220</updated>
     </task>
     <task id="LOCAL-00183" summary="11 April">
       <created>1682061028455</created>
@@ -592,7 +577,21 @@
       <option name="project" value="LOCAL" />
       <updated>1684384372150</updated>
     </task>
-    <option name="localTasksCounter" value="230" />
+    <task id="LOCAL-00230" summary="3">
+      <created>1684556320606</created>
+      <option name="number" value="00230" />
+      <option name="presentableId" value="LOCAL-00230" />
+      <option name="project" value="LOCAL" />
+      <updated>1684556320606</updated>
+    </task>
+    <task id="LOCAL-00231" summary="3">
+      <created>1684556325340</created>
+      <option name="number" value="00231" />
+      <option name="presentableId" value="LOCAL-00231" />
+      <option name="project" value="LOCAL" />
+      <updated>1684556325340</updated>
+    </task>
+    <option name="localTasksCounter" value="232" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">

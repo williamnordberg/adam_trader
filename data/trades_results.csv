@@ -1,6 +1,6 @@
-model_name,PNL,long_trades,short_trades,total_trades
-model1,253,0,1,1
-model2,0,0,0,0
-model3,0,0,0,0
-model4,0,0,0,0
-model5,200,3,2,1
+wighted_score_category,PNL,long_trades,short_trades,total_trades
+65to70,0,0,0,0
+70to75,0,0,0,0
+75to80,0,0,0,0
+80to100,0,0,0,0
+test,200,3,2,1
