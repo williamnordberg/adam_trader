@@ -24,7 +24,6 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 # Load the config file
 config = configparser.ConfigParser()
 config.read('config/config.ini')
-USER_AGENT = 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
 
 
 def read_addresses_from_csv(file_path: str) -> List[str]:
