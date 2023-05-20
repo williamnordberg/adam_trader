@@ -1,12 +1,12 @@
-1. using Ubuntu you should update the default value for the CHROMEDRIVER_PATH environment variable in the get_service() function in your code. Replace "chromedriver.exe" with "chromedriver" like this:
-win:
+,,,1. using Ubuntu you should update the default value for the CHROMEDRIVER_PATH environment variable in the get_service() function in your code. Replace "chromedriver.exe" with "chromedriver" like this:
+,,win:
 def get_service():
     return Service(executable_path=os.environ.get("CHROMEDRIVER_PATH", "chromedriver.exe"))
 
-ubuntu:
+,,ubuntu:
 def get_service():
     return Service(executable_path=os.environ.get("CHROMEDRIVER_PATH", "chromedriver"))
 
-2.chrome driver is diggerent in windows and ubuntu
+,,,2.chrome driver is different in windows and ubuntu(now is in usr/bin)
 
 

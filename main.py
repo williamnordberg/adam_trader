@@ -29,7 +29,7 @@ LONG_THRESHOLD = 0.65
 SHORT_THRESHOLD = 0.65
 SCORE_MARGIN_TO_CLOSE = 0.65
 PROFIT_MARGIN = 0.005
-VISUALIZATION_SLEEP_TIME = 20 * 60
+VISUALIZATION_SLEEP_TIME = 25 * 60
 TRADE_RESULT_PATH = 'data/trades_results.csv'
 TRADE_DETAILS_PATH = 'data/trades_details.csv'
 
@@ -236,6 +236,7 @@ if __name__ == "__main__":
 
     visualization_charts_process = Process(target=run_visualize_factors_states)
     visualization_charts_process.start()
+    sleep(3)  # Sleep To let Visualization be complete before next process start
 
     # visualization_trade_result_process = Process(target=run_visualize_trade_result)
     # visualization_trade_result_process.start()

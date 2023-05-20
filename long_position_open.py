@@ -106,7 +106,6 @@ def long_position(score_margin_to_close: float, profit_margin: float) -> Tuple[i
         # Check if weighed score show high chance to position loss
         if weighted_score_down > weighted_score_up and weighted_score_down > score_margin_to_close:
             close_position_at_market(POSITION_SIZE)
-            logging.info('long position clos')
             if current_price > position_opening_price:
                 profit = int(current_price - position_opening_price)
                 logging.info('long position closed with profit')
