@@ -15,6 +15,8 @@ BINANCE_ENDPOINT_PRICE = "https://api.binance.com/api/v3/ticker/price"
 GECKO_ENDPOINT_PRICE = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
 LATEST_INFO_FILE = "data/latest_info_saved.csv"
 SYMBOL = 'BTCUSDT'
+TRADE_RESULT_PATH = 'data/trades_results.csv'
+TRADE_DETAILS_PATH = 'data/trades_details.csv'
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -333,7 +335,64 @@ def compare_reddit(current_activity: float, previous_activity: float) -> Tuple[f
     return 0, 0
 
 
+def save_trade_details(model_name: float, position_opening_time: str,
+                       position_closing_time: str, position_type: str,
+                       opening_price: int, close_price: int, pnl: float):
+
+    # Read the existing trade details CSV
+    df = pd.read_csv(TRADE_DETAILS_PATH)
+
+    # Create a new row with the provided trade details
+    new_row = {
+        'model_name': model_name,
+        'position_opening_time': position_opening_time,
+        'position_closing_time': position_closing_time,
+        'position_type': position_type,
+        'opening_price': opening_price,
+        'close_price': close_price,
+        'PNL': pnl
+    }
+
+    # Use a list to store new rows
+    new_rows = [new_row]
+
+    # Create a new DataFrame from the list of new rows
+    df_new = pd.DataFrame(new_rows)
+
+    # Concatenate the new DataFrame with the original DataFrame
+    df = pd.concat([df, df_new], ignore_index=True)
+
+    # Save the updated DataFrame to the CSV file
+    df.to_csv(TRADE_DETAILS_PATH, index=False)
+
+
+def save_trade_result(pnl: float, weighted_score: float, trade_type: str):
+    df = pd.read_csv(TRADE_RESULT_PATH)
+
+    if 0.65 <= weighted_score < 0.70:
+        weighted_score_category = '65to70'
+    elif 0.70 <= weighted_score < 0.75:
+        weighted_score_category = '70to75'
+    elif 0.75 <= weighted_score < 0.80:
+        weighted_score_category = '75to80'
+    else:
+        weighted_score_category = '80to100'
+
+    # Locate the row with the specific model_name
+    row_index = df[df['wighted_score_category'] == weighted_score_category].index[0]
+
+    # Update the number_of_trades and PNL values for the specific model
+    df.loc[row_index, 'total_trades'] += 1
+    df.loc[row_index, 'PNL'] += pnl
+
+    if trade_type == 'short':
+        df.loc[row_index, 'short_trades'] += 1
+    else:
+        df.loc[row_index, 'long_trades'] += 1
+
+    # Save the updated DataFrame to the CSV file
+    df.to_csv(TRADE_RESULT_PATH, index=False)
+
+
 if __name__ == '__main__':
     logging.info(f'bitcoin price: {get_bitcoin_price()}')
-
-
