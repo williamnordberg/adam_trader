@@ -204,7 +204,8 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
             close_price = get_bitcoin_price()
 
             save_trade_result(pnl, weighted_score_up, 'long')
-            save_trade_details(weighted_score_up, trade_open_time, trade_close_time, 'long', opening_price, close_price, pnl)
+            save_trade_details(weighted_score_up, trade_open_time,
+                               trade_close_time, 'long', opening_price, close_price, pnl)
             logging.info(f"profit_after_trade:{profit_after_trade}, loss_after_trade:"
                          f"{loss_after_trade}")
 
@@ -229,7 +230,8 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
             close_price = get_bitcoin_price()
 
             save_trade_result(pnl, weighted_score_down, 'short')
-            save_trade_details(weighted_score_down, trade_open_time, trade_close_time, 'short', opening_price, close_price, pnl)
+            save_trade_details(weighted_score_down, trade_open_time, trade_close_time,
+                               'short', opening_price, close_price, pnl)
 
             logging.info(f"profit_after_trade:{profit_after_trade}, "f"loss_after_trade:{loss_after_trade}")
         logging.info(f'Threshold:{long_threshold} and loop counter: {LOOP_COUNTER} SLEEPS')
@@ -256,5 +258,7 @@ if __name__ == "__main__":
         'model3': [0.75, 0.70, 0.005]
     }
 
-    process = Process(target=trading_loop, args=[0.65, 0.65, 0.005])
-    process.start()
+    # process = Process(target=trading_loop, args=[0.65, 0.65, 0.005])
+    # process.start()
+
+    save_trade_result(10, 0.65, 'long')
