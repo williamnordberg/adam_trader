@@ -2,10 +2,10 @@ import logging
 from time import sleep
 from multiprocessing import Process
 import datetime
-import pandas as pd
 
 from database import read_database
-from handy_modules import compare_send_receive_richest_addresses, get_bitcoin_price
+from handy_modules import compare_send_receive_richest_addresses, get_bitcoin_price, \
+    save_trade_details, save_trade_result
 from technical_analysis import technical_analyse
 from news_analyser import check_sentiment_of_news
 from youtube import check_bitcoin_youtube_videos_increase
@@ -29,69 +29,9 @@ SHORT_THRESHOLD = 0.65
 SCORE_MARGIN_TO_CLOSE = 0.65
 PROFIT_MARGIN = 0.005
 VISUALIZATION_SLEEP_TIME = 25 * 60
-TRADE_RESULT_PATH = 'data/trades_results.csv'
-TRADE_DETAILS_PATH = 'data/trades_details.csv'
+
 
 logging.basicConfig(filename='trading.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-
-def save_trade_details(model_name: float, position_opening_time: str,
-                       position_closing_time: str, position_type: str,
-                       opening_price: int, close_price: int, pnl: float):
-
-    # Read the existing trade details CSV
-    df = pd.read_csv(TRADE_DETAILS_PATH)
-
-    # Create a new row with the provided trade details
-    new_row = {
-        'model_name': model_name,
-        'position_opening_time': position_opening_time,
-        'position_closing_time': position_closing_time,
-        'position_type': position_type,
-        'opening_price': opening_price,
-        'close_price': close_price,
-        'PNL': pnl
-    }
-
-    # Use a list to store new rows
-    new_rows = [new_row]
-
-    # Create a new DataFrame from the list of new rows
-    df_new = pd.DataFrame(new_rows)
-
-    # Concatenate the new DataFrame with the original DataFrame
-    df = pd.concat([df, df_new], ignore_index=True)
-
-    # Save the updated DataFrame to the CSV file
-    df.to_csv(TRADE_DETAILS_PATH, index=False)
-
-
-def save_trade_result(pnl: float, weighted_score: float, trade_type: str):
-    df = pd.read_csv(TRADE_RESULT_PATH)
-
-    if 0.65 <= weighted_score < 0.70:
-        weighted_score_category = '65to70'
-    elif 0.70 <= weighted_score < 0.75:
-        weighted_score_category = '70to75'
-    elif 0.75 <= weighted_score < 0.80:
-        weighted_score_category = '75to80'
-    else:
-        weighted_score_category = '80to100'
-
-    # Locate the row with the specific model_name
-    row_index = df[df['wighted_score_category'] == weighted_score_category].index[0]
-
-    # Update the number_of_trades and PNL values for the specific model
-    df.loc[row_index, 'total_trades'] += 1
-    df.loc[row_index, 'PNL'] += pnl
-
-    if trade_type == 'short':
-        df.loc[row_index, 'short_trades'] += 1
-    else:
-        df.loc[row_index, 'long_trades'] += 1
-
-    # Save the updated DataFrame to the CSV file
-    df.to_csv(TRADE_RESULT_PATH, index=False)
 
 
 def run_visualize_factors_states():
@@ -134,6 +74,17 @@ def run_visualize_trade_result():
     while True:
         visualize_trade_results(run_dash=True)
         sleep(VISUALIZATION_SLEEP_TIME)  # Update visualization every 20 minutes
+
+
+def calculate_score_margin(weighted_score):
+    if 0.65 <= weighted_score < 0.70:
+        return 0.65
+    elif 0.70 <= weighted_score < 0.75:
+        return 0.68
+    elif 0.75 <= weighted_score < 0.80:
+        return 0.7
+    else:
+        return 0.65
 
 
 def trading_loop(long_threshold: float, short_threshold: float, profit_margin: float):
@@ -188,15 +139,7 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
             logging.info('Opening a long position')
             trade_open_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             opening_price = get_bitcoin_price()
-
-            if 0.65 <= weighted_score_down < 0.70:
-                score_margin_to_close = 0.65
-            elif 0.70 <= weighted_score_down < 0.75:
-                score_margin_to_close = 0.68
-            elif 0.75 <= weighted_score_down < 0.80:
-                score_margin_to_close = 0.7
-            else:
-                score_margin_to_close = 0.65
+            score_margin_to_close = calculate_score_margin(weighted_score_up)
 
             profit_after_trade, loss_after_trade = long_position(score_margin_to_close, profit_margin)
             pnl = profit_after_trade - loss_after_trade
@@ -214,15 +157,7 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
             logging.info('Opening short position')
             trade_open_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             opening_price = get_bitcoin_price()
-
-            if 0.65 <= weighted_score_up < 0.70:
-                score_margin_to_close = 0.65
-            elif 0.70 <= weighted_score_up < 0.75:
-                score_margin_to_close = 0.68
-            elif 0.75 <= weighted_score_up < 0.80:
-                score_margin_to_close = 0.7
-            else:
-                score_margin_to_close = 0.65
+            score_margin_to_close = calculate_score_margin(weighted_score_down)
 
             profit_after_trade, loss_after_trade = short_position(score_margin_to_close, profit_margin)
             pnl = profit_after_trade - loss_after_trade
@@ -252,13 +187,5 @@ if __name__ == "__main__":
     # visualization_trade_result_process = Process(target=run_visualize_trade_result)
     # visualization_trade_result_process.start()
 
-    models = {
-        'model1': [0.65, 0.65, 0.005],
-        'model2': [0.70, 0.70, 0.005],
-        'model3': [0.75, 0.70, 0.005]
-    }
-
-    # process = Process(target=trading_loop, args=[0.65, 0.65, 0.005])
-    # process.start()
-
-    save_trade_result(10, 0.65, 'long')
+    process = Process(target=trading_loop, args=[0.65, 0.65, 0.005])
+    process.start()
