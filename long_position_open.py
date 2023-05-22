@@ -22,6 +22,7 @@ SCORE_MARGIN_TO_CLOSE = 0.65
 PROFIT_MARGIN = 0.01
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 POSITION_SIZE = 0.3
+TRADING_LOOP_SLEEP_TIME = 60 * 5
 
 
 def long_position(score_margin_to_close: float, profit_margin: float) -> Tuple[int, int]:
@@ -115,7 +116,7 @@ def long_position(score_margin_to_close: float, profit_margin: float) -> Tuple[i
                 logging.info('long position closed with loss')
             return profit, loss
         get_btc_open_positions()
-        sleep(60 * 3)
+        sleep(TRADING_LOOP_SLEEP_TIME)
 
 
 if __name__ == "__main__":
