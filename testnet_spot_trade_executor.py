@@ -226,7 +226,7 @@ if __name__ == '__main__':
     # get_open_positions()
     # get_trade_history(SYMBOL)
     # get_account_assets()
-    get_asset_pnl()
+    # get_asset_pnl()
     # calculate_total_profit_loss(SYMBOL)
     # cancel_all_open_orders(SYMBOL)
     # place_market_buy_order(1)
