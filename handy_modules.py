@@ -115,6 +115,7 @@ def get_bitcoin_future_market_price() -> int:
         except (BinanceAPIException, BinanceRequestException) as e:
             logging.error(f"Error: Could not connect to Binance API:{e}")
             return 0
+# TODO: what will happen if return zero
 
 
 @retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(
