@@ -22,6 +22,7 @@ SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 POSITION_SIZE = 0.01
 LEVERAGE = 10
 MARGIN_MODE = 'isolated'
+TRADING_LOOP_SLEEP_TIME = 60 * 5
 
 
 def short_position(score_margin_to_close: float, profit_margin: float) -> Tuple[int, int]:
@@ -120,7 +121,7 @@ def short_position(score_margin_to_close: float, profit_margin: float) -> Tuple[
                 logging.info('short position closed with loss')
             return profit, loss
         get_open_futures_positions()
-        sleep(20)
+        sleep(TRADING_LOOP_SLEEP_TIME)
 
 
 if __name__ == "__main__":
