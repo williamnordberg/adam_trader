@@ -2,8 +2,8 @@ import requests
 import logging
 from typing import Tuple
 import pandas as pd
-import time
 from functools import wraps
+from time import sleep
 
 from datetime import datetime, timedelta
 from database import read_database, save_value_to_database
@@ -46,7 +46,7 @@ def retry_on_error_fallback_0_0(max_retries: int = 3, delay: int = 5, allowed_ex
                 except allowed_exceptions as e:
                     retries += 1
                     logging.warning(f"Attempt {retries} failed with error: {e}. Retrying in {delay} seconds...")
-                    time.sleep(delay)
+                    sleep(delay)
             logging.error(f"All {max_retries} attempts failed. Returning fallback values (0, 0).")
             return 0, 0
 
@@ -67,7 +67,7 @@ def retry_on_error_with_fallback(max_retries: int = 3, delay: int = 5,
                 except allowed_exceptions as e:
                     retries += 1
                     logging.warning(f"Attempt {retries} failed with error: {e}. Retrying in {delay} seconds...")
-                    time.sleep(delay)
+                    sleep(delay)
             logging.error(f"All {max_retries} attempts failed.")
             if fallback_values is not None:
                 if fallback_values == "pass":
@@ -101,59 +101,51 @@ def check_internet_connection() -> bool:
         return False
 
 
-@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(
-        BinanceAPIException, BinanceRequestException,), fallback_values=0)
 def get_bitcoin_future_market_price() -> int:
+    while True:
+        if check_internet_connection():
+            client = initialized_future_client()
+            try:
+                ticker = client.futures_ticker(symbol=SYMBOL)
+                current_price = int(float(ticker['lastPrice']))
+                return current_price
+            except (BinanceAPIException, BinanceRequestException) as e:
+                logging.error(f"Error: Could not connect to Binance API:{e}")
+        else:
+            logging.error("No internet connection.")
+        logging.error('Sleep 61 Sec and try again to retrieve Bitcoin price')
+        sleep(61)  # wait for 61 seconds before retrying
 
-    if check_internet_connection():
-        client = initialized_future_client()
-        try:
-            ticker = client.get_symbol_ticker(symbol=SYMBOL)
-            current_price = int(float(ticker['price']))
-            return current_price
 
-        except (BinanceAPIException, BinanceRequestException) as e:
-            logging.error(f"Error: Could not connect to Binance API:{e}")
-            return 0
-# TODO: what will happen if return zero
-
-
-@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(
-        requests.exceptions.RequestException,), fallback_values=0)
 def get_bitcoin_price() -> int:
     """
     Retrieves the current Bitcoin price in USD from the CoinGecko API and Binance API.
+    Continuously retries until a valid price is obtained.
 
     Returns:
-        Int: The current Bitcoin price in USD or 0 if an error occurred.
+        Int: The current Bitcoin price in USD or None if an error occurred.
     """
-    if check_internet_connection():
-        errors = []
+    while True:
+        if check_internet_connection():
+            try:
+                response = requests.get(GECKO_ENDPOINT_PRICE)
+                if response.status_code == 200:
+                    data = response.json()
+                    current_price = int(data['bitcoin']['usd'])
+                    return current_price
+            except requests.exceptions.RequestException as e:
+                logging.error(f"Error: Could not connect to CoinGecko API:{e}")
 
-        try:
-            response = requests.get(GECKO_ENDPOINT_PRICE)
-            if response.status_code == 200:
-                data = response.json()
-                current_price = int(data['bitcoin']['usd'])
-                return current_price
-        except requests.exceptions.RequestException as e:
-            errors.append(f"Error: Could not connect to CoinGecko API:{e}")
-
-        try:
-            response = requests.get(BINANCE_ENDPOINT_PRICE, params={'symbol': 'BTCUSDT'})
-            if response.status_code == 200:
-                return int(float(response.json()['price']))
-        except requests.exceptions.RequestException as e:
-            errors.append(f"Error: Could not connect to Binance API:{e}")
-
-        if errors:
-            for error in errors:
-                logging.error(error)
-
-        return 0
-    # no internet connection
-    else:
-        return 0
+            try:
+                response = requests.get(BINANCE_ENDPOINT_PRICE, params={'symbol': 'BTCUSDT'})
+                if response.status_code == 200:
+                    return int(float(response.json()['price']))
+            except requests.exceptions.RequestException as e:
+                logging.error(f"Error: Could not connect to Binance API:{e}")
+        else:
+            logging.error("No internet connection.")
+        logging.error(f"Error: Could not retrieve BTC price, Sleep for 61 seconds ")
+        sleep(61)  # wait for 61 seconds before retrying
 
 
 def compare_predicted_price(predicted_price: int, current_price: int) -> Tuple[float, float]:
@@ -397,3 +389,4 @@ def save_trade_result(pnl: float, weighted_score: float, trade_type: str):
 
 if __name__ == '__main__':
     logging.info(f'bitcoin price: {get_bitcoin_price()}')
+    logging.info(f'bitcoin future price: {get_bitcoin_future_market_price()}')
