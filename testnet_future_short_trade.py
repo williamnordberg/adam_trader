@@ -150,12 +150,10 @@ def check_no_open_future_position(symbol: str):
     return True  # no open position
 
 
-
 if __name__ == '__main__':
     # short_market(0.03, 28000, 10, 'isolated')  # 5x leverage and isolated margin mode
     # close_shorts_open_positions(SYMBOL)
     # get_open_futures_positions()
-    # print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
     # close_shorts_open_positions(SYMBOL)
     # short_market(0.1, 3, 'isolated')
     get_open_futures_positions()
