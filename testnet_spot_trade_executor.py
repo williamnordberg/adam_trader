@@ -217,7 +217,7 @@ def get_btc_open_positions():
         logging.info("No open BTC position.")
     else:
         for position in btc_position:
-            logging.info(f"Asset: {position['asset']} - Free: {position['free']} - Locked: {position['locked']}")
+            logging.info(f"Asset: {position['asset']} - position size: {position['free']}")
 
 
 if __name__ == '__main__':

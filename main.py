@@ -136,7 +136,7 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
 
         # Trading decision
         if weighted_score_up > weighted_score_down and weighted_score_up > long_threshold:
-            logging.info('Opening a long position')
+            logging.info(f'Opening a long position with score of: {weighted_score_up}')
             trade_open_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             opening_price = get_bitcoin_price()
             score_margin_to_close = calculate_score_margin(weighted_score_up)
@@ -154,7 +154,7 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
 
         elif weighted_score_down > weighted_score_up and weighted_score_down > short_threshold and \
                 check_no_open_future_position(SYMBOL):
-            logging.info('Opening short position')
+            logging.info(f'Opening short position with score of: {weighted_score_down}')
             trade_open_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             opening_price = get_bitcoin_price()
             score_margin_to_close = calculate_score_margin(weighted_score_down)

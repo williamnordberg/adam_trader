@@ -38,7 +38,8 @@ def short_position(score_margin_to_close: float, profit_margin: float) -> Tuple[
     while True:
         logging.info('******************************************')
         current_price = get_bitcoin_future_market_price()
-        logging.info(f'current_price:{current_price}, profit_point:{profit_point},stop_loss:{stop_loss} ')
+        logging.info(f'current_price:{current_price}, PNL:{position_opening_price-current_price}'
+                     f' profit_point:{profit_point},stop_loss:{stop_loss} ')
 
         # Check if we meet profit or stop loss
         if current_price < profit_point:
