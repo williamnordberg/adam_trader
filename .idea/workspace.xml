@@ -8,15 +8,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="3">
-      <change beforePath="$PROJECT_DIR$/.gitignore/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/adam_trader.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/adam_trader.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Downloads/btc(1).csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Downloads/btc.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/old_update_dataset_internal.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-    </list>
+    <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="3" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -245,13 +237,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00194" summary="11 April">
-      <created>1682392922830</created>
-      <option name="number" value="00194" />
-      <option name="presentableId" value="LOCAL-00194" />
-      <option name="project" value="LOCAL" />
-      <updated>1682392922830</updated>
     </task>
     <task id="LOCAL-00195" summary="11 April">
       <created>1682393837293</created>
@@ -589,7 +574,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684742053346</updated>
     </task>
-    <option name="localTasksCounter" value="243" />
+    <task id="LOCAL-00243" summary="3">
+      <created>1684806763878</created>
+      <option name="number" value="00243" />
+      <option name="presentableId" value="LOCAL-00243" />
+      <option name="project" value="LOCAL" />
+      <updated>1684806763878</updated>
+    </task>
+    <option name="localTasksCounter" value="244" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
