@@ -23,7 +23,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 update_intervals = {
     "dataset": timedelta(hours=24),
     "macro": timedelta(hours=24),
-    "order_book": timedelta(minutes=20),
+    "order_book": timedelta(minutes=10),
     "predicted_price": timedelta(hours=12),
     "technical_analysis": timedelta(hours=4),
     "richest_addresses_compare": timedelta(hours=3),
