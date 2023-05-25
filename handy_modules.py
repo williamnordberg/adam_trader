@@ -383,6 +383,11 @@ def save_trade_result(pnl: float, weighted_score: float, trade_type: str):
     else:
         df.loc[row_index, 'long_trades'] += 1
 
+    if pnl >= 0:
+        df.loc[row_index, 'win_trades'] += 1
+    else:
+        df.loc[row_index, 'loss_trades'] += 1
+
     # Save the updated DataFrame to the CSV file
     df.to_csv(TRADE_RESULT_PATH, index=False)
 
