@@ -388,7 +388,6 @@ def save_trade_result(pnl: float, weighted_score: float, trade_type: str):
 
 
 if __name__ == '__main__':
-    #logging.info(f'bitcoin price: {get_bitcoin_price()}')
-    #logging.info(f'bitcoin future price: {get_bitcoin_future_market_price()}')
+    logging.info(f'bitcoin price: {get_bitcoin_price()}')
+    logging.info(f'bitcoin future price: {get_bitcoin_future_market_price()}')
 
-    save_trade_details(0.6,'2023-05-21 21:17:28','2023-05-21 21:17:28','long',123,321,200)
