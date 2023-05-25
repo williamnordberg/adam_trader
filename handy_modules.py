@@ -328,7 +328,7 @@ def compare_reddit(current_activity: float, previous_activity: float) -> Tuple[f
     return 0, 0
 
 
-def save_trade_details(model_name: float, position_opening_time: str,
+def save_trade_details(wighted_score: float, position_opening_time: str,
                        position_closing_time: str, position_type: str,
                        opening_price: int, close_price: int, pnl: float):
 
@@ -337,7 +337,7 @@ def save_trade_details(model_name: float, position_opening_time: str,
 
     # Create a new row with the provided trade details
     new_row = {
-        'model_name': model_name,
+        'wighted_score': wighted_score,
         'position_opening_time': position_opening_time,
         'position_closing_time': position_closing_time,
         'position_type': position_type,
@@ -388,5 +388,7 @@ def save_trade_result(pnl: float, weighted_score: float, trade_type: str):
 
 
 if __name__ == '__main__':
-    logging.info(f'bitcoin price: {get_bitcoin_price()}')
-    logging.info(f'bitcoin future price: {get_bitcoin_future_market_price()}')
+    #logging.info(f'bitcoin price: {get_bitcoin_price()}')
+    #logging.info(f'bitcoin future price: {get_bitcoin_future_market_price()}')
+
+    save_trade_details(0.6,'2023-05-21 21:17:28','2023-05-21 21:17:28','long',123,321,200)
