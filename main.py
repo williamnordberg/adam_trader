@@ -28,7 +28,7 @@ LONG_THRESHOLD = 0.65
 SHORT_THRESHOLD = 0.65
 SCORE_MARGIN_TO_CLOSE = 0.65
 PROFIT_MARGIN = 0.005
-VISUALIZATION_SLEEP_TIME = 25 * 60
+VISUALIZATION_SLEEP_TIME = 20
 
 
 logging.basicConfig(filename='trading.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
