@@ -222,7 +222,7 @@ def get_btc_open_positions():
 
 if __name__ == '__main__':
     # get_open_positions()
-    # close_position_at_market(3.80100000)
+    # close_position_at_market(0.3)
     # get_open_positions()
     # get_trade_history(SYMBOL)
     # get_account_assets()
