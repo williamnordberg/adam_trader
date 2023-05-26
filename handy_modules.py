@@ -422,4 +422,4 @@ if __name__ == '__main__':
     logging.info(f'bitcoin price: {get_bitcoin_price()}')
     logging.info(f'bitcoin future price: {get_bitcoin_future_market_price()}')
     x = read_current_trading_state()
-    print(type(x))
+    print(x)
