@@ -111,10 +111,11 @@ def long_position(score_margin_to_close: float, profit_margin: float) -> Tuple[i
             if current_price > position_opening_price:
                 profit = int(current_price - position_opening_price)
                 logging.info('long position closed with profit')
+                return profit, loss
             elif current_price <= position_opening_price:
                 loss = int(position_opening_price - current_price)
                 logging.info('long position closed with loss')
-            return profit, loss
+                return profit, loss
         get_btc_open_positions()
         sleep(TRADING_LOOP_SLEEP_TIME)
 

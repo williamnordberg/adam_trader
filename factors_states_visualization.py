@@ -78,6 +78,7 @@ def create_gauge_chart(bullish, bearish, show_number=True):
 
 
 def visualize_charts(shared_data):
+    trading_state = shared_data['trading_state']
     macro_bullish = shared_data['macro_bullish']
     macro_bearish = shared_data['macro_bearish']
     order_book_bullish = shared_data['order_book_bullish']
@@ -176,6 +177,12 @@ def visualize_charts(shared_data):
                               'color': 'red' if ppi_within_2_days else None,
                               'fontWeight': 'bold' if ppi_within_2_days else None}),
             ]),
+
+            html.Div([
+                html.P(f'Trading State: {trading_state}', style={'fontSize': '12px', 'margin': '0'}),
+            ], style={'borderTop': '1px solid black', 'lineHeight': '1.8'}),
+
+
             html.Div([
                 html.P(bid_volume, style={'fontSize': '12px'}),
                 html.P(ask_vol, style={'fontSize': '12px'}),
@@ -213,7 +220,9 @@ def visualize_charts(shared_data):
 
 
 if __name__ == "__main__":
+    trading_state_outer: str = 'main'
     shared_data_outer = {
+        'trading_state': trading_state_outer,
         'macro_bullish': 1,
         'macro_bearish': 0,
         'order_book_bullish': 1,
