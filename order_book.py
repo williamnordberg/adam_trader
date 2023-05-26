@@ -4,7 +4,7 @@ import logging
 from datetime import datetime, timedelta
 
 from database import save_value_to_database
-from handy_modules import get_bitcoin_price, retry_on_error_fallback_0_0
+from handy_modules import get_bitcoin_price, retry_on_error_fallback_0_0, save_float_to_latest_saved
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 ENDPOINT_DEPTH = "https://api.binance.com/api/v3/depth"
@@ -138,6 +138,9 @@ def get_probabilities_hit_profit_or_stop(symbols: List[str], limit: int, profit_
 
     probability_to_hit_target = bid_volume / (bid_volume + ask_volume)
     probability_to_hit_stop_loss = ask_volume / (bid_volume + ask_volume)
+
+    save_float_to_latest_saved('order_book_hit_profit', round(probability_to_hit_target, 2))
+    save_float_to_latest_saved('order_book_hit_loss', round(probability_to_hit_stop_loss, 2))
 
     return probability_to_hit_target, probability_to_hit_stop_loss
 

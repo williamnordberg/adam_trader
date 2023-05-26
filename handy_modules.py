@@ -298,6 +298,32 @@ def save_update_time(factor_name: str):
     latest_info_saved.to_csv(LATEST_INFO_FILE, index=False)
 
 
+def save_trading_state(state: str):
+    latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
+    latest_info_saved.loc[0, 'latest_trading_state'] = state
+    latest_info_saved.to_csv(LATEST_INFO_FILE, index=False)
+
+
+def read_current_trading_state() -> str:
+    latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
+    state = latest_info_saved.iloc[0]['latest_trading_state']
+    latest_info_saved.to_csv(LATEST_INFO_FILE, index=False)
+    return state
+
+
+def save_float_to_latest_saved(column: str, value):
+    latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
+    latest_info_saved.loc[0, f'{column}'] = value
+    latest_info_saved.to_csv(LATEST_INFO_FILE, index=False)
+
+
+def read_float_from_latest_saved(column: str) -> float:
+    latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
+    retrieved_value = latest_info_saved.iloc[0][f'{column}']
+    latest_info_saved.to_csv(LATEST_INFO_FILE, index=False)
+    return retrieved_value
+
+
 def compare_reddit(current_activity: float, previous_activity: float) -> Tuple[float, float]:
 
     activity_percentage = (current_activity - previous_activity) / previous_activity * 100
@@ -395,4 +421,5 @@ def save_trade_result(pnl: float, weighted_score: float, trade_type: str):
 if __name__ == '__main__':
     logging.info(f'bitcoin price: {get_bitcoin_price()}')
     logging.info(f'bitcoin future price: {get_bitcoin_future_market_price()}')
-
+    x = read_current_trading_state()
+    print(type(x))
