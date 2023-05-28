@@ -3,10 +3,8 @@ from time import sleep
 from multiprocessing import Process
 import datetime
 
-from database import read_database
 from handy_modules import compare_send_receive_richest_addresses, get_bitcoin_price, \
-    save_trade_details, save_trade_result, save_trading_state, read_current_trading_state,\
-    read_float_from_latest_saved
+    save_trade_details, save_trade_result, save_trading_state
 from technical_analysis import technical_analyse
 from news_analyser import check_sentiment_of_news
 from youtube import check_bitcoin_youtube_videos_increase
@@ -36,60 +34,7 @@ logging.basicConfig(filename='trading.log', level=logging.INFO, format='%(asctim
 
 
 def run_visualize_factors_states():
-    while True:
-        database = read_database()
-        trading_state = read_current_trading_state()
-
-        if trading_state == 'long' or trading_state == 'short':
-            shared_data = dict({
-                'trading_state': trading_state,
-                'macro_bullish': database['macro_bullish'][-1],
-                'macro_bearish': database['macro_bearish'][-1],
-                'order_book_bullish': read_float_from_latest_saved('order_book_hit_profit'),
-                'order_book_bearish': read_float_from_latest_saved('order_book_hit_loss'),
-                'prediction_bullish': database['prediction_bullish'][-1],
-                'prediction_bearish': database['prediction_bearish'][-1],
-                'technical_bullish': database['technical_bullish'][-1],
-                'technical_bearish': database['technical_bearish'][-1],
-                'richest_addresses_bullish': database['richest_addresses_bullish'][-1],
-                'richest_addresses_bearish': database['richest_addresses_bearish'][-1],
-                'google_search_bullish': database['google_search_bullish'][-1],
-                'google_search_bearish': database['google_search_bearish'][-1],
-                'reddit_bullish': database['reddit_bullish'][-1],
-                'reddit_bearish': database['reddit_bearish'][-1],
-                'youtube_bullish': database['youtube_bullish'][-1],
-                'youtube_bearish': database['youtube_bearish'][-1],
-                'news_bullish': database['news_bullish'][-1],
-                'news_bearish': database['news_bearish'][-1],
-                'weighted_score_up': read_float_from_latest_saved('score_profit_position'),
-                'weighted_score_down': read_float_from_latest_saved('score_loss_position'),
-            })
-        else:
-            shared_data = dict({
-                'trading_state': trading_state,
-                'macro_bullish': database['macro_bullish'][-1],
-                'macro_bearish': database['macro_bearish'][-1],
-                'order_book_bullish': database['order_book_bullish'][-1],
-                'order_book_bearish': database['order_book_bearish'][-1],
-                'prediction_bullish': database['prediction_bullish'][-1],
-                'prediction_bearish': database['prediction_bearish'][-1],
-                'technical_bullish': database['technical_bullish'][-1],
-                'technical_bearish': database['technical_bearish'][-1],
-                'richest_addresses_bullish': database['richest_addresses_bullish'][-1],
-                'richest_addresses_bearish': database['richest_addresses_bearish'][-1],
-                'google_search_bullish': database['google_search_bullish'][-1],
-                'google_search_bearish': database['google_search_bearish'][-1],
-                'reddit_bullish': database['reddit_bullish'][-1],
-                'reddit_bearish': database['reddit_bearish'][-1],
-                'youtube_bullish': database['youtube_bullish'][-1],
-                'youtube_bearish': database['youtube_bearish'][-1],
-                'news_bullish': database['news_bullish'][-1],
-                'news_bearish': database['news_bearish'][-1],
-                'weighted_score_up': database['weighted_score_up'][-1],
-                'weighted_score_down': database['weighted_score_down'][-1],
-            })
-        visualize_charts(shared_data)
-        sleep(VISUALIZATION_SLEEP_TIME)  # Update visualization every VISUALIZATION_SLEEP_TIME
+    visualize_charts()
 
 
 def run_visualize_database():
@@ -213,7 +158,7 @@ if __name__ == "__main__":
 
     visualization_charts_process = Process(target=run_visualize_factors_states)
     visualization_charts_process.start()
-    sleep(3)  # Sleep To let Visualization be complete before next process start
+    sleep(5)  # Sleep To let Visualization be complete before next process start
 
     # visualization_trade_result_process = Process(target=run_visualize_trade_result)
     # visualization_trade_result_process.start()
