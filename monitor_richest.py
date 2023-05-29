@@ -62,7 +62,8 @@ def check_multiple_addresses(addresses: List[str]) -> Tuple[float, float]:
 
         elif i % 3 == 1:
             # Use the Blockchain.info API
-            received, sent = get_address_transactions_24h(address)
+            received, sent = get_address_transactions_24h_blockcypher(address)
+            # received, sent = get_address_transactions_24h(address)
 
         else:
             # Use the Blockcypher API again
@@ -70,7 +71,7 @@ def check_multiple_addresses(addresses: List[str]) -> Tuple[float, float]:
 
         total_received += received
         total_sent += sent
-        time.sleep(3)
+        time.sleep(0.2)
 
     logging.info(f"Total received: {total_received} BTC")
     logging.info(f"Total sent: {total_sent} BTC")

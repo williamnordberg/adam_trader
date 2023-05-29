@@ -6,6 +6,8 @@ from requests.sessions import Session
 from dateutil.parser import parse
 from typing import Tuple
 from handy_modules import check_internet_connection
+import itertools
+
 
 # Initialize a session object
 session = Session()
@@ -23,15 +25,18 @@ with open(config_path, 'r') as f:
     config_string = f.read()
 
 config.read_string(config_string)
-API_KEY_BLOCKCYPHER = config.get('API', 'Blockcypher')
+# API_KEY_BLOCKCYPHER = config.get('API', 'Blockcypher')
 
 
-def get_address_transactions_24h_blockcypher(address: str) -> Tuple[float, float]:
+def get_address_transactions_24h_blockcypher(address: str, api_keys_cycle=itertools.cycle([
+    'Blockcypher1', 'Blockcypher2', 'Blockcypher3', 'Blockcypher4', 'Blockcypher5'])) \
+        -> Tuple[float, float]:
     """
     Check the total Bitcoin received and sent in the last 24 hours for an address using the Blockcypher API.
 
     Args:
         address (str): The Bitcoin address to check.
+        api_keys_cycle: api key
 
     Returns:
         total_received (float): Total Bitcoin received in the last 24 hours.
@@ -47,8 +52,10 @@ def get_address_transactions_24h_blockcypher(address: str) -> Tuple[float, float
     current_time = int(time.time())
     time_24_hours_ago = current_time - 86400
 
-    # Construct the API URL to get all transactions for the address
-    api_key = API_KEY_BLOCKCYPHER
+    # Get the next API key from the cycle
+    api_key = next(api_keys_cycle)
+    api_key = config.get('API', api_key)
+
     api_url = f"{API_BASE_URL}{address}/full?token={api_key}"
 
     # Send the API request and get the response
@@ -87,5 +94,6 @@ def get_address_transactions_24h_blockcypher(address: str) -> Tuple[float, float
 
 
 if __name__ == "__main__":
-    received, sent = get_address_transactions_24h_blockcypher('13nxifM4WUfT8fBd2caeaxTtUe4zeQa9zB')
-    logging.info(f'receive: {received}, sent: {sent} ')
+    for i in range(1, 20):
+        received, sent = get_address_transactions_24h_blockcypher('13nxifM4WUfT8fBd2caeaxTtUe4zeQa9zB')
+        logging.info(f'receive: {received}, sent: {sent} ')
