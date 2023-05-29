@@ -4,7 +4,7 @@ from multiprocessing import Process
 import datetime
 
 from handy_modules import compare_send_receive_richest_addresses, get_bitcoin_price, \
-    save_trade_details, save_trade_result, save_trading_state
+    save_trade_details, save_trade_result, save_trading_state, save_int_to_latest_saved
 from technical_analysis import technical_analyse
 from news_analyser import check_sentiment_of_news
 from youtube import check_bitcoin_youtube_videos_increase
@@ -19,6 +19,7 @@ from short_position_open import short_position
 from factors_states_visualization import visualize_charts
 from database_visualization import visualize_database_one_chart, visualize_trade_results
 from testnet_future_short_trade import check_no_open_future_position
+from monitor_richest import monitor_bitcoin_richest_addresses
 
 # Constants
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
@@ -40,13 +41,19 @@ def run_visualize_factors_states():
 def run_visualize_database():
     while True:
         visualize_database_one_chart(run_dash=True)
-        sleep(VISUALIZATION_SLEEP_TIME)  # Update visualization every 20 minutes
 
 
 def run_visualize_trade_result():
     while True:
         visualize_trade_results(run_dash=True)
-        sleep(VISUALIZATION_SLEEP_TIME)  # Update visualization every 20 minutes
+
+
+def run_monitor_richest_addresses():
+    # call function to get total send and total receive in last 24 hours
+    total_received, total_sent = monitor_bitcoin_richest_addresses()
+    save_int_to_latest_saved('total_received_coins_in_last_24', int(total_received))
+    save_int_to_latest_saved('total_sent_coins_in_last_24', int(total_sent))
+    sleep(60 * 20)
 
 
 def calculate_score_margin(weighted_score):
@@ -152,7 +159,6 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
 
 if __name__ == "__main__":
 
-    # Start visualization processes
     # visualization_process = Process(target=run_visualize_database)
     # visualization_process.start()
 
@@ -164,4 +170,8 @@ if __name__ == "__main__":
     # visualization_trade_result_process.start()
 
     process = Process(target=trading_loop, args=[0.65, 0.65, 0.005])
+    process.start()
+    sleep(60)
+
+    process = Process(target=run_monitor_richest_addresses)
     process.start()

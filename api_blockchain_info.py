@@ -67,7 +67,7 @@ def get_address_transactions_24h(address: str) -> Tuple[float, float]:
         return abs(total_received / SATOSHI_TO_BITCOIN), abs(total_sent / SATOSHI_TO_BITCOIN)
 
     elif response.status_code == 429:
-        logging.info(f"Rate limited for address {address}. Sleeping for a minute.")
+        logging.info(f"blockchain.info rate limited for address {address}. Sleeping for a minute.")
         time.sleep(SLEEP_TIME)
         return get_address_transactions_24h(address)
     else:

@@ -311,7 +311,13 @@ def read_current_trading_state() -> str:
     return state
 
 
-def save_float_to_latest_saved(column: str, value):
+def save_float_to_latest_saved(column: str, value: float):
+    latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
+    latest_info_saved.loc[0, f'{column}'] = value
+    latest_info_saved.to_csv(LATEST_INFO_FILE, index=False)
+
+
+def save_int_to_latest_saved(column: str, value: int):
     latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
     latest_info_saved.loc[0, f'{column}'] = value
     latest_info_saved.to_csv(LATEST_INFO_FILE, index=False)
