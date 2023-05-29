@@ -424,6 +424,17 @@ def save_trade_result(pnl: float, weighted_score: float, trade_type: str):
     df.to_csv(TRADE_RESULT_PATH, index=False)
 
 
+def calculate_score_margin(weighted_score):
+    if 0.65 <= weighted_score < 0.70:
+        return 0.65
+    elif 0.70 <= weighted_score < 0.75:
+        return 0.68
+    elif 0.75 <= weighted_score < 0.80:
+        return 0.7
+    else:
+        return 0.65
+
+
 if __name__ == '__main__':
     logging.info(f'bitcoin price: {get_bitcoin_price()}')
     logging.info(f'bitcoin future price: {get_bitcoin_future_market_price()}')

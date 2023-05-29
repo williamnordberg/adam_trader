@@ -4,7 +4,7 @@ from multiprocessing import Process
 import datetime
 
 from handy_modules import compare_send_receive_richest_addresses, get_bitcoin_price, \
-    save_trade_details, save_trade_result, save_trading_state, save_int_to_latest_saved
+    save_trade_details, save_trade_result, save_trading_state, save_int_to_latest_saved, calculate_score_margin
 from technical_analysis import technical_analyse
 from news_analyser import check_sentiment_of_news
 from youtube import check_bitcoin_youtube_videos_increase
@@ -49,22 +49,13 @@ def run_visualize_trade_result():
 
 
 def run_monitor_richest_addresses():
-    # call function to get total send and total receive in last 24 hours
-    total_received, total_sent = monitor_bitcoin_richest_addresses()
-    save_int_to_latest_saved('total_received_coins_in_last_24', int(total_received))
-    save_int_to_latest_saved('total_sent_coins_in_last_24', int(total_sent))
-    sleep(60 * 20)
-
-
-def calculate_score_margin(weighted_score):
-    if 0.65 <= weighted_score < 0.70:
-        return 0.65
-    elif 0.70 <= weighted_score < 0.75:
-        return 0.68
-    elif 0.75 <= weighted_score < 0.80:
-        return 0.7
-    else:
-        return 0.65
+    while True:
+        total_received, total_sent = monitor_bitcoin_richest_addresses()
+        save_int_to_latest_saved('total_received_coins_in_last_24', int(total_received))
+        save_int_to_latest_saved('total_sent_coins_in_last_24', int(total_sent))
+        logging.info(f'total sent in last 24 hours: {total_sent} and receive: {total_received}')
+        logging.info('finish monitoring richest addresses and sleep for 20 min')
+        sleep(60 * 20)
 
 
 def trading_loop(long_threshold: float, short_threshold: float, profit_margin: float):
