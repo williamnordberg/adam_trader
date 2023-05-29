@@ -89,7 +89,7 @@ def get_address_transactions_24h_blockcypher(address: str, api_keys_cycle=iterto
         return get_address_transactions_24h_blockcypher(address)
 
     else:
-        logging.info(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")
+        # logging.info(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")
         return 0, 0
 
 

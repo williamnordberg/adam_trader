@@ -10,7 +10,6 @@ import configparser
 
 # Local imports
 from bs4_scraper import scrape_bitcoin_rich_list
-from api_blockchain_info import get_address_transactions_24h
 from api_blockcypher import get_address_transactions_24h_blockcypher
 from handy_modules import should_update, save_value_to_database
 
@@ -73,8 +72,6 @@ def check_multiple_addresses(addresses: List[str]) -> Tuple[float, float]:
         total_sent += sent
         time.sleep(0.2)
 
-    logging.info(f"Total received: {total_received} BTC")
-    logging.info(f"Total sent: {total_sent} BTC")
     return total_received, total_sent
 
 
