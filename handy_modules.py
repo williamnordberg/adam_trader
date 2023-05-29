@@ -261,19 +261,10 @@ def compare_send_receive_richest_addresses_wrapper() -> Tuple[float, float]:
 
 
 def compare_send_receive_richest_addresses() -> Tuple[float, float]:
-    if should_update('richest_addresses_compare'):
-        richest_addresses_bullish, richest_addresses_bearish = compare_send_receive_richest_addresses_wrapper()
-
-        # Save to database
-        save_value_to_database('richest_addresses_bullish', richest_addresses_bullish)
-        save_value_to_database('richest_addresses_bearish', richest_addresses_bearish)
-
-        return richest_addresses_bullish, richest_addresses_bearish
-    else:
-        database = read_database()
-        richest_addresses_bullish = database['richest_addresses_bullish'][-1]
-        richest_addresses_bearish = database['richest_addresses_bearish'][-1]
-        return richest_addresses_bullish, richest_addresses_bearish
+    database = read_database()
+    richest_addresses_bullish = database['richest_addresses_bullish'][-1]
+    richest_addresses_bearish = database['richest_addresses_bearish'][-1]
+    return richest_addresses_bullish, richest_addresses_bearish
 
 
 def should_update(factor: str) -> bool:

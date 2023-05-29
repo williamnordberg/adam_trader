@@ -4,7 +4,8 @@ from multiprocessing import Process
 import datetime
 
 from handy_modules import compare_send_receive_richest_addresses, get_bitcoin_price, \
-    save_trade_details, save_trade_result, save_trading_state, save_int_to_latest_saved, calculate_score_margin
+    save_trade_details, save_trade_result, save_trading_state, save_int_to_latest_saved,\
+    calculate_score_margin, compare_send_receive_richest_addresses_wrapper
 from technical_analysis import technical_analyse
 from news_analyser import check_sentiment_of_news
 from youtube import check_bitcoin_youtube_videos_increase
@@ -20,6 +21,7 @@ from factors_states_visualization import visualize_charts
 from database_visualization import visualize_database_one_chart, visualize_trade_results
 from testnet_future_short_trade import check_no_open_future_position
 from monitor_richest import monitor_bitcoin_richest_addresses
+from database import save_value_to_database
 
 # Constants
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
@@ -53,6 +55,13 @@ def run_monitor_richest_addresses():
         total_received, total_sent = monitor_bitcoin_richest_addresses()
         save_int_to_latest_saved('total_received_coins_in_last_24', int(total_received))
         save_int_to_latest_saved('total_sent_coins_in_last_24', int(total_sent))
+
+        richest_addresses_bullish, richest_addresses_bearish = compare_send_receive_richest_addresses_wrapper()
+
+        # Save to database
+        save_value_to_database('richest_addresses_bullish', richest_addresses_bullish)
+        save_value_to_database('richest_addresses_bearish', richest_addresses_bearish)
+
         logging.info(f'total sent in last 24 hours: {total_sent} and receive: {total_received}')
         logging.info('finish monitoring richest addresses and sleep for 20 min')
         sleep(60 * 20)
@@ -164,5 +173,5 @@ if __name__ == "__main__":
     process.start()
     sleep(60)
 
-    process = Process(target=run_monitor_richest_addresses)
-    process.start()
+    # process = Process(target=run_monitor_richest_addresses)
+    # process.start()
