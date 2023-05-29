@@ -70,7 +70,7 @@ def check_multiple_addresses(addresses: List[str]) -> Tuple[float, float]:
 
         total_received += received
         total_sent += sent
-        time.sleep(0.2)
+        time.sleep(0.5)
 
     return total_received, total_sent
 

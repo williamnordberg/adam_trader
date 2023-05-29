@@ -12,7 +12,7 @@ from database import parse_date
 app = dash.Dash(__name__)
 LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
 DATABASE_PATH = 'data/database.csv'
-UPDATE_TIME = 20
+UPDATE_TIME = 5
 
 
 def calculate_upcoming_events():
