@@ -224,19 +224,15 @@ def visualize_charts():
                 html.P(f'Fed rate MtoM: {initial_fed_rate_m_to_m}', id='fed-rate', style={'fontSize': '12px'}),
                 html.P(f'CPI MtoM: {initial_cpi_m_to_m}', id='cpi-rate', style={'fontSize': '12px'}),
                 html.P(f'PPI MtoM: {initial_ppi_m_to_m}', id='ppi-rate', style={'fontSize': '12px'}),
-                html.P(initial_fed_announcement if initial_fed_announcement != "N/A" else "", id='fed-announcement',
-                       style={
-                           'fontSize': '11px', 'color': 'red' if initial_fed_within_2_days else None,
-                           'fontWeight': 'bold' if initial_fed_within_2_days else None}),
-                html.P(initial_cpi_fed_announcement if initial_cpi_fed_announcement != "N/A" else "",
-                       id='cpi-announcement', style={
-                        'fontSize': '11px', 'color': 'red' if initial_cpi_within_2_days else None,
-                        'fontWeight': 'bold' if initial_cpi_within_2_days else None}),
-                html.P(initial_ppi_fed_announcement if initial_ppi_fed_announcement != "N/A" else "",
-                       id='ppi-announcement', style={
-                        'fontSize': '11px', 'color': 'red' if initial_ppi_within_2_days else None,
-                        'fontWeight': 'bold' if initial_ppi_within_2_days else None}),
-
+                html.P(initial_fed_announcement, id='fed-announcement', style={
+                    'fontSize': '11px', 'color': 'red' if initial_fed_within_2_days else None,
+                    'fontWeight': 'bold' if initial_fed_within_2_days else None}),
+                html.P(initial_cpi_fed_announcement, id='cpi-announcement', style={
+                    'fontSize': '11px', 'color': 'red' if initial_cpi_within_2_days else None,
+                    'fontWeight': 'bold' if initial_cpi_within_2_days else None}),
+                html.P(initial_ppi_fed_announcement, id='ppi-announcement', style={
+                    'fontSize': '11px', 'color': 'red' if initial_ppi_within_2_days else None,
+                    'fontWeight': 'bold' if initial_ppi_within_2_days else None}),
             ]),
 
             html.Div([
@@ -392,7 +388,7 @@ def update_graph_live(n):
     return fig
 
 
-@app.callback(
+@app.callback([
     Output('fed-rate', 'children'),
     Output('cpi-rate', 'children'),
     Output('ppi-rate', 'children'),
@@ -412,12 +408,8 @@ def update_graph_live(n):
     Output('btc-received', 'children'),
     Output('btc-sent', 'children'),
     Output('positive-news', 'children'),
-    Output('negative-news', 'children'),
-    Output('fed_within_2_days', 'children'),
-    Output('cpi_within_2_days', 'children'),
-    Output('ppi_within_2_days', 'children'),
-    [Input('interval-component', 'n_intervals')]
-)
+    Output('negative-news', 'children')
+], [Input('interval-component', 'n_intervals')])
 def update_values(n):
     # This function should return new values for all your variables.
     database = pd.read_csv(DATABASE_PATH, converters={"date": parse_date})
@@ -426,11 +418,14 @@ def update_values(n):
     latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
     new_trading_state = latest_info_saved.iloc[0]['latest_trading_state']
 
-    new_fed_rate = float(latest_info_saved['fed_rate_m_to_m'][0])
+    fed_rate_m_to_m_read = float(latest_info_saved['fed_rate_m_to_m'][0])
+    new_fed_rate = f'Fed rate MtoM: {fed_rate_m_to_m_read}'
 
-    new_cpi_rate = float(latest_info_saved['cpi_m_to_m'][0])
+    cpi_m_to_m_read = float(latest_info_saved['cpi_m_to_m'][0])
+    new_cpi_rate = f'CPI MtoM: {cpi_m_to_m_read}'
 
-    new_ppi_rate = float(latest_info_saved['ppi_m_to_m'][0])
+    ppi_m_to_m_read = float(latest_info_saved['ppi_m_to_m'][0])
+    new_ppi_rate = f'PPI MtoM: {ppi_m_to_m_read}'
 
     new_bid_volume = int(database['bid_volume'][-1])
 
@@ -456,13 +451,8 @@ def update_values(n):
     new_fed_announcement, new_cpi_announcement, new_ppi_announcement, \
         fed_within_2_days, cpi_within_2_days, ppi_within_2_days = calculate_upcoming_events()
 
-    new_fed_announcement = new_fed_announcement if new_fed_announcement != "N/A" else ""
-    new_cpi_announcement = new_cpi_announcement if new_cpi_announcement != "N/A" else ""
-    new_ppi_announcement = new_ppi_announcement if new_ppi_announcement != "N/A" else ""
-
     return (f'Fed rate MtoM: {new_fed_rate}', f'CPI MtoM: {new_cpi_rate}', f'PPI MtoM: {new_ppi_rate}',
             new_fed_announcement, new_cpi_announcement, new_ppi_announcement,
-            fed_within_2_days, cpi_within_2_days, ppi_within_2_days,
             f'Trading State: {new_trading_state}', f'Bid vol: {new_bid_volume}', f'Ask vol: {new_ask_volume}',
             f'Predicted: {new_predicted_price}', f'Current: {new_current_price}', f'Diff: {new_price_difference}',
             f'RSI: {new_rsi}', f'Over 200EMA: {new_over_200ema}', f'MACD up trend: {new_macd_trend}',
