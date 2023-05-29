@@ -9,13 +9,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="3">
+      <change afterPath="$PROJECT_DIR$/logs/latest_info_saved.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_blockcypher.py" beforeDir="false" afterPath="$PROJECT_DIR$/api_blockcypher.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/latest_info_saved.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handy_modules.py" beforeDir="false" afterPath="$PROJECT_DIR$/handy_modules.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitor_richest.py" beforeDir="false" afterPath="$PROJECT_DIR$/monitor_richest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/factors_states_visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/logs/factors_states_visualization.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -245,13 +242,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00212" summary="11May">
-      <created>1683875117778</created>
-      <option name="number" value="00212" />
-      <option name="presentableId" value="LOCAL-00212" />
-      <option name="project" value="LOCAL" />
-      <updated>1683875117778</updated>
     </task>
     <task id="LOCAL-00213" summary="11May">
       <created>1683875127115</created>
@@ -589,7 +579,14 @@
       <option name="project" value="LOCAL" />
       <updated>1685338459860</updated>
     </task>
-    <option name="localTasksCounter" value="261" />
+    <task id="LOCAL-00261" summary="3">
+      <created>1685339844027</created>
+      <option name="number" value="00261" />
+      <option name="presentableId" value="LOCAL-00261" />
+      <option name="project" value="LOCAL" />
+      <updated>1685339844027</updated>
+    </task>
+    <option name="localTasksCounter" value="262" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
