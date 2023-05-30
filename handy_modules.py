@@ -27,12 +27,12 @@ update_intervals = {
     "richest_addresses": timedelta(minutes=20),
     "predicted_price": timedelta(hours=12),
     "technical_analysis": timedelta(hours=4),
-    "richest_addresses_compare": timedelta(minutes=10),
+    "richest_addresses_compare": timedelta(minutes=20),
     "google_search": timedelta(hours=3),
     "reddit": timedelta(hours=8),
     "youtube": timedelta(hours=4),
     "sentiment_of_news": timedelta(hours=1),
-    "richest_addresses_scrap": timedelta(hours=24)
+    "richest_addresses_scrap": timedelta(hours=12)
 }
 
 

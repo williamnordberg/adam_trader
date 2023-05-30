@@ -3,11 +3,14 @@ import requests
 import logging
 from datetime import datetime, timedelta
 
+from handy_modules import read_current_trading_state
 from database import save_value_to_database
 from handy_modules import get_bitcoin_price, retry_on_error_fallback_0_0, save_float_to_latest_saved
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-ENDPOINT_DEPTH = "https://api.binance.com/api/v3/depth"
+SPOT_ENDPOINT_DEPTH = "https://api.binance.com/api/v3/depth"
+FUTURES_ENDPOINT_DEPTH = 'https://fapi.binance.com/fapi/v1/depth'
+
 LIMIT = 1000
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 
@@ -42,7 +45,12 @@ def aggregate_and_save_values():
 @retry_on_error_fallback_0_0(max_retries=3, delay=5, allowed_exceptions=(requests.exceptions.RequestException,))
 def get_order_book(symbol: str, limit: int):
     try:
-        response = requests.get(ENDPOINT_DEPTH, params={'symbol': symbol, 'limit': str(limit)})
+        trading_state = read_current_trading_state()
+        if trading_state == 'short':
+            ENDPOINT = FUTURES_ENDPOINT_DEPTH
+        else:
+            ENDPOINT = SPOT_ENDPOINT_DEPTH
+        response = requests.get(ENDPOINT, params={'symbol': symbol, 'limit': str(limit)})
         return response.json()
     except requests.exceptions.RequestException as e:
         logging.error(e)
