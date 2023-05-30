@@ -30,8 +30,7 @@ LONG_THRESHOLD = 0.65
 SHORT_THRESHOLD = 0.65
 SCORE_MARGIN_TO_CLOSE = 0.65
 PROFIT_MARGIN = 0.005
-VISUALIZATION_SLEEP_TIME = 20
-
+RICHEST_ADDRESSES_SLEEP_TIME = 20 * 60
 
 logging.basicConfig(filename='trading.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -62,9 +61,9 @@ def run_monitor_richest_addresses():
         save_value_to_database('richest_addresses_bullish', richest_addresses_bullish)
         save_value_to_database('richest_addresses_bearish', richest_addresses_bearish)
 
-        logging.info(f'total sent in last 24 hours: {total_sent} and receive: {total_received}')
+        logging.info(f'total sent in last 24 hours: {int(total_sent)} and receive: {int(total_received)}')
         logging.info('finish monitoring richest addresses and sleep for 20 min')
-        sleep(60 * 20)
+        sleep(RICHEST_ADDRESSES_SLEEP_TIME)
 
 
 def trading_loop(long_threshold: float, short_threshold: float, profit_margin: float):
