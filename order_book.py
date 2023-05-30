@@ -48,6 +48,8 @@ def get_order_book(symbol: str, limit: int):
         trading_state = read_current_trading_state()
         if trading_state == 'short':
             ENDPOINT = FUTURES_ENDPOINT_DEPTH
+            if symbol == 'BTCBUSD':
+                return {'bids': [], 'asks': []}
         else:
             ENDPOINT = SPOT_ENDPOINT_DEPTH
         response = requests.get(ENDPOINT, params={'symbol': symbol, 'limit': str(limit)})
