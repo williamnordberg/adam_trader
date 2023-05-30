@@ -421,7 +421,7 @@ def update_values(n):
 
     new_fed_announcement, new_cpi_announcement, new_ppi_announcement = calculate_upcoming_events()
 
-    return (f'Fed rate MtoM: {new_fed_rate}', f'CPI MtoM: {new_cpi_rate}', f'PPI MtoM: {new_ppi_rate}',
+    return (new_fed_rate, new_cpi_rate, new_ppi_rate,
             new_fed_announcement, new_cpi_announcement, new_ppi_announcement,
             f'Trading State: {new_trading_state}', f'Bid vol: {new_bid_volume}', f'Ask vol: {new_ask_volume}',
             f'Predicted: {new_predicted_price}', f'Current: {new_current_price}', f'Diff: {new_price_difference}',

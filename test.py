@@ -4,50 +4,14 @@ from plotly.subplots import make_subplots
 import dash
 from dash import dcc
 from dash import html
-from datetime import datetime
-from handy_modules import get_bitcoin_price
+from handy_modules import get_bitcoin_price, calculate_upcoming_events
 from dash.dependencies import Input, Output
 from database import parse_date
 
 app = dash.Dash(__name__)
 LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
 DATABASE_PATH = 'data/database.csv'
-UPDATE_TIME = 2
-
-
-def calculate_upcoming_events():
-    latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
-    fed = datetime.strptime(latest_info_saved['interest_rate_announcement_date'][0], "%Y-%m-%d %H:%M:%S")
-    cpi = datetime.strptime(latest_info_saved['cpi_announcement_date'][0], "%Y-%m-%d %H:%M:%S")
-    ppi = datetime.strptime(latest_info_saved['ppi_announcement_date'][0], "%Y-%m-%d %H:%M:%S")
-
-    now = datetime.utcnow()
-
-    time_until_fed = fed - now
-    time_until_cpi = cpi - now
-    time_until_ppi = ppi - now
-
-    fed_announcement = ''
-    cpi_fed_announcement = ''
-    ppi_fed_announcement = ''
-
-    if time_until_fed.days >= 0:
-        hours, remainder = divmod(time_until_fed.seconds, 3600)
-        minutes, seconds = divmod(remainder, 60)
-        fed_announcement = f"Next FED: {time_until_fed.days}D, {hours}H,, {minutes}m"
-
-    if time_until_cpi.days >= 0:
-        hours, remainder = divmod(time_until_cpi.seconds, 3600)
-        minutes, seconds = divmod(remainder, 60)
-        cpi_fed_announcement = f"Next CPI: {time_until_cpi.days}D, {hours}H, {minutes}m"
-
-    if time_until_ppi.days >= 0:
-        hours, remainder = divmod(time_until_ppi.seconds, 3600)
-        minutes, seconds = divmod(remainder, 60)
-        ppi_fed_announcement = f"Next PPI: {time_until_ppi.days}D, {hours}H, {minutes}m"
-    return fed_announcement if time_until_fed.days <= 2 else '',\
-        cpi_fed_announcement if time_until_cpi.days <= 2 else '',\
-        ppi_fed_announcement if time_until_ppi.days <= 2 else ''
+APP_UPDATE_TIME = 10
 
 
 def create_gauge_chart(bullish, bearish, show_number=True):
@@ -212,10 +176,17 @@ def visualize_charts():
 
     app.layout = html.Div([
         dcc.Interval(
-            id='interval-component',
-            interval=5 * 1000,  # in milliseconds (every 7 seconds)
+            id='timer-interval-component',
+            interval=1 * 1000,  # in milliseconds
             n_intervals=0
         ),
+
+        dcc.Interval(
+            id='interval-component',
+            interval=APP_UPDATE_TIME * 1000,  # in milliseconds
+            n_intervals=0
+        ),
+        html.Div(id='timer'),
         dcc.Graph(id='live-update-graph', figure=fig, style={
             'width': '90%', 'height': '100vh', 'display': 'inline-block'}),
         html.Div([
@@ -457,7 +428,7 @@ def update_values(n):
 
     new_fed_announcement, new_cpi_announcement, new_ppi_announcement = calculate_upcoming_events()
 
-    return (f'Fed rate MtoM: {new_fed_rate}', f'CPI MtoM: {new_cpi_rate}', f'PPI MtoM: {new_ppi_rate}',
+    return (new_fed_rate, new_cpi_rate, new_ppi_rate,
             new_fed_announcement, new_cpi_announcement, new_ppi_announcement,
             f'Trading State: {new_trading_state}', f'Bid vol: {new_bid_volume}', f'Ask vol: {new_ask_volume}',
             f'Predicted: {new_predicted_price}', f'Current: {new_current_price}', f'Diff: {new_price_difference}',
@@ -465,6 +436,15 @@ def update_values(n):
             f'bb distance MA: {new_bb_distance}', f'Rich receive: {new_btc_received}',
             f'Rich send: {new_btc_sent}', f'+ news increase: {new_positive_news}',
             f'- news increase: {new_negative_news}')
+
+
+@app.callback(
+    Output('timer', 'children'),
+    [Input('timer-interval-component', 'n_intervals')]
+)
+def update_timer(n):
+    countdown = APP_UPDATE_TIME - (n % APP_UPDATE_TIME)
+    return f'Next update in {countdown} seconds'
 
 
 if __name__ == '__main__':
