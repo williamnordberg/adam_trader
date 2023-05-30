@@ -11,7 +11,8 @@ import configparser
 # Local imports
 from bs4_scraper import scrape_bitcoin_rich_list
 from api_blockcypher import get_address_transactions_24h_blockcypher
-from handy_modules import should_update, save_value_to_database
+from database import save_value_to_database
+from handy_modules import should_update
 
 SATOSHI_TO_BITCOIN = 100000000
 LATEST_INFO_FILE = 'data/latest_info_saved.csv'

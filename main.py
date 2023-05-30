@@ -173,5 +173,5 @@ if __name__ == "__main__":
     process.start()
     sleep(60)
 
-    # process = Process(target=run_monitor_richest_addresses)
-    # process.start()
+    process = Process(target=run_monitor_richest_addresses)
+    process.start()

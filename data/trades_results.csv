@@ -1,5 +1,5 @@
 wighted_score_category,PNL,long_trades,short_trades,win_trades,loss_trades,total_trades
-65to70,-167,4,0,,,one
+65to70,167,4,0,,,one
 70to75,139,1,0,,,two
 75to80,1,0,0,,,three
 80to100,0,0,0,,,four

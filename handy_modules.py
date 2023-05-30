@@ -6,7 +6,7 @@ from functools import wraps
 from time import sleep
 
 from datetime import datetime, timedelta
-from database import read_database, save_value_to_database
+from database import read_database
 from binance.exceptions import BinanceAPIException, BinanceRequestException
 from testnet_future_short_trade import initialized_future_client
 
@@ -424,6 +424,41 @@ def calculate_score_margin(weighted_score):
         return 0.7
     else:
         return 0.65
+
+
+def calculate_upcoming_events():
+    latest_info_saved = pd.read_csv(LATEST_INFO_FILE).squeeze("columns")
+    fed = datetime.strptime(latest_info_saved['interest_rate_announcement_date'][0], "%Y-%m-%d %H:%M:%S")
+    cpi = datetime.strptime(latest_info_saved['cpi_announcement_date'][0], "%Y-%m-%d %H:%M:%S")
+    ppi = datetime.strptime(latest_info_saved['ppi_announcement_date'][0], "%Y-%m-%d %H:%M:%S")
+
+    now = datetime.utcnow()
+
+    time_until_fed = fed - now
+    time_until_cpi = cpi - now
+    time_until_ppi = ppi - now
+
+    fed_announcement = ''
+    cpi_fed_announcement = ''
+    ppi_fed_announcement = ''
+
+    if time_until_fed.days >= 0:
+        hours, remainder = divmod(time_until_fed.seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        fed_announcement = f"Next FED: {time_until_fed.days}D, {hours}H,, {minutes}m"
+
+    if time_until_cpi.days >= 0:
+        hours, remainder = divmod(time_until_cpi.seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        cpi_fed_announcement = f"Next CPI: {time_until_cpi.days}D, {hours}H, {minutes}m"
+
+    if time_until_ppi.days >= 0:
+        hours, remainder = divmod(time_until_ppi.seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        ppi_fed_announcement = f"Next PPI: {time_until_ppi.days}D, {hours}H, {minutes}m"
+    return fed_announcement if time_until_fed.days <= 2 else '',\
+        cpi_fed_announcement if time_until_cpi.days <= 2 else '',\
+        ppi_fed_announcement if time_until_ppi.days <= 2 else ''
 
 
 if __name__ == '__main__':
