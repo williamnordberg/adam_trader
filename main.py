@@ -4,7 +4,7 @@ from multiprocessing import Process
 import datetime
 
 from handy_modules import compare_send_receive_richest_addresses, get_bitcoin_price, \
-    save_trade_details, save_trade_result, save_trading_state, save_int_to_latest_saved,\
+    save_trade_details, save_trade_result, save_trading_state,\
     calculate_score_margin, compare_send_receive_richest_addresses_wrapper
 from technical_analysis import technical_analyse
 from news_analyser import check_sentiment_of_news
@@ -52,8 +52,6 @@ def run_visualize_trade_result():
 def run_monitor_richest_addresses():
     while True:
         total_received, total_sent = monitor_bitcoin_richest_addresses()
-        save_int_to_latest_saved('total_received_coins_in_last_24', int(total_received))
-        save_int_to_latest_saved('total_sent_coins_in_last_24', int(total_sent))
 
         richest_addresses_bullish, richest_addresses_bearish = compare_send_receive_richest_addresses_wrapper()
 

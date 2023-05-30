@@ -24,6 +24,7 @@ update_intervals = {
     "dataset": timedelta(hours=24),
     "macro": timedelta(hours=24),
     "order_book": timedelta(minutes=10),
+    "richest_addresses": timedelta(minutes=20),
     "predicted_price": timedelta(hours=12),
     "technical_analysis": timedelta(hours=4),
     "richest_addresses_compare": timedelta(minutes=10),
@@ -462,7 +463,5 @@ def calculate_upcoming_events():
 
 
 if __name__ == '__main__':
-    logging.info(f'bitcoin price: {get_bitcoin_price()}')
-    logging.info(f'bitcoin future price: {get_bitcoin_future_market_price()}')
-    x = read_current_trading_state()
-    print(x)
+    save_update_time('richest_addresses')
+
