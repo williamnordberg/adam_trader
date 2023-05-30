@@ -12,7 +12,7 @@ import configparser
 from bs4_scraper import scrape_bitcoin_rich_list
 from api_blockcypher import get_address_transactions_24h_blockcypher
 from database import save_value_to_database
-from handy_modules import should_update
+from handy_modules import should_update, read_float_from_latest_saved, save_update_time, save_int_to_latest_saved
 
 SATOSHI_TO_BITCOIN = 100000000
 LATEST_INFO_FILE = 'data/latest_info_saved.csv'
@@ -88,17 +88,28 @@ def monitor_bitcoin_richest_addresses() -> Tuple[float, float]:
     else:
         logging.info(f'list of richest addresses is already updated')
 
-    # Read addresses from the CSV file
-    addresses = read_addresses_from_csv(BITCOIN_RICH_LIST_FILE)
+    if should_update('richest_addresses'):
+        # Read addresses from the CSV file
+        addresses = read_addresses_from_csv(BITCOIN_RICH_LIST_FILE)
 
-    # Check the total Bitcoin received and sent in the last 24 hours for all addresses
-    total_received, total_sent = check_multiple_addresses(addresses)
+        # Check the total Bitcoin received and sent in the last 24 hours for all addresses
+        total_received, total_sent = check_multiple_addresses(addresses)
 
-    # Save to database
-    save_value_to_database('richest_addresses_total_received', total_received)
-    save_value_to_database('richest_addresses_total_sent', total_sent)
+        # Save to database
+        save_value_to_database('richest_addresses_total_received', total_received)
+        save_value_to_database('richest_addresses_total_sent', total_sent)
 
-    return total_received, total_sent
+        save_int_to_latest_saved('total_received_coins_in_last_24', int(total_received))
+        save_int_to_latest_saved('total_sent_coins_in_last_24', int(total_sent))
+
+        save_update_time('richest_addresses')
+        return total_received, total_sent
+    else:
+        logging.info('Richest addresses is update')
+        total_received = read_float_from_latest_saved('total_received_coins_in_last_24')
+        total_sent = read_float_from_latest_saved('total_sent_coins_in_last_24')
+
+        return total_received, total_sent
 
 
 if __name__ == "__main__":
