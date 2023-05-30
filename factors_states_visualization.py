@@ -4,50 +4,14 @@ from plotly.subplots import make_subplots
 import dash
 from dash import dcc
 from dash import html
-from datetime import datetime
-from handy_modules import get_bitcoin_price
+from handy_modules import get_bitcoin_price, calculate_upcoming_events
 from dash.dependencies import Input, Output
 from database import parse_date
 
 app = dash.Dash(__name__)
 LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
 DATABASE_PATH = 'data/database.csv'
-UPDATE_TIME = 5
-
-
-def calculate_upcoming_events():
-    latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
-    fed = datetime.strptime(latest_info_saved['interest_rate_announcement_date'][0], "%Y-%m-%d %H:%M:%S")
-    cpi = datetime.strptime(latest_info_saved['cpi_announcement_date'][0], "%Y-%m-%d %H:%M:%S")
-    ppi = datetime.strptime(latest_info_saved['ppi_announcement_date'][0], "%Y-%m-%d %H:%M:%S")
-
-    now = datetime.utcnow()
-
-    time_until_fed = fed - now
-    time_until_cpi = cpi - now
-    time_until_ppi = ppi - now
-
-    fed_announcement = "N/A"
-    cpi_fed_announcement = "N/A"
-    ppi_fed_announcement = "N/A"
-
-    if time_until_fed.days >= 0:
-        hours, remainder = divmod(time_until_fed.seconds, 3600)
-        minutes, seconds = divmod(remainder, 60)
-        fed_announcement = f"Next FED: {time_until_fed.days}D, {hours}H,, {minutes}m"
-
-    if time_until_cpi.days >= 0:
-        hours, remainder = divmod(time_until_cpi.seconds, 3600)
-        minutes, seconds = divmod(remainder, 60)
-        cpi_fed_announcement = f"Next CPI: {time_until_cpi.days}D, {hours}H, {minutes}m"
-
-    if time_until_ppi.days >= 0:
-        hours, remainder = divmod(time_until_ppi.seconds, 3600)
-        minutes, seconds = divmod(remainder, 60)
-        ppi_fed_announcement = f"Next PPI: {time_until_ppi.days}D, {hours}H, {minutes}m"
-
-    return fed_announcement, cpi_fed_announcement, ppi_fed_announcement, \
-        time_until_fed.days <= 2, time_until_cpi.days <= 2, time_until_ppi.days <= 2
+APP_UPDATE_TIME = 7
 
 
 def create_gauge_chart(bullish, bearish, show_number=True):
@@ -208,13 +172,12 @@ def visualize_charts():
     initial_positive_news_polarity_change = round(latest_info_saved['positive_news_polarity_change'][0], 0)
     initial_negative_news_polarity_change = round(latest_info_saved['negative_news_polarity_change'][0], 0)
 
-    initial_fed_announcement, initial_cpi_fed_announcement, initial_ppi_fed_announcement, \
-        initial_fed_within_2_days, initial_cpi_within_2_days, initial_ppi_within_2_days = calculate_upcoming_events()
+    initial_fed_announcement, initial_cpi_announcement, initial_ppi_announcement = calculate_upcoming_events()
 
     app.layout = html.Div([
         dcc.Interval(
             id='interval-component',
-            interval=UPDATE_TIME * 1000,  # in milliseconds (every 7 seconds)
+            interval=APP_UPDATE_TIME * 1000,  # in milliseconds
             n_intervals=0
         ),
         dcc.Graph(id='live-update-graph', figure=fig, style={
@@ -224,18 +187,22 @@ def visualize_charts():
                 html.P(f'Fed rate MtoM: {initial_fed_rate_m_to_m}', id='fed-rate', style={'fontSize': '12px'}),
                 html.P(f'CPI MtoM: {initial_cpi_m_to_m}', id='cpi-rate', style={'fontSize': '12px'}),
                 html.P(f'PPI MtoM: {initial_ppi_m_to_m}', id='ppi-rate', style={'fontSize': '12px'}),
-                html.P(initial_fed_announcement if initial_fed_announcement != "N/A" else "", id='fed-announcement',
-                       style={
-                           'fontSize': '11px', 'color': 'red' if initial_fed_within_2_days else None,
-                           'fontWeight': 'bold' if initial_fed_within_2_days else None}),
-                html.P(initial_cpi_fed_announcement if initial_cpi_fed_announcement != "N/A" else "",
-                       id='cpi-announcement', style={
-                        'fontSize': '11px', 'color': 'red' if initial_cpi_within_2_days else None,
-                        'fontWeight': 'bold' if initial_cpi_within_2_days else None}),
-                html.P(initial_ppi_fed_announcement if initial_ppi_fed_announcement != "N/A" else "",
-                       id='ppi-announcement', style={
-                        'fontSize': '11px', 'color': 'red' if initial_ppi_within_2_days else None,
-                        'fontWeight': 'bold' if initial_ppi_within_2_days else None}),
+
+                html.P(initial_fed_announcement if initial_fed_announcement != '' else "",
+                       id='fed-announcement',
+                       style={'fontSize': '11px',
+                              'color': 'red' if initial_fed_announcement != '' else None,
+                              'fontWeight': 'bold' if initial_fed_announcement != '' else None}),
+
+                html.P(initial_cpi_announcement if initial_cpi_announcement != '' else "",
+                       id='cpi-announcement',
+                       style={'fontSize': '11px', 'color': 'red' if initial_cpi_announcement != '' else None,
+                              'fontWeight': 'bold' if initial_cpi_announcement != '' else None}),
+
+                html.P(initial_ppi_announcement if initial_ppi_announcement else "",
+                       id='ppi-announcement',
+                       style={'fontSize': '11px', 'color': 'red' if initial_ppi_announcement != '' else None,
+                              'fontWeight': 'bold' if initial_ppi_announcement != '' else None}),
 
             ]),
 
@@ -392,7 +359,7 @@ def update_graph_live(n):
     return fig
 
 
-@app.callback(
+@app.callback([
     Output('fed-rate', 'children'),
     Output('cpi-rate', 'children'),
     Output('ppi-rate', 'children'),
@@ -412,12 +379,8 @@ def update_graph_live(n):
     Output('btc-received', 'children'),
     Output('btc-sent', 'children'),
     Output('positive-news', 'children'),
-    Output('negative-news', 'children'),
-    Output('fed_within_2_days', 'children'),
-    Output('cpi_within_2_days', 'children'),
-    Output('ppi_within_2_days', 'children'),
-    [Input('interval-component', 'n_intervals')]
-)
+    Output('negative-news', 'children')
+], [Input('interval-component', 'n_intervals')])
 def update_values(n):
     # This function should return new values for all your variables.
     database = pd.read_csv(DATABASE_PATH, converters={"date": parse_date})
@@ -426,11 +389,14 @@ def update_values(n):
     latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
     new_trading_state = latest_info_saved.iloc[0]['latest_trading_state']
 
-    new_fed_rate = float(latest_info_saved['fed_rate_m_to_m'][0])
+    fed_rate_m_to_m_read = float(latest_info_saved['fed_rate_m_to_m'][0])
+    new_fed_rate = f'Fed rate MtoM: {fed_rate_m_to_m_read}'
 
-    new_cpi_rate = float(latest_info_saved['cpi_m_to_m'][0])
+    cpi_m_to_m_read = float(latest_info_saved['cpi_m_to_m'][0])
+    new_cpi_rate = f'CPI MtoM: {cpi_m_to_m_read}'
 
-    new_ppi_rate = float(latest_info_saved['ppi_m_to_m'][0])
+    ppi_m_to_m_read = float(latest_info_saved['ppi_m_to_m'][0])
+    new_ppi_rate = f'PPI MtoM: {ppi_m_to_m_read}'
 
     new_bid_volume = int(database['bid_volume'][-1])
 
@@ -453,16 +419,10 @@ def update_values(n):
 
     latest_info_saved.to_csv(LATEST_INFO_SAVED, index=False)
 
-    new_fed_announcement, new_cpi_announcement, new_ppi_announcement, \
-        fed_within_2_days, cpi_within_2_days, ppi_within_2_days = calculate_upcoming_events()
-
-    new_fed_announcement = new_fed_announcement if new_fed_announcement != "N/A" else ""
-    new_cpi_announcement = new_cpi_announcement if new_cpi_announcement != "N/A" else ""
-    new_ppi_announcement = new_ppi_announcement if new_ppi_announcement != "N/A" else ""
+    new_fed_announcement, new_cpi_announcement, new_ppi_announcement = calculate_upcoming_events()
 
     return (f'Fed rate MtoM: {new_fed_rate}', f'CPI MtoM: {new_cpi_rate}', f'PPI MtoM: {new_ppi_rate}',
             new_fed_announcement, new_cpi_announcement, new_ppi_announcement,
-            fed_within_2_days, cpi_within_2_days, ppi_within_2_days,
             f'Trading State: {new_trading_state}', f'Bid vol: {new_bid_volume}', f'Ask vol: {new_ask_volume}',
             f'Predicted: {new_predicted_price}', f'Current: {new_current_price}', f'Diff: {new_price_difference}',
             f'RSI: {new_rsi}', f'Over 200EMA: {new_over_200ema}', f'MACD up trend: {new_macd_trend}',

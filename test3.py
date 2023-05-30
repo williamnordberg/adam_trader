@@ -12,7 +12,7 @@ from database import parse_date
 app = dash.Dash(__name__)
 LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
 DATABASE_PATH = 'data/database.csv'
-UPDATE_TIME = 20
+UPDATE_TIME = 2
 
 
 def calculate_upcoming_events():
@@ -214,7 +214,7 @@ def visualize_charts():
     app.layout = html.Div([
         dcc.Interval(
             id='interval-component',
-            interval=UPDATE_TIME * 1000,  # in milliseconds (every 7 seconds)
+            interval=3 * 1000,  # in milliseconds (every 7 seconds)
             n_intervals=0
         ),
         dcc.Graph(id='live-update-graph', figure=fig, style={
