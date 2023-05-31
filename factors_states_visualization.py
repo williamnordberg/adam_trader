@@ -177,7 +177,7 @@ def visualize_charts():
     app.layout = html.Div([
         dcc.Interval(
             id='timer-interval-component',
-            interval=1 * 1000,  # in milliseconds
+            interval=5 * 1000,  # in milliseconds
             n_intervals=0
         ),
 
@@ -443,7 +443,8 @@ def update_values(n):
     [Input('timer-interval-component', 'n_intervals')]
 )
 def update_timer(n):
-    countdown = APP_UPDATE_TIME - (n % APP_UPDATE_TIME)
+
+    countdown = 10 if n % 2 == 0 else 5
     return f'Next update in {countdown} seconds'
 
 

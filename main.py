@@ -156,15 +156,15 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
 
 if __name__ == "__main__":
 
-    # visualization_process = Process(target=run_visualize_database)
-    # visualization_process.start()
+    visualization_process = Process(target=run_visualize_database)
+    visualization_process.start()
 
     visualization_charts_process = Process(target=run_visualize_factors_states)
     visualization_charts_process.start()
     sleep(5)  # Sleep To let Visualization be complete before next process start
 
-    # visualization_trade_result_process = Process(target=run_visualize_trade_result)
-    # visualization_trade_result_process.start()
+    visualization_trade_result_process = Process(target=run_visualize_trade_result)
+    visualization_trade_result_process.start()
 
     process = Process(target=trading_loop, args=[0.65, 0.65, 0.005])
     process.start()

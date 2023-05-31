@@ -389,19 +389,26 @@ def visualize_trade_results(run_dash=True):
     fig = go.Figure()
 
     # Add a bar chart for PNL
-    fig.add_trace(go.Bar(x=df['model_name'], y=df["PNL"],
-                         name='PNL'))
+    fig.add_trace(go.Bar(x=df['wighted_score_category'], y=(df["PNL"]/1000),
+                         name='PNL(K)'))
 
     # Add a bar chart for number_of_long
-    fig.add_trace(go.Bar(x=df['model_name'], y=df["long_trades"],
-                         name='Number of Trades'))
+    fig.add_trace(go.Bar(x=df['wighted_score_category'], y=df["long_trades"],
+                         name='long trades Number'))
 
     # Add a bar chart for number_of_short
-    fig.add_trace(go.Bar(x=df['model_name'], y=df["short_trades"],
-                         name='Number of Trades'))
+    fig.add_trace(go.Bar(x=df['wighted_score_category'], y=df["short_trades"],
+                         name='short trades Number'))
+    # Add a bar chart for number_of_trades
+    fig.add_trace(go.Bar(x=df['wighted_score_category'], y=df["win_trades"],
+                         name='win trades'))
 
     # Add a bar chart for number_of_trades
-    fig.add_trace(go.Bar(x=df['model_name'], y=df["total_trades"],
+    fig.add_trace(go.Bar(x=df['wighted_score_category'], y=df["loss_trades"],
+                         name='loss trades'))
+
+    # Add a bar chart for number_of_trades
+    fig.add_trace(go.Bar(x=df['wighted_score_category'], y=df["total_trades"],
                          name='Number of Trades'))
 
     # Update the layout and show the plot
