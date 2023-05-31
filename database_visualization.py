@@ -5,6 +5,8 @@ import dash
 from dash import dcc
 from dash import html
 import logging
+from dash.dependencies import Input, Output
+
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
@@ -382,7 +384,7 @@ def visualize_database_one_chart(run_dash=True):
         app.run_server(host='0.0.0.0', port=8050, debug=False)
 
 
-def visualize_trade_results(run_dash=True):
+def visualize_trade_results():
     df = pd.read_csv(TRADE_RESULT_PATH)
 
     # Create an empty figure
@@ -417,16 +419,61 @@ def visualize_trade_results(run_dash=True):
                       yaxis_title='Value',
                       barmode='group')
 
-    if run_dash:
-        app = dash.Dash(__name__)
+    app = dash.Dash(__name__)
 
-        app.layout = html.Div([
-            dcc.Graph(id='trade-results-chart', figure=fig, style={'width': '100%', 'height': '100vh'}),
-        ])
-        app.run_server(host='0.0.0.0', port=8052, debug=False)
+    app.layout = html.Div([
+        dcc.Graph(id='trade-results-chart', style={'width': '100%', 'height': '100vh'}),
+        dcc.Interval(
+            id='interval-component',
+            interval=5 * 1000,  # in milliseconds (10 minutes)
+            n_intervals=0
+        ),
+    ])
+
+    @app.callback(Output('trade-results-chart', 'figure'),
+                  [Input('interval-component', 'n_intervals')])
+    def update_graph_live(n):
+        # Read the updated data
+        df_inner = pd.read_csv(TRADE_RESULT_PATH)
+
+        # Create an empty figure
+        fig_inner = go.Figure()
+
+        # Add a bar chart for PNL
+        fig_inner.add_trace(go.Bar(x=df_inner['wighted_score_category'], y=(df_inner["PNL"] / 1000),
+                                   name='PNL(K)'))
+
+        # Add a bar chart for number_of_long
+        fig_inner.add_trace(go.Bar(x=df_inner['wighted_score_category'], y=df_inner["long_trades"],
+                                   name='long trades Number'))
+
+        # Add a bar chart for number_of_short
+        fig_inner.add_trace(go.Bar(x=df_inner['wighted_score_category'], y=df_inner["short_trades"],
+                                   name='short trades Number'))
+
+        # Add a bar chart for number_of_trades
+        fig_inner.add_trace(go.Bar(x=df_inner['wighted_score_category'], y=df_inner["win_trades"],
+                                   name='win trades'))
+
+        # Add a bar chart for number_of_trades
+        fig_inner.add_trace(go.Bar(x=df_inner['wighted_score_category'], y=df_inner["loss_trades"],
+                                   name='loss trades'))
+
+        # Add a bar chart for number_of_trades
+        fig_inner.add_trace(go.Bar(x=df_inner['wighted_score_category'], y=df_inner["total_trades"],
+                                   name='Number of Trades'))
+
+        # Update the layout and show the plot
+        fig_inner.update_layout(title='Trade Results',
+                                xaxis_title='Model Name',
+                                yaxis_title='Value',
+                                barmode='group')
+
+        return fig_inner
+    app.run_server(host='0.0.0.0', port=8052, debug=False)
 
 
 if __name__ == "__main__":
-    visualize_database_one_chart()
-    visualize_database_two_rows()
+    # visualize_database_one_chart()
+    # visualize_database_two_rows()
     visualize_trade_results()

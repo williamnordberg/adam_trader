@@ -4,6 +4,8 @@ from typing import Tuple
 import pandas as pd
 from functools import wraps
 from time import sleep
+import plotly.graph_objects as go
+
 
 from datetime import datetime, timedelta
 from database import read_database
@@ -462,6 +464,89 @@ def calculate_upcoming_events():
         ppi_fed_announcement if time_until_ppi.days <= 2 else ''
 
 
+def create_gauge_chart_old(bullish, bearish, show_number=True):
+    if bullish == 0 and bearish == 0:
+        value = 50
+        gauge_steps = [
+            {"range": [0, 1], "color": "lightgray"},
+        ]
+        title = ""
+        bar_thickness = 0
+    else:
+        value = (bullish / (bullish + bearish)) * 1
+        gauge_steps = [
+            {"range": [0, 1], "color": "lightcoral"}
+        ]
+        title = "Bull" if bullish > bearish else "Bear"
+        bar_thickness = 1
+
+    mode_str = "gauge+number+delta" if show_number else "gauge"
+
+    return go.Indicator(
+        mode=mode_str,
+        value=value,
+        title={"text": title, "font": {"size": 10, "color": "green" if title == "Bull" else "Red"}},
+        domain={"x": [0, 1], "y": [0, 1]},
+        gauge={
+            "axis": {"range": [0, 1]},
+            "bar": {"color": "green", "thickness": bar_thickness},
+            "steps": gauge_steps,
+        },
+        number={"suffix": "%" if show_number and title == "" else "", "font": {"size": 20}},
+    )
+
+
+def last_and_next_update(factor: str) -> Tuple[datetime, timedelta]:
+    latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
+    last_update_time_str = latest_info_saved.iloc[0][f'latest_{factor}_update']
+    last_update_time = datetime.strptime(last_update_time_str, '%Y-%m-%d %H:%M:%S')
+    next_update = update_intervals[factor] - (datetime.now() - last_update_time)
+    return last_update_time, next_update
+
+
+def create_gauge_chart(bullish, bearish, factor, show_number=True):
+    last_update_time, next_update = last_and_next_update(factor)
+
+    days, remainder = divmod(next_update.total_seconds(), 86400)
+    hours, remainder = divmod(remainder, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    next_update_str = f"{int(days)}d, {int(hours)}h, {int(minutes)}m, {int(seconds)}s"
+
+    if bullish == 0 and bearish == 0:
+        value = 50
+        gauge_steps = [
+            {"range": [0, 1], "color": "lightgray"},
+        ]
+        title = ""
+        bar_thickness = 0
+    else:
+        value = (bullish / (bullish + bearish)) * 1
+        gauge_steps = [
+            {"range": [0, 1], "color": "lightcoral"}
+        ]
+        title = " " if bullish > bearish else " "
+        # title = "Bull" if bullish > bearish else "Bear"
+
+        bar_thickness = 1
+
+    mode_str = "gauge+number+delta" if show_number else "gauge"
+
+    return go.Indicator(
+        mode=mode_str,
+        value=value,
+        title={
+            "text": f"{title}<br>Last up: {last_update_time.strftime('%Y-%m-%d %H:%M:%S')}<br>"
+                    f"Next up: {next_update_str}",
+            "font": {"size": 10, "color": "green" if title == "Bull" else "Red"}},
+        domain={"x": [0, 1], "y": [0, 1]},
+        gauge={
+            "axis": {"range": [0, 1]},
+            "bar": {"color": "green", "thickness": bar_thickness},
+            "steps": gauge_steps,
+        },
+        number={"suffix": "%" if show_number and title == "" else "", "font": {"size": 10}},
+    )
+
+
 if __name__ == '__main__':
     save_update_time('richest_addresses')
-

@@ -1,17 +1,47 @@
 import pandas as pd
+import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import dash
 from dash import dcc
 from dash import html
-from handy_modules import get_bitcoin_price, calculate_upcoming_events, create_gauge_chart
+from handy_modules import get_bitcoin_price, calculate_upcoming_events
 from dash.dependencies import Input, Output
 from database import read_database
-
 
 app = dash.Dash(__name__)
 LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
 DATABASE_PATH = 'data/database.csv'
 APP_UPDATE_TIME = 10
+
+
+def create_gauge_chart(bullish, bearish, show_number=True):
+    if bullish == 0 and bearish == 0:
+        value = 50
+        gauge_steps = [
+            {"range": [0, 1], "color": "lightgray"},
+        ]
+        title = ""
+        bar_thickness = 0
+    else:
+        value = (bullish / (bullish + bearish)) * 1
+        gauge_steps = [
+            {"range": [0, 1], "color": "lightcoral"}
+        ]
+        title = "Bull" if bullish > bearish else "Bear"
+        bar_thickness = 1
+
+    return go.Indicator(
+        mode="gauge+number+delta" if show_number and title == "" else "gauge",
+        value=value,
+        title={"text": title, "font": {"size": 13, "color": "green" if title == "Bull" else "Red"}},
+        domain={"x": [0, 1], "y": [0, 1]},
+        gauge={
+            "axis": {"range": [0, 1]},
+            "bar": {"color": "green", "thickness": bar_thickness},
+            "steps": gauge_steps,
+        },
+        number={"suffix": "%" if show_number and title == "" else "", "font": {"size": 20}},
+    )
 
 
 def visualize_charts():
@@ -54,26 +84,17 @@ def visualize_charts():
                                         "Richest Addresses", "Google Search Trend", "Reddit Sentiment",
                                         "YouTube Sentiment", "News Sentiment", "Weighted Score"])
 
-    fig.add_trace(create_gauge_chart(
-        macro_bullish, macro_bearish, 'macro', show_number=False), row=1, col=1)
-    fig.add_trace(create_gauge_chart(
-        order_book_bullish, order_book_bearish, 'order_book', show_number=False), row=1, col=2)
-    fig.add_trace(create_gauge_chart(
-        prediction_bullish, prediction_bearish, 'predicted_price', show_number=False), row=1, col=3)
-    fig.add_trace(create_gauge_chart(
-        technical_bullish, technical_bearish, 'predicted_price',  show_number=False), row=1, col=4)
-    fig.add_trace(create_gauge_chart(
-        richest_addresses_bullish, richest_addresses_bearish, 'predicted_price', show_number=False), row=1, col=5)
-    fig.add_trace(create_gauge_chart(
-        google_search_bullish, google_search_bearish, 'predicted_price',  show_number=False), row=2, col=1)
-    fig.add_trace(create_gauge_chart(
-        reddit_bullish, reddit_bearish, 'predicted_price',  show_number=False), row=2, col=2)
-    fig.add_trace(create_gauge_chart(
-        youtube_bullish, youtube_bearish, 'predicted_price',  show_number=False), row=2, col=3)
-    fig.add_trace(create_gauge_chart(
-        news_bullish, news_bearish, 'predicted_price',  show_number=False), row=2, col=4)
-    fig.add_trace(create_gauge_chart(
-        weighted_score_up, weighted_score_down, 'predicted_price',  show_number=True), row=2, col=5)
+    fig.add_trace(create_gauge_chart(macro_bullish, macro_bearish, show_number=False), row=1, col=1)
+    fig.add_trace(create_gauge_chart(order_book_bullish, order_book_bearish, show_number=False), row=1, col=2)
+    fig.add_trace(create_gauge_chart(prediction_bullish, prediction_bearish, show_number=False), row=1, col=3)
+    fig.add_trace(create_gauge_chart(technical_bullish, technical_bearish, show_number=False), row=1, col=4)
+    fig.add_trace(create_gauge_chart(richest_addresses_bullish, richest_addresses_bearish,
+                                     show_number=False), row=1, col=5)
+    fig.add_trace(create_gauge_chart(google_search_bullish, google_search_bearish, show_number=False), row=2, col=1)
+    fig.add_trace(create_gauge_chart(reddit_bullish, reddit_bearish, show_number=False), row=2, col=2)
+    fig.add_trace(create_gauge_chart(youtube_bullish, youtube_bearish, show_number=False), row=2, col=3)
+    fig.add_trace(create_gauge_chart(news_bullish, news_bearish, show_number=False), row=2, col=4)
+    fig.add_trace(create_gauge_chart(weighted_score_up, weighted_score_down, show_number=True), row=2, col=5)
 
     fig.update_layout(
         font=dict(size=10)
@@ -239,26 +260,17 @@ def update_graph_live(n):
                                         "Richest Addresses", "Google Search Trend", "Reddit Sentiment",
                                         "YouTube Sentiment", "News Sentiment", "Weighted Score"])
 
-    fig.add_trace(create_gauge_chart(
-        macro_bullish, macro_bearish, 'macro', show_number=False), row=1, col=1)
-    fig.add_trace(create_gauge_chart(
-        order_book_bullish, order_book_bearish, 'order_book', show_number=False), row=1, col=2)
-    fig.add_trace(create_gauge_chart(
-        prediction_bullish, prediction_bearish, 'predicted_price', show_number=False), row=1, col=3)
-    fig.add_trace(create_gauge_chart(
-        technical_bullish, technical_bearish, 'predicted_price',  show_number=False), row=1, col=4)
-    fig.add_trace(create_gauge_chart(
-        richest_addresses_bullish, richest_addresses_bearish, 'predicted_price', show_number=False), row=1, col=5)
-    fig.add_trace(create_gauge_chart(
-        google_search_bullish, google_search_bearish, 'predicted_price',  show_number=False), row=2, col=1)
-    fig.add_trace(create_gauge_chart(
-        reddit_bullish, reddit_bearish, 'predicted_price',  show_number=False), row=2, col=2)
-    fig.add_trace(create_gauge_chart(
-        youtube_bullish, youtube_bearish, 'predicted_price',  show_number=False), row=2, col=3)
-    fig.add_trace(create_gauge_chart(
-        news_bullish, news_bearish, 'predicted_price',  show_number=False), row=2, col=4)
-    fig.add_trace(create_gauge_chart(
-        weighted_score_up, weighted_score_down, 'predicted_price',  show_number=True), row=2, col=5)
+    fig.add_trace(create_gauge_chart(macro_bullish, macro_bearish, show_number=False), row=1, col=1)
+    fig.add_trace(create_gauge_chart(order_book_bullish, order_book_bearish, show_number=False), row=1, col=2)
+    fig.add_trace(create_gauge_chart(prediction_bullish, prediction_bearish, show_number=False), row=1, col=3)
+    fig.add_trace(create_gauge_chart(technical_bullish, technical_bearish, show_number=False), row=1, col=4)
+    fig.add_trace(create_gauge_chart(richest_addresses_bullish, richest_addresses_bearish,
+                                     show_number=False), row=1, col=5)
+    fig.add_trace(create_gauge_chart(google_search_bullish, google_search_bearish, show_number=False), row=2, col=1)
+    fig.add_trace(create_gauge_chart(reddit_bullish, reddit_bearish, show_number=False), row=2, col=2)
+    fig.add_trace(create_gauge_chart(youtube_bullish, youtube_bearish, show_number=False), row=2, col=3)
+    fig.add_trace(create_gauge_chart(news_bullish, news_bearish, show_number=False), row=2, col=4)
+    fig.add_trace(create_gauge_chart(weighted_score_up, weighted_score_down, show_number=True), row=2, col=5)
 
     fig.update_layout(
         font=dict(size=10)

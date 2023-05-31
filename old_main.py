@@ -18,7 +18,7 @@ from order_book import get_probabilities
 from trading_decision import make_trading_decision
 from long_position_open import long_position
 from short_position_open import short_position
-from factors_states_visualization import visualize_charts
+from old_factors_states_visualization import visualize_charts
 from database_visualization import visualize_database_one_chart, visualize_trade_results
 from testnet_future_short_trade import check_no_open_future_position
 

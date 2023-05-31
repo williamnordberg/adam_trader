@@ -46,7 +46,7 @@ def run_visualize_database():
 
 def run_visualize_trade_result():
     while True:
-        visualize_trade_results(run_dash=True)
+        visualize_trade_results()
 
 
 def run_monitor_richest_addresses():
@@ -158,13 +158,15 @@ if __name__ == "__main__":
 
     visualization_process = Process(target=run_visualize_database)
     visualization_process.start()
+    sleep(2)
 
     visualization_charts_process = Process(target=run_visualize_factors_states)
     visualization_charts_process.start()
-    sleep(5)  # Sleep To let Visualization be complete before next process start
+    sleep(2)  # Sleep To let Visualization be complete before next process start
 
     visualization_trade_result_process = Process(target=run_visualize_trade_result)
     visualization_trade_result_process.start()
+    sleep(2)
 
     process = Process(target=trading_loop, args=[0.65, 0.65, 0.005])
     process.start()
