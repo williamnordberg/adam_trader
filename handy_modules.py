@@ -496,21 +496,38 @@ def create_gauge_chart_old(bullish, bearish, show_number=True):
     )
 
 
-def last_and_next_update(factor: str) -> Tuple[datetime, timedelta]:
+def last_and_next_update(factor: str) -> Tuple[timedelta, timedelta]:
     latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
     last_update_time_str = latest_info_saved.iloc[0][f'latest_{factor}_update']
     last_update_time = datetime.strptime(last_update_time_str, '%Y-%m-%d %H:%M:%S')
+    # Calculate the time difference between now and the last update time
+    time_since_last_update = datetime.now() - last_update_time
     next_update = update_intervals[factor] - (datetime.now() - last_update_time)
-    return last_update_time, next_update
+    return time_since_last_update, next_update
 
 
 def create_gauge_chart(bullish, bearish, factor, show_number=True):
     last_update_time, next_update = last_and_next_update(factor)
 
-    days, remainder = divmod(next_update.total_seconds(), 86400)
-    hours, remainder = divmod(remainder, 3600)
-    minutes, seconds = divmod(remainder, 60)
-    next_update_str = f"{int(days)}d, {int(hours)}h, {int(minutes)}m, {int(seconds)}s"
+    # Convert timedelta to total hours, minutes, seconds
+    total_seconds_since_last_update = last_update_time.total_seconds()
+    hours_since_last_update = total_seconds_since_last_update // 3600
+    minutes_since_last_update = (total_seconds_since_last_update // 60) % 60
+
+    # Check if hours are zero
+    if int(hours_since_last_update) == 0:
+        last_update_time_str = f"{int(minutes_since_last_update)}m"
+    else:
+        last_update_time_str = f"{int(hours_since_last_update)}h {int(minutes_since_last_update)}m ago"
+
+    total_seconds_next_update = next_update.total_seconds()
+    hours_next_update = total_seconds_next_update // 3600
+    minutes_next_update = (total_seconds_next_update // 60) % 60
+    # Check if hours are zero
+    if int(hours_next_update) == 0:
+        next_update_str = f"{int(minutes_next_update)}m"
+    else:
+        next_update_str = f"{int(hours_next_update)}h, {int(minutes_next_update)}m"
 
     if bullish == 0 and bearish == 0:
         value = 50
@@ -535,9 +552,8 @@ def create_gauge_chart(bullish, bearish, factor, show_number=True):
         mode=mode_str,
         value=value,
         title={
-            "text": f"{title}<br>Last up: {last_update_time.strftime('%Y-%m-%d %H:%M:%S')}<br>"
-                    f"Next up: {next_update_str}",
-            "font": {"size": 10, "color": "green" if title == "Bull" else "Red"}},
+            "text": f"L: {last_update_time_str}, N: {next_update_str}",
+            "font": {"size": 11, "color": "purple"}},
         domain={"x": [0, 1], "y": [0, 1]},
         gauge={
             "axis": {"range": [0, 1]},
@@ -546,6 +562,7 @@ def create_gauge_chart(bullish, bearish, factor, show_number=True):
         },
         number={"suffix": "%" if show_number and title == "" else "", "font": {"size": 10}},
     )
+
 
 
 if __name__ == '__main__':
