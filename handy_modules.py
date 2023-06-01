@@ -6,7 +6,6 @@ from functools import wraps
 from time import sleep
 import plotly.graph_objects as go
 
-
 from datetime import datetime, timedelta
 from database import read_database
 from binance.exceptions import BinanceAPIException, BinanceRequestException
@@ -562,7 +561,6 @@ def create_gauge_chart(bullish, bearish, factor, show_number=True):
         },
         number={"suffix": "%" if show_number and title == "" else "", "font": {"size": 10}},
     )
-
 
 
 if __name__ == '__main__':
