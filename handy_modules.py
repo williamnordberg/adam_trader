@@ -463,41 +463,10 @@ def calculate_upcoming_events():
         ppi_fed_announcement if time_until_ppi.days <= 2 else ''
 
 
-def create_gauge_chart_old(bullish, bearish, show_number=True):
-    if bullish == 0 and bearish == 0:
-        value = 50
-        gauge_steps = [
-            {"range": [0, 1], "color": "lightgray"},
-        ]
-        title = ""
-        bar_thickness = 0
-    else:
-        value = (bullish / (bullish + bearish)) * 1
-        gauge_steps = [
-            {"range": [0, 1], "color": "lightcoral"}
-        ]
-        title = "Bull" if bullish > bearish else "Bear"
-        bar_thickness = 1
-
-    mode_str = "gauge+number+delta" if show_number else "gauge"
-
-    return go.Indicator(
-        mode=mode_str,
-        value=value,
-        title={"text": title, "font": {"size": 10, "color": "green" if title == "Bull" else "Red"}},
-        domain={"x": [0, 1], "y": [0, 1]},
-        gauge={
-            "axis": {"range": [0, 1]},
-            "bar": {"color": "green", "thickness": bar_thickness},
-            "steps": gauge_steps,
-        },
-        number={"suffix": "%" if show_number and title == "" else "", "font": {"size": 20}},
-    )
-
-
 def last_and_next_update(factor: str) -> Tuple[timedelta, timedelta]:
     latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
     last_update_time_str = latest_info_saved.iloc[0][f'latest_{factor}_update']
+    print('last_update_time_str', last_update_time_str)
     last_update_time = datetime.strptime(last_update_time_str, '%Y-%m-%d %H:%M:%S')
     # Calculate the time difference between now and the last update time
     time_since_last_update = datetime.now() - last_update_time
@@ -564,4 +533,8 @@ def create_gauge_chart(bullish, bearish, factor, show_number=True):
 
 
 if __name__ == '__main__':
-    save_update_time('richest_addresses')
+    print('macro', last_and_next_update('macro'))
+    print('youtube', last_and_next_update('macro'))
+    print('macro', last_and_next_update('sentiment_of_news'))
+    print('macro', last_and_next_update('predicted_price'))
+
