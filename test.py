@@ -238,6 +238,7 @@ def update_graph_live(n):
                         subplot_titles=["Macro Sentiment", "Order Book", "Prediction", "Technical Analysis",
                                         "Richest Addresses", "Google Search Trend", "Reddit Sentiment",
                                         "YouTube Sentiment", "News Sentiment", "Weighted Score"])
+    fig.for_each_annotation(lambda a: a.update(font=dict(size=15)))  # Update font size for each annotation
 
     fig.add_trace(create_gauge_chart(
         macro_bullish, macro_bearish, 'macro', show_number=False), row=1, col=1)
