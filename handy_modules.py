@@ -466,7 +466,6 @@ def calculate_upcoming_events():
 def last_and_next_update(factor: str) -> Tuple[timedelta, timedelta]:
     latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
     last_update_time_str = latest_info_saved.iloc[0][f'latest_{factor}_update']
-    print('last_update_time_str', last_update_time_str)
     last_update_time = datetime.strptime(last_update_time_str, '%Y-%m-%d %H:%M:%S')
     # Calculate the time difference between now and the last update time
     time_since_last_update = datetime.now() - last_update_time
@@ -534,7 +533,6 @@ def create_gauge_chart(bullish, bearish, factor, show_number=True):
 
 if __name__ == '__main__':
     print('macro', last_and_next_update('macro'))
-    print('youtube', last_and_next_update('macro'))
-    print('macro', last_and_next_update('sentiment_of_news'))
-    print('macro', last_and_next_update('predicted_price'))
+
+
 
