@@ -3,12 +3,14 @@ from plotly.subplots import make_subplots
 import dash
 from dash import dcc
 from dash import html
-from handy_modules import get_bitcoin_price, calculate_upcoming_events, create_gauge_chart
 from dash.dependencies import Input, Output
+import dash_bootstrap_components as dbc
+
+from handy_modules import get_bitcoin_price, calculate_upcoming_events, create_gauge_chart
 from database import read_database
 
 
-app = dash.Dash(__name__)
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
 DATABASE_PATH = 'data/database.csv'
 APP_UPDATE_TIME = 10
@@ -108,6 +110,12 @@ def visualize_charts():
 
     initial_fed_announcement, initial_cpi_announcement, initial_ppi_announcement = calculate_upcoming_events()
 
+    fed_rate_tooltip = dbc.Tooltip(
+        "This is the tooltip text",
+        target='fed-rate',  # Notice the id here matches the id of html.A component
+        placement="bottom",
+    )
+
     app.layout = html.Div([
         dcc.Interval(
             id='timer-interval-component',
@@ -125,7 +133,15 @@ def visualize_charts():
             'width': '90%', 'height': '100vh', 'display': 'inline-block'}),
         html.Div([
             html.Div([
-                html.P(f'Fed rate MtoM: {initial_fed_rate_m_to_m}', id='fed-rate', style={'fontSize': '12px'}),
+
+                html.A(  # This is your new link for Fed rate MtoM
+                    f'{initial_fed_rate_m_to_m}',
+                    id='fed-rate',
+                    target='_blank',  # Opens link in new tab
+                    href="http://your-link.com",  # Replace with your desired URL
+                    style={'fontSize': '12px'}
+                ),
+                fed_rate_tooltip,
                 html.P(f'CPI MtoM: {initial_cpi_m_to_m}', id='cpi-rate', style={'fontSize': '12px'}),
                 html.P(f'PPI MtoM: {initial_ppi_m_to_m}', id='ppi-rate', style={'fontSize': '12px'}),
 
