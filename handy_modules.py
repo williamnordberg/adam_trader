@@ -480,8 +480,6 @@ def last_and_next_update(factor: str) -> Tuple[timedelta, timedelta]:
 
 def create_gauge_chart(bullish, bearish, factor, show_number=True):
     last_update_time, next_update = last_and_next_update(factor)
-    print('last_update_time', last_update_time)
-    print('next_update', next_update)
 
     # Convert timedelta to total hours, minutes, seconds
     total_seconds_since_last_update = last_update_time.total_seconds()
