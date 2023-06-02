@@ -53,7 +53,6 @@ def check_multiple_addresses(addresses: List[str]) -> Tuple[float, float]:
     """
     total_received = 0.0001
     total_sent = 0.0001
-    logging.info('Start monitoring richest addresses')
 
     for i, address in enumerate(addresses):
         if i % 3 == 0:
