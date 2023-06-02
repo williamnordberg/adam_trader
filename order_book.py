@@ -2,7 +2,6 @@ from typing import List, Optional, Tuple, Dict
 import requests
 import logging
 from datetime import datetime, timedelta
-import pandas as pd
 
 from handy_modules import read_current_trading_state
 from database import save_value_to_database
