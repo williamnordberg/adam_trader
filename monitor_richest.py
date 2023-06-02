@@ -85,8 +85,6 @@ def monitor_bitcoin_richest_addresses() -> Tuple[float, float]:
     """
     if should_update('richest_addresses_scrap'):
         scrape_bitcoin_rich_list()
-    else:
-        logging.info(f'list of richest addresses is already updated')
 
     if should_update('richest_addresses'):
         # Read addresses from the CSV file
@@ -105,7 +103,6 @@ def monitor_bitcoin_richest_addresses() -> Tuple[float, float]:
         save_update_time('richest_addresses')
         return total_received, total_sent
     else:
-        logging.info('Richest addresses is update')
         total_received = read_float_from_latest_saved('total_received_coins_in_last_24')
         total_sent = read_float_from_latest_saved('total_sent_coins_in_last_24')
 
