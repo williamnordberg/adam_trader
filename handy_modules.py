@@ -25,10 +25,9 @@ update_intervals = {
     "dataset": timedelta(hours=24),
     "macro": timedelta(hours=24),
     "order_book": timedelta(minutes=10),
-    "richest_addresses": timedelta(minutes=20),
     "predicted_price": timedelta(hours=12),
     "technical_analysis": timedelta(hours=4),
-    "richest_addresses_compare": timedelta(minutes=20),
+    "richest_addresses": timedelta(minutes=20),
     "google_search": timedelta(hours=3),
     "reddit": timedelta(hours=8),
     "youtube": timedelta(hours=4),
@@ -231,7 +230,7 @@ def compare_send_receive_richest_addresses_wrapper() -> Tuple[float, float]:
     total_sent = latest_info_saved['total_sent_coins_in_last_24'][0]
 
     # Save latest update time
-    save_update_time('richest_addresses_compare')
+    save_update_time('richest_addresses')
 
     activity_percentage = (total_received - total_sent) / total_sent * 100
 
@@ -537,4 +536,4 @@ def create_gauge_chart(bullish, bearish, factor, show_number=True):
 
 
 if __name__ == '__main__':
-    create_gauge_chart(1, 0, 'technical_analysis', show_number=False)
+    create_gauge_chart(1, 0, 'richest_addresses', show_number=False)
