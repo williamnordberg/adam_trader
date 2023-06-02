@@ -59,7 +59,7 @@ def visualize_charts():
     fig.add_trace(create_gauge_chart(
         macro_bullish, macro_bearish, 'macro', show_number=False), row=1, col=1)
     fig.add_trace(create_gauge_chart(
-        order_book_bullish, order_book_bearish, 'macro', show_number=False), row=1, col=2)
+        order_book_bullish, order_book_bearish, 'order_book', show_number=False), row=1, col=2)
     fig.add_trace(create_gauge_chart(
         prediction_bullish, prediction_bearish, 'predicted_price', show_number=False), row=1, col=3)
     fig.add_trace(create_gauge_chart(

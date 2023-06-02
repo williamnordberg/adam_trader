@@ -2,10 +2,11 @@ from typing import List, Optional, Tuple, Dict
 import requests
 import logging
 from datetime import datetime, timedelta
+import pandas as pd
 
 from handy_modules import read_current_trading_state
 from database import save_value_to_database
-from handy_modules import get_bitcoin_price, retry_on_error_fallback_0_0, save_float_to_latest_saved
+from handy_modules import get_bitcoin_price, retry_on_error_fallback_0_0, save_float_to_latest_saved, save_update_time
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 SPOT_ENDPOINT_DEPTH = "https://api.binance.com/api/v3/depth"
@@ -113,6 +114,9 @@ def get_probabilities(symbols: List[str], limit: int = LIMIT, bid_multiplier: fl
     aggregated_values['order_book_bullish'].append(order_book_bullish)
     aggregated_values['order_book_bearish'].append(order_book_bearish)
 
+    # Save update time
+    save_update_time('order_book')
+
     # Check if an hour has passed since the last database update
     current_time = datetime.now()
     last_hour = current_time.replace(minute=0, second=0, microsecond=0)
@@ -169,4 +173,8 @@ if __name__ == '__main__':
 
     logging.info(f'order_book_hit_target:{order_book_hit_target_outer},'
                  f'order_book_hit_stop: {order_book_hit_stop_outer}')
+
+    latest_info_saved = pd.read_csv('data/latest_info_saved.csv')
+    print(latest_info_saved['latest_order_book_update'][0])
+
 

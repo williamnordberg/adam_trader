@@ -467,14 +467,21 @@ def last_and_next_update(factor: str) -> Tuple[timedelta, timedelta]:
     latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
     last_update_time_str = latest_info_saved.iloc[0][f'latest_{factor}_update']
     last_update_time = datetime.strptime(last_update_time_str, '%Y-%m-%d %H:%M:%S')
+
     # Calculate the time difference between now and the last update time
     time_since_last_update = datetime.now() - last_update_time
-    next_update = update_intervals[factor] - (datetime.now() - last_update_time)
+
+    if update_intervals[factor] < time_since_last_update:
+        next_update = timedelta(seconds=0)  # equivalent to zero
+    else:
+        next_update = update_intervals[factor] - time_since_last_update
     return time_since_last_update, next_update
 
 
 def create_gauge_chart(bullish, bearish, factor, show_number=True):
     last_update_time, next_update = last_and_next_update(factor)
+    print('last_update_time', last_update_time)
+    print('next_update', next_update)
 
     # Convert timedelta to total hours, minutes, seconds
     total_seconds_since_last_update = last_update_time.total_seconds()
@@ -532,7 +539,5 @@ def create_gauge_chart(bullish, bearish, factor, show_number=True):
 
 
 if __name__ == '__main__':
-    print('macro', last_and_next_update('macro'))
-
-
+    create_gauge_chart(1, 0, 'order_book', show_number=False)
 
