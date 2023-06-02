@@ -11,9 +11,10 @@ from database import read_database
 
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+
 LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
 DATABASE_PATH = 'data/database.csv'
-APP_UPDATE_TIME = 10
+APP_UPDATE_TIME = 50
 
 
 def visualize_charts():
@@ -122,15 +123,29 @@ def visualize_charts():
             interval=5 * 1000,  # in milliseconds
             n_intervals=0
         ),
+        dbc.Progress(value=50, color="success", striped=True, animated=True, id="progress"),
+        dbc.Popover(
+            [
+                dbc.PopoverHeader("Next update time"),
+                dbc.PopoverBody("This shows the next updating time"),
+            ],
+            id="popover",
+            target="progress",
+            trigger="click",
+            placement="auto",
+        ),
+
 
         dcc.Interval(
-            id='interval-component',
-            interval=APP_UPDATE_TIME * 1000,  # in milliseconds
-            n_intervals=0
-        ),
+                id='interval-component',
+                interval=APP_UPDATE_TIME * 1000,  # in milliseconds
+                n_intervals=0
+                ),
+
         html.Div(id='timer'),
         dcc.Graph(id='live-update-graph', figure=fig, style={
             'width': '90%', 'height': '100vh', 'display': 'inline-block'}),
+
         html.Div([
             html.Div([
 
@@ -361,9 +376,17 @@ def update_values(n):
     [Input('timer-interval-component', 'n_intervals')]
 )
 def update_timer(n):
-
-    countdown = 10 if n % 2 == 0 else 5
+    countdown = APP_UPDATE_TIME - (n * 5) % APP_UPDATE_TIME
     return f'Next update in {countdown} seconds'
+
+
+@app.callback(
+    Output('progress', 'value'),
+    [Input('timer-interval-component', 'n_intervals')]
+)
+def update_progress(n):
+    countdown = 100 if n % 10 == 0 else 100 - (n % 10) * 10
+    return countdown
 
 
 if __name__ == '__main__':
