@@ -155,6 +155,7 @@ def get_probabilities_hit_profit_or_stop(symbols: List[str], limit: int, profit_
 
     save_float_to_latest_saved('order_book_hit_profit', round(probability_to_hit_target, 2))
     save_float_to_latest_saved('order_book_hit_loss', round(probability_to_hit_stop_loss, 2))
+    save_update_time('order_book')
 
     return probability_to_hit_target, probability_to_hit_stop_loss
 
@@ -174,7 +175,6 @@ if __name__ == '__main__':
     logging.info(f'order_book_hit_target:{order_book_hit_target_outer},'
                  f'order_book_hit_stop: {order_book_hit_stop_outer}')
 
-    latest_info_saved = pd.read_csv('data/latest_info_saved.csv')
-    print(latest_info_saved['latest_order_book_update'][0])
+
 
 
