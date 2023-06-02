@@ -171,7 +171,7 @@ def technical_analyse_rounder():
     # Save the values to the database
     save_value_to_database('technical_bullish', technical_bullish)
     save_value_to_database('technical_bearish', technical_bearish)
-    save_update_time('technical_analyse')
+    save_update_time('technical_analysis')
 
     # Return the same values as the original function
     return technical_bullish, technical_bearish
@@ -188,5 +188,5 @@ def technical_analyse() -> Tuple[float, float]:
 
 
 if __name__ == '__main__':
-    technical_bullish1, technical_bearish1 = technical_analyse_wrapper()
+    technical_bullish1, technical_bearish1 = technical_analyse_rounder()
     logging.info(f'Bullish: {technical_bullish1}, Bearish: {technical_bearish1}')
