@@ -65,7 +65,7 @@ def visualize_charts():
     fig.add_trace(create_gauge_chart(
         technical_bullish, technical_bearish, 'technical_analysis',  show_number=False), row=1, col=4)
     fig.add_trace(create_gauge_chart(richest_addresses_bullish, richest_addresses_bearish,
-                                     'richest_addresses_compare', show_number=False), row=1, col=5)
+                                     'richest_addresses', show_number=False), row=1, col=5)
     fig.add_trace(create_gauge_chart(
         google_search_bullish, google_search_bearish, 'google_search',  show_number=False), row=2, col=1)
     fig.add_trace(create_gauge_chart(
@@ -266,7 +266,7 @@ def update_graph_live(n):
         technical_bullish, technical_bearish, 'technical_analysis',  show_number=False), row=1, col=4)
     fig.add_trace(create_gauge_chart(
         richest_addresses_bullish, richest_addresses_bearish,
-        'richest_addresses_compare', show_number=False), row=1, col=5)
+        'richest_addresses', show_number=False), row=1, col=5)
     fig.add_trace(create_gauge_chart(
         google_search_bullish, google_search_bearish, 'google_search',  show_number=False), row=2, col=1)
     fig.add_trace(create_gauge_chart(
