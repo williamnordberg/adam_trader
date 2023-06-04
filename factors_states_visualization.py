@@ -5,7 +5,6 @@ from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
-
 from handy_modules import get_bitcoin_price, calculate_upcoming_events, create_gauge_chart
 from database import read_database
 
@@ -157,8 +156,10 @@ def visualize_charts():
                     style={'fontSize': '12px'}
                 ),
                 fed_rate_tooltip,
-                html.P(f'CPI MtoM: {initial_cpi_m_to_m}', id='cpi-rate', style={'fontSize': '12px'}),
-                html.P(f'PPI MtoM: {initial_ppi_m_to_m}', id='ppi-rate', style={'fontSize': '12px'}),
+                html.P(f'CPI MtoM: {initial_cpi_m_to_m}', id='cpi-rate', style={
+                    'fontSize': '12px', 'marginBottom': '5px'}),
+                html.P(f'PPI MtoM: {initial_ppi_m_to_m}', id='ppi-rate', style={
+                    'fontSize': '12px', 'marginBottom': '5px'}),
 
                 html.P(initial_fed_announcement if initial_fed_announcement != '' else "",
                        id='fed-announcement',
@@ -179,38 +180,38 @@ def visualize_charts():
             ]),
 
             html.Div([
-                html.P(f'Trading State: {initial_trading_state}', id='trading-state',
-                       style={'fontSize': '12px', 'margin': '0'}),
+                html.P(f'T State: {initial_trading_state}', id='trading-state',
+                       style={'fontSize': '12px', 'margin': '5px'}),
             ], style={'borderTop': '1px solid black', 'lineHeight': '1.8'}),
 
             html.Div([
-                html.P(f'Bid vol: {initial_bid}', id='bid-volume', style={'fontSize': '12px'}),
-                html.P(f'Ask vol: {initial_ask}', id='ask-volume', style={'fontSize': '12px'}),
+                html.P(f'Bid vol: {initial_bid}', id='bid-volume', style={'fontSize': '12px', 'margin': '5px'}),
+                html.P(f'Ask vol: {initial_ask}', id='ask-volume', style={'fontSize': '12px', 'margin': '5px'}),
             ], style={'borderTop': '1px solid black'}),
 
             html.Div([
                 html.P(f'Predicted: {initial_predicted_price}', id='predicted-price',
-                       style={'fontSize': '12px', 'margin': '0'}),
+                       style={'fontSize': '12px', 'margin': '5px'}),
                 html.P(f'Current: {initial_current_price}', id='current-price', style={
-                    'fontSize': '12px', 'margin': '0'}),
+                    'fontSize': '12px', 'margin': '5px'}),
                 html.P(f'Diff: {initial_predicted_price - initial_current_price}', id='price-difference',
-                       style={'fontSize': '12px', 'margin': '0'}),
+                       style={'fontSize': '12px', 'margin': '5px'}),
             ], style={'borderTop': '1px solid black', 'lineHeight': '1.8'}),
 
             html.Div([
-                html.P(f'RSI: {initial_rsi}', id='rsi', style={'fontSize': '12px', 'margin': '0'}),
+                html.P(f'RSI: {initial_rsi}', id='rsi', style={'fontSize': '12px', 'margin': '5px'}),
                 html.P(f'Over 200EMA: {initial_over_200EMA}', id='over-200ema', style={
                     'fontSize': '12px', 'margin': '0'}),
-                html.P(f'MACD up trend: {initial_MACD_uptrend}', id='macd-trend',
-                       style={'fontSize': '12px', 'margin': '0'}),
-                html.P(f'bb distance MA: {initial_bb_MA_distance}', id='bb-distance',
-                       style={'fontSize': '12px', 'margin': '0'}),
+                html.P(f'MACD up tr: {initial_MACD_uptrend}', id='macd-trend',
+                       style={'fontSize': '12px', 'margin': '5px'}),
+                html.P(f'bb distance: {initial_bb_MA_distance}', id='bb-distance',
+                       style={'fontSize': '12px', 'margin': '5px'}),
             ], style={'borderTop': '1px solid black', 'lineHeight': '1.8'}),
 
             html.Div([
                 html.P(f'Rich receive: {initial_BTC_received}', id='btc-received',
                        style={'fontSize': '12px', 'margin': '0'}),
-                html.P(f'Rich send: {initial_BTC_send}', id='btc-sent', style={'fontSize': '12px', 'margin': '0'}),
+                html.P(f'Rich send: {initial_BTC_send}', id='btc-sent', style={'fontSize': '12px', 'margin': '5px'}),
             ], style={'borderTop': '1px solid black', 'lineHeight': '1.8'}),
 
             html.Div([
@@ -294,7 +295,7 @@ def update_graph_live(n):
         weighted_score_up, weighted_score_down, 'order_book',  show_number=True), row=2, col=5)
 
     fig.update_layout(
-        font=dict(size=10)
+        font=dict(size=9)
     )
 
     return fig
@@ -363,10 +364,10 @@ def update_values(n):
 
     return (new_fed_rate, new_cpi_rate, new_ppi_rate,
             new_fed_announcement, new_cpi_announcement, new_ppi_announcement,
-            f'Trading State: {new_trading_state}', f'Bid vol: {new_bid_volume}', f'Ask vol: {new_ask_volume}',
+            f'T State: {new_trading_state}', f'Bid vol: {new_bid_volume}', f'Ask vol: {new_ask_volume}',
             f'Predicted: {new_predicted_price}', f'Current: {new_current_price}', f'Diff: {new_price_difference}',
-            f'RSI: {new_rsi}', f'Over 200EMA: {new_over_200ema}', f'MACD up trend: {new_macd_trend}',
-            f'bb distance MA: {new_bb_distance}', f'Rich receive: {new_btc_received}',
+            f'RSI: {new_rsi}', f'Over 200EMA: {new_over_200ema}', f'MACD up tr: {new_macd_trend}',
+            f'bb distance: {new_bb_distance}', f'Rich receive: {new_btc_received}',
             f'Rich send: {new_btc_sent}', f'+ news increase: {new_positive_news}',
             f'- news increase: {new_negative_news}')
 

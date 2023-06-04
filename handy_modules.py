@@ -97,7 +97,7 @@ def check_internet_connection() -> bool:
     try:
         requests.get("http://www.google.com", timeout=5)
         return True
-    except requests.ConnectionError:
+    except (requests.ConnectionError, requests.exceptions.Timeout, requests.exceptions.ReadTimeout):
         logging.warning("No internet connection available.")
         return False
 
