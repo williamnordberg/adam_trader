@@ -2,6 +2,7 @@ import logging
 from database import save_value_to_database
 from typing import Dict, List, Tuple
 from datetime import datetime, timedelta
+from handy_modules import save_float_to_latest_saved, save_update_time
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -107,6 +108,11 @@ def make_trading_decision(macro_bullish: float, macro_bearish: float,
         normalized_score_up = weighted_score_up / total_score
         normalized_score_down = weighted_score_down / total_score
 
+        # Save the latest weighted score
+        save_float_to_latest_saved('latest_weighted_score_up', normalized_score_up)
+        save_float_to_latest_saved('latest_weighted_score_down', normalized_score_down)
+        save_update_time('weighted_score')
+
         # Save to database Check if an hour has passed since the last database update
         current_time = datetime.now()
         last_hour = current_time.replace(minute=0, second=0, microsecond=0)
@@ -120,6 +126,10 @@ def make_trading_decision(macro_bullish: float, macro_bearish: float,
 
         return round(normalized_score_up, 2), round(normalized_score_down, 2)    # ...
     else:
+        # Save the latest weighted score
+        save_float_to_latest_saved('latest_weighted_score_up', 0.0)
+        save_float_to_latest_saved('latest_weighted_score_down', 0.0)
+        save_update_time('weighted_score')
         logging.info(f"Minimum contributing factors not met: {num_contributing_factors}/{MIN_CONTRIBUTING_FACTORS}")
         return 0.0, 0.0
 

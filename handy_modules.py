@@ -32,7 +32,8 @@ update_intervals = {
     "reddit": timedelta(hours=8),
     "youtube": timedelta(hours=4),
     "sentiment_of_news": timedelta(hours=1),
-    "richest_addresses_scrap": timedelta(hours=12)
+    "richest_addresses_scrap": timedelta(hours=12),
+    "weighted_score": timedelta(minutes=10),
 }
 
 
@@ -305,7 +306,7 @@ def read_current_trading_state() -> str:
 
 def save_float_to_latest_saved(column: str, value: float):
     latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
-    latest_info_saved.loc[0, f'{column}'] = value
+    latest_info_saved.loc[0, f'{column}'] = round(value, 2)
     latest_info_saved.to_csv(LATEST_INFO_FILE, index=False)
 
 
@@ -352,7 +353,7 @@ def compare_reddit(current_activity: float, previous_activity: float) -> Tuple[f
     return 0, 0
 
 
-def save_trade_details(wighted_score: float, position_opening_time: str,
+def save_trade_details(weighted_score: float, position_opening_time: str,
                        position_closing_time: str, position_type: str,
                        opening_price: int, close_price: int, pnl: float):
 
@@ -361,7 +362,7 @@ def save_trade_details(wighted_score: float, position_opening_time: str,
 
     # Create a new row with the provided trade details
     new_row = {
-        'wighted_score': wighted_score,
+        'weighted_score': weighted_score,
         'position_opening_time': position_opening_time,
         'position_closing_time': position_closing_time,
         'position_type': position_type,
@@ -396,7 +397,7 @@ def save_trade_result(pnl: float, weighted_score: float, trade_type: str):
         weighted_score_category = '80to100'
 
     # Locate the row with the specific model_name
-    row_index = df[df['wighted_score_category'] == weighted_score_category].index[0]
+    row_index = df[df['weighted_score_category'] == weighted_score_category].index[0]
 
     # Update the number_of_trades and PNL values for the specific model
     df.loc[row_index, 'total_trades'] += 1
