@@ -2,6 +2,8 @@ import logging
 from time import sleep
 from multiprocessing import Process
 import datetime
+import signal
+import sys
 
 from handy_modules import compare_send_receive_richest_addresses, get_bitcoin_price, \
     save_trade_details, save_trade_result, save_trading_state,\
@@ -153,7 +155,20 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
         sleep(60 * 20)  # Sleep for 20 minutes
 
 
+def signal_handler(sig, frame):
+    print('Received interrupt signal. Cleaning up...')
+    # Stop child processes here.
+    visualization_process.terminate()
+    visualization_charts_process.terminate()
+    visualization_trade_result_process.terminate()
+    process.terminate()
+    sys.exit(0)
+
+
 if __name__ == "__main__":
+
+    # Register the signal handler
+    signal.signal(signal.SIGINT, signal_handler)
 
     visualization_process = Process(target=run_visualize_database)
     visualization_process.start()
