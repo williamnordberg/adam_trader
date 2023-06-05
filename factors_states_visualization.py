@@ -47,8 +47,8 @@ def visualize_charts():
     else:
         order_book_bullish = database['order_book_bullish'][-1]
         order_book_bearish = database['order_book_bearish'][-1]
-        weighted_score_up = database['weighted_score_up'][-1]
-        weighted_score_down = database['weighted_score_down'][-1]
+        weighted_score_up = latest_info_saved.iloc[0]['latest_weighted_score_up']
+        weighted_score_down = latest_info_saved.iloc[0]['latest_weighted_score_down']
 
     fig = make_subplots(rows=2, cols=5,
                         specs=[[{"type": "indicator"}] * 5] * 2,
@@ -75,7 +75,7 @@ def visualize_charts():
     fig.add_trace(create_gauge_chart(
         news_bullish, news_bearish, 'sentiment_of_news',  show_number=False), row=2, col=4)
     fig.add_trace(create_gauge_chart(
-        weighted_score_up, weighted_score_down, 'predicted_price',  show_number=True), row=2, col=5)
+        weighted_score_up, weighted_score_down, 'weighted_score',  show_number=True), row=2, col=5)
 
     fig.update_layout(
         font=dict(size=10)
@@ -262,8 +262,8 @@ def update_graph_live(n):
     else:
         order_book_bullish = database['order_book_bullish'][-1]
         order_book_bearish = database['order_book_bearish'][-1]
-        weighted_score_up = database['weighted_score_up'][-1]
-        weighted_score_down = database['weighted_score_down'][-1]
+        weighted_score_up = latest_info_saved.iloc[0]['latest_weighted_score_up']
+        weighted_score_down = latest_info_saved.iloc[0]['latest_weighted_score_down']
 
     fig = make_subplots(rows=2, cols=5,
                         specs=[[{"type": "indicator"}] * 5] * 2,
@@ -292,7 +292,7 @@ def update_graph_live(n):
     fig.add_trace(create_gauge_chart(
         news_bullish, news_bearish, 'sentiment_of_news',  show_number=False), row=2, col=4)
     fig.add_trace(create_gauge_chart(
-        weighted_score_up, weighted_score_down, 'order_book',  show_number=True), row=2, col=5)
+        weighted_score_up, weighted_score_down, 'weighted_score',  show_number=True), row=2, col=5)
 
     fig.update_layout(
         font=dict(size=9)
