@@ -16,49 +16,40 @@ DATABASE_PATH = 'data/database.csv'
 APP_UPDATE_TIME = 50
 
 
-def read_gauge_chart_data():
+def visualize_charts():
     database = read_database()
     latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
+    initial_trading_state = latest_info_saved.iloc[0]['latest_trading_state']
 
-    data_dict = {
-        'trading_state': latest_info_saved.iloc[0]['latest_trading_state'],
-        'macro_bullish': database['macro_bullish'][-1],
-        'macro_bearish': database['macro_bearish'][-1],
-        'prediction_bullish': database['prediction_bullish'][-1],
-        'prediction_bearish': database['prediction_bearish'][-1],
-        'technical_bullish': database['technical_bullish'][-1],
-        'technical_bearish': database['technical_bearish'][-1],
-        'richest_addresses_bullish': database['richest_addresses_bullish'][-1],
-        'richest_addresses_bearish': database['richest_addresses_bearish'][-1],
-        'google_search_bullish': database['google_search_bullish'][-1],
-        'google_search_bearish': database['google_search_bearish'][-1],
-        'reddit_bullish': database['reddit_bullish'][-1],
-        'reddit_bearish': database['reddit_bearish'][-1],
-        'youtube_bullish': database['youtube_bullish'][-1],
-        'youtube_bearish': database['youtube_bearish'][-1],
-        'news_bullish': database['news_bullish'][-1],
-        'news_bearish': database['news_bearish'][-1],
-        'weighted_score_up': latest_info_saved.iloc[0]['latest_weighted_score_up'],
-        'weighted_score_down': latest_info_saved.iloc[0]['latest_weighted_score_down'],
-    }
+    macro_bullish = database['macro_bullish'][-1]
+    macro_bearish = database['macro_bearish'][-1]
+    prediction_bullish = database['prediction_bullish'][-1]
+    prediction_bearish = database['prediction_bearish'][-1]
+    technical_bullish = database['technical_bullish'][-1]
+    technical_bearish = database['technical_bearish'][-1]
+    richest_addresses_bullish = database['richest_addresses_bullish'][-1]
+    richest_addresses_bearish = database['richest_addresses_bearish'][-1]
+    google_search_bullish = database['google_search_bullish'][-1]
+    google_search_bearish = database['google_search_bearish'][-1]
+    reddit_bullish = database['reddit_bullish'][-1]
+    reddit_bearish = database['reddit_bearish'][-1]
+    youtube_bullish = database['youtube_bullish'][-1]
+    youtube_bearish = database['youtube_bearish'][-1]
+    news_bullish = database['news_bullish'][-1]
+    news_bearish = database['news_bearish'][-1]
 
-    if data_dict['trading_state'] in ['long', 'short']:
-        data_dict.update({
-            'order_book_bullish': latest_info_saved.iloc[0]['order_book_hit_profit'],
-            'order_book_bearish': latest_info_saved.iloc[0]['order_book_hit_loss']
-        })
+    if initial_trading_state == 'long' or initial_trading_state == 'short':
+        order_book_bullish = latest_info_saved.iloc[0]['order_book_hit_profit']
+        order_book_bearish = latest_info_saved.iloc[0]['order_book_hit_loss']
+        weighted_score_up = latest_info_saved.iloc[0]['score_profit_position']
+        weighted_score_down = latest_info_saved.iloc[0]['score_loss_position']
+
     else:
-        data_dict.update({
-            'order_book_bullish': database['order_book_bullish'][-1],
-            'order_book_bearish': database['order_book_bearish'][-1]
-        })
+        order_book_bullish = database['order_book_bullish'][-1]
+        order_book_bearish = database['order_book_bearish'][-1]
+        weighted_score_up = latest_info_saved.iloc[0]['latest_weighted_score_up']
+        weighted_score_down = latest_info_saved.iloc[0]['latest_weighted_score_down']
 
-    return data_dict
-
-
-# noinspection PyTypeChecker
-def create_gauge_charts():
-    data_dict = read_gauge_chart_data()
     fig = make_subplots(rows=2, cols=5,
                         specs=[[{"type": "indicator"}] * 5] * 2,
                         subplot_titles=["Macro Sentiment", "Order Book", "Prediction", "Technical Analysis",
@@ -66,91 +57,58 @@ def create_gauge_charts():
                                         "YouTube Sentiment", "News Sentiment", "Weighted Score"])
 
     fig.add_trace(create_gauge_chart(
-        data_dict['macro_bullish'], data_dict['macro_bearish'], 'macro', show_number=True), row=1, col=1)
+        macro_bullish, macro_bearish, 'macro', show_number=False), row=1, col=1)
     fig.add_trace(create_gauge_chart(
-        data_dict['order_book_bullish'], data_dict['order_book_bearish'],
-        'order_book', show_number=True), row=1, col=2)
+        order_book_bullish, order_book_bearish, 'order_book', show_number=False), row=1, col=2)
     fig.add_trace(create_gauge_chart(
-        data_dict['prediction_bullish'], data_dict['prediction_bearish'],
-        'predicted_price', show_number=True), row=1, col=3)
+        prediction_bullish, prediction_bearish, 'predicted_price', show_number=False), row=1, col=3)
     fig.add_trace(create_gauge_chart(
-        data_dict['technical_bullish'], data_dict['technical_bearish'],
-        'technical_analysis', show_number=True), row=1, col=4)
-    fig.add_trace(create_gauge_chart(data_dict['richest_addresses_bullish'], data_dict['richest_addresses_bearish'],
-                                     'richest_addresses', show_number=True), row=1, col=5)
+        technical_bullish, technical_bearish, 'technical_analysis',  show_number=False), row=1, col=4)
+    fig.add_trace(create_gauge_chart(richest_addresses_bullish, richest_addresses_bearish,
+                                     'richest_addresses', show_number=False), row=1, col=5)
     fig.add_trace(create_gauge_chart(
-        data_dict['google_search_bullish'], data_dict['google_search_bearish'],
-        'google_search', show_number=True), row=2, col=1)
+        google_search_bullish, google_search_bearish, 'google_search',  show_number=False), row=2, col=1)
     fig.add_trace(create_gauge_chart(
-        data_dict['reddit_bullish'], data_dict['reddit_bearish'], 'reddit', show_number=True), row=2, col=2)
+        reddit_bullish, reddit_bearish, 'reddit',  show_number=False), row=2, col=2)
     fig.add_trace(create_gauge_chart(
-        data_dict['youtube_bullish'], data_dict['youtube_bearish'], 'youtube', show_number=True), row=2, col=3)
+        youtube_bullish, youtube_bearish, 'youtube',  show_number=False), row=2, col=3)
     fig.add_trace(create_gauge_chart(
-        data_dict['news_bullish'], data_dict['news_bearish'], 'sentiment_of_news', show_number=True), row=2, col=4)
+        news_bullish, news_bearish, 'sentiment_of_news',  show_number=False), row=2, col=4)
     fig.add_trace(create_gauge_chart(
-        data_dict['weighted_score_up'], data_dict['weighted_score_down'],
-        'weighted_score', show_number=True), row=2, col=5)
+        weighted_score_up, weighted_score_down, 'weighted_score',  show_number=True), row=2, col=5)
 
     fig.update_layout(
         font=dict(size=10)
     )
 
-    return fig
+    fed_rate_m_to_m_read = float(latest_info_saved['fed_rate_m_to_m'][0])
+    initial_fed_rate_m_to_m = f'Fed rate MtoM: {fed_rate_m_to_m_read}'
 
+    cpi_m_to_m_read = float(latest_info_saved['cpi_m_to_m'][0])
+    initial_cpi_m_to_m = f'CPI MtoM: {cpi_m_to_m_read}'
 
-def read_layout_data():
-    database = read_database()
-    latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
-    fed_announcement, cpi_announcement, ppi_announcement = calculate_upcoming_events()
+    ppi_m_to_m_read = float(latest_info_saved['ppi_m_to_m'][0])
+    initial_ppi_m_to_m = f'PPI MtoM: {ppi_m_to_m_read}'
 
-    layout_data = {
-        "trading_state": f'Trading state: {latest_info_saved["latest_trading_state"][0]}',
-        "fed_rate_m_to_m": f'Fed rate MtoM: {float(latest_info_saved["fed_rate_m_to_m"][0])}',
-        "cpi_m_to_m": f'CPI MtoM: {float(latest_info_saved["cpi_m_to_m"][0])}',
-        "ppi_m_to_m": f'PPI MtoM: {float(latest_info_saved["ppi_m_to_m"][0])}',
-        "bid_volume": int(database['bid_volume'][-1]),
-        "ask_volume": int(database['ask_volume'][-1]),
-        "predicted_price": database['predicted_price'][-1],
-        "current_price": get_bitcoin_price(),
-        "rsi": float(latest_info_saved['latest_rsi'][0]),
-        "over_200EMA": latest_info_saved['over_200EMA'][0],
-        "MACD_uptrend": database['technical_potential_up_trend'][-1],
-        "bb_MA_distance": latest_info_saved['bb_band_MA_distance'][0],
-        "BTC_received": int(latest_info_saved['total_received_coins_in_last_24'][0]),
-        "BTC_send": int(latest_info_saved['total_sent_coins_in_last_24'][0]),
-        "positive_news_polarity_change": round(latest_info_saved['positive_news_polarity_change'][0], 0),
-        "negative_news_polarity_change": round(latest_info_saved['negative_news_polarity_change'][0], 0),
-        "fed_announcement": fed_announcement,
-        "cpi_announcement": cpi_announcement,
-        "ppi_announcement": ppi_announcement
-    }
+    initial_bid = int(database['bid_volume'][-1])
 
-    return layout_data
+    initial_ask = int(database['ask_volume'][-1])
 
+    initial_predicted_price = database['predicted_price'][-1]
+    initial_current_price = get_bitcoin_price()
 
-def create_layout(fig):
-    layout_data = read_layout_data()
+    initial_rsi = float(latest_info_saved['latest_rsi'][0])
+    initial_over_200EMA = latest_info_saved['over_200EMA'][0]
+    initial_MACD_uptrend = database['technical_potential_up_trend'][-1]
+    initial_bb_MA_distance = latest_info_saved['bb_band_MA_distance'][0]
 
-    # Extracting data from layout_data dictionary
-    initial_trading_state = layout_data["trading_state"]
-    initial_fed_rate_m_to_m = layout_data["fed_rate_m_to_m"]
-    initial_cpi_m_to_m = layout_data["cpi_m_to_m"]
-    initial_ppi_m_to_m = layout_data["ppi_m_to_m"]
-    initial_bid = layout_data["bid_volume"]
-    initial_ask = layout_data["ask_volume"]
-    initial_predicted_price = layout_data["predicted_price"]
-    initial_current_price = layout_data["current_price"]
-    initial_rsi = layout_data["rsi"]
-    initial_over_200EMA = layout_data["over_200EMA"]
-    initial_MACD_uptrend = layout_data["MACD_uptrend"]
-    initial_bb_MA_distance = layout_data["bb_MA_distance"]
-    initial_BTC_received = layout_data["BTC_received"]
-    initial_BTC_send = layout_data["BTC_send"]
-    initial_positive_news_polarity_change = layout_data["positive_news_polarity_change"]
-    initial_negative_news_polarity_change = layout_data["negative_news_polarity_change"]
-    initial_fed_announcement = layout_data["fed_announcement"]
-    initial_cpi_announcement = layout_data["cpi_announcement"]
-    initial_ppi_announcement = layout_data["ppi_announcement"]
+    initial_BTC_received = int(latest_info_saved['total_received_coins_in_last_24'][0])
+    initial_BTC_send = int(latest_info_saved['total_sent_coins_in_last_24'][0])
+
+    initial_positive_news_polarity_change = round(latest_info_saved['positive_news_polarity_change'][0], 0)
+    initial_negative_news_polarity_change = round(latest_info_saved['negative_news_polarity_change'][0], 0)
+
+    initial_fed_announcement, initial_cpi_announcement, initial_ppi_announcement = calculate_upcoming_events()
 
     fed_rate_tooltip = dbc.Tooltip(
         "Federal interest rate month to month increase",
@@ -268,15 +226,78 @@ def create_layout(fig):
     app.run_server(host='0.0.0.0', port=8051, debug=False)
 
 
-def visualize_charts():
-    fig = create_gauge_charts()
-    create_layout(fig)
-
-
 @app.callback(Output('live-update-graph', 'figure'),
               [Input('interval-component', 'n_intervals')])
-def update_gauge_chart_live(n):
-    fig = create_gauge_charts()
+def update_graph_live(n):
+    # This function should return new values for all your variables.
+    database = read_database()
+
+    latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
+
+    initial_trading_state = latest_info_saved.iloc[0]['latest_trading_state']
+
+    macro_bullish = database['macro_bullish'][-1]
+    macro_bearish = database['macro_bearish'][-1]
+    prediction_bullish = database['prediction_bullish'][-1]
+    prediction_bearish = database['prediction_bearish'][-1]
+    technical_bullish = database['technical_bullish'][-1]
+    technical_bearish = database['technical_bearish'][-1]
+    richest_addresses_bullish = database['richest_addresses_bullish'][-1]
+    richest_addresses_bearish = database['richest_addresses_bearish'][-1]
+    google_search_bullish = database['google_search_bullish'][-1]
+    google_search_bearish = database['google_search_bearish'][-1]
+    reddit_bullish = database['reddit_bullish'][-1]
+    reddit_bearish = database['reddit_bearish'][-1]
+    youtube_bullish = database['youtube_bullish'][-1]
+    youtube_bearish = database['youtube_bearish'][-1]
+    news_bullish = database['news_bullish'][-1]
+    news_bearish = database['news_bearish'][-1]
+
+    if initial_trading_state == 'long' or initial_trading_state == 'short':
+        order_book_bullish = latest_info_saved.iloc[0]['order_book_hit_profit']
+        order_book_bearish = latest_info_saved.iloc[0]['order_book_hit_loss']
+        weighted_score_up = latest_info_saved.iloc[0]['score_profit_position']
+        weighted_score_down = latest_info_saved.iloc[0]['score_loss_position']
+
+    else:
+        order_book_bullish = database['order_book_bullish'][-1]
+        order_book_bearish = database['order_book_bearish'][-1]
+        weighted_score_up = latest_info_saved.iloc[0]['latest_weighted_score_up']
+        weighted_score_down = latest_info_saved.iloc[0]['latest_weighted_score_down']
+
+    fig = make_subplots(rows=2, cols=5,
+                        specs=[[{"type": "indicator"}] * 5] * 2,
+                        subplot_titles=["Macro Sentiment", "Order Book", "Prediction", "Technical Analysis",
+                                        "Richest Addresses", "Google Search Trend", "Reddit Sentiment",
+                                        "YouTube Sentiment", "News Sentiment", "Weighted Score"])
+    fig.for_each_annotation(lambda a: a.update(font=dict(size=15)))  # Update font size for each annotation
+
+    fig.add_trace(create_gauge_chart(
+        macro_bullish, macro_bearish, 'macro', show_number=False), row=1, col=1)
+    fig.add_trace(create_gauge_chart(
+        order_book_bullish, order_book_bearish, 'order_book', show_number=False), row=1, col=2)
+    fig.add_trace(create_gauge_chart(
+        prediction_bullish, prediction_bearish, 'predicted_price', show_number=False), row=1, col=3)
+    fig.add_trace(create_gauge_chart(
+        technical_bullish, technical_bearish, 'technical_analysis',  show_number=False), row=1, col=4)
+    fig.add_trace(create_gauge_chart(
+        richest_addresses_bullish, richest_addresses_bearish,
+        'richest_addresses', show_number=False), row=1, col=5)
+    fig.add_trace(create_gauge_chart(
+        google_search_bullish, google_search_bearish, 'google_search',  show_number=False), row=2, col=1)
+    fig.add_trace(create_gauge_chart(
+        reddit_bullish, reddit_bearish, 'reddit',  show_number=False), row=2, col=2)
+    fig.add_trace(create_gauge_chart(
+        youtube_bullish, youtube_bearish, 'youtube',  show_number=False), row=2, col=3)
+    fig.add_trace(create_gauge_chart(
+        news_bullish, news_bearish, 'sentiment_of_news',  show_number=False), row=2, col=4)
+    fig.add_trace(create_gauge_chart(
+        weighted_score_up, weighted_score_down, 'weighted_score',  show_number=True), row=2, col=5)
+
+    fig.update_layout(
+        font=dict(size=9)
+    )
+
     return fig
 
 
@@ -302,8 +323,7 @@ def update_gauge_chart_live(n):
     Output('positive-news', 'children'),
     Output('negative-news', 'children')
 ], [Input('interval-component', 'n_intervals')])
-def update_layout_values_live(n):
-
+def update_values(n):
     # This function should return new values for all your variables.
     database = read_database()
 

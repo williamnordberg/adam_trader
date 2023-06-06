@@ -502,7 +502,7 @@ def create_gauge_chart(bullish, bearish, factor, show_number=True):
         next_update_str = f"{int(hours_next_update)}h, {int(minutes_next_update)}m"
 
     if bullish == 0 and bearish == 0:
-        value = 50
+        value = 0
         gauge_steps = [
             {"range": [0, 1], "color": "lightgray"},
         ]
@@ -519,7 +519,6 @@ def create_gauge_chart(bullish, bearish, factor, show_number=True):
         bar_thickness = 1
 
     mode_str = "gauge+number+delta" if show_number else "gauge"
-
     return go.Indicator(
         mode=mode_str,
         value=value,
@@ -532,9 +531,10 @@ def create_gauge_chart(bullish, bearish, factor, show_number=True):
             "bar": {"color": "green", "thickness": bar_thickness},
             "steps": gauge_steps,
         },
-        number={"suffix": "%" if show_number and title == "" else "", "font": {"size": 10}},
+        number={"suffix": "" if show_number and title == "" else "", "font": {"size": 10}},
     )
 
 
 if __name__ == '__main__':
-    create_gauge_chart(1, 0, 'richest_addresses', show_number=False)
+    create_gauge_chart(0.8, 0.2, 'weighted_score', show_number=True)
+
