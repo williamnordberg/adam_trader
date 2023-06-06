@@ -8,7 +8,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="3" />
+    <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="3">
+      <change afterPath="$PROJECT_DIR$/TEST.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/old_factor_state_visualization.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/youtube_token.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/config/youtube_token.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/bitcoin_rich_list2000.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/bitcoin_rich_list2000.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/latest_info_saved.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/trades_results.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/trades_results.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database_visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_visualization.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/factors_states_visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/factors_states_visualization.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handy_modules.py" beforeDir="false" afterPath="$PROJECT_DIR$/handy_modules.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test2.py" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -83,15 +98,15 @@
       <recent name="C:\will\Python_project\adam_trader\datasets" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\will\Python_project\adam_trader\config" />
       <recent name="C:\will\Python_project\adam_trader\data" />
       <recent name="C:\will\Python_project\adam_trader" />
+      <recent name="C:\will\Python_project\adam_trader\config" />
       <recent name="C:\will\Python_project\adam_trader\logs" />
       <recent name="C:\will\Python_project\adam_trader\tests" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main">
-    <configuration name="factors_states_visualization" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.test">
+    <configuration name="factors_states_visualization (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -112,7 +127,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="macro_analyser" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="factors_states_visualization" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -124,7 +139,28 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/macro_analyser.py" />
+      <option name="SCRIPT_NAME" value="C:\will\Python_project\adam_trader\factors_states_visualization.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="handy_modules" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="adam_trader" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/handy_modules.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -154,7 +190,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -166,28 +202,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test2.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="test3" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="adam_trader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test3.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -212,20 +227,20 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.macro_analyser" />
-      <item itemvalue="Python.test3" />
+      <item itemvalue="Python.factors_states_visualization (1)" />
+      <item itemvalue="Python.handy_modules" />
+      <item itemvalue="Python.test" />
       <item itemvalue="Python.factors_states_visualization" />
       <item itemvalue="Python.main" />
-      <item itemvalue="Python.test2" />
       <item itemvalue="Python tests.Unittests with right config" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.test" />
+        <item itemvalue="Python.handy_modules" />
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.factors_states_visualization (1)" />
         <item itemvalue="Python.factors_states_visualization" />
-        <item itemvalue="Python.test2" />
-        <item itemvalue="Python.macro_analyser" />
-        <item itemvalue="Python.test3" />
       </list>
     </recent_temporary>
   </component>
@@ -237,27 +252,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00246" summary="3">
-      <created>1684807864857</created>
-      <option name="number" value="00246" />
-      <option name="presentableId" value="LOCAL-00246" />
-      <option name="project" value="LOCAL" />
-      <updated>1684807864857</updated>
-    </task>
-    <task id="LOCAL-00247" summary="3">
-      <created>1684909910503</created>
-      <option name="number" value="00247" />
-      <option name="presentableId" value="LOCAL-00247" />
-      <option name="project" value="LOCAL" />
-      <updated>1684909910503</updated>
-    </task>
-    <task id="LOCAL-00248" summary="3">
-      <created>1684986691332</created>
-      <option name="number" value="00248" />
-      <option name="presentableId" value="LOCAL-00248" />
-      <option name="project" value="LOCAL" />
-      <updated>1684986691332</updated>
     </task>
     <task id="LOCAL-00249" summary="3">
       <created>1684987099464</created>
@@ -581,7 +575,28 @@
       <option name="project" value="LOCAL" />
       <updated>1685953922486</updated>
     </task>
-    <option name="localTasksCounter" value="295" />
+    <task id="LOCAL-00295" summary="3">
+      <created>1685954700687</created>
+      <option name="number" value="00295" />
+      <option name="presentableId" value="LOCAL-00295" />
+      <option name="project" value="LOCAL" />
+      <updated>1685954700687</updated>
+    </task>
+    <task id="LOCAL-00296" summary="3">
+      <created>1685954838850</created>
+      <option name="number" value="00296" />
+      <option name="presentableId" value="LOCAL-00296" />
+      <option name="project" value="LOCAL" />
+      <updated>1685954838850</updated>
+    </task>
+    <task id="LOCAL-00297" summary="3">
+      <created>1685954961206</created>
+      <option name="number" value="00297" />
+      <option name="presentableId" value="LOCAL-00297" />
+      <option name="project" value="LOCAL" />
+      <updated>1685954961206</updated>
+    </task>
+    <option name="localTasksCounter" value="298" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
