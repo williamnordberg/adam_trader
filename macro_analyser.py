@@ -135,8 +135,8 @@ def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
         save_value_to_database('interest_rate', rate_this_month)
         save_value_to_database('cpi_m_to_m', cpi_m_to_m)
         save_value_to_database('ppi_m_to_m', ppi_m_to_m)
-        save_value_to_database('macro_bullish', macro_bullish)
-        save_value_to_database('macro_bearish', macro_bearish)
+        save_value_to_database('macro_bullish', round(macro_bullish, 2))
+        save_value_to_database('macro_bearish', round(macro_bearish, 2))
 
         latest_info_saved.to_csv(LATEST_INFO_SAVED, index=False)
         return macro_bullish, macro_bearish, events_date_dict
