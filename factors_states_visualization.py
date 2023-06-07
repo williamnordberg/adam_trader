@@ -11,6 +11,8 @@ from database import read_database
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
+BACKGROUND_COLOR = '#000000'
+TEXT_COLOR = '#FFFFFF'
 LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
 DATABASE_PATH = 'data/database.csv'
 APP_UPDATE_TIME = 50
@@ -66,34 +68,34 @@ def create_gauge_charts():
                                         "YouTube Sentiment", "News Sentiment", "Weighted Score"])
 
     fig.add_trace(create_gauge_chart(
-        data_dict['macro_bullish'], data_dict['macro_bearish'], 'macro', show_number=True), row=1, col=1)
+        data_dict['macro_bullish'], data_dict['macro_bearish'], 'macro'), row=1, col=1)
     fig.add_trace(create_gauge_chart(
-        data_dict['order_book_bullish'], data_dict['order_book_bearish'],
-        'order_book', show_number=True), row=1, col=2)
+        data_dict['order_book_bullish'], data_dict['order_book_bearish'], 'order_book'), row=1, col=2)
     fig.add_trace(create_gauge_chart(
         data_dict['prediction_bullish'], data_dict['prediction_bearish'],
-        'predicted_price', show_number=True), row=1, col=3)
+        'predicted_price'), row=1, col=3)
     fig.add_trace(create_gauge_chart(
         data_dict['technical_bullish'], data_dict['technical_bearish'],
-        'technical_analysis', show_number=True), row=1, col=4)
+        'technical_analysis'), row=1, col=4)
     fig.add_trace(create_gauge_chart(data_dict['richest_addresses_bullish'], data_dict['richest_addresses_bearish'],
-                                     'richest_addresses', show_number=True), row=1, col=5)
+                                     'richest_addresses'), row=1, col=5)
     fig.add_trace(create_gauge_chart(
         data_dict['google_search_bullish'], data_dict['google_search_bearish'],
-        'google_search', show_number=True), row=2, col=1)
+        'google_search'), row=2, col=1)
     fig.add_trace(create_gauge_chart(
-        data_dict['reddit_bullish'], data_dict['reddit_bearish'], 'reddit', show_number=True), row=2, col=2)
+        data_dict['reddit_bullish'], data_dict['reddit_bearish'], 'reddit'), row=2, col=2)
     fig.add_trace(create_gauge_chart(
-        data_dict['youtube_bullish'], data_dict['youtube_bearish'], 'youtube', show_number=True), row=2, col=3)
+        data_dict['youtube_bullish'], data_dict['youtube_bearish'], 'youtube'), row=2, col=3)
     fig.add_trace(create_gauge_chart(
-        data_dict['news_bullish'], data_dict['news_bearish'], 'sentiment_of_news', show_number=True), row=2, col=4)
+        data_dict['news_bullish'], data_dict['news_bearish'], 'sentiment_of_news'), row=2, col=4)
     fig.add_trace(create_gauge_chart(
         data_dict['weighted_score_up'], data_dict['weighted_score_down'],
-        'weighted_score', show_number=True), row=2, col=5)
+        'weighted_score'), row=2, col=5)
 
-    fig.update_layout(
-        font=dict(size=10)
-    )
+    fig.update_layout(plot_bgcolor=BACKGROUND_COLOR, paper_bgcolor=BACKGROUND_COLOR)
+
+    for annotation in fig['layout']['annotations']:
+        annotation['font'] = dict(color=TEXT_COLOR, size=16)  # set color and size of subplot titles
 
     return fig
 
@@ -105,7 +107,7 @@ def read_layout_data():
 
     layout_data = {
         "trading_state": f'Trading state: {latest_info_saved["latest_trading_state"][0]}',
-        "fed_rate_m_to_m": f'Fed rate MtoM: {float(latest_info_saved["fed_rate_m_to_m"][0])}',
+        "fed_rate_m_to_m": f'Fed rate MtM: {float(latest_info_saved["fed_rate_m_to_m"][0])}',
         "cpi_m_to_m": f'CPI MtoM: {float(latest_info_saved["cpi_m_to_m"][0])}',
         "ppi_m_to_m": f'PPI MtoM: {float(latest_info_saved["ppi_m_to_m"][0])}',
         "bid_volume": int(database['bid_volume'][-1]),
@@ -126,6 +128,63 @@ def read_layout_data():
     }
 
     return layout_data
+
+
+def generate_tooltips():
+    return [
+        dbc.Tooltip("Federal interest rate month to month increase", target='fed-rate', placement="bottom"),
+        dbc.Tooltip("Consumer Price Index month to month increase", target='cpi-rate', placement="bottom"),
+        dbc.Tooltip("Producer Price Index month to month increase", target='ppi-rate', placement="bottom"),
+        dbc.Tooltip("Federal announcement details", target='fed-announcement', placement="bottom"),
+        dbc.Tooltip("CPI announcement details", target='cpi-announcement', placement="bottom"),
+        dbc.Tooltip("PPI announcement details", target='ppi-announcement', placement="bottom"),
+        dbc.Tooltip("Trading state details", target='trading-state', placement="bottom"),
+        dbc.Tooltip("Bid volume details", target='bid-volume', placement="bottom"),
+        dbc.Tooltip("Ask volume details", target='ask-volume', placement="bottom"),
+        dbc.Tooltip("Predicted price details", target='predicted-price', placement="bottom"),
+        dbc.Tooltip("Current price details", target='current-price', placement="bottom"),
+        dbc.Tooltip("Price difference details", target='price-difference', placement="bottom"),
+        dbc.Tooltip("Relative Strength Index details", target='rsi', placement="bottom"),
+        dbc.Tooltip("Details over 200EMA", target='over-200ema', placement="bottom"),
+        dbc.Tooltip("MACD up trend details", target='macd-trend', placement="bottom"),
+        dbc.Tooltip("Bollinger Bands distance details", target='bb-distance', placement="bottom"),
+        dbc.Tooltip("Details of rich receiving Bitcoin", target='btc-received', placement="bottom"),
+        dbc.Tooltip("Details of rich sending Bitcoin", target='btc-sent', placement="bottom"),
+        dbc.Tooltip("Positive news increase details", target='positive-news', placement="bottom"),
+        dbc.Tooltip("Negative news increase details", target='negative-news', placement="bottom"),
+        dbc.Tooltip("Macro sentiment is a measure of the overall sentiment towards Bitcoin. "
+                    "This sentiment can be influenced by a variety of factors, such as the current economic climate, "
+                    "the sentiment towards cryptocurrencies in general, and news events related to Bitcoin.",
+                    target='macro'),
+        dbc.Tooltip("Order Book represents the interest of buyers and sellers for Bitcoin at various price levels. "
+                    "A higher number of buy orders compared to sell orders can indicate bullish sentiment.",
+                    target='order_book'),
+        dbc.Tooltip("This is the prediction of the future price of Bitcoin based on our algorithm. "
+                    "A positive number indicates a bullish prediction.",
+                    target='predicted_price'),
+        dbc.Tooltip(
+            "Technical Analysis is a method of predicting the future price of Bitcoin based on past market data, "
+            "primarily price and volume. A positive number indicates a bullish technical analysis.",
+            target='technical_analysis'),
+        dbc.Tooltip("This shows the actions of the richest Bitcoin addresses. If they are buying more than selling, "
+                    "it could indicate bullish sentiment.",
+                    target='richest_addresses'),
+        dbc.Tooltip("Google Search Trend indicates the interest over time for Bitcoin on Google's search engine. "
+                    "An increase in search interest may indicate bullish sentiment.",
+                    target='google_search'),
+        dbc.Tooltip("Reddit Sentiment represents the overall sentiment towards Bitcoin in Reddit comments. "
+                    "A positive number indicates a bullish sentiment.",
+                    target='reddit'),
+        dbc.Tooltip("YouTube Sentiment represents the overall sentiment towards Bitcoin in YouTube comments. "
+                    "A positive number indicates a bullish sentiment.",
+                    target='youtube'),
+        dbc.Tooltip("News Sentiment represents the overall sentiment towards Bitcoin in news articles. "
+                    "A positive number indicates a bullish sentiment.",
+                    target='sentiment_of_news'),
+        dbc.Tooltip("Weighted Score is a composite measure that takes into account all the factors above. "
+                    "A positive score indicates bullish sentiment.",
+                    target='weighted_score'),
+    ]
 
 
 def create_layout(fig):
@@ -152,19 +211,13 @@ def create_layout(fig):
     initial_cpi_announcement = layout_data["cpi_announcement"]
     initial_ppi_announcement = layout_data["ppi_announcement"]
 
-    fed_rate_tooltip = dbc.Tooltip(
-        "Federal interest rate month to month increase",
-        target='fed-rate',  # Notice the id here matches the id of html.A component
-        placement="bottom",
-    )
-
-    app.layout = html.Div([
+    app.layout = html.Div(style={'backgroundColor': BACKGROUND_COLOR, 'color': TEXT_COLOR}, children=[
         dcc.Interval(
             id='timer-interval-component',
             interval=5 * 1000,  # in milliseconds
             n_intervals=0
         ),
-        dbc.Progress(value=50, color="success", striped=True, animated=True, id="progress"),
+        dbc.Progress(value=50, color=BACKGROUND_COLOR, striped=True, animated=True, id="progress", className="custom-progress"),
         dbc.Popover(
             [
                 dbc.PopoverHeader("Next update time"),
@@ -182,7 +235,6 @@ def create_layout(fig):
                 interval=APP_UPDATE_TIME * 1000,  # in milliseconds
                 n_intervals=0
                 ),
-
         html.Div(id='timer'),
         dcc.Graph(id='live-update-graph', figure=fig, style={
             'width': '90%', 'height': '100vh', 'display': 'inline-block'}),
@@ -190,81 +242,82 @@ def create_layout(fig):
         html.Div([
             html.Div([
 
-                html.A(  # This is your new link for Fed rate MtoM
+                html.A(
                     f'{initial_fed_rate_m_to_m}',
                     id='fed-rate',
                     target='_blank',  # Opens link in new tab
-                    href="http://fast.com",  # Replace with your desired URL
-                    style={'fontSize': '12px'}
+                    href="https://www.forexfactory.com/calendar",
+                    style={'fontSize': '13px'}
                 ),
-                fed_rate_tooltip,
                 html.P(f'CPI MtoM: {initial_cpi_m_to_m}', id='cpi-rate', style={
-                    'fontSize': '12px', 'marginBottom': '5px'}),
+                    'fontSize': '13px', 'marginBottom': '0px'}),
                 html.P(f'PPI MtoM: {initial_ppi_m_to_m}', id='ppi-rate', style={
-                    'fontSize': '12px', 'marginBottom': '5px'}),
+                    'fontSize': '13px', 'marginBottom': '0px'}),
 
                 html.P(initial_fed_announcement if initial_fed_announcement != '' else "",
                        id='fed-announcement',
-                       style={'fontSize': '11px',
+                       style={'fontSize': '13px',
                               'color': 'red' if initial_fed_announcement != '' else None,
                               'fontWeight': 'bold' if initial_fed_announcement != '' else None}),
 
                 html.P(initial_cpi_announcement if initial_cpi_announcement != '' else "",
                        id='cpi-announcement',
-                       style={'fontSize': '11px', 'color': 'red' if initial_cpi_announcement != '' else None,
+                       style={'fontSize': '13px', 'color': 'red' if initial_cpi_announcement != '' else None,
                               'fontWeight': 'bold' if initial_cpi_announcement != '' else None}),
 
                 html.P(initial_ppi_announcement if initial_ppi_announcement else "",
                        id='ppi-announcement',
-                       style={'fontSize': '11px', 'color': 'red' if initial_ppi_announcement != '' else None,
+                       style={'fontSize': '13px', 'color': 'red' if initial_ppi_announcement != '' else None,
                               'fontWeight': 'bold' if initial_ppi_announcement != '' else None}),
 
             ]),
 
             html.Div([
                 html.P(f'T State: {initial_trading_state}', id='trading-state',
-                       style={'fontSize': '12px', 'margin': '5px'}),
-            ], style={'borderTop': '1px solid black', 'lineHeight': '1.8'}),
+                       style={'fontSize': '13px', 'margin': '0px'}),
+            ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
 
             html.Div([
-                html.P(f'Bid vol: {initial_bid}', id='bid-volume', style={'fontSize': '12px', 'margin': '5px'}),
-                html.P(f'Ask vol: {initial_ask}', id='ask-volume', style={'fontSize': '12px', 'margin': '5px'}),
-            ], style={'borderTop': '1px solid black'}),
+                html.P(f'Bid vol: {initial_bid}', id='bid-volume', style={'fontSize': '14px', 'margin': '0px'}),
+                html.P(f'Ask vol: {initial_ask}', id='ask-volume', style={'fontSize': '14px', 'margin': '0px'}),
+            ], style={'borderTop': '1px solid white'}),
 
             html.Div([
                 html.P(f'Predicted: {initial_predicted_price}', id='predicted-price',
-                       style={'fontSize': '12px', 'margin': '5px'}),
+                       style={'fontSize': '13px', 'margin': '0px'}),
                 html.P(f'Current: {initial_current_price}', id='current-price', style={
-                    'fontSize': '12px', 'margin': '5px'}),
+                    'fontSize': '13px', 'margin': '0px'}),
                 html.P(f'Diff: {initial_predicted_price - initial_current_price}', id='price-difference',
-                       style={'fontSize': '12px', 'margin': '5px'}),
-            ], style={'borderTop': '1px solid black', 'lineHeight': '1.8'}),
+                       style={'fontSize': '13px', 'margin': '0px'}),
+            ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
 
             html.Div([
-                html.P(f'RSI: {initial_rsi}', id='rsi', style={'fontSize': '12px', 'margin': '5px'}),
+                html.P(f'RSI: {initial_rsi}', id='rsi', style={'fontSize': '14px', 'margin': '0px'}),
                 html.P(f'Over 200EMA: {initial_over_200EMA}', id='over-200ema', style={
-                    'fontSize': '12px', 'margin': '0'}),
+                    'fontSize': '13px', 'margin': '0px'}),
                 html.P(f'MACD up tr: {initial_MACD_uptrend}', id='macd-trend',
-                       style={'fontSize': '12px', 'margin': '5px'}),
+                       style={'fontSize': '13px', 'margin': '0px'}),
                 html.P(f'bb distance: {initial_bb_MA_distance}', id='bb-distance',
-                       style={'fontSize': '12px', 'margin': '5px'}),
-            ], style={'borderTop': '1px solid black', 'lineHeight': '1.8'}),
+                       style={'fontSize': '13px', 'margin': '0px'}),
+            ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
 
             html.Div([
                 html.P(f'Rich receive: {initial_BTC_received}', id='btc-received',
-                       style={'fontSize': '12px', 'margin': '0'}),
-                html.P(f'Rich send: {initial_BTC_send}', id='btc-sent', style={'fontSize': '12px', 'margin': '5px'}),
-            ], style={'borderTop': '1px solid black', 'lineHeight': '1.8'}),
+                       style={'fontSize': '13px', 'margin': '0px'}),
+                html.P(f'Rich send: {initial_BTC_send}', id='btc-sent', style={'fontSize': '13px', 'margin': '0px'}),
+            ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
 
             html.Div([
                 html.P(f'+ news increase: {initial_positive_news_polarity_change}', id='positive-news',
-                       style={'fontSize': '12px', 'margin': '0'}),
+                       style={'fontSize': '12px', 'margin': '0px'}),
                 html.P(f'- news increase: {initial_negative_news_polarity_change}', id='negative-news',
-                       style={'fontSize': '12px', 'margin': '0'}),
-            ], style={'borderTop': '1px solid black', 'lineHeight': '1.8'}),
+                       style={'fontSize': '12px', 'margin': '0px'}),
+            ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
 
         ], style={'width': '10%', 'height': '100vh', 'display': 'inline-block', 'verticalAlign': 'top'}),
-    ])
+    ] + generate_tooltips()
+    )
+
     app.run_server(host='0.0.0.0', port=8051, debug=False)
 
 
@@ -311,7 +364,7 @@ def update_layout_values_live(n):
     new_trading_state = latest_info_saved.iloc[0]['latest_trading_state']
 
     fed_rate_m_to_m_read = float(latest_info_saved['fed_rate_m_to_m'][0])
-    new_fed_rate = f'Fed rate MtoM: {fed_rate_m_to_m_read}'
+    new_fed_rate = f'Fed rate MtM: {fed_rate_m_to_m_read}'
 
     cpi_m_to_m_read = float(latest_info_saved['cpi_m_to_m'][0])
     new_cpi_rate = f'CPI MtoM: {cpi_m_to_m_read}'

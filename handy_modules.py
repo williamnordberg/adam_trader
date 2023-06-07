@@ -525,17 +525,17 @@ def create_gauge_chart(bullish, bearish, factor):
         value=value,
         delta={"reference": 1},
         title={
-            "text": f"L: {last_update_time_str}, N: {next_update_str}",
-            "font": {"size": 10, "color": COLORS['gray_text']}
+            "text": f"L: {last_update_time_str},   N: {next_update_str}",
+            "font": {"size": 12, "color": COLORS['gray_text']}
         },
         domain={"x": [0, 1], "y": [0, 1]},
         gauge={
-            "axis": {"range": [0, 1], "tickcolor": COLORS['white']},
+            "axis": {"range": [0, 1], "showticklabels": False},
             "bar": {"color": COLORS['green_chart'], "thickness": bar_thickness},
             "steps": gauge_steps,
             "bgcolor": COLORS['black']
         },
-        number={"font": {"size": 10, "color": COLORS['white']}},
+        number={"font": {"size": 12, "color": COLORS['white']}},
     )
 
 

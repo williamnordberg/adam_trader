@@ -107,7 +107,7 @@ def read_layout_data():
 
     layout_data = {
         "trading_state": f'Trading state: {latest_info_saved["latest_trading_state"][0]}',
-        "fed_rate_m_to_m": f'Fed rate MtoM: {float(latest_info_saved["fed_rate_m_to_m"][0])}',
+        "fed_rate_m_to_m": f'Fed rate MtM: {float(latest_info_saved["fed_rate_m_to_m"][0])}',
         "cpi_m_to_m": f'CPI MtoM: {float(latest_info_saved["cpi_m_to_m"][0])}',
         "ppi_m_to_m": f'PPI MtoM: {float(latest_info_saved["ppi_m_to_m"][0])}',
         "bid_volume": int(database['bid_volume'][-1]),
@@ -217,7 +217,7 @@ def create_layout(fig):
             interval=5 * 1000,  # in milliseconds
             n_intervals=0
         ),
-        dbc.Progress(value=50, color="success", striped=True, animated=True, id="progress"),
+        dbc.Progress(value=50, color=BACKGROUND_COLOR, striped=True, animated=True, id="progress", className="custom-progress"),
         dbc.Popover(
             [
                 dbc.PopoverHeader("Next update time"),
@@ -247,64 +247,64 @@ def create_layout(fig):
                     id='fed-rate',
                     target='_blank',  # Opens link in new tab
                     href="https://www.forexfactory.com/calendar",
-                    style={'fontSize': '12px'}
+                    style={'fontSize': '13px'}
                 ),
                 html.P(f'CPI MtoM: {initial_cpi_m_to_m}', id='cpi-rate', style={
-                    'fontSize': '12px', 'marginBottom': '0px'}),
+                    'fontSize': '13px', 'marginBottom': '0px'}),
                 html.P(f'PPI MtoM: {initial_ppi_m_to_m}', id='ppi-rate', style={
-                    'fontSize': '12px', 'marginBottom': '0px'}),
+                    'fontSize': '13px', 'marginBottom': '0px'}),
 
                 html.P(initial_fed_announcement if initial_fed_announcement != '' else "",
                        id='fed-announcement',
-                       style={'fontSize': '11px',
+                       style={'fontSize': '13px',
                               'color': 'red' if initial_fed_announcement != '' else None,
                               'fontWeight': 'bold' if initial_fed_announcement != '' else None}),
 
                 html.P(initial_cpi_announcement if initial_cpi_announcement != '' else "",
                        id='cpi-announcement',
-                       style={'fontSize': '11px', 'color': 'red' if initial_cpi_announcement != '' else None,
+                       style={'fontSize': '13px', 'color': 'red' if initial_cpi_announcement != '' else None,
                               'fontWeight': 'bold' if initial_cpi_announcement != '' else None}),
 
                 html.P(initial_ppi_announcement if initial_ppi_announcement else "",
                        id='ppi-announcement',
-                       style={'fontSize': '11px', 'color': 'red' if initial_ppi_announcement != '' else None,
+                       style={'fontSize': '13px', 'color': 'red' if initial_ppi_announcement != '' else None,
                               'fontWeight': 'bold' if initial_ppi_announcement != '' else None}),
 
             ]),
 
             html.Div([
                 html.P(f'T State: {initial_trading_state}', id='trading-state',
-                       style={'fontSize': '12px', 'margin': '0px'}),
+                       style={'fontSize': '13px', 'margin': '0px'}),
             ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
 
             html.Div([
-                html.P(f'Bid vol: {initial_bid}', id='bid-volume', style={'fontSize': '12px', 'margin': '0px'}),
-                html.P(f'Ask vol: {initial_ask}', id='ask-volume', style={'fontSize': '12px', 'margin': '0px'}),
+                html.P(f'Bid vol: {initial_bid}', id='bid-volume', style={'fontSize': '14px', 'margin': '0px'}),
+                html.P(f'Ask vol: {initial_ask}', id='ask-volume', style={'fontSize': '14px', 'margin': '0px'}),
             ], style={'borderTop': '1px solid white'}),
 
             html.Div([
                 html.P(f'Predicted: {initial_predicted_price}', id='predicted-price',
-                       style={'fontSize': '12px', 'margin': '0px'}),
+                       style={'fontSize': '13px', 'margin': '0px'}),
                 html.P(f'Current: {initial_current_price}', id='current-price', style={
-                    'fontSize': '12px', 'margin': '0px'}),
+                    'fontSize': '13px', 'margin': '0px'}),
                 html.P(f'Diff: {initial_predicted_price - initial_current_price}', id='price-difference',
-                       style={'fontSize': '12px', 'margin': '0px'}),
+                       style={'fontSize': '13px', 'margin': '0px'}),
             ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
 
             html.Div([
-                html.P(f'RSI: {initial_rsi}', id='rsi', style={'fontSize': '12px', 'margin': '0px'}),
+                html.P(f'RSI: {initial_rsi}', id='rsi', style={'fontSize': '14px', 'margin': '0px'}),
                 html.P(f'Over 200EMA: {initial_over_200EMA}', id='over-200ema', style={
-                    'fontSize': '12px', 'margin': '0px'}),
+                    'fontSize': '13px', 'margin': '0px'}),
                 html.P(f'MACD up tr: {initial_MACD_uptrend}', id='macd-trend',
-                       style={'fontSize': '12px', 'margin': '0px'}),
+                       style={'fontSize': '13px', 'margin': '0px'}),
                 html.P(f'bb distance: {initial_bb_MA_distance}', id='bb-distance',
-                       style={'fontSize': '12px', 'margin': '0px'}),
+                       style={'fontSize': '13px', 'margin': '0px'}),
             ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
 
             html.Div([
                 html.P(f'Rich receive: {initial_BTC_received}', id='btc-received',
-                       style={'fontSize': '12px', 'margin': '0px'}),
-                html.P(f'Rich send: {initial_BTC_send}', id='btc-sent', style={'fontSize': '12px', 'margin': '0px'}),
+                       style={'fontSize': '13px', 'margin': '0px'}),
+                html.P(f'Rich send: {initial_BTC_send}', id='btc-sent', style={'fontSize': '13px', 'margin': '0px'}),
             ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
 
             html.Div([
@@ -317,6 +317,7 @@ def create_layout(fig):
         ], style={'width': '10%', 'height': '100vh', 'display': 'inline-block', 'verticalAlign': 'top'}),
     ] + generate_tooltips()
     )
+
     app.run_server(host='0.0.0.0', port=8051, debug=False)
 
 
@@ -363,7 +364,7 @@ def update_layout_values_live(n):
     new_trading_state = latest_info_saved.iloc[0]['latest_trading_state']
 
     fed_rate_m_to_m_read = float(latest_info_saved['fed_rate_m_to_m'][0])
-    new_fed_rate = f'Fed rate MtoM: {fed_rate_m_to_m_read}'
+    new_fed_rate = f'Fed rate MtM: {fed_rate_m_to_m_read}'
 
     cpi_m_to_m_read = float(latest_info_saved['cpi_m_to_m'][0])
     new_cpi_rate = f'CPI MtoM: {cpi_m_to_m_read}'
