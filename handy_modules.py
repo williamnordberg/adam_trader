@@ -478,121 +478,66 @@ def last_and_next_update(factor: str) -> Tuple[timedelta, timedelta]:
     return time_since_last_update, next_update
 
 
-def create_gauge_chart(bullish, bearish, factor, show_number=True):
+COLORS = {
+    'red_chart': '#ca3f64',
+    'green_chart': '#25a750',
+    'white': '#FFFFFF',
+    'black': '#000000',
+    'lightgray': '#545454',
+    'gray_text': '#fff'
+}
+
+
+def convert_time_to_str(timedelta_obj):
+    total_seconds = timedelta_obj.total_seconds()
+    hours = total_seconds // 3600
+    minutes = (total_seconds // 60) % 60
+
+    if int(hours) == 0:
+        return f"{int(minutes)}m"
+    else:
+        return f"{int(hours)}h {int(minutes)}m ago"
+
+
+def create_gauge_chart(bullish, bearish, factor):
     last_update_time, next_update = last_and_next_update(factor)
 
-    # Convert timedelta to total hours, minutes, seconds
-    total_seconds_since_last_update = last_update_time.total_seconds()
-    hours_since_last_update = total_seconds_since_last_update // 3600
-    minutes_since_last_update = (total_seconds_since_last_update // 60) % 60
-
-    # Check if hours are zero
-    if int(hours_since_last_update) == 0:
-        last_update_time_str = f"{int(minutes_since_last_update)}m"
-    else:
-        last_update_time_str = f"{int(hours_since_last_update)}h {int(minutes_since_last_update)}m ago"
-
-    total_seconds_next_update = next_update.total_seconds()
-    hours_next_update = total_seconds_next_update // 3600
-    minutes_next_update = (total_seconds_next_update // 60) % 60
-    # Check if hours are zero
-    if int(hours_next_update) == 0:
-        next_update_str = f"{int(minutes_next_update)}m"
-    else:
-        next_update_str = f"{int(hours_next_update)}h, {int(minutes_next_update)}m"
+    last_update_time_str = convert_time_to_str(last_update_time)
+    next_update_str = convert_time_to_str(next_update)
 
     if bullish == 0 and bearish == 0:
         value = 0
         gauge_steps = [
-            {"range": [0, 1], "color": "lightgray"},
+            {"range": [0, 1], "color": COLORS['lightgray']},
         ]
-        title = ""
         bar_thickness = 0
     else:
         value = round(((bullish / (bullish + bearish)) * 1), 2)
         gauge_steps = [
-            {"range": [0, 1], "color": "lightcoral"}
+            {"range": [0, 1], "color": COLORS['red_chart']}
         ]
-        title = " " if bullish > bearish else " "
-        # title = "Bull" if bullish > bearish else "Bear"
-
         bar_thickness = 1
 
-    mode_str = "gauge+number+delta" if show_number else "gauge"
+    mode_str = "gauge+number+delta"
+
     return go.Indicator(
         mode=mode_str,
         value=value,
+        delta={"reference": 1},
         title={
             "text": f"L: {last_update_time_str}, N: {next_update_str}",
-            "font": {"size": 11, "color": "#FFFFFF"}},  # setting title color to white
+            "font": {"size": 10, "color": COLORS['gray_text']}
+        },
         domain={"x": [0, 1], "y": [0, 1]},
         gauge={
-            "axis": {"range": [0, 1], "tickcolor": "#FFFFFF"},  # setting gauge axis tick color to white
-            "bar": {"color": "green", "thickness": bar_thickness},
+            "axis": {"range": [0, 1], "tickcolor": COLORS['white']},
+            "bar": {"color": COLORS['green_chart'], "thickness": bar_thickness},
             "steps": gauge_steps,
-            "bgcolor": "#000000"  # setting gauge background color to black
+            "bgcolor": COLORS['black']
         },
-        number={"suffix": "" if show_number and title == "" else "", "font": {"size": 10, "color": "#FFFFFF"}},  # setting number color to white
-    )
-
-
-def create_gauge_chart_old(bullish, bearish, factor, show_number=True):
-    last_update_time, next_update = last_and_next_update(factor)
-
-    # Convert timedelta to total hours, minutes, seconds
-    total_seconds_since_last_update = last_update_time.total_seconds()
-    hours_since_last_update = total_seconds_since_last_update // 3600
-    minutes_since_last_update = (total_seconds_since_last_update // 60) % 60
-
-    # Check if hours are zero
-    if int(hours_since_last_update) == 0:
-        last_update_time_str = f"{int(minutes_since_last_update)}m"
-    else:
-        last_update_time_str = f"{int(hours_since_last_update)}h {int(minutes_since_last_update)}m ago"
-
-    total_seconds_next_update = next_update.total_seconds()
-    hours_next_update = total_seconds_next_update // 3600
-    minutes_next_update = (total_seconds_next_update // 60) % 60
-    # Check if hours are zero
-    if int(hours_next_update) == 0:
-        next_update_str = f"{int(minutes_next_update)}m"
-    else:
-        next_update_str = f"{int(hours_next_update)}h, {int(minutes_next_update)}m"
-
-    if bullish == 0 and bearish == 0:
-        value = 0
-        gauge_steps = [
-            {"range": [0, 1], "color": "lightgray"},
-        ]
-        title = ""
-        bar_thickness = 0
-    else:
-        value = round(((bullish / (bullish + bearish)) * 1), 2)
-        gauge_steps = [
-            {"range": [0, 1], "color": "lightcoral"}
-        ]
-        title = " " if bullish > bearish else " "
-        # title = "Bull" if bullish > bearish else "Bear"
-
-        bar_thickness = 1
-
-    mode_str = "gauge+number+delta" if show_number else "gauge"
-    return go.Indicator(
-        mode=mode_str,
-        value=value,
-        title={
-            "text": f"L: {last_update_time_str}, N: {next_update_str}",
-            "font": {"size": 11, "color": "purple"}},
-        domain={"x": [0, 1], "y": [0, 1]},
-        gauge={
-            "axis": {"range": [0, 1]},
-            "bar": {"color": "green", "thickness": bar_thickness},
-            "steps": gauge_steps,
-        },
-        number={"suffix": "" if show_number and title == "" else "", "font": {"size": 10}},
+        number={"font": {"size": 10, "color": COLORS['white']}},
     )
 
 
 if __name__ == '__main__':
-    create_gauge_chart(0.8, 0.2, 'weighted_score', show_number=True)
-
+    create_gauge_chart(0.8, 0.2, 'weighted_score')

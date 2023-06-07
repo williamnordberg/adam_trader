@@ -425,7 +425,7 @@ def visualize_trade_results():
         dcc.Graph(id='trade-results-chart', style={'width': '100%', 'height': '100vh'}),
         dcc.Interval(
             id='interval-component',
-            interval=5 * 1000,  # in milliseconds (10 minutes)
+            interval=5 * 60 * 1000,  # in milliseconds (10 minutes)
             n_intervals=0
         ),
     ])
