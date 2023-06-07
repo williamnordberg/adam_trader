@@ -68,35 +68,34 @@ def create_gauge_charts():
                                         "YouTube Sentiment", "News Sentiment", "Weighted Score"])
 
     fig.add_trace(create_gauge_chart(
-        data_dict['macro_bullish'], data_dict['macro_bearish'], 'macro', show_number=True), row=1, col=1)
+        data_dict['macro_bullish'], data_dict['macro_bearish'], 'macro'), row=1, col=1)
     fig.add_trace(create_gauge_chart(
-        data_dict['order_book_bullish'], data_dict['order_book_bearish'],
-        'order_book', show_number=True), row=1, col=2)
+        data_dict['order_book_bullish'], data_dict['order_book_bearish'], 'order_book'), row=1, col=2)
     fig.add_trace(create_gauge_chart(
         data_dict['prediction_bullish'], data_dict['prediction_bearish'],
-        'predicted_price', show_number=True), row=1, col=3)
+        'predicted_price'), row=1, col=3)
     fig.add_trace(create_gauge_chart(
         data_dict['technical_bullish'], data_dict['technical_bearish'],
-        'technical_analysis', show_number=True), row=1, col=4)
+        'technical_analysis'), row=1, col=4)
     fig.add_trace(create_gauge_chart(data_dict['richest_addresses_bullish'], data_dict['richest_addresses_bearish'],
-                                     'richest_addresses', show_number=True), row=1, col=5)
+                                     'richest_addresses'), row=1, col=5)
     fig.add_trace(create_gauge_chart(
         data_dict['google_search_bullish'], data_dict['google_search_bearish'],
-        'google_search', show_number=True), row=2, col=1)
+        'google_search'), row=2, col=1)
     fig.add_trace(create_gauge_chart(
-        data_dict['reddit_bullish'], data_dict['reddit_bearish'], 'reddit', show_number=True), row=2, col=2)
+        data_dict['reddit_bullish'], data_dict['reddit_bearish'], 'reddit'), row=2, col=2)
     fig.add_trace(create_gauge_chart(
-        data_dict['youtube_bullish'], data_dict['youtube_bearish'], 'youtube', show_number=True), row=2, col=3)
+        data_dict['youtube_bullish'], data_dict['youtube_bearish'], 'youtube'), row=2, col=3)
     fig.add_trace(create_gauge_chart(
-        data_dict['news_bullish'], data_dict['news_bearish'], 'sentiment_of_news', show_number=True), row=2, col=4)
+        data_dict['news_bullish'], data_dict['news_bearish'], 'sentiment_of_news'), row=2, col=4)
     fig.add_trace(create_gauge_chart(
         data_dict['weighted_score_up'], data_dict['weighted_score_down'],
-        'weighted_score', show_number=True), row=2, col=5)
+        'weighted_score'), row=2, col=5)
 
     fig.update_layout(plot_bgcolor=BACKGROUND_COLOR, paper_bgcolor=BACKGROUND_COLOR)
 
     for annotation in fig['layout']['annotations']:
-        annotation['font'] = dict(color=TEXT_COLOR, size=12)  # set color and size of subplot titles
+        annotation['font'] = dict(color=TEXT_COLOR, size=16)  # set color and size of subplot titles
 
     return fig
 
@@ -236,7 +235,6 @@ def create_layout(fig):
                 interval=APP_UPDATE_TIME * 1000,  # in milliseconds
                 n_intervals=0
                 ),
-
         html.Div(id='timer'),
         dcc.Graph(id='live-update-graph', figure=fig, style={
             'width': '90%', 'height': '100vh', 'display': 'inline-block'}),
@@ -244,11 +242,11 @@ def create_layout(fig):
         html.Div([
             html.Div([
 
-                html.A(  # This is your new link for Fed rate MtoM
+                html.A(
                     f'{initial_fed_rate_m_to_m}',
                     id='fed-rate',
                     target='_blank',  # Opens link in new tab
-                    href="https://www.forexfactory.com/calendar",  # Replace with your desired URL
+                    href="https://www.forexfactory.com/calendar",
                     style={'fontSize': '12px'}
                 ),
                 html.P(f'CPI MtoM: {initial_cpi_m_to_m}', id='cpi-rate', style={
