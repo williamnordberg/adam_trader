@@ -511,6 +511,8 @@ def create_gauge_chart(bullish, bearish, factor):
             {"range": [0, 1], "color": COLORS['lightgray']},
         ]
         bar_thickness = 0
+        mode_str = "gauge+number+delta"
+        number = {"font": {"size": 12, "color": '#000000'}}
     else:
         value = round(((bullish / (bullish + bearish)) * 1), 2)
         gauge_steps = [
@@ -518,12 +520,16 @@ def create_gauge_chart(bullish, bearish, factor):
         ]
         bar_thickness = 1
 
-    mode_str = "gauge+number+delta"
+        mode_str = "gauge+number+delta"
+        number = {"font": {"size": 12, "color": COLORS['white']}}
 
     return go.Indicator(
         mode=mode_str,
         value=value,
-        delta={"reference": 1},
+        delta={
+            "reference": 1,
+            "font": {"size": 10}  # Adjust this value to change the size of the delta
+        },
         title={
             "text": f"L: {last_update_time_str},   N: {next_update_str}",
             "font": {"size": 12, "color": COLORS['gray_text']}
@@ -535,7 +541,7 @@ def create_gauge_chart(bullish, bearish, factor):
             "steps": gauge_steps,
             "bgcolor": COLORS['black']
         },
-        number={"font": {"size": 12, "color": COLORS['white']}},
+        number=number,
     )
 
 

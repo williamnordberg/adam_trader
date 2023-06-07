@@ -2,6 +2,8 @@ from binance.client import Client
 import logging
 import configparser
 import os
+from binance.exceptions import BinanceAPIException, BinanceRequestException
+from time import sleep
 
 CONFIG_PATH = 'config/config.ini'
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -30,9 +32,15 @@ def initialized_future_client():
     api_key = config.get('binance_future_testnet', 'api_key')
     api_secret = config.get('binance_future_testnet', 'api_secret')
 
-    client = Client(api_key, api_secret, testnet=True)
-    client.API_URL = 'https://testnet.binancefuture.com'  # Set the futures testnet URL
-    return client
+    while True:
+        try:
+            client = Client(api_key, api_secret, testnet=True)
+            client.API_URL = 'https://testnet.binance.vision'  # Set the futures testnet URL
+            return client
+        except (BinanceAPIException, BinanceRequestException) as e:
+            logging.error(f"Error: Could not connect to Binance API:{e}")
+            logging.info("Retrying in 5 seconds...")
+            sleep(5)
 
 
 def short_market_on_specific_price(btc_amount: float, price: float, leverage: int, margin_mode: str):
