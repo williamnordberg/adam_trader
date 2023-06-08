@@ -210,6 +210,7 @@ def create_layout(fig):
     initial_fed_announcement = layout_data["fed_announcement"]
     initial_cpi_announcement = layout_data["cpi_announcement"]
     initial_ppi_announcement = layout_data["ppi_announcement"]
+    print('initial_trading_state', initial_trading_state)
 
     app.layout = html.Div(style={'backgroundColor': BACKGROUND_COLOR, 'color': TEXT_COLOR}, children=[
         dcc.Interval(
@@ -217,7 +218,8 @@ def create_layout(fig):
             interval=5 * 1000,  # in milliseconds
             n_intervals=0
         ),
-        dbc.Progress(value=50, color=BACKGROUND_COLOR, striped=True, animated=True, id="progress", className="custom-progress"),
+        dbc.Progress(value=50, color=BACKGROUND_COLOR, striped=True, animated=True, id="progress",
+                     className="custom-progress"),
         dbc.Popover(
             [
                 dbc.PopoverHeader("Next update time"),
@@ -274,7 +276,12 @@ def create_layout(fig):
 
             html.Div([
                 html.P(f'T State: {initial_trading_state}', id='trading-state',
-                       style={'fontSize': '13px', 'margin': '0px'}),
+                       style={'fontSize': '13px',
+                              'margin': '0px',
+                              'color': 'green' if initial_trading_state == 'Trading state: long' or
+                                                  initial_trading_state == 'long' else (
+                               'red' if initial_trading_state == 'Trading state: short' or
+                                        initial_trading_state == 'short' else TEXT_COLOR)}),
             ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
 
             html.Div([
@@ -341,6 +348,7 @@ def update_gauge_chart_live(n):
     Output('cpi-announcement', 'children'),
     Output('ppi-announcement', 'children'),
     Output('trading-state', 'children'),
+    Output('trading-state', 'style'),
     Output('bid-volume', 'children'),
     Output('ask-volume', 'children'),
     Output('predicted-price', 'children'),
@@ -362,7 +370,7 @@ def update_layout_values_live(n):
 
     latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
     new_trading_state = latest_info_saved.iloc[0]['latest_trading_state']
-
+    print('new_trading_state ', new_trading_state )
     fed_rate_m_to_m_read = float(latest_info_saved['fed_rate_m_to_m'][0])
     new_fed_rate = f'Fed rate MtM: {fed_rate_m_to_m_read}'
 
@@ -395,9 +403,13 @@ def update_layout_values_live(n):
 
     new_fed_announcement, new_cpi_announcement, new_ppi_announcement = calculate_upcoming_events()
 
+    new_trading_state_style = {'fontSize': '13px', 'margin': '0px',
+                               'color': 'green' if new_trading_state == 'Trading state: long' or new_trading_state == 'long' else (
+                                   'red' if new_trading_state == 'Trading state: short' or new_trading_state == 'short' else TEXT_COLOR)}
+
     return (new_fed_rate, new_cpi_rate, new_ppi_rate,
             new_fed_announcement, new_cpi_announcement, new_ppi_announcement,
-            f'T State: {new_trading_state}', f'Bid vol: {new_bid_volume}', f'Ask vol: {new_ask_volume}',
+            f'T State: {new_trading_state}', new_trading_state_style, f'Bid vol: {new_bid_volume}', f'Ask vol: {new_ask_volume}',
             f'Predicted: {new_predicted_price}', f'Current: {new_current_price}', f'Diff: {new_price_difference}',
             f'RSI: {new_rsi}', f'Over 200EMA: {new_over_200ema}', f'MACD up tr: {new_macd_trend}',
             f'bb distance: {new_bb_distance}', f'Rich receive: {new_btc_received}',
