@@ -463,7 +463,7 @@ def calculate_upcoming_events():
         ppi_fed_announcement if time_until_ppi.days <= 2 else ''
 
 
-def last_and_next_update(factor: str) -> Tuple[timedelta, timedelta]:
+def last_and_next_update(factor: str) -> Tuple[str, str]:
     latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
     last_update_time_str = latest_info_saved.iloc[0][f'latest_{factor}_update']
     last_update_time = datetime.strptime(last_update_time_str, '%Y-%m-%d %H:%M:%S')
@@ -471,11 +471,24 @@ def last_and_next_update(factor: str) -> Tuple[timedelta, timedelta]:
     # Calculate the time difference between now and the last update time
     time_since_last_update = datetime.now() - last_update_time
 
+    # If the time since last update is more than 1 hour, convert it to hours
+    if time_since_last_update.total_seconds() > 3600:
+        time_since_last_update_str = f'{int(time_since_last_update.total_seconds() // 3600)}h'
+    else:  # else, convert it to minutes
+        time_since_last_update_str = f'{int(time_since_last_update.total_seconds() // 60)}m'
+
     if update_intervals[factor] < time_since_last_update:
         next_update = timedelta(seconds=0)  # equivalent to zero
     else:
         next_update = update_intervals[factor] - time_since_last_update
-    return time_since_last_update, next_update
+
+    # Similar conversion for next update
+    if next_update.total_seconds() > 3600:
+        next_update_str = f'{int(next_update.total_seconds() // 3600)}h'
+    else:
+        next_update_str = f'{int(next_update.total_seconds() // 60)}m'
+
+    return time_since_last_update_str, next_update_str
 
 
 COLORS = {
@@ -484,26 +497,13 @@ COLORS = {
     'white': '#FFFFFF',
     'black': '#000000',
     'lightgray': '#545454',
-    'gray_text': '#fff'
+    'gray_text': '#fff',
+    'background': '#000000'
 }
 
 
-def convert_time_to_str(timedelta_obj):
-    total_seconds = timedelta_obj.total_seconds()
-    hours = total_seconds // 3600
-    minutes = (total_seconds // 60) % 60
-
-    if int(hours) == 0:
-        return f"{int(minutes)}m"
-    else:
-        return f"{int(hours)}h {int(minutes)}m ago"
-
-
 def create_gauge_chart(bullish, bearish, factor):
-    last_update_time, next_update = last_and_next_update(factor)
-
-    last_update_time_str = convert_time_to_str(last_update_time)
-    next_update_str = convert_time_to_str(next_update)
+    last_update_time_str, next_update_str = last_and_next_update(factor)
 
     if bullish == 0 and bearish == 0:
         value = 0
@@ -511,8 +511,9 @@ def create_gauge_chart(bullish, bearish, factor):
             {"range": [0, 1], "color": COLORS['lightgray']},
         ]
         bar_thickness = 0
-        mode_str = "gauge+number+delta"
-        number = {"font": {"size": 12, "color": '#000000'}}
+        mode_str = "gauge"
+        number = {}
+
     else:
         value = round(((bullish / (bullish + bearish)) * 1), 2)
         gauge_steps = [
@@ -520,19 +521,14 @@ def create_gauge_chart(bullish, bearish, factor):
         ]
         bar_thickness = 1
 
-        mode_str = "gauge+number+delta"
+        mode_str = "gauge+number"
         number = {"font": {"size": 12, "color": COLORS['white']}}
-
     return go.Indicator(
         mode=mode_str,
         value=value,
-        delta={
-            "reference": 1,
-            "font": {"size": 10}  # Adjust this value to change the size of the delta
-        },
         title={
-            "text": f"L: {last_update_time_str},   N: {next_update_str}",
-            "font": {"size": 12, "color": COLORS['gray_text']}
+            "text": f"L: {last_update_time_str}   N: {next_update_str}",
+            "font": {"size": 12, "color": COLORS['lightgray']}
         },
         domain={"x": [0, 1], "y": [0, 1]},
         gauge={
