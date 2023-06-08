@@ -28,9 +28,8 @@ from database import save_value_to_database
 # Constants
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 SYMBOL = 'BTCUSDT'
-LONG_THRESHOLD = 0.65
-SHORT_THRESHOLD = 0.65
-SCORE_MARGIN_TO_CLOSE = 0.65
+LONG_THRESHOLD = 0.68
+SHORT_THRESHOLD = 0.7
 PROFIT_MARGIN = 0.005
 RICHEST_ADDRESSES_SLEEP_TIME = 20 * 60
 
@@ -182,7 +181,7 @@ if __name__ == "__main__":
     visualization_trade_result_process.start()
     sleep(2)
 
-    process = Process(target=trading_loop, args=[0.65, 0.65, 0.005])
+    process = Process(target=trading_loop, args=[LONG_THRESHOLD, SHORT_THRESHOLD, PROFIT_MARGIN])
     process.start()
     sleep(60)
 

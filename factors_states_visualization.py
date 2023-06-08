@@ -210,7 +210,6 @@ def create_layout(fig):
     initial_fed_announcement = layout_data["fed_announcement"]
     initial_cpi_announcement = layout_data["cpi_announcement"]
     initial_ppi_announcement = layout_data["ppi_announcement"]
-    print('initial_trading_state', initial_trading_state)
 
     app.layout = html.Div(style={'backgroundColor': BACKGROUND_COLOR, 'color': TEXT_COLOR}, children=[
         dcc.Interval(
@@ -370,7 +369,6 @@ def update_layout_values_live(n):
 
     latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
     new_trading_state = latest_info_saved.iloc[0]['latest_trading_state']
-    print('new_trading_state ', new_trading_state )
     fed_rate_m_to_m_read = float(latest_info_saved['fed_rate_m_to_m'][0])
     new_fed_rate = f'Fed rate MtM: {fed_rate_m_to_m_read}'
 
