@@ -8,7 +8,7 @@ import logging
 from datetime import datetime, timedelta
 from handy_modules import compare_reddit
 from database import save_value_to_database
-from handy_modules import should_update, save_update_time, retry_on_error_fallback_0_0
+from handy_modules import should_update, save_update_time, retry_on_error_with_fallback, retry_on_error_fallback_0_0
 from typing import Tuple
 from database import read_database
 from googleapiclient.errors import HttpError
@@ -75,11 +75,12 @@ def get_youtube_videos(youtube, published_after, published_before):
         search_response = search_request.execute()
         search_results.extend(search_response['items'])
         search_request = youtube.search().list_next(search_request, search_response)
-
     return search_results
 
 
-@retry_on_error_fallback_0_0(max_retries=3, delay=5, allowed_exceptions=(RefreshError,))
+@retry_on_error_with_fallback(
+    max_retries=3, delay=5, allowed_exceptions=(RefreshError,),
+    fallback_values=(0, 0))
 def youtube_wrapper() -> Tuple[float, float]:
     # If so, check the increase in the number of YouTube videos with the #bitcoin hashtag
     youtube = get_authenticated_service()
@@ -107,6 +108,8 @@ def youtube_wrapper() -> Tuple[float, float]:
         save_value_to_database('youtube_bearish', youtube_bearish)
     except Exception as e:
         logging.error(f"Error occurred: {e}")
+        save_value_to_database('youtube_bullish', 0)
+        save_value_to_database('youtube_bearish', 0)
         youtube_bullish, youtube_bearish = 0, 0
 
     return youtube_bullish, youtube_bearish
@@ -123,5 +126,5 @@ def check_bitcoin_youtube_videos_increase() -> Tuple[float, float]:
 
 
 if __name__ == "__main__":
-    youtube_bullish_outer, youtube_bearish_outer = check_bitcoin_youtube_videos_increase()
+    youtube_bullish_outer, youtube_bearish_outer = youtube_wrapper()
     logging.info(f'youtube_bullish: {youtube_bullish_outer} , youtube_bearish: {youtube_bearish_outer}')
