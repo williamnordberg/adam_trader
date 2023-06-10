@@ -1,127 +1,185 @@
-import google_auth_oauthlib.flow
-import googleapiclient.discovery
-import googleapiclient.errors
-import pickle
-import os.path
-from google.auth.transport.requests import Request
+import pandas as pd
+import ccxt
 import logging
-from datetime import datetime, timedelta
-from handy_modules import compare_reddit
-from database import save_value_to_database
-from handy_modules import should_update, save_update_time, retry_on_error_fallback_0_0
 from typing import Tuple
-from database import read_database
-from googleapiclient.errors import HttpError
-from google.auth.exceptions import RefreshError
 
+from indicator_calculator import bollinger_bands, exponential_moving_average, macd, relative_strength_index
+from handy_modules import get_bitcoin_price, should_update, save_update_time, retry_on_error_with_fallback
+from database import save_value_to_database, read_database
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
 
 
-def get_authenticated_service():
-    api_service_name = "youtube"
-    api_version = "v3"
-    client_secrets_file = "config/youtube_client_secret.json"
-    scopes = ["https://www.googleapis.com/auth/youtube.force-ssl"]
+@retry_on_error_with_fallback(max_retries=3, delay=5, fallback_values=pd.Series(dtype=float))
+def get_historical_data(symbol: str, timeframe: str, limit: int) -> pd.Series:
+    """
+      Retrieves historical price data for a cryptocurrency from the Binance API.
 
-    creds = None
-    token_file = 'config/youtube_token.pickle'
-    if os.path.exists(token_file):
-        with open(token_file, 'rb') as token:
-            creds = pickle.load(token)
+      Args:
+          symbol (str): The symbol of the cryptocurrency to retrieve data for.
+          timeframe (str): The timeframe to retrieve data for (e.g. '1d' for daily data).
+          limit (int): The number of data points to retrieve.
 
-    if not creds or not creds.valid:
-        try:
-            if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            else:
-                flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
-                    client_secrets_file, scopes)
-                creds = flow.run_local_server(port=0)
-        except RefreshError as e:
-            logging.error(f"Error refreshing token: {e}. Token update required.")
-            logging.info("Manually authenticate and save the token in youtube_token.pickle")
-            # Exception is re-raised so that the retry decorator on youtube_wrapper can handle it
-            raise
-        except Exception as e:
-            logging.error(f"An unexpected error occurred: {e}")
-            # If there are other exceptions that are not RefreshError, you can decide how to handle them.
-            # You may choose to re-raise them if they should trigger a retry in youtube_wrapper.
-            raise
-
-        with open(token_file, 'wb') as token:
-            pickle.dump(creds, token)
-
-    youtube = googleapiclient.discovery.build(api_service_name, api_version, credentials=creds)
-    return youtube
+      Returns:
+          pandas.Series: A pandas Series containing the historical price data.
+      """
+    exchange = ccxt.binance()
+    ohlcv = exchange.fetch_ohlcv(symbol=symbol, timeframe=timeframe, limit=limit)
+    df = pd.DataFrame(ohlcv, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
+    df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
+    df.set_index('timestamp', inplace=True)
+    close_series = df['close']
+    return close_series
 
 
-@retry_on_error_fallback_0_0(max_retries=3, delay=5, allowed_exceptions=(HttpError, RefreshError, ))
-def get_youtube_videos(youtube, published_after, published_before):
-    search_request = youtube.search().list(
-        part="id,snippet",
-        q="#bitcoin",
-        type="video",
-        videoDefinition="high",
-        videoDuration="short",
-        videoDimension="2d",
-        publishedAfter=published_after,
-        publishedBefore=published_before,
-        maxResults=50
-    )
+def potential_reversal(data_close: pd.Series) -> Tuple[bool, bool]:
+    """
+       Identifies whether a potential bullish or bearish reversal is forming.
 
-    search_results = []
-    while search_request:
-        search_response = search_request.execute()
-        search_results.extend(search_response['items'])
-        search_request = youtube.search().list_next(search_request, search_response)
+       Returns:
+           tuple: A tuple containing the potential bullish and bearish reversal flags as booleans.
+       """
+    latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
 
-    return search_results
+    potential_up_reversal_bullish, potential_down_reversal_bearish = False, False
+    upper_band, moving_average, lower_band = bollinger_bands(data_close)
+    current_price = int(data_close.iloc[-1])
+
+    # Check if price fill 70 percent of distance between bands and moving average
+    last_moving_average = int(moving_average.iloc[-1]) if not pd.isna(moving_average.iloc[-1]) else 0
+    last_lower_band = int(lower_band.iloc[-1]) if not pd.isna(lower_band.iloc[-1]) else 0
+    last_upper_band = int(upper_band.iloc[-1]) if not pd.isna(upper_band.iloc[-1]) else 0
+
+    distance_middle_lower = int((last_moving_average - last_lower_band) * 0.7) if not pd.isna(
+        moving_average.iloc[-1]) and not pd.isna(lower_band.iloc[-1]) else 0
+    distance_middle_upper = int((last_upper_band - last_moving_average) * 0.7) if not pd.isna(
+        upper_band.iloc[-1]) and not pd.isna(moving_average.iloc[-1]) else 0
+
+    if not pd.isna(current_price) and not pd.isna(last_moving_average):
+        if current_price < last_moving_average:
+            if (last_moving_average - current_price) > distance_middle_lower:
+                potential_up_reversal_bullish = True
+
+            # Calculate the percentage
+            total_scope = last_moving_average - last_lower_band
+            current_distance = last_moving_average - current_price
+            percentage = -((current_distance / total_scope) * 100)
+
+            latest_info_saved.loc[0, 'bb_band_MA_distance'] = round(percentage, 0)
+
+        elif current_price > last_moving_average:
+            if (current_price - last_moving_average) > distance_middle_upper:
+                potential_down_reversal_bearish = True
+
+            # Calculate the percentage
+            total_scope = last_upper_band - last_moving_average
+            current_distance = current_price - last_moving_average
+            percentage = (current_distance / total_scope) * 100
+            latest_info_saved.loc[0, 'bb_band_MA_distance'] = round(percentage, 0)
+    # RSI overbought or oversold
+    rsi = relative_strength_index(data_close, 14)
+    if rsi[-1] < 30:
+        potential_up_reversal_bullish = True
+    elif rsi[-1] > 70:
+        potential_down_reversal_bearish = True
+
+    save_value_to_database('technical_potential_up_reversal_bullish', potential_up_reversal_bullish)
+    save_value_to_database('technical_potential_down_reversal_bearish', potential_down_reversal_bearish)
+
+    latest_info_saved.loc[0, 'latest_rsi'] = round(rsi[-1], 0)
+    latest_info_saved.to_csv(LATEST_INFO_SAVED, index=False)
+    return potential_up_reversal_bullish, potential_down_reversal_bearish
 
 
-@retry_on_error_fallback_0_0(max_retries=3, delay=5, allowed_exceptions=(RefreshError,))
-def youtube_wrapper() -> Tuple[float, float]:
-    # If so, check the increase in the number of YouTube videos with the #bitcoin hashtag
-    youtube = get_authenticated_service()
+def potential_up_trending(data_close: pd.Series) -> bool:
+    """
+       Identifies whether a potential uptrend is forming.
 
-    now = datetime.utcnow()
-    last_24_hours_start = (now - timedelta(days=1)).strftime('%Y-%m-%dT%H:%M:%SZ')
-    last_48_hours_start = (now - timedelta(days=2)).strftime('%Y-%m-%dT%H:%M:%SZ')
-    last_24_hours_end = now.strftime('%Y-%m-%dT%H:%M:%SZ')
+       Returns:
+           bool: The potential uptrend flag.
+       """
+    rsi = relative_strength_index(data_close, 14)
+    macd_line, signal, histogram = macd(data_close)
 
-    try:
-        search_results_last_24_hours = get_youtube_videos(youtube, last_24_hours_start, last_24_hours_end)
-        search_results_last_48_to_24_hours = get_youtube_videos(youtube, last_48_hours_start, last_24_hours_start)
+    # check if today rsi is bigger than yesterday,and macd is over signal
+    if rsi[-1] > rsi[-2] or macd_line[-1] > signal[-1]:
+        potential_up_trend = True
+    else:
+        potential_up_trend = False
 
-        num_last_24_hours = len(search_results_last_24_hours)
-        num_last_48_to_24_hours = len(search_results_last_48_to_24_hours)
-
-        youtube_bullish, youtube_bearish = compare_reddit(num_last_24_hours, num_last_48_to_24_hours)
-
-        # Save latest update time
-        save_update_time('youtube')
-
-        # Save to database
-        save_value_to_database('last_24_youtube', num_last_24_hours)
-        save_value_to_database('youtube_bullish', youtube_bullish)
-        save_value_to_database('youtube_bearish', youtube_bearish)
-    except Exception as e:
-        logging.error(f"Error occurred: {e}")
-        youtube_bullish, youtube_bearish = 0, 0
-
-    return youtube_bullish, youtube_bearish
+    save_value_to_database('technical_potential_up_trend', potential_up_trend)
+    return potential_up_trend
 
 
-def check_bitcoin_youtube_videos_increase() -> Tuple[float, float]:
-    if should_update('youtube'):
-        return youtube_wrapper()
+def technical_analyse_wrapper() -> Tuple[float, float]:
+    """
+       Performs a technical analysis of the Bitcoin market using various indicators.
+
+       Returns:
+           tuple: A tuple containing the bullish and bearish technical analysis flags as booleans.
+       """
+    # read the data
+    data_close = get_historical_data('BTC/USDT', '1d', 200)
+
+    potential_up_reversal_bullish, potential_down_reversal_bearish = potential_reversal(data_close)
+    potential_up_trend = potential_up_trending(data_close)
+
+    # Set initial value base on ema200
+    ema200 = exponential_moving_average(data_close, 200)
+    current_price = get_bitcoin_price()
+
+    # Get the current reversal state
+    reversal = 'up' if potential_up_reversal_bullish else 'down' if potential_down_reversal_bearish else 'neither'
+    over_ema200 = current_price >= ema200[-1]
+
+    # Save for visualization
+    latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
+    latest_info_saved.loc[0, 'over_200EMA'] = current_price >= ema200[-1]
+    latest_info_saved.to_csv(LATEST_INFO_SAVED, index=False)
+
+    # Define a dictionary for all possibilities
+    possibilities = {
+        # Reversal, Trend, EMA200
+        ('up', True, True): (1, 0),
+        ('up', True, False): (0.9, 0.1),
+        ('up', False, True): (0.9, 0.1),
+        ('up', False, False): (0.8, 0.2),
+
+        ('down', False, False): (0, 1),
+        ('down', True, False): (0.1, 0.9),
+        ('down', False, True): (0.1, 0.9),
+        ('down', True, True): (0.2, 0.8),
+
+        ('neither', True, False): (0, 0),
+        ('neither', False, True): (0, 0),
+        ('neither', True, True): (0.7, 0.3),
+        ('neither', False, False): (0.3, 0.7)
+    }
+    return possibilities[(reversal, potential_up_trend, over_ema200)]
+
+
+def technical_analyse_rounder():
+    technical_bullish, technical_bearish = technical_analyse_wrapper()
+    # Save the values to the database
+    save_value_to_database('technical_bullish', technical_bullish)
+    save_value_to_database('technical_bearish', technical_bearish)
+    save_update_time('technical_analysis')
+
+    # Return the same values as the original function
+    return technical_bullish, technical_bearish
+
+
+def technical_analyse() -> Tuple[float, float]:
+    if should_update('technical_analysis'):
+        return technical_analyse_rounder()
     else:
         database = read_database()
-        youtube_bullish = database['youtube_bullish'][-1]
-        youtube_bearish = database['youtube_bearish'][-1]
-        return youtube_bullish, youtube_bearish
+        technical_bullish = database['technical_bullish'][-1]
+        technical_bearish = database['technical_bearish'][-1]
+        return technical_bullish, technical_bearish
 
 
-if __name__ == "__main__":
-    youtube_bullish_outer, youtube_bearish_outer = youtube_wrapper()
-    logging.info(f'youtube_bullish: {youtube_bullish_outer} , youtube_bearish: {youtube_bearish_outer}')
+if __name__ == '__main__':
+    technical_bullish1, technical_bearish1 = technical_analyse_rounder()
+    logging.info(f'Bullish: {technical_bullish1}, Bearish: {technical_bearish1}')
