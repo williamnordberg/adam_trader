@@ -124,46 +124,39 @@ def technical_analyse_wrapper() -> Tuple[float, float]:
 
     potential_up_reversal_bullish, potential_down_reversal_bearish = potential_reversal(data_close)
     potential_up_trend = potential_up_trending(data_close)
-    
+
     # Set initial value base on ema200
     ema200 = exponential_moving_average(data_close, 200)
     current_price = get_bitcoin_price()
 
+    # Get the current reversal state
+    reversal = 'up' if potential_up_reversal_bullish else 'down' if potential_down_reversal_bearish else 'neither'
+    over_ema200 = current_price >= ema200[-1]
+
+    # Save for visualization
     latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
     latest_info_saved.loc[0, 'over_200EMA'] = current_price >= ema200[-1]
     latest_info_saved.to_csv(LATEST_INFO_SAVED, index=False)
 
-    # check potentials
-    if potential_up_reversal_bullish and potential_up_trend and (current_price >= ema200[-1]):
-        return 1, 0
-    elif potential_down_reversal_bearish and not potential_up_trend and (current_price >= ema200[-1]):
-        return 0, 1
+    # Define a dictionary for all possibilities
+    possibilities = {
+        # Reversal, Trend, EMA200
+        ('up', True, True): (1, 0),
+        ('up', True, False): (0.9, 0.1),
+        ('up', False, True): (0.9, 0.1),
+        ('up', False, False): (0.8, 0.2),
 
-    # potential and rsi and macd trend
-    elif potential_up_reversal_bullish and potential_up_trend and not(current_price >= ema200[-1]):
-        return 0.9, 0.1
-    elif potential_down_reversal_bearish and not potential_up_trend and (current_price >= ema200[-1]):
-        return 0.1, 0.9
+        ('down', False, False): (0, 1),
+        ('down', True, False): (0.1, 0.9),
+        ('down', False, True): (0.1, 0.9),
+        ('down', True, True): (0.2, 0.8),
 
-    # just reversal
-    elif potential_up_reversal_bullish and not potential_up_trend and (current_price >= ema200[-1]):
-        return 0.75, 0.25
-    elif potential_down_reversal_bearish and potential_up_trend and (current_price >= ema200[-1]):
-        return 0.75, 0.25
-
-    # just ris and macd trend
-    elif not potential_up_reversal_bullish and potential_up_trend and not (current_price >= ema200[-1]):
-        return 0.65, 0.35
-    elif not potential_down_reversal_bearish and not potential_up_trend and (current_price >= ema200[-1]):
-        return 0.35, 0.65
-
-    # just EMA
-    elif not potential_up_reversal_bullish and not potential_up_trend and (current_price >= ema200[-1]):
-        return 0.6, 0.4
-    elif not potential_down_reversal_bearish and not potential_up_trend and (current_price >= ema200[-1]):
-        return 0.4, 0.6
-
-    return 0, 0
+        ('neither', True, False): (0, 0),
+        ('neither', False, True): (0, 0),
+        ('neither', True, True): (0.7, 0.3),
+        ('neither', False, False): (0.3, 0.7)
+    }
+    return possibilities[(reversal, potential_up_trend, over_ema200)]
 
 
 def technical_analyse_rounder():

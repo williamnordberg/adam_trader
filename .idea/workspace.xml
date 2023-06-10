@@ -10,13 +10,10 @@
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="3">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/youtube_token.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/config/youtube_token.pickle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/youtube_token.py" beforeDir="false" afterPath="$PROJECT_DIR$/youtube_token.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/latest_info_saved.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/youtube_token.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/data/youtube_token.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/technical_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/technical_analysis.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test2.py" beforeDir="false" afterPath="$PROJECT_DIR$/test2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/youtube.py" beforeDir="false" afterPath="$PROJECT_DIR$/youtube.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +96,7 @@
       <recent name="C:\will\Python_project\adam_trader\logs" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.youtube">
+  <component name="RunManager" selected="Python.test2">
     <configuration name="factors_states_visualization" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -251,8 +248,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.youtube" />
         <item itemvalue="Python.test2" />
+        <item itemvalue="Python.youtube" />
         <item itemvalue="Python.youtube_token (1)" />
         <item itemvalue="Python.factors_states_visualization" />
         <item itemvalue="Python.youtube_token (1)" />
@@ -267,13 +264,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00259" summary="3">
-      <created>1685332584936</created>
-      <option name="number" value="00259" />
-      <option name="presentableId" value="LOCAL-00259" />
-      <option name="project" value="LOCAL" />
-      <updated>1685332584936</updated>
     </task>
     <task id="LOCAL-00260" summary="3">
       <created>1685338459860</created>
@@ -611,7 +601,14 @@
       <option name="project" value="LOCAL" />
       <updated>1686367104783</updated>
     </task>
-    <option name="localTasksCounter" value="308" />
+    <task id="LOCAL-00308" summary="3">
+      <created>1686372816256</created>
+      <option name="number" value="00308" />
+      <option name="presentableId" value="LOCAL-00308" />
+      <option name="project" value="LOCAL" />
+      <updated>1686372816256</updated>
+    </task>
+    <option name="localTasksCounter" value="309" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
