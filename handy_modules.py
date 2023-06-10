@@ -5,6 +5,7 @@ import pandas as pd
 from functools import wraps
 from time import sleep
 import plotly.graph_objects as go
+import pandas.errors
 
 from datetime import datetime, timedelta
 from database import read_database
@@ -161,29 +162,29 @@ def compare_predicted_price(predicted_price: int, current_price: int) -> Tuple[f
     Returns:
         tuple: bullish and bearish probabilities based on the price difference percentage.
     """
-    activity_percentage = (predicted_price - current_price) / current_price * 100
+    price_difference_percentage = (predicted_price - current_price) / current_price * 100
 
-    if activity_percentage > 0:
-        if activity_percentage >= 5:
+    if price_difference_percentage > 0:
+        if price_difference_percentage >= 5:
             return 1, 0
-        elif activity_percentage >= 4:
+        elif price_difference_percentage >= 4:
             return 0.9, 0.1
-        elif activity_percentage >= 3:
+        elif price_difference_percentage >= 3:
             return 0.8, 0.2
-        elif activity_percentage >= 2:
+        elif price_difference_percentage >= 2:
             return 0.7, 0.3
-        elif activity_percentage >= 1:
+        elif price_difference_percentage >= 1:
             return 0.6, 0.4
-    elif activity_percentage <= 0:
-        if activity_percentage <= -5:
+    elif price_difference_percentage <= 0:
+        if price_difference_percentage <= -5:
             return 0, 1
-        elif activity_percentage <= -4:
+        elif price_difference_percentage <= -4:
             return 0.1, 0.9
-        elif activity_percentage <= -3:
+        elif price_difference_percentage <= -3:
             return 0.2, 0.8
-        elif activity_percentage <= -2:
+        elif price_difference_percentage <= -2:
             return 0.3, 0.7
-        elif activity_percentage <= -1:
+        elif price_difference_percentage <= -1:
             return 0.4, 0.6
 
     return 0, 0
@@ -463,6 +464,8 @@ def calculate_upcoming_events():
         ppi_fed_announcement if time_until_ppi.days <= 2 else ''
 
 
+@retry_on_error_with_fallback(max_retries=3, delay=5,allowed_exceptions=(
+        pandas.errors.EmptyDataError, Exception), fallback_values=('0', '0'))
 def last_and_next_update(factor: str) -> Tuple[str, str]:
     latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
     last_update_time_str = latest_info_saved.iloc[0][f'latest_{factor}_update']
@@ -542,4 +545,11 @@ def create_gauge_chart(bullish, bearish, factor):
 
 
 if __name__ == '__main__':
-    create_gauge_chart(0.8, 0.2, 'weighted_score')
+    print(last_and_next_update('order_book'))
+    print(last_and_next_update('macro'))
+    print(last_and_next_update('richest_addresses'))
+    print(last_and_next_update('google_search'))
+    print(last_and_next_update('reddit'))
+    print(last_and_next_update('youtube'))
+    print(last_and_next_update('sentiment_of_news'))
+    print(last_and_next_update('weighted_score'))

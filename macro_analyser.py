@@ -2,6 +2,7 @@ import os
 import logging
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
 from datetime import datetime
 from typing import Tuple, Dict
@@ -9,7 +10,7 @@ import pandas as pd
 
 from database import save_value_to_database, read_database
 from macro_compare import calculate_macro_sentiment
-from handy_modules import save_update_time, should_update
+from handy_modules import save_update_time, should_update, retry_on_error_with_fallback
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
@@ -56,6 +57,8 @@ def get_service():
     return Service(executable_path=os.environ.get("CHROMEDRIVER_PATH", "chromedriver.exe"))
 
 
+@retry_on_error_with_fallback(max_retries=3,delay=5, allowed_exceptions=(
+        Exception,TimeoutException), fallback_values=(0, 0, {}))
 def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
     latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
 

@@ -4,42 +4,15 @@ import pandas as pd
 LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
 
 
-def compare_interest_rate(rate_this_month:  float, rate_month_before: float) -> Tuple[float, float]:
-
-    rate_decrease = rate_month_before - rate_this_month
-
-    if rate_decrease > 0:
-        if rate_decrease >= 0.75:
-            return 1.0, 0.0
-        elif rate_decrease >= 0.5:
-            return 0.85, 0.15
-        elif rate_decrease >= 0.25:
-            return 0.7, 0.3
-        elif rate_decrease >= 0:
-            return 0.6, 0.4
-
-    elif rate_decrease <= 0:
-        if rate_decrease <= -0.75:
-            return 0.0, 1.0
-        elif rate_decrease <= -0.5:
-            return 0.15, 0.85
-        elif rate_decrease <= -0.25:
-            return 0.3, 0.7
-        elif rate_decrease < 0:
-            return 0.4, 0.6
-
-    return 0.0, 0.0
-
-
 def compare_cpi_ppi_m_to_m(cpi_m_to_m: float) -> Tuple[float, float]:
     """
     Compare CPI and PPI month-to-month.
 
     Args:
-        cpi_m_to_m (float): CPI month-to-month value.
+        cpi_m_to_m or ppi_m_to_m (float): CPI month-to-month value.
 
     Returns:
-        tuple: Two floating point numbers representing comparison between CPI and PPI.
+        tuple: Two floating point numbers representing bullishness ad bearishness.
     """
     if cpi_m_to_m <= -0.75:
         return 1.0, 0.0
@@ -59,6 +32,11 @@ def compare_cpi_ppi_m_to_m(cpi_m_to_m: float) -> Tuple[float, float]:
         return 0.0, 1.0
     else:
         return 0.0, 0.0
+
+
+def compare_interest_rate(rate_this_month:  float, rate_month_before: float) -> Tuple[float, float]:
+    rate_increase = rate_this_month - rate_month_before
+    return compare_cpi_ppi_m_to_m(rate_increase)
 
 
 def calculate_macro_sentiment(rate_this_month: Optional[float], rate_month_before: Optional[float],

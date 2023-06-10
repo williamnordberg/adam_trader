@@ -61,7 +61,7 @@ def get_order_book(symbol: str, limit: int):
 
 def compare_probability(probability_up: float, probability_down: float) -> Tuple[float, float]:
 
-    if probability_up > probability_down:
+    if probability_up >= probability_down:
         if probability_up >= 0.65:
             return 1, 0
         elif probability_up >= 0.62:
@@ -72,6 +72,8 @@ def compare_probability(probability_up: float, probability_down: float) -> Tuple
             return 0.7, 0.3
         elif probability_up >= 0.53:
             return 0.6, 0.4
+        else:
+            return 0, 0
 
     elif probability_up < probability_down:
         if probability_down >= 0.65:
@@ -84,8 +86,8 @@ def compare_probability(probability_up: float, probability_down: float) -> Tuple
             return 0.3, 0.7
         elif probability_down >= 0.53:
             return 0.4, 0.6
-
-    return 0, 0
+        else:
+            return 0, 0
 
 
 def get_probabilities(symbols: List[str], limit: int = LIMIT, bid_multiplier: float = 0.995,
