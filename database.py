@@ -1,6 +1,9 @@
 import pandas as pd
 from datetime import datetime
 from typing import Any, Dict
+from handy_modules import retry_on_error_with_fallback
+import pandas.errors
+
 
 DATABASE_PATH = 'data/database.csv'
 
@@ -81,6 +84,8 @@ def parse_date(date_str):
     return datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
 
 
+@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(
+        pandas.errors.EmptyDataError, Exception), fallback_values="pass")
 def read_database() -> pd.DataFrame:
     """Read the CSV file into a DataFrame and set the "date" column as the index"""
     df = pd.read_csv(DATABASE_PATH, converters={"date": parse_date})
