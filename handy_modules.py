@@ -464,7 +464,7 @@ def calculate_upcoming_events():
         ppi_fed_announcement if time_until_ppi.days <= 2 else ''
 
 
-@retry_on_error_with_fallback(max_retries=3, delay=5,allowed_exceptions=(
+@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(
         pandas.errors.EmptyDataError, Exception), fallback_values=('0', '0'))
 def last_and_next_update(factor: str) -> Tuple[str, str]:
     latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
