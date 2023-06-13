@@ -257,19 +257,19 @@ def create_layout(fig):
 
                 html.P(initial_fed_announcement if initial_fed_announcement != '' else "",
                        id='fed-announcement',
-                       style={'fontSize': '13px',
+                       style={'fontSize': '13px', 'marginBottom': '0px',
                               'color': 'red' if initial_fed_announcement != '' else None,
-                              'fontWeight': 'bold' if initial_fed_announcement != '' else None}),
+                              'fontWeight': '' if initial_fed_announcement != '' else None}),
 
                 html.P(initial_cpi_announcement if initial_cpi_announcement != '' else "",
                        id='cpi-announcement',
-                       style={'fontSize': '13px', 'color': 'red' if initial_cpi_announcement != '' else None,
-                              'fontWeight': 'bold' if initial_cpi_announcement != '' else None}),
+                       style={'fontSize': '13px', 'marginBottom': '0px', 'color': 'red' if initial_cpi_announcement != '' else None,
+                              'fontWeight': '' if initial_cpi_announcement != '' else None}),
 
                 html.P(initial_ppi_announcement if initial_ppi_announcement else "",
                        id='ppi-announcement',
-                       style={'fontSize': '13px', 'color': 'red' if initial_ppi_announcement != '' else None,
-                              'fontWeight': 'bold' if initial_ppi_announcement != '' else None}),
+                       style={'fontSize': '13px', 'marginBottom': '0px', 'color': 'red' if initial_ppi_announcement != '' else None,
+                              'fontWeight': '' if initial_ppi_announcement != '' else None}),
 
             ]),
 

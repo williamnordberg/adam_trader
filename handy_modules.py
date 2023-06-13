@@ -429,6 +429,21 @@ def calculate_score_margin(weighted_score):
         return 0.65
 
 
+def format_time(time_until):
+    days = time_until.days
+    hours, remainder = divmod(time_until.seconds, 3600)
+    minutes, _ = divmod(remainder, 60)
+
+    if days > 1:
+        return f"{days}d, {hours}h"
+    elif days == 1:
+        return f"{days}d, {hours}h"
+    elif hours > 0:
+        return f"{hours}h, {minutes}m"
+    else:
+        return f"{minutes}m"
+
+
 def calculate_upcoming_events():
     latest_info_saved = pd.read_csv(LATEST_INFO_FILE).squeeze("columns")
     fed = datetime.strptime(latest_info_saved['interest_rate_announcement_date'][0], "%Y-%m-%d %H:%M:%S")
@@ -446,21 +461,16 @@ def calculate_upcoming_events():
     ppi_fed_announcement = ''
 
     if time_until_fed.days >= 0:
-        hours, remainder = divmod(time_until_fed.seconds, 3600)
-        minutes, seconds = divmod(remainder, 60)
-        fed_announcement = f"Next FED: {time_until_fed.days}D, {hours}H,, {minutes}m"
+        fed_announcement = f"Next FED: {format_time(time_until_fed)}"
 
     if time_until_cpi.days >= 0:
-        hours, remainder = divmod(time_until_cpi.seconds, 3600)
-        minutes, seconds = divmod(remainder, 60)
-        cpi_fed_announcement = f"Next CPI: {time_until_cpi.days}D, {hours}H, {minutes}m"
+        cpi_fed_announcement = f"Next CPI: {format_time(time_until_cpi)}"
 
     if time_until_ppi.days >= 0:
-        hours, remainder = divmod(time_until_ppi.seconds, 3600)
-        minutes, seconds = divmod(remainder, 60)
-        ppi_fed_announcement = f"Next PPI: {time_until_ppi.days}D, {hours}H, {minutes}m"
-    return fed_announcement if time_until_fed.days <= 2 else '',\
-        cpi_fed_announcement if time_until_cpi.days <= 2 else '',\
+        ppi_fed_announcement = f"Next PPI: {format_time(time_until_ppi)}"
+
+    return fed_announcement if time_until_fed.days <= 2 else '', \
+        cpi_fed_announcement if time_until_cpi.days <= 2 else '', \
         ppi_fed_announcement if time_until_ppi.days <= 2 else ''
 
 
@@ -551,5 +561,6 @@ def read_time_last_update_time_difference(column: str) -> timedelta:
     last_update_time_difference = datetime.now() - last_news_sentiment
     return last_update_time_difference
 
+
 if __name__ == '__main__':
-    print(compare_send_receive_richest_addresses())
+    print(calculate_upcoming_events())
