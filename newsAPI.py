@@ -68,6 +68,7 @@ def check_news_api_sentiment(start: datetime, end: datetime) -> Tuple[float, flo
                     positive_polarity_score += sentiment_score
                     positive_count += 1
                 elif sentiment_score < SENTIMENT_NEGATIVE_THRESHOLD:
+                    print('sentiment_score', sentiment_score)
                     negative_polarity_score += sentiment_score
                     negative_count += 1
             except Exception as e:

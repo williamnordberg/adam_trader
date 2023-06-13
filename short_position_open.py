@@ -11,7 +11,7 @@ from reddit import reddit_check
 from youtube import check_bitcoin_youtube_videos_increase
 from adam_predictor import decision_tree_predictor
 from position_decision_maker import position_decision
-from handy_modules import compare_send_receive_richest_addresses, get_bitcoin_future_market_price
+from handy_modules import retrieve_richest_addresses_bullish_bearish, get_bitcoin_future_market_price
 from testnet_future_short_trade import short_market, close_shorts_open_positions, get_open_futures_positions
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -71,7 +71,7 @@ def short_position(score_margin_to_close: float, profit_margin: float) -> Tuple[
         order_book_bullish, order_book_bearish = probabilities
 
         # 3 Monitor the richest Bitcoin addresses
-        richest_addresses_bullish, richest_addresses_bearish = compare_send_receive_richest_addresses()
+        richest_addresses_bullish, richest_addresses_bearish = retrieve_richest_addresses_bullish_bearish()
 
         # 4 Check Google search trends for Bitcoin and cryptocurrency
         google_search_bullish, google_search_bearish = check_search_trend(["Bitcoin", "Cryptocurrency"])

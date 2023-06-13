@@ -190,7 +190,7 @@ def compare_predicted_price(predicted_price: int, current_price: int) -> Tuple[f
     return 0, 0
 
 
-def compare_google_search_trends(last_hour: int, two_hours_before: int) -> Tuple[float, float]:
+def compare_google_and_reddit_and_youtube(last_hour: int, two_hours_before: int) -> Tuple[float, float]:
     """
     Compare the search trends between the last hour and two hours before.
 
@@ -226,7 +226,7 @@ def compare_google_search_trends(last_hour: int, two_hours_before: int) -> Tuple
     return 0, 0
 
 
-def compare_send_receive_richest_addresses_wrapper() -> Tuple[float, float]:
+def compare_send_receive_richest_addresses() -> Tuple[float, float]:
     latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
     total_received = latest_info_saved['total_received_coins_in_last_24'][0]
     total_sent = latest_info_saved['total_sent_coins_in_last_24'][0]
@@ -263,7 +263,7 @@ def compare_send_receive_richest_addresses_wrapper() -> Tuple[float, float]:
     return 0, 0
 
 
-def compare_send_receive_richest_addresses() -> Tuple[float, float]:
+def retrieve_richest_addresses_bullish_bearish() -> Tuple[float, float]:
     database = read_database()
     richest_addresses_bullish = database['richest_addresses_bullish'][-1]
     richest_addresses_bearish = database['richest_addresses_bearish'][-1]
@@ -545,11 +545,4 @@ def create_gauge_chart(bullish, bearish, factor):
 
 
 if __name__ == '__main__':
-    print(last_and_next_update('order_book'))
-    print(last_and_next_update('macro'))
-    print(last_and_next_update('richest_addresses'))
-    print(last_and_next_update('google_search'))
-    print(last_and_next_update('reddit'))
-    print(last_and_next_update('youtube'))
-    print(last_and_next_update('sentiment_of_news'))
-    print(last_and_next_update('weighted_score'))
+    print(compare_send_receive_richest_addresses())

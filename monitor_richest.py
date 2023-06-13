@@ -17,7 +17,6 @@ from handy_modules import should_update, read_float_from_latest_saved, save_upda
 SATOSHI_TO_BITCOIN = 100000000
 LATEST_INFO_FILE = 'data/latest_info_saved.csv'
 BITCOIN_RICH_LIST_FILE = 'data/bitcoin_rich_list2000.csv'
-UPDATE_INTERVAL_HOURS = 8
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -93,8 +92,8 @@ def monitor_bitcoin_richest_addresses() -> Tuple[float, float]:
         total_received, total_sent = check_multiple_addresses(addresses)
 
         # Save to database
-        save_value_to_database('richest_addresses_total_received', total_received)
-        save_value_to_database('richest_addresses_total_sent', total_sent)
+        save_value_to_database('richest_addresses_total_received', int(total_received))
+        save_value_to_database('richest_addresses_total_sent', int(total_sent))
 
         save_int_to_latest_saved('total_received_coins_in_last_24', int(total_received))
         save_int_to_latest_saved('total_sent_coins_in_last_24', int(total_sent))

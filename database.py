@@ -1,10 +1,13 @@
 import pandas as pd
 from datetime import datetime
 from typing import Any, Dict
-from handy_modules import retry_on_error_with_fallback
 import pandas.errors
+from functools import wraps
+import logging
+from time import sleep
 
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 DATABASE_PATH = 'data/database.csv'
 
 # Define column names
@@ -76,6 +79,35 @@ column_dtypes = {
     "news_bullish": "float",
     "news_bearish": "float",
 }
+
+
+def retry_on_error_with_fallback(max_retries: int = 3, delay: int = 5,
+                                 allowed_exceptions: tuple = (), fallback_values=None):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            retries = 0
+            while retries < max_retries:
+                try:
+                    return func(*args, **kwargs)
+                except allowed_exceptions as e:
+                    retries += 1
+                    logging.warning(f"Attempt {retries} failed with error: {e}. Retrying in {delay} seconds...")
+                    sleep(delay)
+            logging.error(f"All {max_retries} attempts failed.")
+            if fallback_values is not None:
+                if fallback_values == "pass":
+                    logging.error("Fallback value is 'pass'. Skipping this function.")
+                    return
+                else:
+                    logging.error(f"Returning fallback values {fallback_values}.")
+                    return fallback_values
+            else:
+                raise Exception(f"All {max_retries} attempts failed without a fallback value.")
+
+        return wrapper
+
+    return decorator
 
 
 def parse_date(date_str):
