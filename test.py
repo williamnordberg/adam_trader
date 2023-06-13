@@ -1,92 +1,116 @@
+from datetime import datetime, timedelta
+import logging
+
+from newsAPI import check_news_api_sentiment
+from news_crypto_compare import check_news_cryptocompare_sentiment
+from news_scrapper import check_news_sentiment_scrapper
+from typing import Tuple
+from handy_modules import read_float_from_latest_saved
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def calculate_market_sentiment(positive_polarity_24h: float, positive_count_24h: int,
-                               negative_polarity_24h: float, negative_count_24h: int,
-                               positive_polarity_48h: float, positive_count_48h: int,
-                               negative_polarity_48h: float, negative_count_48h: int) -> (float, float):
+def calculate_market_sentiment() -> (float, float):
+
+    positive_polarity_24h, negative_polarity_24h, \
+        positive_count_24h, negative_count_24h = aggregate_news()
+
+    positive_polarity_48h = round(read_float_from_latest_saved('positive_polarity_score'), 2)
+    positive_count_48h = read_float_from_latest_saved('positive_news_count')
+    negative_polarity_48h = round(read_float_from_latest_saved('negative_polarity_score'), 2)
+    negative_count_48h = read_float_from_latest_saved('negative_news_count')
+
+    print('positive_polarity_48h', positive_polarity_48h)
+    print('positive_polarity_24h', positive_polarity_24h)
+
+    print('positive_count_48h', positive_count_48h)
+    print('positive_count_24h', positive_count_24h)
+
+    print('negative_polarity_48h', negative_polarity_48h)
+    print('negative_polarity_24h', negative_polarity_24h)
+
+    print('negative_count_48h', negative_count_48h)
+    print('negative_count_24h', negative_count_24h)
 
     # Calculate changes in counts and polarities
-    positive_count_change = positive_count_24h - positive_count_48h
-    negative_count_change = negative_count_24h - negative_count_48h
     positive_pol_change = positive_polarity_24h - positive_polarity_48h
-    negat_pol_change = negative_polarity_24h - negative_polarity_48h
+    positive_count_change = positive_count_24h - positive_count_48h
+    negative_pol_change = negative_polarity_24h - negative_polarity_48h
+    negative_count_change = negative_count_24h - negative_count_48h
 
-    print('positive_count_change', positive_count_change)
-    print('negative_count_change', negative_count_change)
-    print('positive_polarity_change', positive_pol_change)
-    print('negative_polarity_change', negat_pol_change)
+    score, news_bullish, news_bearish = 0, 0, 0
+    if positive_pol_change > 0:
+        score += 0.1
+    elif positive_pol_change < 0:
+        score -= 0.1
 
-    # Positive count increases, positive polarity increases, negative count decreases, negative polarity decreases
-    if positive_count_change > 0 > negative_count_change and positive_pol_change > 0 > negat_pol_change:
-        news_bullish, news_bearish = 1, 0
+    if positive_count_change > 0:
+        score += 0.1
+    elif positive_count_change < 0:
+        score -= 0.1
 
-    # Positive count increases, positive polarity decreases, negative count decreases, negative polarity decreases
-    elif positive_count_change > 0 and positive_pol_change < 0 and negative_count_change < 0 and negat_pol_change < 0:
-        news_bullish, news_bearish = 0.8, 0.2
+    if negative_pol_change > 0:
+        score -= 0.2
+    elif negative_pol_change < 0:
+        score += 0.2
 
-    # Positive count decreases, positive polarity increases, negative count decreases, negative polarity decreases
-    elif positive_count_change < 0 and positive_pol_change > 0 and negative_count_change < 0 and negat_pol_change < 0:
-        news_bullish, news_bearish = 0.8, 0.2
+    if negative_count_change > 0:
+        score -= 0.1
+    elif negative_count_change < 0:
+        score += 0.1
 
-    # Positive count decreases, positive polarity decreases, negative count decreases, negative polarity decreases
-    elif positive_count_change < 0 and positive_pol_change < 0 and negative_count_change < 0 and negat_pol_change < 0:
-        news_bullish, news_bearish = 0, 0
-
-    # Positive count increases, positive polarity increases, negative count increases, negative polarity increases
-    elif positive_count_change > 0 and positive_pol_change > 0 and negative_count_change > 0 and negat_pol_change > 0:
-        news_bullish, news_bearish = 0, 0
-
-    # Positive count increases, positive polarity decreases, negative count increases, negative polarity increases
-    elif positive_count_change > 0 and positive_pol_change < 0 and negative_count_change > 0 and negat_pol_change > 0:
-        news_bullish, news_bearish = 0.3, 0.7
-
-    # Positive count decreases, positive polarity increases, negative count increases, negative polarity increases
-    elif positive_count_change < 0 and positive_pol_change > 0 and negative_count_change > 0 and negat_pol_change > 0:
-        news_bullish, news_bearish = 0.2, 0.8
-
-    # Positive count decreases, positive polarity decreases, negative count increases, negative polarity increases
-    elif positive_count_change < 0 and positive_pol_change < 0 and negative_count_change > 0 and negat_pol_change > 0:
-        news_bullish, news_bearish = 0, 1
-
-    # Positive count increases, positive polarity increases, negative count decreases, negative polarity increases
-    elif positive_count_change > 0 and positive_pol_change > 0 and negative_count_change < 0 and negat_pol_change > 0:
-        news_bullish, news_bearish = 0.8, 0.2
-
-    # Positive count increases, positive polarity decreases, negative count decreases, negative polarity increases
-    elif positive_count_change > 0 and positive_pol_change < 0 and negative_count_change < 0 and negat_pol_change > 0:
-        news_bullish, news_bearish = 0.7, 0.3
-
-    # Positive count decreases, positive polarity increases, negative count decreases, negative polarity increases
-    elif positive_count_change < 0 and positive_pol_change > 0 and negative_count_change < 0 and negat_pol_change > 0:
-        news_bullish, news_bearish = 0, 0
-
-    # Positive count decreases, positive polarity decreases, negative count decreases, negative polarity increases
-    elif positive_count_change < 0 and positive_pol_change < 0 and negative_count_change < 0 and negat_pol_change > 0:
-        news_bullish, news_bearish = 0.4, 0.6
-
-    # Positive count increases, positive polarity increases, negative count increases, negative polarity decreases
-    elif positive_count_change > 0 and positive_pol_change > 0 and negative_count_change > 0 and negat_pol_change < 0:
-        news_bullish, news_bearish = 0.7, 0.3
-
-    # Positive count increases, positive polarity decreases, negative count increases, negative polarity decreases
-    elif positive_count_change > 0 and positive_pol_change < 0 and negative_count_change > 0 and negat_pol_change < 0:
-        news_bullish, news_bearish = 0.3, 0.7
-
-    # Positive count decreases, positive polarity increases, negative count increases, negative polarity decreases
-    elif positive_count_change < 0 and positive_pol_change > 0 and negative_count_change > 0 and negat_pol_change < 0:
-        news_bullish, news_bearish = 0, 0
-
-    # Positive count decreases, positive polarity decreases, negative count increases, negative polarity decreases
-    elif positive_count_change < 0 and positive_pol_change < 0 and negative_count_change > 0 and negat_pol_change < 0:
-        news_bullish, news_bearish = 0.2, 0.8
+    if score > 0:
+        news_bullish = 0.5 + score
+    elif score < 0:
+        news_bearish = 0.5 + abs(score)
     else:
-        print('here')
         news_bullish, news_bearish = 0, 0
 
     return news_bullish, news_bearish
 
 
-if __name__ == '__main__':
-    print(calculate_market_sentiment(2, 2, 2, 2,
-                                     1, 1, 2, 3))
+def aggregate_news() -> Tuple[float, float, int, int]:
+    """
+        Aggregates news sentiment from different sources for the last 24 hours.
 
+        Returns:
+            positive_polarity_24_hours_before (float): Average positive polarity score.
+            negative_polarity_24_hours_before (float): Average negative polarity score.
+            positive_count_24_hours_before (int): Total number of positive news articles.
+            negative_count_24_hours_before (int): Total number of negative news articles.
+        """
+
+    start = datetime.now() - timedelta(days=1)
+    end = datetime.now()
+    positive_polarity_24_hours_before1, negative_polarity_24_hours_before1, \
+        positive_count_24_hours_before1, negative_count_24_hours_before1 = \
+        check_news_api_sentiment(start, end)
+
+    positive_polarity_24_hours_before2, negative_polarity_24_hours_before2, \
+        positive_count_24_hours_before2, negative_count_24_hours_before2 = \
+        check_news_cryptocompare_sentiment()
+
+    positive_polarity_24_hours_before3, negative_polarity_24_hours_before3, \
+        positive_count_24_hours_before3, negative_count_24_hours_before3 = \
+        check_news_sentiment_scrapper()
+
+    # divide by number of news aggregates
+    positive_polarity_24_hours_before = (positive_polarity_24_hours_before1 + positive_polarity_24_hours_before2
+                                         + positive_polarity_24_hours_before3) / 3
+
+    negative_polarity_24_hours_before = (negative_polarity_24_hours_before1 + negative_polarity_24_hours_before2
+                                         + negative_polarity_24_hours_before3) / 3
+
+    positive_count_24_hours_before = int((positive_count_24_hours_before1 + positive_count_24_hours_before2
+                                          + positive_count_24_hours_before3) / 3)
+
+    negative_count_24_hours_before = int((negative_count_24_hours_before1 + negative_count_24_hours_before2
+                                          + negative_count_24_hours_before3) / 3)
+
+    return round(positive_polarity_24_hours_before, 2), round(negative_polarity_24_hours_before, 2), \
+        positive_count_24_hours_before, negative_count_24_hours_before
+
+
+if __name__ == "__main__":
+    x, y = calculate_market_sentiment()
+    print(f'bullish: {x}, bearish: {y}')

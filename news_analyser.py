@@ -6,7 +6,7 @@ from handy_modules import should_update, save_update_time
 from typing import Tuple
 from database import read_database
 from newsAPI import check_news_api_sentiment
-from news_aggregate import aggregate_news, compare_polarity
+from news_aggregate import aggregate_news, calculate_market_sentiment
 from database import save_value_to_database
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -24,17 +24,12 @@ def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
     last_update_time_difference = datetime.now() - last_news_sentiment
 
     if last_update_time_difference < timedelta(hours=48):
-        print('if last_update_time_difference < timedelta(hours=48):')
         saved_positive_polarity = latest_info_saved['positive_polarity_score'][0]
         saved_negative_polarity = latest_info_saved['negative_polarity_score'][0]
 
         # Get aggregated value from 3 function for las 24 hours
         last_24_hours_positive_polarity, last_24_hours_negative_polarity,\
             positive_count_24_hours_before, negative_count_24_hours_before = aggregate_news()
-        print('last_24_hours_positive_polarity', last_24_hours_positive_polarity)
-        print('last_24_hours_negative_polarity', last_24_hours_negative_polarity)
-        print('saved_positive_polarity', saved_positive_polarity)
-        print('saved_negative_polarity', saved_negative_polarity)
 
         # Calculate and save value for visualisation
         positive_percentage_increase = (last_24_hours_positive_polarity - saved_positive_polarity
@@ -45,13 +40,8 @@ def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
         latest_info_saved.loc[0, 'positive_news_polarity_change'] = int(positive_percentage_increase)
         latest_info_saved.loc[0, 'negative_news_polarity_change'] = int(negative_percentage_increase)
 
-        # compare last 24 hours polarity with last 48 hours polarity
-        news_bullish, news_bearish = compare_polarity(last_24_hours_positive_polarity, saved_positive_polarity,
-                                                      last_24_hours_negative_polarity, saved_negative_polarity)
-        print('last_24_hours_positive_polarity, saved_positive_polarity,'
-              'last_24_hours_negative_polarity, saved_negative_polarity',
-              last_24_hours_positive_polarity, saved_positive_polarity,
-              last_24_hours_negative_polarity, saved_negative_polarity)
+        news_bullish, news_bearish = calculate_market_sentiment()
+
         # Save data on disk for later compare
         latest_info_saved.loc[0, 'positive_polarity_score'] = last_24_hours_positive_polarity
         latest_info_saved.loc[0, 'negative_polarity_score'] = last_24_hours_negative_polarity
@@ -66,15 +56,14 @@ def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
         latest_info_saved.to_csv(LATEST_INFO_SAVED_PATH, index=False)
 
         # Save data on database
-        save_value_to_database('news_positive_polarity', round(last_24_hours_positive_polarity, 3))
-        save_value_to_database('news_negative_polarity', round(last_24_hours_negative_polarity, 3))
+        save_value_to_database('news_positive_polarity', round(last_24_hours_positive_polarity, 2))
+        save_value_to_database('news_negative_polarity', round(last_24_hours_negative_polarity, 2))
         save_value_to_database('news_positive_count', positive_count_24_hours_before)
         save_value_to_database('news_negative_count', negative_count_24_hours_before)
 
         return news_bullish, news_bearish
 
     elif last_update_time_difference > timedelta(hours=48):
-        print('    elif last_update_time_difference > timedelta(hours=48):')
         # Get the values for 48 to 24 hours before
         start = datetime.now() - timedelta(days=2)
         end = datetime.now() - timedelta(days=1)
@@ -90,9 +79,7 @@ def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
             check_news_api_sentiment(start, end)
 
         # compare
-        news_bullish, news_bearish = compare_polarity(
-            last_24_hours_positive_polarity, positive_polarity_48_hours_before,
-            last_24_hours_negative_polarity, negative_polarity_48_hours_before)
+        news_bullish, news_bearish = calculate_market_sentiment()
 
         # Calculate and save value for visualisation
         positive_percentage_increase = (last_24_hours_positive_polarity - positive_polarity_48_hours_before
@@ -129,7 +116,6 @@ def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
 
 def check_sentiment_of_news() -> Tuple[float, float]:
     if should_update('sentiment_of_news'):
-        print('should_update(sentiment_of_news)')
         news_bullish, news_bearish = check_sentiment_of_news_wrapper()
         save_value_to_database('news_bullish', news_bullish)
         save_value_to_database('news_bearish', news_bearish)
