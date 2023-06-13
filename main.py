@@ -5,9 +5,9 @@ import datetime
 import signal
 import sys
 
-from handy_modules import compare_send_receive_richest_addresses, get_bitcoin_price, \
+from handy_modules import retrieve_richest_addresses_bullish_bearish, get_bitcoin_price, \
     save_trade_details, save_trade_result, save_trading_state,\
-    calculate_score_margin, compare_send_receive_richest_addresses_wrapper
+    calculate_score_margin, compare_send_receive_richest_addresses
 from technical_analysis import technical_analyse
 from news_analyser import check_sentiment_of_news
 from youtube import check_bitcoin_youtube_videos_increase
@@ -54,7 +54,7 @@ def run_monitor_richest_addresses():
     while True:
         total_received, total_sent = monitor_bitcoin_richest_addresses()
 
-        richest_addresses_bullish, richest_addresses_bearish = compare_send_receive_richest_addresses_wrapper()
+        richest_addresses_bullish, richest_addresses_bearish = compare_send_receive_richest_addresses()
 
         # Save to database
         save_value_to_database('richest_addresses_bullish', richest_addresses_bullish)
@@ -80,7 +80,7 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
         order_book_bullish, order_book_bearish = probabilities
 
         # 3 Monitor the richest Bitcoin addresses
-        richest_addresses_bullish, richest_addresses_bearish = compare_send_receive_richest_addresses()
+        richest_addresses_bullish, richest_addresses_bearish = retrieve_richest_addresses_bullish_bearish()
 
         # 4 Check Google search trends for Bitcoin and cryptocurrency
         google_search_bullish, google_search_bearish = check_search_trend(["Bitcoin", "Cryptocurrency"])

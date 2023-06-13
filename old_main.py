@@ -6,7 +6,7 @@ import time
 import pandas as pd
 
 from database import read_database
-from handy_modules import compare_send_receive_richest_addresses, get_bitcoin_price
+from handy_modules import retrieve_richest_addresses_bullish_bearish, get_bitcoin_price
 from technical_analysis import technical_analyse
 from news_analyser import check_sentiment_of_news
 from youtube import check_bitcoin_youtube_videos_increase
@@ -159,7 +159,7 @@ def trading_loop(queue, lock, visualization_queue, long_threshold: float, short_
         order_book_bullish, order_book_bearish = probabilities
 
         # 3 Monitor the richest Bitcoin addresses
-        richest_addresses_bullish, richest_addresses_bearish = compare_send_receive_richest_addresses()
+        richest_addresses_bullish, richest_addresses_bearish = retrieve_richest_addresses_bullish_bearish()
 
         # 4 Check Google search trends for Bitcoin and cryptocurrency
         google_search_bullish, google_search_bearish = check_search_trend(["Bitcoin", "Cryptocurrency"])

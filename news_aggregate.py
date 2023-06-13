@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 import logging
-import pandas as pd
 
 from newsAPI import check_news_api_sentiment
 from news_crypto_compare import check_news_cryptocompare_sentiment
@@ -17,6 +16,10 @@ def compare_polarity(last_24_hours_positive_polarity: float, saved_positive_pola
                                     ) / saved_positive_polarity * 100
     negative_percentage_increase = (last_24_hours_negative_polarity - saved_negative_polarity
                                     ) / saved_negative_polarity * 100
+
+    print('positive_percentage_increase', positive_percentage_increase)
+    print('negative_percentage_increase', negative_percentage_increase)
+
     if positive_percentage_increase > negative_percentage_increase:
         positive_percentage_increase = positive_percentage_increase - negative_percentage_increase
         if positive_percentage_increase >= 50:
@@ -89,20 +92,7 @@ def aggregate_news() -> Tuple[float, float, int, int]:
 
 
 if __name__ == "__main__":
-    LATEST_INFO_SAVED_PATH = 'data/latest_info_saved.csv'
-    latest_info_saved = pd.read_csv(LATEST_INFO_SAVED_PATH).squeeze("columns")
 
-    saved_positive_polarity_outer = latest_info_saved['positive_polarity_score'][0]
-    saved_negative_polarity_outer = latest_info_saved['negative_polarity_score'][0]
-
-    positive_polarity_score_outer, negative_polarity_score_outer, \
-        positive_count_outer, negative_count_outer = aggregate_news()
-
-    print('last_24_hours_positive_polarity', positive_polarity_score_outer)
-    print('saved_positive_polarity', saved_positive_polarity_outer)
-    print('last_24_hours_negative_polarity', negative_polarity_score_outer)
-    print('saved_negative_polarity', saved_negative_polarity_outer)
-
-    x, y = compare_polarity(positive_polarity_score_outer, saved_positive_polarity_outer,
-                            negative_polarity_score_outer, saved_negative_polarity_outer)
+    x, y = compare_polarity(0.13, 0.1,
+                            1, 1)
     print(f'bullish: {x}, bearish: {y}')

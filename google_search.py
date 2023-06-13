@@ -5,7 +5,7 @@ from pytrends.exceptions import ResponseError
 
 from database import save_value_to_database, read_database
 from handy_modules import check_internet_connection, retry_on_error_fallback_0_0, \
-    compare_google_search_trends, save_update_time, should_update
+    compare_google_and_reddit_and_youtube, save_update_time, should_update
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -76,7 +76,7 @@ def check_search_trend_wrapper(keywords: List[str]) -> Tuple[float, float]:
         trend = pytrends.interest_over_time()
         last_hour, two_hours_before = trend.iloc[-1].values[0], trend.iloc[-2].values[0]
 
-        youtube_bullish, youtube_bearish = compare_google_search_trends(last_hour, two_hours_before)
+        youtube_bullish, youtube_bearish = compare_google_and_reddit_and_youtube(last_hour, two_hours_before)
 
         save_value_to_database('hourly_google_search', last_hour)
         save_value_to_database('google_search_bullish', youtube_bullish)
