@@ -5,48 +5,56 @@ from newsAPI import check_news_api_sentiment
 from news_crypto_compare import check_news_cryptocompare_sentiment
 from news_scrapper import check_news_sentiment_scrapper
 from typing import Tuple
+from handy_modules import read_float_from_latest_saved
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def compare_polarity(last_24_hours_positive_polarity: float, saved_positive_polarity: float,
-                     last_24_hours_negative_polarity: float, saved_negative_polarity: float)\
-        -> Tuple[float, float]:
-    positive_percentage_increase = (last_24_hours_positive_polarity - saved_positive_polarity
-                                    ) / saved_positive_polarity * 100
-    negative_percentage_increase = (last_24_hours_negative_polarity - saved_negative_polarity
-                                    ) / saved_negative_polarity * 100
+def calculate_market_sentiment() -> (float, float):
 
-    print('positive_percentage_increase', positive_percentage_increase)
-    print('negative_percentage_increase', negative_percentage_increase)
+    positive_polarity_24h, negative_polarity_24h, \
+        positive_count_24h, negative_count_24h = aggregate_news()
 
-    if positive_percentage_increase > negative_percentage_increase:
-        positive_percentage_increase = positive_percentage_increase - negative_percentage_increase
-        if positive_percentage_increase >= 50:
-            return 1, 0
-        elif positive_percentage_increase >= 40:
-            return 0.9, 0.1
-        elif positive_percentage_increase >= 30:
-            return 0.8, 0.2
-        elif positive_percentage_increase >= 20:
-            return 0.7, 0.3
-        elif positive_percentage_increase >= 10:
-            return 0.6, 0.4
+    positive_polarity_48h = round(read_float_from_latest_saved('positive_polarity_score'), 2)
+    positive_count_48h = read_float_from_latest_saved('positive_news_count')
+    negative_polarity_48h = round(read_float_from_latest_saved('negative_polarity_score'), 2)
+    negative_count_48h = read_float_from_latest_saved('negative_news_count')
 
-    elif positive_percentage_increase < negative_percentage_increase:
-        negative_percentage_increase = negative_percentage_increase - positive_percentage_increase
-        if negative_percentage_increase >= 50:
-            return 0, 1
-        elif negative_percentage_increase >= 40:
-            return 0.1, 0.9
-        elif negative_percentage_increase >= 30:
-            return 0.2, 0.8
-        elif negative_percentage_increase >= 20:
-            return 0.3, 0.7
-        elif negative_percentage_increase >= 10:
-            return 0.4, 0.6
+    # Calculate changes in counts and polarities
+    positive_pol_change = positive_polarity_24h - positive_polarity_48h
+    positive_count_change = positive_count_24h - positive_count_48h
+    negative_pol_change = negative_polarity_24h - negative_polarity_48h
+    negative_count_change = negative_count_24h - negative_count_48h
 
-    return 0, 0
+    score, news_bullish, news_bearish = 0, 0, 0
+    if positive_pol_change > 0:
+        score += 0.1
+    elif positive_pol_change < 0:
+        score -= 0.1
+
+    if positive_count_change > 0:
+        score += 0.1
+    elif positive_count_change < 0:
+        score -= 0.1
+
+    if negative_pol_change > 0:
+        score -= 0.2
+    elif negative_pol_change < 0:
+        score += 0.2
+
+    if negative_count_change > 0:
+        score -= 0.1
+    elif negative_count_change < 0:
+        score += 0.1
+
+    if score > 0:
+        news_bullish = 0.5 + score
+    elif score < 0:
+        news_bearish = 0.5 + abs(score)
+    else:
+        news_bullish, news_bearish = 0, 0
+
+    return news_bullish, news_bearish
 
 
 def aggregate_news() -> Tuple[float, float, int, int]:
@@ -87,12 +95,10 @@ def aggregate_news() -> Tuple[float, float, int, int]:
     negative_count_24_hours_before = int((negative_count_24_hours_before1 + negative_count_24_hours_before2
                                           + negative_count_24_hours_before3) / 3)
 
-    return positive_polarity_24_hours_before, negative_polarity_24_hours_before, \
+    return round(positive_polarity_24_hours_before, 2), round(negative_polarity_24_hours_before, 2), \
         positive_count_24_hours_before, negative_count_24_hours_before
 
 
 if __name__ == "__main__":
-
-    x, y = compare_polarity(0.13, 0.1,
-                            1, 1)
+    x, y = calculate_market_sentiment()
     print(f'bullish: {x}, bearish: {y}')
