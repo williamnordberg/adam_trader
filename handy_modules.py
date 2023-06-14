@@ -22,11 +22,14 @@ TRADE_DETAILS_PATH = 'data/trades_details.csv'
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# time_to_announce = datetime(2023, 6, 14, 18, 0)
-latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
-value = str(latest_info_saved.iloc[0]['next-fed-announcement'])
 
-time_to_announce = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
+def read_fed_announcement() -> str:
+    latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
+    value = str(latest_info_saved.iloc[0]['next-fed-announcement'])
+    return value
+
+
+time_to_announce = datetime.strptime(read_fed_announcement(), '%Y-%m-%d %H:%M:%S')
 
 update_intervals = {
     "dataset": timedelta(hours=24),
@@ -466,13 +469,13 @@ def calculate_upcoming_events():
     ppi_fed_announcement = ''
 
     if time_until_fed.days >= 0:
-        fed_announcement = f"Next FED: {format_time(time_until_fed)}"
+        fed_announcement = f"Nxt FED:{format_time(time_until_fed)}"
 
     if time_until_cpi.days >= 0:
-        cpi_fed_announcement = f"Next CPI: {format_time(time_until_cpi)}"
+        cpi_fed_announcement = f"Nxt CPI:{format_time(time_until_cpi)}"
 
     if time_until_ppi.days >= 0:
-        ppi_fed_announcement = f"Next PPI: {format_time(time_until_ppi)}"
+        ppi_fed_announcement = f"Nxt PPI:{format_time(time_until_ppi)}"
 
     return fed_announcement if time_until_fed.days <= 2 else '', \
         cpi_fed_announcement if time_until_cpi.days <= 2 else '', \
@@ -568,4 +571,4 @@ def read_time_last_update_time_difference(column: str) -> timedelta:
 
 
 if __name__ == '__main__':
-    save_trading_state('long')
+    print('')
