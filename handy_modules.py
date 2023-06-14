@@ -22,9 +22,15 @@ TRADE_DETAILS_PATH = 'data/trades_details.csv'
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+# time_to_announce = datetime(2023, 6, 14, 18, 0)
+latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
+value = str(latest_info_saved.iloc[0]['next-fed-announcement'])
+
+time_to_announce = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
+
 update_intervals = {
     "dataset": timedelta(hours=24),
-    "macro": timedelta(hours=24),
+    "macro": timedelta(hours=1) if datetime.now() <= time_to_announce else timedelta(hours=24),
     "order_book": timedelta(minutes=10),
     "predicted_price": timedelta(hours=12),
     "technical_analysis": timedelta(hours=4),
@@ -301,7 +307,6 @@ def save_trading_state(state: str):
 def read_current_trading_state() -> str:
     latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
     state = latest_info_saved.iloc[0]['latest_trading_state']
-    latest_info_saved.to_csv(LATEST_INFO_FILE, index=False)
     return state
 
 
@@ -563,4 +568,4 @@ def read_time_last_update_time_difference(column: str) -> timedelta:
 
 
 if __name__ == '__main__':
-    print(calculate_upcoming_events())
+    save_trading_state('long')

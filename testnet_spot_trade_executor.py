@@ -231,6 +231,6 @@ if __name__ == '__main__':
     # cancel_all_open_orders(SYMBOL)
     # place_market_buy_order(1)
     # get_open_orders(SYMBOL)
-    #close_position_at_market(0.3)
+    # close_position_at_market(0.3)
     get_btc_open_positions()
     # get_trade_history(SYMBOL)
