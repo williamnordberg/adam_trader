@@ -56,6 +56,7 @@ def reddit_check_wrapper() -> Tuple[float, float]:
         client_secret=reddit_config['client_secret'],
         user_agent=reddit_config['user_agent']
     )
+
     latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
 
     previous_activity = float(latest_info_saved['previous_activity'][0])
