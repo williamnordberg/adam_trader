@@ -57,13 +57,13 @@ def get_service():
     return Service(executable_path=os.environ.get("CHROMEDRIVER_PATH", "chromedriver.exe"))
 
 
-@retry_on_error_with_fallback(max_retries=3,delay=5, allowed_exceptions=(
-        Exception,TimeoutException), fallback_values=(0, 0, {}))
+@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(
+        Exception, TimeoutException), fallback_values=(0, 0, {}))
 def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
-    latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
-
     # Save latest update time
     save_update_time('macro')
+
+    latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
 
     events_list = ["Federal Funds Rate", "CPI m/m", "PPI m/m"]
     url = "https://www.forexfactory.com/calendar"
@@ -141,7 +141,11 @@ def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
         save_value_to_database('macro_bullish', round(macro_bullish, 2))
         save_value_to_database('macro_bearish', round(macro_bearish, 2))
 
+        # Save the next event date
+        latest_info_saved.loc[0, 'next-fed-announcement'] = str(events_date_dict['Federal Funds Rate'])
+
         latest_info_saved.to_csv(LATEST_INFO_SAVED, index=False)
+
         return macro_bullish, macro_bearish, events_date_dict
 
     else:
@@ -160,6 +164,5 @@ def macro_sentiment() -> Tuple[float, float, Dict[str, datetime]]:
 
 if __name__ == "__main__":
     macro_bullish_outer, macro_bearish_outer, events_date_dict_outer = macro_sentiment_wrapper()
-    logging.info(f"{macro_bullish_outer}, {macro_bearish_outer}, event: {events_date_dict_outer}")
-    print_upcoming_events(events_date_dict_outer)
-    print('events_date_dict_outer', events_date_dict_outer)
+    # logging.info(f"{macro_bullish_outer}, {macro_bearish_outer}, event: {events_date_dict_outer}")
+    print(events_date_dict_outer)
