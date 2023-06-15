@@ -5,9 +5,11 @@ from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
-from handy_modules import get_bitcoin_price, calculate_upcoming_events, create_gauge_chart
-from database import read_database
+import plotly.graph_objects as go
 
+from handy_modules import get_bitcoin_price, \
+    calculate_upcoming_events, create_gauge_chart, COLORS
+from database import read_database
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
@@ -15,7 +17,70 @@ BACKGROUND_COLOR = '#000000'
 TEXT_COLOR = '#FFFFFF'
 LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
 DATABASE_PATH = 'data/database.csv'
+TRADE_RESULT_PATH = 'data/trades_results.csv'
 APP_UPDATE_TIME = 50
+
+
+def visualize_trade_results():
+    df = pd.read_csv(TRADE_RESULT_PATH)
+
+    # Create an empty figure
+    fig = go.Figure()
+
+    # Add a bar chart for PNL
+    fig.add_trace(go.Bar(x=df['weighted_score_category'], y=(df["PNL"] / 1000),
+                         name='PNL(K)', marker=dict(color=COLORS['lightgray'])))
+
+    # Add a bar chart for number_of_long
+    fig.add_trace(go.Bar(x=df['weighted_score_category'], y=df["long_trades"],
+                         name='long trades Number', marker=dict(color=COLORS['green_chart'])))
+
+    # Add a bar chart for number_of_short
+    fig.add_trace(go.Bar(x=df['weighted_score_category'], y=df["short_trades"],
+                         name='short trades Number', marker=dict(color=COLORS['red_chart'])))
+    # Add a bar chart for number_of_trades
+    fig.add_trace(go.Bar(x=df['weighted_score_category'], y=df["win_trades"],
+                         name='win trades'))
+
+    # Add a bar chart for number_of_trades
+    fig.add_trace(go.Bar(x=df['weighted_score_category'], y=df["loss_trades"],
+                         name='loss trades'))
+
+    # Add a bar chart for number_of_trades
+    # fig.add_trace(go.Bar(x=df['weighted_score_category'], y=df["total_trades"],
+    #                    name='Number of Trades'))
+
+    # Update the layout and show the plot
+    fig.update_layout(
+            title={
+                'text': "Trade Results",
+                'y': 0.9,  # Adjust this as needed. Default is 0.9
+                'x': 0.5,  # Places the title in the center
+                'xanchor': 'center',  # ensures the title remains at center when resizing
+                'yanchor': 'top',  # ensures the title remains at top when resizing
+                'font': {
+                 'color': COLORS['white'],  # Change this to your desired color
+                 'size': 24  # Change this to your desired size
+                    }
+                    },
+            xaxis_title='Model Category',
+            yaxis_title='Value',
+            barmode='group',
+            plot_bgcolor=BACKGROUND_COLOR,
+            paper_bgcolor=BACKGROUND_COLOR,
+            font=dict(
+                color=COLORS['white'],  # Change this to your desired color
+                size=12
+            )
+    )
+
+    return fig
+
+
+@app.callback(Output('trade-results-chart', 'figure'),
+              [Input('interval-component', 'n_intervals')])
+def update_trade_result(n):
+    return visualize_trade_results()
 
 
 def read_gauge_chart_data():
@@ -187,7 +252,7 @@ def generate_tooltips():
     ]
 
 
-def create_layout(fig):
+def create_layout(fig, fig_trade_result):
     layout_data = read_layout_data()
 
     # Extracting data from layout_data dictionary
@@ -240,6 +305,9 @@ def create_layout(fig):
         dcc.Graph(id='live-update-graph', figure=fig, style={
             'width': '90%', 'height': '100vh', 'display': 'inline-block'}),
 
+        # Add your new chart here
+
+
         html.Div([
             html.Div([
 
@@ -262,13 +330,15 @@ def create_layout(fig):
                               'fontWeight': '' if initial_fed_announcement != '' else None}),
 
                 html.P(initial_cpi_announcement if initial_cpi_announcement != '' else "",
-                       id='cpi-announcement',
-                       style={'fontSize': '13px', 'marginBottom': '0px', 'color': 'red' if initial_cpi_announcement != '' else None,
-                              'fontWeight': '' if initial_cpi_announcement != '' else None}),
+                       id='cpi-announcement', style={'fontSize': '13px',
+                                                     'marginBottom': '0px',
+                                                     'color': 'red' if initial_cpi_announcement != '' else None,
+                                                     'fontWeight': '' if initial_cpi_announcement != '' else None}),
 
                 html.P(initial_ppi_announcement if initial_ppi_announcement else "",
                        id='ppi-announcement',
-                       style={'fontSize': '13px', 'marginBottom': '0px', 'color': 'red' if initial_ppi_announcement != '' else None,
+                       style={'fontSize': '13px', 'marginBottom': '0px',
+                              'color': 'red' if initial_ppi_announcement != '' else None,
                               'fontWeight': '' if initial_ppi_announcement != '' else None}),
 
             ]),
@@ -277,10 +347,12 @@ def create_layout(fig):
                 html.P(f'T State: {initial_trading_state}', id='trading-state',
                        style={'fontSize': '13px',
                               'margin': '0px',
-                              'color': 'green' if initial_trading_state == 'Trading state: long' or
-                                                  initial_trading_state == 'long' else (
-                               'red' if initial_trading_state == 'Trading state: short' or
-                                        initial_trading_state == 'short' else TEXT_COLOR)}),
+                              'color': 'green' if initial_trading_state == 'Trading state: long'
+                              or initial_trading_state == 'long'
+                              else('red' if
+                                   initial_trading_state == 'Trading state: short' or
+                                   initial_trading_state == 'short' else TEXT_COLOR)}),
+
             ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
 
             html.Div([
@@ -321,6 +393,7 @@ def create_layout(fig):
             ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
 
         ], style={'width': '10%', 'height': '100vh', 'display': 'inline-block', 'verticalAlign': 'top'}),
+        dcc.Graph(id='trade-results-chart', figure=fig_trade_result, style={'width': '100%', 'height': '70  vh'}),
     ] + generate_tooltips()
     )
 
@@ -329,7 +402,8 @@ def create_layout(fig):
 
 def visualize_charts():
     fig = create_gauge_charts()
-    create_layout(fig)
+    fig_trade_result = visualize_trade_results()
+    create_layout(fig, fig_trade_result)
 
 
 @app.callback(Output('live-update-graph', 'figure'),
@@ -402,12 +476,15 @@ def update_layout_values_live(n):
     new_fed_announcement, new_cpi_announcement, new_ppi_announcement = calculate_upcoming_events()
 
     new_trading_state_style = {'fontSize': '13px', 'margin': '0px',
-                               'color': 'green' if new_trading_state == 'Trading state: long' or new_trading_state == 'long' else (
-                                   'red' if new_trading_state == 'Trading state: short' or new_trading_state == 'short' else TEXT_COLOR)}
+                               'color': 'green' if new_trading_state == 'Trading state: long' or
+                                                   new_trading_state == 'long' else
+                               ('red' if new_trading_state == 'Trading state: short' or new_trading_state == 'short'
+                                else TEXT_COLOR)}
 
     return (new_fed_rate, new_cpi_rate, new_ppi_rate,
             new_fed_announcement, new_cpi_announcement, new_ppi_announcement,
-            f'T State: {new_trading_state}', new_trading_state_style, f'Bid vol: {new_bid_volume}', f'Ask vol: {new_ask_volume}',
+            f'T State: {new_trading_state}', new_trading_state_style, f'Bid vol: {new_bid_volume}',
+            f'Ask vol: {new_ask_volume}',
             f'Predicted: {new_predicted_price}', f'Current: {new_current_price}', f'Diff: {new_price_difference}',
             f'RSI: {new_rsi}', f'Over 200EMA: {new_over_200ema}', f'MACD up tr: {new_macd_trend}',
             f'bb distance: {new_bb_distance}', f'Rich receive: {new_btc_received}',

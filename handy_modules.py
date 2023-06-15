@@ -20,6 +20,16 @@ SYMBOL = 'BTCUSDT'
 TRADE_RESULT_PATH = 'data/trades_results.csv'
 TRADE_DETAILS_PATH = 'data/trades_details.csv'
 
+COLORS = {
+    'red_chart': '#ca3f64',
+    'green_chart': '#25a750',
+    'white': '#FFFFFF',
+    'black': '#000000',
+    'lightgray': '#545454',
+    'gray_text': '#fff',
+    'background': '#000000'
+}
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
@@ -510,17 +520,6 @@ def last_and_next_update(factor: str) -> Tuple[str, str]:
         next_update_str = f'{int(next_update.total_seconds() // 60)}m'
 
     return time_since_last_update_str, next_update_str
-
-
-COLORS = {
-    'red_chart': '#ca3f64',
-    'green_chart': '#25a750',
-    'white': '#FFFFFF',
-    'black': '#000000',
-    'lightgray': '#545454',
-    'gray_text': '#fff',
-    'background': '#000000'
-}
 
 
 def create_gauge_chart(bullish, bearish, factor):
