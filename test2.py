@@ -7,18 +7,387 @@ from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 
-from handy_modules import get_bitcoin_price, \
-    calculate_upcoming_events, create_gauge_chart, COLORS
+from handy_modules import get_bitcoin_price, calculate_upcoming_events, create_gauge_chart, COLORS
 from database import read_database
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-BACKGROUND_COLOR = '#000000'
-TEXT_COLOR = '#FFFFFF'
 LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
 DATABASE_PATH = 'data/database.csv'
 TRADE_RESULT_PATH = 'data/trades_results.csv'
 APP_UPDATE_TIME = 50
+
+
+def visualized_news():
+    df = pd.read_csv(DATABASE_PATH)
+
+    df['date'] = pd.to_datetime(df['date'])
+    df.set_index('date', inplace=True)
+
+    fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
+
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_bullish"], name='Richest bullish', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_bearish"], name='Richest bearish', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_total_received"], name='Sent in last 24H'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_total_sent"], name='Received in last 24H'))
+
+    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right')
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(showgrid=False)
+    fig.update_layout(
+        title={
+            'text': "Richest Addresses",
+            'y': 0.9,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {
+                'color': COLORS['white'],
+                'size': 24
+            }
+        },
+        xaxis_title='Date',
+        yaxis_title='Value',
+        plot_bgcolor=COLORS['background'],
+        paper_bgcolor=COLORS['background'],
+        font=dict(
+            color=COLORS['white'],
+            size=12
+        ),
+        legend=dict(orientation="h",  # horizontal legend
+                    yanchor="bottom",
+                    y=1.02,  # put it a bit above the bottom of the plot
+                    xanchor="right",
+                    x=1),  # put it to the right of the plot
+        hovermode="x"  # on hover, show info for all data series for that x-value
+    )
+
+    return fig
+
+
+@app.callback(Output('news-chart', 'figure'),
+              [Input('interval-component', 'n_intervals')])
+def update_google(n):
+    return visualized_richest()
+
+
+def visualized_youtube():
+    df = pd.read_csv(DATABASE_PATH)
+
+    df['date'] = pd.to_datetime(df['date'])
+    df.set_index('date', inplace=True)
+
+    fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
+
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_bullish"], name='Richest bullish', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_bearish"], name='Richest bearish', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_total_received"], name='Sent in last 24H'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_total_sent"], name='Received in last 24H'))
+
+    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right')
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(showgrid=False)
+    fig.update_layout(
+        title={
+            'text': "Richest Addresses",
+            'y': 0.9,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {
+                'color': COLORS['white'],
+                'size': 24
+            }
+        },
+        xaxis_title='Date',
+        yaxis_title='Value',
+        plot_bgcolor=COLORS['background'],
+        paper_bgcolor=COLORS['background'],
+        font=dict(
+            color=COLORS['white'],
+            size=12
+        ),
+        legend=dict(orientation="h",  # horizontal legend
+                    yanchor="bottom",
+                    y=1.02,  # put it a bit above the bottom of the plot
+                    xanchor="right",
+                    x=1),  # put it to the right of the plot
+        hovermode="x"  # on hover, show info for all data series for that x-value
+    )
+
+    return fig
+
+
+@app.callback(Output('google-youtube', 'figure'),
+              [Input('interval-component', 'n_intervals')])
+def update_youtube(n):
+    return visualized_richest()
+
+
+def visualized_reddit():
+    df = pd.read_csv(DATABASE_PATH)
+
+    df['date'] = pd.to_datetime(df['date'])
+    df.set_index('date', inplace=True)
+
+    fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
+
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_bullish"], name='Richest bullish', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_bearish"], name='Richest bearish', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_total_received"], name='Sent in last 24H'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_total_sent"], name='Received in last 24H'))
+
+    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right')
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(showgrid=False)
+    fig.update_layout(
+        title={
+            'text': "Richest Addresses",
+            'y': 0.9,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {
+                'color': COLORS['white'],
+                'size': 24
+            }
+        },
+        xaxis_title='Date',
+        yaxis_title='Value',
+        plot_bgcolor=COLORS['background'],
+        paper_bgcolor=COLORS['background'],
+        font=dict(
+            color=COLORS['white'],
+            size=12
+        ),
+        legend=dict(orientation="h",  # horizontal legend
+                    yanchor="bottom",
+                    y=1.02,  # put it a bit above the bottom of the plot
+                    xanchor="right",
+                    x=1),  # put it to the right of the plot
+        hovermode="x"  # on hover, show info for all data series for that x-value
+    )
+
+    return fig
+
+
+@app.callback(Output('reddit-chart', 'figure'),
+              [Input('interval-component', 'n_intervals')])
+def reddit_google(n):
+    return visualized_richest()
+
+
+def visualized_google():
+    df = pd.read_csv(DATABASE_PATH)
+
+    df['date'] = pd.to_datetime(df['date'])
+    df.set_index('date', inplace=True)
+
+    fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
+
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_bullish"], name='Richest bullish', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_bearish"], name='Richest bearish', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_total_received"], name='Sent in last 24H'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_total_sent"], name='Received in last 24H'))
+
+    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right')
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(showgrid=False)
+    fig.update_layout(
+        title={
+            'text': "Richest Addresses",
+            'y': 0.9,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {
+                'color': COLORS['white'],
+                'size': 24
+            }
+        },
+        xaxis_title='Date',
+        yaxis_title='Value',
+        plot_bgcolor=COLORS['background'],
+        paper_bgcolor=COLORS['background'],
+        font=dict(
+            color=COLORS['white'],
+            size=12
+        ),
+        legend=dict(orientation="h",  # horizontal legend
+                    yanchor="bottom",
+                    y=1.02,  # put it a bit above the bottom of the plot
+                    xanchor="right",
+                    x=1),  # put it to the right of the plot
+        hovermode="x"  # on hover, show info for all data series for that x-value
+    )
+
+    return fig
+
+
+@app.callback(Output('google-chart', 'figure'),
+              [Input('interval-component', 'n_intervals')])
+def update_google(n):
+    return visualized_richest()
+
+
+def visualized_richest():
+    df = pd.read_csv(DATABASE_PATH)
+
+    df['date'] = pd.to_datetime(df['date'])
+    df.set_index('date', inplace=True)
+
+    fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
+
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_bullish"], name='Richest bullish', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_bearish"], name='Richest bearish', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_total_received"], name='Sent in last 24H'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_total_sent"], name='Received in last 24H'))
+
+    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right')
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(showgrid=False)
+    fig.update_layout(
+        title={
+            'text': "Richest Addresses",
+            'y': 0.9,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {
+                'color': COLORS['white'],
+                'size': 24
+            }
+        },
+        xaxis_title='Date',
+        yaxis_title='Value',
+        plot_bgcolor=COLORS['background'],
+        paper_bgcolor=COLORS['background'],
+        font=dict(
+            color=COLORS['white'],
+            size=12
+        ),
+        legend=dict(orientation="h",  # horizontal legend
+                    yanchor="bottom",
+                    y=1.02,  # put it a bit above the bottom of the plot
+                    xanchor="right",
+                    x=1),  # put it to the right of the plot
+        hovermode="x"  # on hover, show info for all data series for that x-value
+    )
+
+    return fig
+
+
+@app.callback(Output('richest-chart', 'figure'),
+              [Input('interval-component', 'n_intervals')])
+def update_richest(n):
+    return visualized_richest()
+
+
+def visualize_prediction():
+    df = pd.read_csv(DATABASE_PATH)
+
+    df['date'] = pd.to_datetime(df['date'])
+    df.set_index('date', inplace=True)
+
+    fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
+
+    fig.add_trace(go.Scatter(x=df.index, y=df["predicted_price"], name='Price'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["predicted_price"], name='Predicted brice'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["prediction_bullish"], name='Prediction bullish', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["prediction_bearish"], name='Prediction bearish', visible='legendonly'))
+
+    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right')
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(showgrid=False)
+    fig.update_layout(
+        title={
+            'text': "Prediction",
+            'y': 0.9,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {
+                'color': COLORS['white'],
+                'size': 24
+            }
+        },
+        xaxis_title='Date',
+        yaxis_title='Value',
+        plot_bgcolor=COLORS['background'],
+        paper_bgcolor=COLORS['background'],
+        font=dict(
+            color=COLORS['white'],
+            size=12
+        ),
+        legend=dict(orientation="h",  # horizontal legend
+                    yanchor="bottom",
+                    y=1.02,  # put it a bit above the bottom of the plot
+                    xanchor="right",
+                    x=1),  # put it to the right of the plot
+        hovermode="x"  # on hover, show info for all data series for that x-value
+    )
+
+    return fig
+
+
+@app.callback(Output('prediction_chart', 'figure'),
+              [Input('interval-component', 'n_intervals')])
+def update_prediction(n):
+    return visualize_prediction()
+
+
+def visualize_macro():
+    df = pd.read_csv(DATABASE_PATH)
+
+    df['date'] = pd.to_datetime(df['date'])
+    df.set_index('date', inplace=True)
+
+    fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
+
+    fig.add_trace(go.Scatter(x=df.index, y=df["interest_rate"], name='Interest Rate', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["cpi_m_to_m"], name='CPI M to M'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["ppi_m_to_m"], name='PPI M to M'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["macro_bullish"], name='Macro Bullish'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["macro_bearish"], name='Macro Bearish'))
+
+    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right')
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(showgrid=False)
+    fig.update_layout(
+        title={
+            'text': "Macro Economic",
+            'y': 0.9,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {
+                'color': COLORS['white'],
+                'size': 24
+            }
+        },
+        xaxis_title='Date',
+        yaxis_title='Value',
+        plot_bgcolor=COLORS['background'],
+        paper_bgcolor=COLORS['background'],
+        font=dict(
+            color=COLORS['white'],
+            size=12
+        ),
+        legend=dict(orientation="h",  # horizontal legend
+                    yanchor="bottom",
+                    y=1.02,  # put it a bit above the bottom of the plot
+                    xanchor="right",
+                    x=1),  # put it to the right of the plot
+        hovermode="x"  # on hover, show info for all data series for that x-value
+    )
+
+    return fig
+
+
+@app.callback(Output('macro-chart', 'figure'),
+              [Input('interval-component', 'n_intervals')])
+def update_macro(n):
+    return visualize_macro()
 
 
 def visualize_trade_results():
@@ -51,6 +420,8 @@ def visualize_trade_results():
     #                    name='Number of Trades'))
 
     # Update the layout and show the plot
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(showgrid=False)
     fig.update_layout(
             title={
                 'text': "Trade Results",
@@ -66,8 +437,8 @@ def visualize_trade_results():
             xaxis_title='Model Category',
             yaxis_title='Value',
             barmode='group',
-            plot_bgcolor=BACKGROUND_COLOR,
-            paper_bgcolor=BACKGROUND_COLOR,
+            plot_bgcolor=COLORS['background'],
+            paper_bgcolor=COLORS['background'],
             font=dict(
                 color=COLORS['white'],  # Change this to your desired color
                 size=12
@@ -157,11 +528,18 @@ def create_gauge_charts():
         data_dict['weighted_score_up'], data_dict['weighted_score_down'],
         'weighted_score'), row=2, col=5)
 
-    fig.update_layout(plot_bgcolor=BACKGROUND_COLOR, paper_bgcolor=BACKGROUND_COLOR)
+    fig.update_layout(plot_bgcolor=COLORS['background'], paper_bgcolor=COLORS['background'])
 
     for annotation in fig['layout']['annotations']:
-        annotation['font'] = dict(color=TEXT_COLOR, size=16)  # set color and size of subplot titles
+        annotation['font'] = dict(color=COLORS['white'], size=16)  # set color and size of subplot titles
 
+    return fig
+
+
+@app.callback(Output('live-update-graph', 'figure'),
+              [Input('interval-component', 'n_intervals')])
+def update_gauge_chart_live(n):
+    fig = create_gauge_charts()
     return fig
 
 
@@ -252,7 +630,8 @@ def generate_tooltips():
     ]
 
 
-def create_layout(fig, fig_trade_result):
+def create_layout(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest, fig_google, fig_reddit,
+                  fig_youtube, fig_news):
     layout_data = read_layout_data()
 
     # Extracting data from layout_data dictionary
@@ -276,13 +655,13 @@ def create_layout(fig, fig_trade_result):
     initial_cpi_announcement = layout_data["cpi_announcement"]
     initial_ppi_announcement = layout_data["ppi_announcement"]
 
-    app.layout = html.Div(style={'backgroundColor': BACKGROUND_COLOR, 'color': TEXT_COLOR}, children=[
+    app.layout = html.Div(style={'backgroundColor': COLORS['background'], 'color': COLORS['white']}, children=[
         dcc.Interval(
             id='timer-interval-component',
             interval=5 * 1000,  # in milliseconds
             n_intervals=0
         ),
-        dbc.Progress(value=50, color=BACKGROUND_COLOR, striped=True, animated=True, id="progress",
+        dbc.Progress(value=50, color=COLORS['background'], striped=True, animated=True, id="progress",
                      className="custom-progress"),
         dbc.Popover(
             [
@@ -304,9 +683,6 @@ def create_layout(fig, fig_trade_result):
         html.Div(id='timer'),
         dcc.Graph(id='live-update-graph', figure=fig, style={
             'width': '90%', 'height': '100vh', 'display': 'inline-block'}),
-
-        # Add your new chart here
-
 
         html.Div([
             html.Div([
@@ -351,7 +727,7 @@ def create_layout(fig, fig_trade_result):
                               or initial_trading_state == 'long'
                               else('red' if
                                    initial_trading_state == 'Trading state: short' or
-                                   initial_trading_state == 'short' else TEXT_COLOR)}),
+                                   initial_trading_state == 'short' else COLORS['white'])}),
 
             ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
 
@@ -394,23 +770,17 @@ def create_layout(fig, fig_trade_result):
 
         ], style={'width': '10%', 'height': '100vh', 'display': 'inline-block', 'verticalAlign': 'top'}),
         dcc.Graph(id='trade-results-chart', figure=fig_trade_result, style={'width': '100%', 'height': '70  vh'}),
+        dcc.Graph(id='macro-chart', figure=fig_macro, style={'width': '100%', 'height': '70  vh'}),
+        dcc.Graph(id='prediction_chart', figure=fig_prediction, style={'width': '100%', 'height': '70  vh'}),
+        dcc.Graph(id='richest_chart', figure=fig_richest, style={'width': '100%', 'height': '70  vh'}),
+        dcc.Graph(id='google_chart', figure=fig_google, style={'width': '100%', 'height': '70  vh'}),
+        dcc.Graph(id='reddit_chart', figure=fig_reddit, style={'width': '100%', 'height': '70  vh'}),
+        dcc.Graph(id='youtube_chart', figure=fig_youtube, style={'width': '100%', 'height': '70  vh'}),
+        dcc.Graph(id='news_chart', figure=fig_news, style={'width': '100%', 'height': '70  vh'})
     ] + generate_tooltips()
     )
 
     app.run_server(host='0.0.0.0', port=8051, debug=False)
-
-
-def visualize_charts():
-    fig = create_gauge_charts()
-    fig_trade_result = visualize_trade_results()
-    create_layout(fig, fig_trade_result)
-
-
-@app.callback(Output('live-update-graph', 'figure'),
-              [Input('interval-component', 'n_intervals')])
-def update_gauge_chart_live(n):
-    fig = create_gauge_charts()
-    return fig
 
 
 @app.callback([
@@ -479,7 +849,7 @@ def update_layout_values_live(n):
                                'color': 'green' if new_trading_state == 'Trading state: long' or
                                                    new_trading_state == 'long' else
                                ('red' if new_trading_state == 'Trading state: short' or new_trading_state == 'short'
-                                else TEXT_COLOR)}
+                                else COLORS['white'])}
 
     return (new_fed_rate, new_cpi_rate, new_ppi_rate,
             new_fed_announcement, new_cpi_announcement, new_ppi_announcement,
@@ -508,6 +878,20 @@ def update_timer(n):
 def update_progress(n):
     countdown = 100 if n % 10 == 0 else 100 - (n % 10) * 10
     return countdown
+
+
+def visualize_charts():
+    fig = create_gauge_charts()
+    fig_trade_result = visualize_trade_results()
+    fig_macro = visualize_macro()
+    fig_prediction = visualize_prediction()
+    fig_richest = visualized_richest()
+    fig_google = visualized_google()
+    fig_reddit = visualized_reddit()
+    fig_youtube = visualized_youtube()
+    fig_news = visualized_news()
+    create_layout(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest, fig_google, fig_reddit,
+                  fig_youtube, fig_news)
 
 
 if __name__ == '__main__':

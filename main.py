@@ -20,7 +20,6 @@ from trading_decision import make_trading_decision
 from long_position_open import long_position
 from short_position_open import short_position
 from factors_states_visualization import visualize_charts
-from database_visualization import visualize_database_one_chart, visualize_trade_results
 from testnet_future_short_trade import check_no_open_future_position
 from monitor_richest import monitor_bitcoin_richest_addresses
 from database import save_value_to_database
@@ -38,16 +37,6 @@ logging.basicConfig(filename='trading.log', level=logging.INFO, format='%(asctim
 
 def run_visualize_factors_states():
     visualize_charts()
-
-
-def run_visualize_database():
-    while True:
-        visualize_database_one_chart(run_dash=True)
-
-
-def run_visualize_trade_result():
-    while True:
-        visualize_trade_results()
 
 
 def run_monitor_richest_addresses():
@@ -157,9 +146,7 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
 def signal_handler(sig, frame):
     print('Received interrupt signal. Cleaning up...')
     # Stop child processes here.
-    visualization_process.terminate()
     visualization_charts_process.terminate()
-    visualization_trade_result_process.terminate()
     process.terminate()
     sys.exit(0)
 
@@ -169,16 +156,8 @@ if __name__ == "__main__":
     # Register the signal handler
     signal.signal(signal.SIGINT, signal_handler)
 
-    visualization_process = Process(target=run_visualize_database)
-    visualization_process.start()
-    sleep(2)
-
     visualization_charts_process = Process(target=run_visualize_factors_states)
     visualization_charts_process.start()
-    sleep(2)  # Sleep To let Visualization be complete before next process start
-
-    visualization_trade_result_process = Process(target=run_visualize_trade_result)
-    visualization_trade_result_process.start()
     sleep(2)
 
     process = Process(target=trading_loop, args=[LONG_THRESHOLD, SHORT_THRESHOLD, PROFIT_MARGIN])

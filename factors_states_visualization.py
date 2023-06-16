@@ -7,18 +7,404 @@ from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 
-from handy_modules import get_bitcoin_price, \
-    calculate_upcoming_events, create_gauge_chart, COLORS
+from handy_modules import get_bitcoin_price, calculate_upcoming_events, create_gauge_chart, COLORS
 from database import read_database
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-BACKGROUND_COLOR = '#000000'
-TEXT_COLOR = '#FFFFFF'
 LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
 DATABASE_PATH = 'data/database.csv'
 TRADE_RESULT_PATH = 'data/trades_results.csv'
 APP_UPDATE_TIME = 50
+
+
+def visualized_news():
+    df = pd.read_csv(DATABASE_PATH)
+
+    df['date'] = pd.to_datetime(df['date'])
+    df.set_index('date', inplace=True)
+
+    fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
+
+    fig.add_trace(go.Scatter(x=df.index, y=df["news_bullish"],
+                             name='News bullish', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["news_bearish"],
+                             name='News bearish', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["news_positive_polarity"],
+                             name='Positive Polarity'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["news_negative_polarity"],
+                             name='Negative polarity'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["news_positive_count"],
+                             name='Positive Count'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["news_negative_count"],
+                             name='negative count'))
+
+    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right')
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(showgrid=False)
+    fig.update_layout(
+        title={
+            'text': "News",
+            'y': 0.9,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {
+                'color': COLORS['white'],
+                'size': 24
+            }
+        },
+        xaxis_title='Date',
+        yaxis_title='Value',
+        plot_bgcolor=COLORS['background'],
+        paper_bgcolor=COLORS['background'],
+        font=dict(
+            color=COLORS['white'],
+            size=12
+        ),
+        legend=dict(orientation="h",  # horizontal legend
+                    yanchor="bottom",
+                    y=1.02,  # put it a bit above the bottom of the plot
+                    xanchor="right",
+                    x=1),  # put it to the right of the plot
+        hovermode="x"  # on hover, show info for all data series for that x-value
+    )
+
+    return fig
+
+
+@app.callback(Output('news_chart', 'figure'),
+              [Input('interval-component', 'n_intervals')])
+def update_news(n):
+    return visualized_news()
+
+
+def visualized_youtube():
+    df = pd.read_csv(DATABASE_PATH)
+
+    df['date'] = pd.to_datetime(df['date'])
+    df.set_index('date', inplace=True)
+
+    fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
+
+    fig.add_trace(go.Scatter(x=df.index, y=df["youtube_bullish"],
+                             name='YouTube bullish', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["youtube_bearish"],
+                             name='YouTube bearish', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["last_24_youtube"],
+                             name='Number of Video in 24h'))
+
+    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right')
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(showgrid=False)
+    fig.update_layout(
+        title={
+            'text': "Youtube",
+            'y': 0.9,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {
+                'color': COLORS['white'],
+                'size': 24
+            }
+        },
+        xaxis_title='Date',
+        yaxis_title='Value',
+        plot_bgcolor=COLORS['background'],
+        paper_bgcolor=COLORS['background'],
+        font=dict(
+            color=COLORS['white'],
+            size=12
+        ),
+        legend=dict(orientation="h",  # horizontal legend
+                    yanchor="bottom",
+                    y=1.02,  # put it a bit above the bottom of the plot
+                    xanchor="right",
+                    x=1),  # put it to the right of the plot
+        hovermode="x"  # on hover, show info for all data series for that x-value
+    )
+
+    return fig
+
+
+@app.callback(Output('youtube_chart', 'figure'),
+              [Input('interval-component', 'n_intervals')])
+def update_youtube(n):
+    return visualized_youtube()
+
+
+def visualized_reddit():
+    df = pd.read_csv(DATABASE_PATH)
+
+    df['date'] = pd.to_datetime(df['date'])
+    df.set_index('date', inplace=True)
+
+    fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
+
+    fig.add_trace(go.Scatter(x=df.index, y=df["reddit_bullish"],
+                             name='Reddit bullish', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["reddit_bearish"],
+                             name='Reddit bearish', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["reddit_count_bitcoin_posts_24h"],
+                             name='Count bitcoin posts 24h'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["reddit_activity_24h"],
+                             name='Reddit activity'))
+
+    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right')
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(showgrid=False)
+    fig.update_layout(
+        title={
+            'text': "Reddit",
+            'y': 0.9,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {
+                'color': COLORS['white'],
+                'size': 24
+            }
+        },
+        xaxis_title='Date',
+        yaxis_title='Value',
+        plot_bgcolor=COLORS['background'],
+        paper_bgcolor=COLORS['background'],
+        font=dict(
+            color=COLORS['white'],
+            size=12
+        ),
+        legend=dict(orientation="h",  # horizontal legend
+                    yanchor="bottom",
+                    y=1.02,  # put it a bit above the bottom of the plot
+                    xanchor="right",
+                    x=1),  # put it to the right of the plot
+        hovermode="x"  # on hover, show info for all data series for that x-value
+    )
+
+    return fig
+
+
+@app.callback(Output('reddit_chart', 'figure'),
+              [Input('interval-component', 'n_intervals')])
+def reddit_google(n):
+    return visualized_reddit()
+
+
+def visualized_google():
+    df = pd.read_csv(DATABASE_PATH)
+
+    df['date'] = pd.to_datetime(df['date'])
+    df.set_index('date', inplace=True)
+
+    fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
+
+    fig.add_trace(go.Scatter(x=df.index, y=df["hourly_google_search"], name='Hourly Google Search'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["google_search_bullish"], name='Google Bullish', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["google_search_bearish"], name='Google Bearish', visible='legendonly'))
+
+    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right')
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(showgrid=False)
+    fig.update_layout(
+        title={
+            'text': "Google search",
+            'y': 0.9,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {
+                'color': COLORS['white'],
+                'size': 24
+            }
+        },
+        xaxis_title='Date',
+        yaxis_title='Value',
+        plot_bgcolor=COLORS['background'],
+        paper_bgcolor=COLORS['background'],
+        font=dict(
+            color=COLORS['white'],
+            size=12
+        ),
+        legend=dict(orientation="h",
+                    yanchor="bottom",
+                    y=1.02,
+                    xanchor="right",
+                    x=1),
+        hovermode="x"
+    )
+
+    return fig
+
+
+@app.callback(Output('google_chart', 'figure'),
+              [Input('interval-component', 'n_intervals')])
+def update_google(n):
+    return visualized_google()
+
+
+def visualized_richest():
+    df = pd.read_csv(DATABASE_PATH)
+
+    df['date'] = pd.to_datetime(df['date'])
+    df.set_index('date', inplace=True)
+
+    fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
+
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_bullish"],
+                             name='Richest bullish', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_bearish"],
+                             name='Richest bearish', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_total_received"],
+                             name='Sent in last 24H'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_total_sent"],
+                             name='Received in last 24H'))
+
+    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right')
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(showgrid=False)
+    fig.update_layout(
+        title={
+            'text': "Richest Addresses",
+            'y': 0.9,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {
+                'color': COLORS['white'],
+                'size': 24
+            }
+        },
+        xaxis_title='Date',
+        yaxis_title='Value',
+        plot_bgcolor=COLORS['background'],
+        paper_bgcolor=COLORS['background'],
+        font=dict(
+            color=COLORS['white'],
+            size=12
+        ),
+        legend=dict(orientation="h",  # horizontal legend
+                    yanchor="bottom",
+                    y=1.02,  # put it a bit above the bottom of the plot
+                    xanchor="right",
+                    x=1),  # put it to the right of the plot
+        hovermode="x"  # on hover, show info for all data series for that x-value
+    )
+
+    return fig
+
+
+@app.callback(Output('richest_chart', 'figure'),
+              [Input('interval-component', 'n_intervals')])
+def update_richest(n):
+    return visualized_richest()
+
+
+def visualize_prediction():
+    df = pd.read_csv(DATABASE_PATH)
+
+    df['date'] = pd.to_datetime(df['date'])
+    df.set_index('date', inplace=True)
+
+    fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
+
+    fig.add_trace(go.Scatter(x=df.index, y=df["predicted_price"], name='Price'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["predicted_price"], name='Predicted brice'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["prediction_bullish"], name='Prediction bullish', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["prediction_bearish"], name='Prediction bearish', visible='legendonly'))
+
+    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right')
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(showgrid=False)
+    fig.update_layout(
+        title={
+            'text': "Prediction",
+            'y': 0.9,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {
+                'color': COLORS['white'],
+                'size': 24
+            }
+        },
+        xaxis_title='Date',
+        yaxis_title='Value',
+        plot_bgcolor=COLORS['background'],
+        paper_bgcolor=COLORS['background'],
+        font=dict(
+            color=COLORS['white'],
+            size=12
+        ),
+        legend=dict(orientation="h",  # horizontal legend
+                    yanchor="bottom",
+                    y=1.02,  # put it a bit above the bottom of the plot
+                    xanchor="right",
+                    x=1),  # put it to the right of the plot
+        hovermode="x"  # on hover, show info for all data series for that x-value
+    )
+
+    return fig
+
+
+@app.callback(Output('prediction_chart', 'figure'),
+              [Input('interval-component', 'n_intervals')])
+def update_prediction(n):
+    return visualize_prediction()
+
+
+def visualize_macro():
+    df = pd.read_csv(DATABASE_PATH)
+
+    df['date'] = pd.to_datetime(df['date'])
+    df.set_index('date', inplace=True)
+
+    fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
+
+    fig.add_trace(go.Scatter(x=df.index, y=df["interest_rate"], name='Interest Rate', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["cpi_m_to_m"], name='CPI M to M'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["ppi_m_to_m"], name='PPI M to M'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["macro_bullish"], name='Macro Bullish'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["macro_bearish"], name='Macro Bearish'))
+
+    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right')
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(showgrid=False)
+    fig.update_layout(
+        title={
+            'text': "Macro Economic",
+            'y': 0.9,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {
+                'color': COLORS['white'],
+                'size': 24
+            }
+        },
+        xaxis_title='Date',
+        yaxis_title='Value',
+        plot_bgcolor=COLORS['background'],
+        paper_bgcolor=COLORS['background'],
+        font=dict(
+            color=COLORS['white'],
+            size=12
+        ),
+        legend=dict(orientation="h",  # horizontal legend
+                    yanchor="bottom",
+                    y=1.02,  # put it a bit above the bottom of the plot
+                    xanchor="right",
+                    x=1),  # put it to the right of the plot
+        hovermode="x"  # on hover, show info for all data series for that x-value
+    )
+
+    return fig
+
+
+@app.callback(Output('macro_chart', 'figure'),
+              [Input('interval-component', 'n_intervals')])
+def update_macro(n):
+    return visualize_macro()
 
 
 def visualize_trade_results():
@@ -51,6 +437,8 @@ def visualize_trade_results():
     #                    name='Number of Trades'))
 
     # Update the layout and show the plot
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(showgrid=False)
     fig.update_layout(
             title={
                 'text': "Trade Results",
@@ -66,8 +454,8 @@ def visualize_trade_results():
             xaxis_title='Model Category',
             yaxis_title='Value',
             barmode='group',
-            plot_bgcolor=BACKGROUND_COLOR,
-            paper_bgcolor=BACKGROUND_COLOR,
+            plot_bgcolor=COLORS['background'],
+            paper_bgcolor=COLORS['background'],
             font=dict(
                 color=COLORS['white'],  # Change this to your desired color
                 size=12
@@ -77,7 +465,7 @@ def visualize_trade_results():
     return fig
 
 
-@app.callback(Output('trade-results-chart', 'figure'),
+@app.callback(Output('trade_results_chart', 'figure'),
               [Input('interval-component', 'n_intervals')])
 def update_trade_result(n):
     return visualize_trade_results()
@@ -157,24 +545,31 @@ def create_gauge_charts():
         data_dict['weighted_score_up'], data_dict['weighted_score_down'],
         'weighted_score'), row=2, col=5)
 
-    fig.update_layout(plot_bgcolor=BACKGROUND_COLOR, paper_bgcolor=BACKGROUND_COLOR)
+    fig.update_layout(plot_bgcolor=COLORS['background'], paper_bgcolor=COLORS['background'])
 
     for annotation in fig['layout']['annotations']:
-        annotation['font'] = dict(color=TEXT_COLOR, size=16)  # set color and size of subplot titles
+        annotation['font'] = dict(color=COLORS['white'], size=16)  # set color and size of subplot titles
 
     return fig
 
 
+@app.callback(Output('live-update-graph', 'figure'),
+              [Input('interval-component', 'n_intervals')])
+def update_gauge_chart_live(n):
+    fig = create_gauge_charts()
+    return fig
+
+####
 def read_layout_data():
     database = read_database()
     latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
     fed_announcement, cpi_announcement, ppi_announcement = calculate_upcoming_events()
 
     layout_data = {
-        "trading_state": f'Trading state: {latest_info_saved["latest_trading_state"][0]}',
+        "trading_state": f'{latest_info_saved["latest_trading_state"][0]}',
         "fed_rate_m_to_m": f'Fed rate MtM: {float(latest_info_saved["fed_rate_m_to_m"][0])}',
-        "cpi_m_to_m": f'CPI MtoM: {float(latest_info_saved["cpi_m_to_m"][0])}',
-        "ppi_m_to_m": f'PPI MtoM: {float(latest_info_saved["ppi_m_to_m"][0])}',
+        "cpi_m_to_m": f'{float(latest_info_saved["cpi_m_to_m"][0])}',
+        "ppi_m_to_m": f'{float(latest_info_saved["ppi_m_to_m"][0])}',
         "bid_volume": int(database['bid_volume'][-1]),
         "ask_volume": int(database['ask_volume'][-1]),
         "predicted_price": database['predicted_price'][-1],
@@ -193,6 +588,180 @@ def read_layout_data():
     }
 
     return layout_data
+
+
+def create_initial_layout_data():
+    layout_data = read_layout_data()
+
+    # Extracting data from layout_data dictionary
+    initial_layout_data = {
+        'trading_state': layout_data["trading_state"],
+        'fed_rate_m_to_m': layout_data["fed_rate_m_to_m"],
+        'cpi_m_to_m': layout_data["cpi_m_to_m"],
+        'ppi_m_to_m': layout_data["ppi_m_to_m"],
+        'bid_volume': layout_data["bid_volume"],
+        'ask_volume': layout_data["ask_volume"],
+        'predicted_price': layout_data["predicted_price"],
+        'current_price': layout_data["current_price"],
+        'rsi': layout_data["rsi"],
+        'over_200EMA': layout_data["over_200EMA"],
+        'MACD_uptrend': layout_data["MACD_uptrend"],
+        'bb_MA_distance': layout_data["bb_MA_distance"],
+        'BTC_received': layout_data["BTC_received"],
+        'BTC_send': layout_data["BTC_send"],
+        'positive_news_polarity_change': layout_data["positive_news_polarity_change"],
+        'negative_news_polarity_change': layout_data["negative_news_polarity_change"],
+        'fed_announcement': layout_data["fed_announcement"],
+        'cpi_announcement': layout_data["cpi_announcement"],
+        'ppi_announcement': layout_data["ppi_announcement"],
+    }
+
+    return initial_layout_data
+
+
+@app.callback(
+    [Output('fed-rate', 'children'),
+    Output('cpi-rate', 'children'),
+    Output('ppi-rate', 'children'),
+    Output('fed-announcement', 'children'),
+    Output('cpi-announcement', 'children'),
+    Output('ppi-announcement', 'children'),
+    Output('trading-state', 'children'),
+    Output('bid-volume', 'children'),
+    Output('ask-volume', 'children'),
+    Output('predicted-price', 'children'),
+    Output('current-price', 'children'),
+    Output('price-difference', 'children'),
+    Output('rsi', 'children'),
+    Output('over-200EMA', 'children'),
+    Output('MACD-uptrend', 'children'),
+    Output('MA-distance', 'children'),
+    Output('BTC-received', 'children'),
+    Output('BTC-sent', 'children'),
+    Output('positive-news-change', 'children'),
+    Output('negative-news-change', 'children')],
+    [Input('interval-component', 'n_intervals')])
+def update_divs(n):
+    # Get the latest data
+    layout_data = read_layout_data()
+
+    # Extract values
+    trading_state = layout_data["trading_state"]
+    fed_rate_m_to_m = layout_data["fed_rate_m_to_m"]
+    cpi_m_to_m = layout_data["cpi_m_to_m"]
+    ppi_m_to_m = layout_data["ppi_m_to_m"]
+    bid_volume = layout_data["bid_volume"]
+    ask_volume = layout_data["ask_volume"]
+    predicted_price = layout_data["predicted_price"]
+    current_price = layout_data["current_price"]
+    price_difference = predicted_price - current_price
+    rsi = layout_data["rsi"]
+    over_200EMA = layout_data["over_200EMA"]
+    MACD_uptrend = layout_data["MACD_uptrend"]
+    bb_MA_distance = layout_data["bb_MA_distance"]
+    BTC_received = layout_data["BTC_received"]
+    BTC_send = layout_data["BTC_send"]
+    positive_news_polarity_change = layout_data["positive_news_polarity_change"]
+    negative_news_polarity_change = layout_data["negative_news_polarity_change"]
+    fed_announcement = layout_data["fed_announcement"]
+    cpi_announcement = layout_data["cpi_announcement"]
+    ppi_announcement = layout_data["ppi_announcement"]
+
+    return fed_rate_m_to_m, f'CPI MtoM: {cpi_m_to_m}', f'PPI MtoM: {ppi_m_to_m}', fed_announcement, cpi_announcement, \
+        ppi_announcement, f'T State: {trading_state}', f'Bid vol: {bid_volume}',\
+        f'Ask vol: {ask_volume}', f'Predicted: {predicted_price}',  f'Current: {current_price}',\
+        f'Diff: {price_difference}', f'RSI: {rsi}', f'Over 200EMA: {over_200EMA}',\
+        f'MACD up tr: {MACD_uptrend}', f'bb distance: {bb_MA_distance}', f'Rich receive: {BTC_received}'\
+        , f'Rich send: {BTC_send}', f'+ news increase:{positive_news_polarity_change}',\
+        f'- news increase: {negative_news_polarity_change}'
+
+
+def create_html_divs(initial_layout_data):
+    html_div_list = [
+        html.Div([
+            html.A(
+                f'{initial_layout_data["fed_rate_m_to_m"]}',
+                id='fed-rate',
+                target='_blank',  # Opens link in new tab
+                href="https://www.forexfactory.com/calendar",
+                style={'fontSize': '13px'}
+            ),
+            html.P(f'CPI MtoM: {initial_layout_data["cpi_m_to_m"]}', id='cpi-rate', style={
+                'fontSize': '13px', 'marginBottom': '0px'}),
+            html.P(f'PPI MtoM: {initial_layout_data["ppi_m_to_m"]}', id='ppi-rate', style={
+                'fontSize': '13px', 'marginBottom': '0px'}),
+            html.P(initial_layout_data["fed_announcement"] if initial_layout_data["fed_announcement"] != '' else "",
+                   id='fed-announcement',
+                   style={'fontSize': '13px', 'marginBottom': '0px',
+                          'color': 'red' if initial_layout_data["fed_announcement"] != '' else None,
+                          'fontWeight': '' if initial_layout_data["fed_announcement"] != '' else None}),
+            html.P(initial_layout_data["cpi_announcement"] if initial_layout_data["cpi_announcement"] != '' else "",
+                   id='cpi-announcement', style={'fontSize': '13px',
+                                                 'marginBottom': '0px',
+                                                 'color': 'red' if initial_layout_data["cpi_announcement"] != '' else
+                                                 None,
+                                                 'fontWeight': '' if initial_layout_data["cpi_announcement"] != '' else
+                                                 None}),
+            html.P(initial_layout_data["ppi_announcement"] if initial_layout_data["ppi_announcement"] else "",
+                   id='ppi-announcement',
+                   style={'fontSize': '13px', 'marginBottom': '0px',
+                          'color': 'red' if initial_layout_data["ppi_announcement"] != '' else None,
+                          'fontWeight': '' if initial_layout_data["ppi_announcement"] != '' else None}),
+        ]),
+        html.Div([
+            html.P(f'T State: {initial_layout_data["trading_state"]}', id='trading-state',
+                   style={'fontSize': '13px',
+                          'margin': '0px',
+                          'color': 'green' if initial_layout_data["trading_state"] == 'Trading state: long'
+                          else('red' if
+                               initial_layout_data["trading_state"] == 'Trading state: short'
+                               else COLORS['white'])}),
+        ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
+        html.Div([
+            html.P(f'Bid vol: {initial_layout_data["bid_volume"]}', id='bid-volume',
+                   style={'fontSize': '14px', 'margin': '0px'}),
+            html.P(f'Ask vol: {initial_layout_data["ask_volume"]}', id='ask-volume',
+                   style={'fontSize': '14px', 'margin': '0px'}),
+        ], style={'borderTop': '1px solid white'}),
+
+        html.Div([
+            html.P(f'Predicted: {initial_layout_data["predicted_price"]}', id='predicted-price',
+                   style={'fontSize': '13px', 'margin': '0px'}),
+            html.P(f'Current: {initial_layout_data["current_price"]}', id='current-price', style={
+                'fontSize': '13px', 'margin': '0px'}),
+            html.P(f'Diff: {initial_layout_data["predicted_price"] - initial_layout_data["current_price"]}',
+                   id='price-difference', style={'fontSize': '13px', 'margin': '0px'}),
+        ], style={'borderTop': '1px solid white'}),
+
+        html.Div([
+            html.P(f'RSI: {initial_layout_data["rsi"]}', id='rsi', style={'fontSize': '13px', 'margin': '0px'}),
+            html.P(f'Over 200EMA: {initial_layout_data["over_200EMA"]}', id='over-200EMA',
+                   style={'fontSize': '13px', 'margin': '0px'}),
+            html.P(f'MACD uptrend: {initial_layout_data["MACD_uptrend"]}', id='MACD-uptrend',
+                   style={'fontSize': '13px', 'margin': '0px'}),
+            html.P(f'MA distance: {initial_layout_data["bb_MA_distance"]}', id='MA-distance',
+                   style={'fontSize': '13px', 'margin': '0px'}),
+        ], style={'borderTop': '1px solid white'}),
+
+        html.Div([
+            html.P(f'BTC received: {initial_layout_data["BTC_received"]}', id='BTC-received',
+                   style={'fontSize': '13px', 'margin': '0px'}),
+            html.P(f'BTC sent: {initial_layout_data["BTC_send"]}', id='BTC-sent', style={
+                'fontSize': '13px', 'margin': '0px'}),
+        ], style={'borderTop': '1px solid white'}),
+
+        html.Div([
+            html.P(f'+ news change: {initial_layout_data["positive_news_polarity_change"]}',
+                   id='positive-news-change', style={'fontSize': '13px', 'margin': '0px'}),
+            html.P(f'- news change: {initial_layout_data["negative_news_polarity_change"]}',
+                   id='negative-news-change', style={'fontSize': '13px', 'margin': '0px'}),
+        ], style={'borderTop': '1px solid white'})
+    ]
+
+    return html_div_list
+
+
+####
 
 
 def generate_tooltips():
@@ -252,262 +821,119 @@ def generate_tooltips():
     ]
 
 
-def create_layout(fig, fig_trade_result):
-    layout_data = read_layout_data()
+def create_popover():
+    popover = dbc.Popover(
+        [
+            dbc.PopoverHeader("Next update time"),
+            dbc.PopoverBody("This shows the next updating time"),
+        ],
+        id="popover",
+        target="progress",
+        trigger="click",
+        placement="auto",
+    )
 
-    # Extracting data from layout_data dictionary
-    initial_trading_state = layout_data["trading_state"]
-    initial_fed_rate_m_to_m = layout_data["fed_rate_m_to_m"]
-    initial_cpi_m_to_m = layout_data["cpi_m_to_m"]
-    initial_ppi_m_to_m = layout_data["ppi_m_to_m"]
-    initial_bid = layout_data["bid_volume"]
-    initial_ask = layout_data["ask_volume"]
-    initial_predicted_price = layout_data["predicted_price"]
-    initial_current_price = layout_data["current_price"]
-    initial_rsi = layout_data["rsi"]
-    initial_over_200EMA = layout_data["over_200EMA"]
-    initial_MACD_uptrend = layout_data["MACD_uptrend"]
-    initial_bb_MA_distance = layout_data["bb_MA_distance"]
-    initial_BTC_received = layout_data["BTC_received"]
-    initial_BTC_send = layout_data["BTC_send"]
-    initial_positive_news_polarity_change = layout_data["positive_news_polarity_change"]
-    initial_negative_news_polarity_change = layout_data["negative_news_polarity_change"]
-    initial_fed_announcement = layout_data["fed_announcement"]
-    initial_cpi_announcement = layout_data["cpi_announcement"]
-    initial_ppi_announcement = layout_data["ppi_announcement"]
-
-    app.layout = html.Div(style={'backgroundColor': BACKGROUND_COLOR, 'color': TEXT_COLOR}, children=[
-        dcc.Interval(
-            id='timer-interval-component',
-            interval=5 * 1000,  # in milliseconds
-            n_intervals=0
-        ),
-        dbc.Progress(value=50, color=BACKGROUND_COLOR, striped=True, animated=True, id="progress",
-                     className="custom-progress"),
-        dbc.Popover(
-            [
-                dbc.PopoverHeader("Next update time"),
-                dbc.PopoverBody("This shows the next updating time"),
-            ],
-            id="popover",
-            target="progress",
-            trigger="click",
-            placement="auto",
-        ),
+    return popover
 
 
-        dcc.Interval(
-                id='interval-component',
-                interval=APP_UPDATE_TIME * 1000,  # in milliseconds
-                n_intervals=0
-                ),
-        html.Div(id='timer'),
-        dcc.Graph(id='live-update-graph', figure=fig, style={
-            'width': '90%', 'height': '100vh', 'display': 'inline-block'}),
+def create_update_intervals():
+    timer_interval_component = dcc.Interval(
+        id='timer-interval-component',
+        interval=5 * 1000,  # in milliseconds
+        n_intervals=0
+    )
 
-        # Add your new chart here
+    interval_component = dcc.Interval(
+        id='interval-component',
+        interval=5 * 1000,  # in milliseconds
+        n_intervals=0
+    )
+
+    return timer_interval_component, interval_component
 
 
-        html.Div([
-            html.Div([
+def create_graphs(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest, fig_google, fig_reddit,
+                  fig_youtube, fig_news):
+    graph_list = []
+    graph_ids = ['live-update-graph', 'trade_results_chart', 'macro_chart', 'prediction_chart',
+                 'richest_chart', 'google_chart', 'reddit_chart', 'youtube_chart', 'news_chart']
+    fig_list = [fig, fig_trade_result, fig_macro, fig_prediction, fig_richest, fig_google, fig_reddit,
+                fig_youtube, fig_news]
 
-                html.A(
-                    f'{initial_fed_rate_m_to_m}',
-                    id='fed-rate',
-                    target='_blank',  # Opens link in new tab
-                    href="https://www.forexfactory.com/calendar",
-                    style={'fontSize': '13px'}
-                ),
-                html.P(f'CPI MtoM: {initial_cpi_m_to_m}', id='cpi-rate', style={
-                    'fontSize': '13px', 'marginBottom': '0px'}),
-                html.P(f'PPI MtoM: {initial_ppi_m_to_m}', id='ppi-rate', style={
-                    'fontSize': '13px', 'marginBottom': '0px'}),
+    for i in range(len(graph_ids)):
+        graph_list.append(dcc.Graph(id=graph_ids[i], figure=fig_list[i],
+                                    style={'width': '100%', 'height': '70vh'}))
 
-                html.P(initial_fed_announcement if initial_fed_announcement != '' else "",
-                       id='fed-announcement',
-                       style={'fontSize': '13px', 'marginBottom': '0px',
-                              'color': 'red' if initial_fed_announcement != '' else None,
-                              'fontWeight': '' if initial_fed_announcement != '' else None}),
+    return graph_list
 
-                html.P(initial_cpi_announcement if initial_cpi_announcement != '' else "",
-                       id='cpi-announcement', style={'fontSize': '13px',
-                                                     'marginBottom': '0px',
-                                                     'color': 'red' if initial_cpi_announcement != '' else None,
-                                                     'fontWeight': '' if initial_cpi_announcement != '' else None}),
 
-                html.P(initial_ppi_announcement if initial_ppi_announcement else "",
-                       id='ppi-announcement',
-                       style={'fontSize': '13px', 'marginBottom': '0px',
-                              'color': 'red' if initial_ppi_announcement != '' else None,
-                              'fontWeight': '' if initial_ppi_announcement != '' else None}),
+def create_progress_bar():
+    return dbc.Progress(value=50, color=COLORS['background'], striped=True, animated=True, id="progress",
+                        className="custom-progress", style={'position': 'fixed', 'top': '0', 'width': '100%'})
 
-            ]),
 
-            html.Div([
-                html.P(f'T State: {initial_trading_state}', id='trading-state',
-                       style={'fontSize': '13px',
-                              'margin': '0px',
-                              'color': 'green' if initial_trading_state == 'Trading state: long'
-                              or initial_trading_state == 'long'
-                              else('red' if
-                                   initial_trading_state == 'Trading state: short' or
-                                   initial_trading_state == 'short' else TEXT_COLOR)}),
+def create_layout(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest, fig_google, fig_reddit,
+                  fig_youtube, fig_news):
+    initial_layout_data = read_layout_data()
+    popover = create_popover()
+    timer_interval_component, interval_component = create_update_intervals()
+    progress_bar = create_progress_bar()
 
-            ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
+    graphs = create_graphs(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest, fig_google, fig_reddit,
+                           fig_youtube, fig_news)
+    html_divs = create_html_divs(initial_layout_data)
 
-            html.Div([
-                html.P(f'Bid vol: {initial_bid}', id='bid-volume', style={'fontSize': '14px', 'margin': '0px'}),
-                html.P(f'Ask vol: {initial_ask}', id='ask-volume', style={'fontSize': '14px', 'margin': '0px'}),
-            ], style={'borderTop': '1px solid white'}),
+    # the first figure that takes up 90% width
+    first_figure = dcc.Graph(
+        id='live-update-graph',
+        figure=fig,
+        style={'width': '89%', 'height': '100vh', 'display': 'inline-block'}
+    )
 
-            html.Div([
-                html.P(f'Predicted: {initial_predicted_price}', id='predicted-price',
-                       style={'fontSize': '13px', 'margin': '0px'}),
-                html.P(f'Current: {initial_current_price}', id='current-price', style={
-                    'fontSize': '13px', 'margin': '0px'}),
-                html.P(f'Diff: {initial_predicted_price - initial_current_price}', id='price-difference',
-                       style={'fontSize': '13px', 'margin': '0px'}),
-            ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
+    # div wrapping the layout and taking up 10% width
+    layout_div = html.Div(
+        children=[timer_interval_component, interval_component, popover] + html_divs,
+        style={'width': '11%', 'height': '90vh', 'display': 'inline-block', 'verticalAlign': 'top'}
+    )
 
-            html.Div([
-                html.P(f'RSI: {initial_rsi}', id='rsi', style={'fontSize': '14px', 'margin': '0px'}),
-                html.P(f'Over 200EMA: {initial_over_200EMA}', id='over-200ema', style={
-                    'fontSize': '13px', 'margin': '0px'}),
-                html.P(f'MACD up tr: {initial_MACD_uptrend}', id='macd-trend',
-                       style={'fontSize': '13px', 'margin': '0px'}),
-                html.P(f'bb distance: {initial_bb_MA_distance}', id='bb-distance',
-                       style={'fontSize': '13px', 'margin': '0px'}),
-            ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
+    # div wrapping the rest of the figures, taking up 100% width
+    figure_div = html.Div(
+        children=graphs[1:] + generate_tooltips(),
+        style={'width': '100%', 'height': '90vh', 'display': 'inline-block', 'verticalAlign': 'top'}
+    )
 
-            html.Div([
-                html.P(f'Rich receive: {initial_BTC_received}', id='btc-received',
-                       style={'fontSize': '13px', 'margin': '0px'}),
-                html.P(f'Rich send: {initial_BTC_send}', id='btc-sent', style={'fontSize': '13px', 'margin': '0px'}),
-            ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
+    app.layout = html.Div(
+        style={'backgroundColor': COLORS['background'], 'color': COLORS['white']},
+        children=[
+            html.Div(children=[progress_bar], style={'display': 'inline-block', 'width': '100%', 'height': '05vh'}),
+            first_figure,
+            layout_div, figure_div]
 
-            html.Div([
-                html.P(f'+ news increase: {initial_positive_news_polarity_change}', id='positive-news',
-                       style={'fontSize': '12px', 'margin': '0px'}),
-                html.P(f'- news increase: {initial_negative_news_polarity_change}', id='negative-news',
-                       style={'fontSize': '12px', 'margin': '0px'}),
-            ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
 
-        ], style={'width': '10%', 'height': '100vh', 'display': 'inline-block', 'verticalAlign': 'top'}),
-        dcc.Graph(id='trade-results-chart', figure=fig_trade_result, style={'width': '100%', 'height': '70  vh'}),
-    ] + generate_tooltips()
     )
 
     app.run_server(host='0.0.0.0', port=8051, debug=False)
 
 
-def visualize_charts():
-    fig = create_gauge_charts()
-    fig_trade_result = visualize_trade_results()
-    create_layout(fig, fig_trade_result)
-
-
-@app.callback(Output('live-update-graph', 'figure'),
-              [Input('interval-component', 'n_intervals')])
-def update_gauge_chart_live(n):
-    fig = create_gauge_charts()
-    return fig
-
-
-@app.callback([
-    Output('fed-rate', 'children'),
-    Output('cpi-rate', 'children'),
-    Output('ppi-rate', 'children'),
-    Output('fed-announcement', 'children'),
-    Output('cpi-announcement', 'children'),
-    Output('ppi-announcement', 'children'),
-    Output('trading-state', 'children'),
-    Output('trading-state', 'style'),
-    Output('bid-volume', 'children'),
-    Output('ask-volume', 'children'),
-    Output('predicted-price', 'children'),
-    Output('current-price', 'children'),
-    Output('price-difference', 'children'),
-    Output('rsi', 'children'),
-    Output('over-200ema', 'children'),
-    Output('macd-trend', 'children'),
-    Output('bb-distance', 'children'),
-    Output('btc-received', 'children'),
-    Output('btc-sent', 'children'),
-    Output('positive-news', 'children'),
-    Output('negative-news', 'children')
-], [Input('interval-component', 'n_intervals')])
-def update_layout_values_live(n):
-
-    # This function should return new values for all your variables.
-    database = read_database()
-
-    latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
-    new_trading_state = latest_info_saved.iloc[0]['latest_trading_state']
-    fed_rate_m_to_m_read = float(latest_info_saved['fed_rate_m_to_m'][0])
-    new_fed_rate = f'Fed rate MtM: {fed_rate_m_to_m_read}'
-
-    cpi_m_to_m_read = float(latest_info_saved['cpi_m_to_m'][0])
-    new_cpi_rate = f'CPI MtoM: {cpi_m_to_m_read}'
-
-    ppi_m_to_m_read = float(latest_info_saved['ppi_m_to_m'][0])
-    new_ppi_rate = f'PPI MtoM: {ppi_m_to_m_read}'
-
-    new_bid_volume = int(database['bid_volume'][-1])
-
-    new_ask_volume = int(database['ask_volume'][-1])
-
-    new_predicted_price = database['predicted_price'][-1]
-    new_current_price = get_bitcoin_price()
-    new_price_difference = new_current_price - new_predicted_price
-
-    new_rsi = float(latest_info_saved['latest_rsi'][0])
-    new_over_200ema = latest_info_saved['over_200EMA'][0]
-    new_macd_trend = database['technical_potential_up_trend'][-1]
-    new_bb_distance = latest_info_saved['bb_band_MA_distance'][0]
-
-    new_btc_received = int(latest_info_saved['total_received_coins_in_last_24'][0])
-    new_btc_sent = int(latest_info_saved['total_sent_coins_in_last_24'][0])
-
-    new_positive_news = round(latest_info_saved['positive_news_polarity_change'][0], 0)
-    new_negative_news = round(latest_info_saved['negative_news_polarity_change'][0], 0)
-
-    latest_info_saved.to_csv(LATEST_INFO_SAVED, index=False)
-
-    new_fed_announcement, new_cpi_announcement, new_ppi_announcement = calculate_upcoming_events()
-
-    new_trading_state_style = {'fontSize': '13px', 'margin': '0px',
-                               'color': 'green' if new_trading_state == 'Trading state: long' or
-                                                   new_trading_state == 'long' else
-                               ('red' if new_trading_state == 'Trading state: short' or new_trading_state == 'short'
-                                else TEXT_COLOR)}
-
-    return (new_fed_rate, new_cpi_rate, new_ppi_rate,
-            new_fed_announcement, new_cpi_announcement, new_ppi_announcement,
-            f'T State: {new_trading_state}', new_trading_state_style, f'Bid vol: {new_bid_volume}',
-            f'Ask vol: {new_ask_volume}',
-            f'Predicted: {new_predicted_price}', f'Current: {new_current_price}', f'Diff: {new_price_difference}',
-            f'RSI: {new_rsi}', f'Over 200EMA: {new_over_200ema}', f'MACD up tr: {new_macd_trend}',
-            f'bb distance: {new_bb_distance}', f'Rich receive: {new_btc_received}',
-            f'Rich send: {new_btc_sent}', f'+ news increase: {new_positive_news}',
-            f'- news increase: {new_negative_news}')
-
-
-@app.callback(
-    Output('timer', 'children'),
-    [Input('timer-interval-component', 'n_intervals')]
-)
-def update_timer(n):
-    countdown = APP_UPDATE_TIME - (n * 5) % APP_UPDATE_TIME
-    return f'Next update in {countdown} seconds'
-
-
-@app.callback(
-    Output('progress', 'value'),
-    [Input('timer-interval-component', 'n_intervals')]
-)
+@app.callback(Output('progress', 'value'),
+              [Input('timer-interval-component', 'n_intervals')])
 def update_progress(n):
     countdown = 100 if n % 10 == 0 else 100 - (n % 10) * 10
     return countdown
+
+
+def visualize_charts():
+    fig = create_gauge_charts()
+    fig_trade_result = visualize_trade_results()
+    fig_macro = visualize_macro()
+    fig_prediction = visualize_prediction()
+    fig_richest = visualized_richest()
+    fig_google = visualized_google()
+    fig_reddit = visualized_reddit()
+    fig_youtube = visualized_youtube()
+    fig_news = visualized_news()
+    create_layout(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest, fig_google, fig_reddit,
+                  fig_youtube, fig_news)
 
 
 if __name__ == '__main__':
