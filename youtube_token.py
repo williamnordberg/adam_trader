@@ -12,13 +12,13 @@ from handy_modules import should_update, save_update_time, retry_on_error_fallba
 from typing import Tuple
 from database import read_database
 from googleapiclient.errors import HttpError
-from google.auth.exceptions import RefreshError
-
+import warnings
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def get_authenticated_service():
+    warnings.filterwarnings("ignore", message="file_cache is only supported with oauth2client<4.0.0")
     api_service_name = "youtube"
     api_version = "v3"
     client_secrets_file = "config/youtube_client_secret.json"
@@ -38,16 +38,12 @@ def get_authenticated_service():
                 flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
                     client_secrets_file, scopes)
                 creds = flow.run_local_server(port=0)
-        except RefreshError as e:
-            logging.error(f"Error refreshing token: {e}. Token update required.")
-            logging.info("Manually authenticate and save the token in youtube_token.pickle")
-            # Exception is re-raised so that the retry decorator on youtube_wrapper can handle it
-            raise
         except Exception as e:
-            logging.error(f"An unexpected error occurred: {e}")
-            # If there are other exceptions that are not RefreshError, you can decide how to handle them.
-            # You may choose to re-raise them if they should trigger a retry in youtube_wrapper.
-            raise
+            logging.error(f"Error refreshing token: {e}")
+            logging.info("Manually authenticate and save the token in youtube_token.pickle")
+            flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
+                client_secrets_file, scopes)
+            creds = flow.run_local_server(port=0)
 
         with open(token_file, 'wb') as token:
             pickle.dump(creds, token)
@@ -56,7 +52,7 @@ def get_authenticated_service():
     return youtube
 
 
-@retry_on_error_fallback_0_0(max_retries=3, delay=5, allowed_exceptions=(HttpError, RefreshError, ))
+@retry_on_error_fallback_0_0(max_retries=3, delay=5, allowed_exceptions=(HttpError,))
 def get_youtube_videos(youtube, published_after, published_before):
     search_request = youtube.search().list(
         part="id,snippet",
@@ -79,7 +75,6 @@ def get_youtube_videos(youtube, published_after, published_before):
     return search_results
 
 
-@retry_on_error_fallback_0_0(max_retries=3, delay=5, allowed_exceptions=(RefreshError,))
 def youtube_wrapper() -> Tuple[float, float]:
     # If so, check the increase in the number of YouTube videos with the #bitcoin hashtag
     youtube = get_authenticated_service()
@@ -123,5 +118,5 @@ def check_bitcoin_youtube_videos_increase() -> Tuple[float, float]:
 
 
 if __name__ == "__main__":
-    youtube_bullish_outer, youtube_bearish_outer = youtube_wrapper()
+    youtube_bullish_outer, youtube_bearish_outer = check_bitcoin_youtube_videos_increase()
     logging.info(f'youtube_bullish: {youtube_bullish_outer} , youtube_bearish: {youtube_bearish_outer}')
