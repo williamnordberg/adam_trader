@@ -34,6 +34,7 @@ column_names = [
     "reddit_bullish", "reddit_bearish",
     "youtube_bullish", "youtube_bearish",
     "news_bullish", "news_bearish",
+    "fed_rate_m_to_m",
 ]
 
 # Define column data types
@@ -78,6 +79,7 @@ column_dtypes = {
     "youtube_bearish": "float",
     "news_bullish": "float",
     "news_bearish": "float",
+    "fed_rate_m_to_m": "float"
 }
 
 
@@ -160,4 +162,12 @@ def save_value_to_database(column: str, value):
 
 
 if __name__ == '__main__':
-    save_value_to_database('predicted_price', 32289)
+    # Read the existing database
+    df = pd.read_csv(DATABASE_PATH)
+
+    # Set all values in the specified column to zero
+    df['fed_rate_m_to_m'] = 0.0
+
+    # Save the updated DataFrame back to the CSV file without the index
+    df.to_csv(DATABASE_PATH, index=False)
+
