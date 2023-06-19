@@ -518,7 +518,7 @@ def create_gauge_charts():
                         specs=[[{"type": "indicator"}] * 5] * 2,
                         subplot_titles=["Macro Sentiment", "Order Book", "Prediction", "Technical Analysis",
                                         "Richest Addresses", "Google Search Trend", "Reddit Sentiment",
-                                        "YouTube Sentiment", "News Sentiment", "Weighted Score"])
+                                        "YouTube Sentiment", "News Sentiment", "Combined Score"])
 
     fig.add_trace(create_gauge_chart(
         data_dict['macro_bullish'], data_dict['macro_bearish'], 'macro'), row=1, col=1)
@@ -548,7 +548,11 @@ def create_gauge_charts():
     fig.update_layout(plot_bgcolor=COLORS['background'], paper_bgcolor=COLORS['background'])
 
     for annotation in fig['layout']['annotations']:
-        annotation['font'] = dict(color=COLORS['white'], size=16)  # set color and size of subplot titles
+        if annotation['text'] == "Combined Score":
+            annotation['font'] = dict(color=COLORS['white'], size=26,
+                                      )  # set color, size, and boldness of the title
+        else:
+            annotation['font'] = dict(color=COLORS['white'], size=15)
 
     return fig
 
@@ -559,7 +563,7 @@ def update_gauge_chart_live(n):
     fig = create_gauge_charts()
     return fig
 
-####
+
 def read_layout_data():
     database = read_database()
     latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
@@ -621,25 +625,25 @@ def create_initial_layout_data():
 
 @app.callback(
     [Output('fed-rate', 'children'),
-    Output('cpi-rate', 'children'),
-    Output('ppi-rate', 'children'),
-    Output('fed-announcement', 'children'),
-    Output('cpi-announcement', 'children'),
-    Output('ppi-announcement', 'children'),
-    Output('trading-state', 'children'),
-    Output('bid-volume', 'children'),
-    Output('ask-volume', 'children'),
-    Output('predicted-price', 'children'),
-    Output('current-price', 'children'),
-    Output('price-difference', 'children'),
-    Output('rsi', 'children'),
-    Output('over-200EMA', 'children'),
-    Output('MACD-uptrend', 'children'),
-    Output('MA-distance', 'children'),
-    Output('BTC-received', 'children'),
-    Output('BTC-sent', 'children'),
-    Output('positive-news-change', 'children'),
-    Output('negative-news-change', 'children')],
+     Output('cpi-rate', 'children'),
+     Output('ppi-rate', 'children'),
+     Output('fed-announcement', 'children'),
+     Output('cpi-announcement', 'children'),
+     Output('ppi-announcement', 'children'),
+     Output('trading-state', 'children'),
+     Output('bid-volume', 'children'),
+     Output('ask-volume', 'children'),
+     Output('predicted-price', 'children'),
+     Output('current-price', 'children'),
+     Output('price-difference', 'children'),
+     Output('rsi', 'children'),
+     Output('over-200EMA', 'children'),
+     Output('MACD-uptrend', 'children'),
+     Output('MA-distance', 'children'),
+     Output('BTC-received', 'children'),
+     Output('BTC-sent', 'children'),
+     Output('positive-news-change', 'children'),
+     Output('negative-news-change', 'children')],
     [Input('interval-component', 'n_intervals')])
 def update_divs(n):
     # Get the latest data
@@ -671,13 +675,20 @@ def update_divs(n):
         ppi_announcement, f'T State: {trading_state}', f'Bid vol: {bid_volume}',\
         f'Ask vol: {ask_volume}', f'Predicted: {predicted_price}',  f'Current: {current_price}',\
         f'Diff: {price_difference}', f'RSI: {rsi}', f'Over 200EMA: {over_200EMA}',\
-        f'MACD up tr: {MACD_uptrend}', f'bb distance: {bb_MA_distance}', f'Rich receive: {BTC_received}'\
-        , f'Rich send: {BTC_send}', f'+ news increase:{positive_news_polarity_change}',\
+        f'MACD up tr: {MACD_uptrend}', f'bb distance: {bb_MA_distance}', f'Rich receive: {BTC_received}',\
+        f'Rich send: {BTC_send}', f'+ news increase:{positive_news_polarity_change}',\
         f'- news increase: {negative_news_polarity_change}'
 
 
 def create_html_divs(initial_layout_data):
     html_div_list = [
+        html.Div([
+            html.P('L: last update', id='last_update', style={
+                'fontSize': '13px', 'margin': '0px'}),
+            html.P('N: next update', id='next_update',
+                   style={'fontSize': '13px', 'margin': '0px'}),
+        ], ),
+
         html.Div([
             html.A(
                 f'{initial_layout_data["fed_rate_m_to_m"]}',
@@ -707,7 +718,7 @@ def create_html_divs(initial_layout_data):
                    style={'fontSize': '13px', 'marginBottom': '0px',
                           'color': 'red' if initial_layout_data["ppi_announcement"] != '' else None,
                           'fontWeight': '' if initial_layout_data["ppi_announcement"] != '' else None}),
-        ]),
+        ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
         html.Div([
             html.P(f'T State: {initial_layout_data["trading_state"]}', id='trading-state',
                    style={'fontSize': '13px',
@@ -761,7 +772,13 @@ def create_html_divs(initial_layout_data):
     return html_div_list
 
 
-####
+@app.callback(
+    Output('timer', 'children'),
+    [Input('timer-interval-component', 'n_intervals')]
+)
+def update_timer(n):
+    countdown = APP_UPDATE_TIME - (n * 5) % APP_UPDATE_TIME
+    return f'Next update in {countdown} sec'
 
 
 def generate_tooltips():
@@ -868,10 +885,30 @@ def create_graphs(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest,
 
 
 def create_progress_bar():
-    return dbc.Progress(value=50, color=COLORS['background'], striped=True, animated=True, id="progress",
-                        className="custom-progress", style={'position': 'fixed', 'top': '0', 'width': '100%'})
+    return html.Div([
+        dbc.Progress(value=50, color=COLORS['background'], striped=True, animated=True, id="progress",
+                     className="custom-progress", style={'position': 'fixed', 'top': '0', 'width': '100%',
+                                                         'backgroundColor': COLORS['background']}),
+        html.Div(id='timer', style={
+            'position': 'fixed',
+            'top': '0',
+            'width': '100%',
+            'textAlign': 'center',
+            'color': '#D3D3D3',
+            'fontSize': '14px',
+            'marginTop': '-3px'
+        })
+    ])
 
 
+@app.callback(Output('progress', 'value'),
+              [Input('timer-interval-component', 'n_intervals')])
+def update_progress(n):
+    countdown = 100 if n % 10 == 0 else 100 - (n % 10) * 10
+    return countdown
+
+
+# noinspection PyTypeChecker
 def create_layout(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest, fig_google, fig_reddit,
                   fig_youtube, fig_news):
     initial_layout_data = read_layout_data()
@@ -887,7 +924,7 @@ def create_layout(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest,
     first_figure = dcc.Graph(
         id='live-update-graph',
         figure=fig,
-        style={'width': '89%', 'height': '100vh', 'display': 'inline-block'}
+        style={'width': '89%', 'height': '100vh', 'display': 'inline-block', 'marginTop': '-18px'}
     )
 
     # div wrapping the layout and taking up 10% width
@@ -913,13 +950,6 @@ def create_layout(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest,
     )
 
     app.run_server(host='0.0.0.0', port=8051, debug=False)
-
-
-@app.callback(Output('progress', 'value'),
-              [Input('timer-interval-component', 'n_intervals')])
-def update_progress(n):
-    countdown = 100 if n % 10 == 0 else 100 - (n % 10) * 10
-    return countdown
 
 
 def visualize_charts():

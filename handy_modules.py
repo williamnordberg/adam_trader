@@ -542,7 +542,15 @@ def create_gauge_chart(bullish, bearish, factor):
         bar_thickness = 1
 
         mode_str = "gauge+number"
-        number = {"font": {"size": 12, "color": COLORS['white']}}
+        if factor == 'weighted_score':
+            if value >= 0.55:
+                number = {"font": {"size": 26, "color": COLORS['green_chart']}}
+            elif value <= 0.45:
+                number = {"font": {"size": 26, "color": COLORS['red_chart']}}
+            else:
+                number = {"font": {"size": 26, "color": COLORS['white']}}
+        else:
+            number = {"font": {"size": 12, "color": COLORS['white']}}
     return go.Indicator(
         mode=mode_str,
         value=value,
