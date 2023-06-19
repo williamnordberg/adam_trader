@@ -48,7 +48,7 @@ def calculate_macro_sentiment(rate_this_month: Optional[float], rate_month_befor
         rate_bullish, rate_bearish = compare_interest_rate(rate_this_month, rate_month_before)
         latest_info_saved.loc[0, 'rate_bullish'] = rate_bullish
         latest_info_saved.loc[0, 'rate_bearish'] = rate_bearish
-        latest_info_saved.loc[0, 'fed_rate_m_to_m'] = (rate_this_month - rate_this_month)
+        latest_info_saved.loc[0, 'fed_rate_m_to_m'] = float(rate_this_month - rate_this_month)
     else:
         rate_bullish = float(latest_info_saved['rate_bullish'][0])
         rate_bearish = float(latest_info_saved['rate_bearish'][0])

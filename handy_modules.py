@@ -339,7 +339,7 @@ def read_float_from_latest_saved(column: str) -> float:
     latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
     retrieved_value = latest_info_saved.iloc[0][f'{column}']
     latest_info_saved.to_csv(LATEST_INFO_FILE, index=False)
-    return retrieved_value
+    return float(retrieved_value)
 
 
 def compare_reddit(current_activity: float, previous_activity: float) -> Tuple[float, float]:
@@ -578,4 +578,4 @@ def read_time_last_update_time_difference(column: str) -> timedelta:
 
 
 if __name__ == '__main__':
-    print('')
+    save_float_to_latest_saved('fed_rate_m_to_m', 0.0)

@@ -135,6 +135,8 @@ def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
             rate_this_month, rate_month_before, cpi_m_to_m, ppi_m_to_m)
 
         # Save in database
+        if rate_this_month and rate_month_before:
+            save_value_to_database('fed_rate_m_to_m', (rate_this_month-rate_month_before))
         save_value_to_database('interest_rate', rate_this_month)
         save_value_to_database('cpi_m_to_m', cpi_m_to_m)
         save_value_to_database('ppi_m_to_m', ppi_m_to_m)
