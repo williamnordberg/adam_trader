@@ -162,12 +162,6 @@ def save_value_to_database(column: str, value):
 
 
 if __name__ == '__main__':
-    # Read the existing database
-    df = pd.read_csv(DATABASE_PATH)
 
-    # Set all values in the specified column to zero
-    df['fed_rate_m_to_m'] = 0.0
-
-    # Save the updated DataFrame back to the CSV file without the index
-    df.to_csv(DATABASE_PATH, index=False)
-
+    df_outer = read_database()
+    print(df_outer['bitcoin_price'])

@@ -8,7 +8,7 @@ import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 
 from handy_modules import get_bitcoin_price, calculate_upcoming_events,\
-    create_gauge_chart, COLORS, read_float_from_latest_saved
+    create_gauge_chart, COLORS
 from database import read_database
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -310,7 +310,7 @@ def visualize_prediction():
     fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
 
     fig.add_trace(go.Scatter(x=df.index, y=df["predicted_price"], name='Price'))
-    fig.add_trace(go.Scatter(x=df.index, y=df["predicted_price"], name='Predicted brice'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["actual_price_12h_later"], name='Actual price'))
     fig.add_trace(go.Scatter(x=df.index, y=df["prediction_bullish"], name='Prediction bullish', visible='legendonly'))
     fig.add_trace(go.Scatter(x=df.index, y=df["prediction_bearish"], name='Prediction bearish', visible='legendonly'))
 
@@ -362,7 +362,7 @@ def visualize_macro():
 
     fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
 
-    fig.add_trace(go.Scatter(x=df.index, y=df['fed_rate_m_to_m'], name='Interest Rate', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df['fed_rate_m_to_m'], name='Interest Rate'))
     fig.add_trace(go.Scatter(x=df.index, y=df["cpi_m_to_m"], name='CPI M to M'))
     fig.add_trace(go.Scatter(x=df.index, y=df["ppi_m_to_m"], name='PPI M to M'))
     fig.add_trace(go.Scatter(x=df.index, y=df["macro_bullish"], name='Macro Bullish'))
