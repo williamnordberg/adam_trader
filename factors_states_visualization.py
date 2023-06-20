@@ -6,11 +6,13 @@ from dash import html
 from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
-
+import logging
 from handy_modules import get_bitcoin_price, calculate_upcoming_events,\
     create_gauge_chart, COLORS
 from database import read_database
 
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
