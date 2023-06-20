@@ -8,6 +8,7 @@ from database import read_database
 from newsAPI import check_news_api_sentiment
 from news_aggregate import aggregate_news, calculate_market_sentiment
 from database import save_value_to_database
+from update_bitcoin_price import update_bitcoin_price_in_database
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -15,6 +16,10 @@ LATEST_INFO_SAVED_PATH = 'data/latest_info_saved.csv'
 
 
 def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
+
+    # We need to update Bitcoin price hourly (same as news)
+    update_bitcoin_price_in_database()
+
     # Save latest update time
     save_update_time('sentiment_of_news')
 
@@ -119,6 +124,7 @@ def check_sentiment_of_news() -> Tuple[float, float]:
         news_bullish, news_bearish = check_sentiment_of_news_wrapper()
         save_value_to_database('news_bullish', news_bullish)
         save_value_to_database('news_bearish', news_bearish)
+
         return news_bullish, news_bearish
     else:
         database = read_database()
