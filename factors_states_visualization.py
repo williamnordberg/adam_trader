@@ -311,7 +311,7 @@ def visualize_prediction():
 
     fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
 
-    fig.add_trace(go.Scatter(x=df.index, y=df["predicted_price"], name='Price'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["predicted_price"], name='Predicted price'))
     fig.add_trace(go.Scatter(x=df.index, y=df["actual_price_12h_later"], name='Actual price'))
     fig.add_trace(go.Scatter(x=df.index, y=df["prediction_bullish"], name='Prediction bullish', visible='legendonly'))
     fig.add_trace(go.Scatter(x=df.index, y=df["prediction_bearish"], name='Prediction bearish', visible='legendonly'))
