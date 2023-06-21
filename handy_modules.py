@@ -27,7 +27,8 @@ COLORS = {
     'black': '#000000',
     'lightgray': '#545454',
     'gray_text': '#fff',
-    'background': '#000000'
+    'background': '#000000',
+    'black_chart': '#141414'
 }
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

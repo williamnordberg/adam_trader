@@ -7,7 +7,9 @@ from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 import logging
-from handy_modules import get_bitcoin_price, calculate_upcoming_events,\
+from datetime import timedelta
+
+from handy_modules import get_bitcoin_price, calculate_upcoming_events, \
     create_gauge_chart, COLORS
 from database import read_database
 
@@ -21,6 +23,77 @@ TRADE_RESULT_PATH = 'data/trades_results.csv'
 APP_UPDATE_TIME = 50
 
 
+def visualized_combined():
+    df = pd.read_csv(DATABASE_PATH)
+
+    df['date'] = pd.to_datetime(df['date'])
+    df.set_index('date', inplace=True)
+
+    fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
+
+    # Calculate the range for the last day as default time range
+    latest_date = df.index.max()  # get the latest date in your data
+    seven_days_ago = latest_date - timedelta(days=7)
+
+    fig.add_trace(go.Scatter(x=df.index, y=df["weighted_score_up"],
+                             name='Combined score bullish', line=dict(color=COLORS['green_chart'])))
+    fig.add_trace(go.Scatter(x=df.index, y=df["weighted_score_down"],
+                             name='Combined score  bearish', line=dict(color=COLORS['red_chart'])))
+
+    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right', showgrid=False)
+    fig.update_xaxes(
+        showgrid=False,
+        rangeselector=dict(
+            buttons=list([
+                dict(count=1, label="1d", step="day", stepmode="backward"),
+                dict(count=7, label="7d", step="day", stepmode="backward"),
+                dict(count=1, label="1m", step="month", stepmode="backward"),
+                dict(step="all")
+            ]),
+            bgcolor=COLORS['background'],  # Add your preferred color here
+            activecolor=COLORS['lightgray'],  # Change color of the active button
+            x=0.0,  # x position of buttons
+            y=1.1,  # y position of buttons
+        ),
+        type="date"
+    )
+    fig.update_layout(
+        xaxis_range=[seven_days_ago, latest_date],
+        title={
+            'text': "Combined score",
+            'y': 0.95,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {
+                'color': COLORS['white'],
+                'size': 24
+            }
+        },
+        yaxis_title='Value',
+        plot_bgcolor=COLORS['black_chart'],
+        paper_bgcolor=COLORS['background'],
+        font=dict(
+            color=COLORS['white'],
+            size=12
+        ),
+        legend=dict(orientation="h",  # horizontal legend
+                    yanchor="bottom",
+                    y=1.02,  # put it a bit above the bottom of the plot
+                    xanchor="right",
+                    x=1),  # put it to the right of the plot
+        hovermode="x"  # on hover, show info for all data series for that x-value
+    )
+
+    return fig
+
+
+@app.callback(Output('combined_chart', 'figure'),
+              [Input('interval-component', 'n_intervals')])
+def update_combined(n):
+    return visualized_combined()
+
+
 def visualized_news():
     df = pd.read_csv(DATABASE_PATH)
 
@@ -28,6 +101,10 @@ def visualized_news():
     df.set_index('date', inplace=True)
 
     fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
+
+    # Calculate the range for the last day as default time range
+    latest_date = df.index.max()  # get the latest date in your data
+    one_days_ago = latest_date - timedelta(days=1)
 
     fig.add_trace(go.Scatter(x=df.index, y=df["news_bullish"],
                              name='News bullish', visible='legendonly'))
@@ -38,17 +115,32 @@ def visualized_news():
     fig.add_trace(go.Scatter(x=df.index, y=df["news_negative_polarity"],
                              name='Negative polarity'))
     fig.add_trace(go.Scatter(x=df.index, y=df["news_positive_count"],
-                             name='Positive Count'))
+                             name='Positive Count', visible='legendonly'))
     fig.add_trace(go.Scatter(x=df.index, y=df["news_negative_count"],
-                             name='negative count'))
+                             name='negative count', visible='legendonly'))
 
-    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right')
-    fig.update_xaxes(showgrid=False)
-    fig.update_yaxes(showgrid=False)
+    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right', showgrid=False)
+    fig.update_xaxes(
+        showgrid=False,
+        rangeselector=dict(
+            buttons=list([
+                dict(count=1, label="1d", step="day", stepmode="backward"),
+                dict(count=7, label="7d", step="day", stepmode="backward"),
+                dict(count=1, label="1m", step="month", stepmode="backward"),
+                dict(step="all")
+            ]),
+            bgcolor=COLORS['background'],  # Add your preferred color here
+            activecolor=COLORS['lightgray'],  # Change color of the active button
+            x=0.0,  # x position of buttons
+            y=1.1,  # y position of buttons
+        ),
+        type="date"
+    )
     fig.update_layout(
+        xaxis_range=[one_days_ago, latest_date],
         title={
             'text': "News",
-            'y': 0.9,
+            'y': 0.95,
             'x': 0.5,
             'xanchor': 'center',
             'yanchor': 'top',
@@ -57,9 +149,8 @@ def visualized_news():
                 'size': 24
             }
         },
-        xaxis_title='Date',
         yaxis_title='Value',
-        plot_bgcolor=COLORS['background'],
+        plot_bgcolor=COLORS['black_chart'],
         paper_bgcolor=COLORS['background'],
         font=dict(
             color=COLORS['white'],
@@ -88,6 +179,10 @@ def visualized_youtube():
     df['date'] = pd.to_datetime(df['date'])
     df.set_index('date', inplace=True)
 
+    # Calculate the range for the last day as default time range
+    latest_date = df.index.max()  # get the latest date in your data
+    seven_days_ago = latest_date - timedelta(days=7)
+
     fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
 
     fig.add_trace(go.Scatter(x=df.index, y=df["youtube_bullish"],
@@ -97,13 +192,28 @@ def visualized_youtube():
     fig.add_trace(go.Scatter(x=df.index, y=df["last_24_youtube"],
                              name='Number of Video in 24h'))
 
-    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right')
-    fig.update_xaxes(showgrid=False)
-    fig.update_yaxes(showgrid=False)
+    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right', showgrid=False)
+    fig.update_xaxes(
+        showgrid=False,
+        rangeselector=dict(
+            buttons=list([
+                dict(count=1, label="1d", step="day", stepmode="backward"),
+                dict(count=7, label="7d", step="day", stepmode="backward"),
+                dict(count=1, label="1m", step="month", stepmode="backward"),
+                dict(step="all")
+            ]),
+            bgcolor=COLORS['background'],  # Add your preferred color here
+            activecolor=COLORS['lightgray'],  # Change color of the active button
+            x=0.0,  # x position of buttons
+            y=1.1,  # y position of buttons
+        ),
+        type="date"
+    )
     fig.update_layout(
+        xaxis_range=[seven_days_ago, latest_date],
         title={
             'text': "Youtube",
-            'y': 0.9,
+            'y': 0.95,
             'x': 0.5,
             'xanchor': 'center',
             'yanchor': 'top',
@@ -112,9 +222,8 @@ def visualized_youtube():
                 'size': 24
             }
         },
-        xaxis_title='Date',
         yaxis_title='Value',
-        plot_bgcolor=COLORS['background'],
+        plot_bgcolor=COLORS['black_chart'],
         paper_bgcolor=COLORS['background'],
         font=dict(
             color=COLORS['white'],
@@ -143,6 +252,10 @@ def visualized_reddit():
     df['date'] = pd.to_datetime(df['date'])
     df.set_index('date', inplace=True)
 
+    # Calculate the range for the last day as default time range
+    latest_date = df.index.max()  # get the latest date in your data
+    seven_days_ago = latest_date - timedelta(days=7)
+
     fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
 
     fig.add_trace(go.Scatter(x=df.index, y=df["reddit_bullish"],
@@ -150,17 +263,32 @@ def visualized_reddit():
     fig.add_trace(go.Scatter(x=df.index, y=df["reddit_bearish"],
                              name='Reddit bearish', visible='legendonly'))
     fig.add_trace(go.Scatter(x=df.index, y=df["reddit_count_bitcoin_posts_24h"],
-                             name='Count bitcoin posts 24h'))
+                             name='Count bitcoin posts 24h', visible='legendonly'))
     fig.add_trace(go.Scatter(x=df.index, y=df["reddit_activity_24h"],
                              name='Reddit activity'))
 
-    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right')
-    fig.update_xaxes(showgrid=False)
-    fig.update_yaxes(showgrid=False)
+    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right', showgrid=False)
+    fig.update_xaxes(
+        showgrid=False,
+        rangeselector=dict(
+            buttons=list([
+                dict(count=1, label="1d", step="day", stepmode="backward"),
+                dict(count=7, label="7d", step="day", stepmode="backward"),
+                dict(count=1, label="1m", step="month", stepmode="backward"),
+                dict(step="all")
+            ]),
+            bgcolor=COLORS['background'],  # Add your preferred color here
+            activecolor=COLORS['lightgray'],  # Change color of the active button
+            x=0.0,  # x position of buttons
+            y=1.1,  # y position of buttons
+        ),
+        type="date"
+    )
     fig.update_layout(
+        xaxis_range=[seven_days_ago, latest_date],
         title={
             'text': "Reddit",
-            'y': 0.9,
+            'y': 0.95,
             'x': 0.5,
             'xanchor': 'center',
             'yanchor': 'top',
@@ -169,9 +297,8 @@ def visualized_reddit():
                 'size': 24
             }
         },
-        xaxis_title='Date',
         yaxis_title='Value',
-        plot_bgcolor=COLORS['background'],
+        plot_bgcolor=COLORS['black_chart'],
         paper_bgcolor=COLORS['background'],
         font=dict(
             color=COLORS['white'],
@@ -202,17 +329,36 @@ def visualized_google():
 
     fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
 
+    # Calculate the range for the last day as default time range
+    latest_date = df.index.max()  # get the latest date in your data
+    seven_days_ago = latest_date - timedelta(days=7)
+
     fig.add_trace(go.Scatter(x=df.index, y=df["hourly_google_search"], name='Hourly Google Search'))
     fig.add_trace(go.Scatter(x=df.index, y=df["google_search_bullish"], name='Google Bullish', visible='legendonly'))
     fig.add_trace(go.Scatter(x=df.index, y=df["google_search_bearish"], name='Google Bearish', visible='legendonly'))
 
-    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right')
-    fig.update_xaxes(showgrid=False)
-    fig.update_yaxes(showgrid=False)
+    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right', showgrid=False)
+    fig.update_xaxes(
+        showgrid=False,
+        rangeselector=dict(
+            buttons=list([
+                dict(count=1, label="1d", step="day", stepmode="backward"),
+                dict(count=7, label="7d", step="day", stepmode="backward"),
+                dict(count=1, label="1m", step="month", stepmode="backward"),
+                dict(step="all")
+            ]),
+            bgcolor=COLORS['background'],  # Add your preferred color here
+            activecolor=COLORS['lightgray'],  # Change color of the active button
+            x=0.0,  # x position of buttons
+            y=1.1,  # y position of buttons
+        ),
+        type="date"
+    )
     fig.update_layout(
+        xaxis_range=[seven_days_ago, latest_date],
         title={
             'text': "Google search",
-            'y': 0.9,
+            'y': 0.95,
             'x': 0.5,
             'xanchor': 'center',
             'yanchor': 'top',
@@ -221,9 +367,8 @@ def visualized_google():
                 'size': 24
             }
         },
-        xaxis_title='Date',
         yaxis_title='Value',
-        plot_bgcolor=COLORS['background'],
+        plot_bgcolor=COLORS['black_chart'],
         paper_bgcolor=COLORS['background'],
         font=dict(
             color=COLORS['white'],
@@ -252,6 +397,10 @@ def visualized_richest():
     df['date'] = pd.to_datetime(df['date'])
     df.set_index('date', inplace=True)
 
+    # Calculate the range for the last day as default time range
+    latest_date = df.index.max()  # get the latest date in your data
+    seven_days_ago = latest_date - timedelta(days=7)
+
     fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
 
     fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_bullish"],
@@ -263,13 +412,28 @@ def visualized_richest():
     fig.add_trace(go.Scatter(x=df.index, y=df["richest_addresses_total_sent"],
                              name='Received in last 24H'))
 
-    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right')
-    fig.update_xaxes(showgrid=False)
-    fig.update_yaxes(showgrid=False)
+    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right', showgrid=False)
+    fig.update_xaxes(
+        showgrid=False,
+        rangeselector=dict(
+            buttons=list([
+                dict(count=1, label="1d", step="day", stepmode="backward"),
+                dict(count=7, label="7d", step="day", stepmode="backward"),
+                dict(count=1, label="1m", step="month", stepmode="backward"),
+                dict(step="all")
+            ]),
+            bgcolor=COLORS['background'],  # Add your preferred color here
+            activecolor=COLORS['lightgray'],  # Change color of the active button
+            x=0.0,  # x position of buttons
+            y=1.1,  # y position of buttons
+        ),
+        type="date"
+    )
     fig.update_layout(
+        xaxis_range=[seven_days_ago, latest_date],
         title={
             'text': "Richest Addresses",
-            'y': 0.9,
+            'y': 0.95,
             'x': 0.5,
             'xanchor': 'center',
             'yanchor': 'top',
@@ -278,9 +442,8 @@ def visualized_richest():
                 'size': 24
             }
         },
-        xaxis_title='Date',
         yaxis_title='Value',
-        plot_bgcolor=COLORS['background'],
+        plot_bgcolor=COLORS['black_chart'],
         paper_bgcolor=COLORS['background'],
         font=dict(
             color=COLORS['white'],
@@ -309,6 +472,10 @@ def visualize_prediction():
     df['date'] = pd.to_datetime(df['date'])
     df.set_index('date', inplace=True)
 
+    # Calculate the range for the last day as default time range
+    latest_date = df.index.max()  # get the latest date in your data
+    one_day_ago = latest_date - timedelta(days=1)
+
     fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
 
     fig.add_trace(go.Scatter(x=df.index, y=df["predicted_price"], name='Predicted price'))
@@ -316,13 +483,29 @@ def visualize_prediction():
     fig.add_trace(go.Scatter(x=df.index, y=df["prediction_bullish"], name='Prediction bullish', visible='legendonly'))
     fig.add_trace(go.Scatter(x=df.index, y=df["prediction_bearish"], name='Prediction bearish', visible='legendonly'))
 
-    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right')
-    fig.update_xaxes(showgrid=False)
-    fig.update_yaxes(showgrid=False)
+    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right', showgrid=False)
+    fig.update_xaxes(
+        showgrid=False,
+        rangeselector=dict(
+            buttons=list([
+                dict(count=1, label="1d", step="day", stepmode="backward"),
+                dict(count=7, label="7d", step="day", stepmode="backward"),
+                dict(count=1, label="1m", step="month", stepmode="backward"),
+                dict(step="all")
+            ]),
+            bgcolor=COLORS['background'],  # Add your preferred color here
+            activecolor=COLORS['lightgray'],  # Change color of the active button
+            x=0.0,  # x position of buttons
+            y=1.1,  # y position of buttons
+        ),
+        type="date"
+    )
+
     fig.update_layout(
+        xaxis_range=[one_day_ago, latest_date],
         title={
             'text': "Prediction",
-            'y': 0.9,
+            'y': 0.95,
             'x': 0.5,
             'xanchor': 'center',
             'yanchor': 'top',
@@ -331,9 +514,8 @@ def visualize_prediction():
                 'size': 24
             }
         },
-        xaxis_title='Date',
         yaxis_title='Value',
-        plot_bgcolor=COLORS['background'],
+        plot_bgcolor=COLORS['black_chart'],
         paper_bgcolor=COLORS['background'],
         font=dict(
             color=COLORS['white'],
@@ -364,19 +546,33 @@ def visualize_macro():
 
     fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
 
-    fig.add_trace(go.Scatter(x=df.index, y=df['fed_rate_m_to_m'], name='Interest Rate'))
+    fig.add_trace(go.Scatter(x=df.index, y=df['fed_rate_m_to_m'], name='Interest Rate M to M'))
     fig.add_trace(go.Scatter(x=df.index, y=df["cpi_m_to_m"], name='CPI M to M'))
     fig.add_trace(go.Scatter(x=df.index, y=df["ppi_m_to_m"], name='PPI M to M'))
-    fig.add_trace(go.Scatter(x=df.index, y=df["macro_bullish"], name='Macro Bullish'))
-    fig.add_trace(go.Scatter(x=df.index, y=df["macro_bearish"], name='Macro Bearish'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["macro_bullish"], name='Macro Bullish', visible='legendonly'))
+    fig.add_trace(go.Scatter(x=df.index, y=df["macro_bearish"], name='Macro Bearish', visible='legendonly'))
 
-    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right')
-    fig.update_xaxes(showgrid=False)
-    fig.update_yaxes(showgrid=False)
+    fig.update_yaxes(tickfont=dict(color=COLORS['white']), side='right', showgrid=False)
+    fig.update_xaxes(
+        showgrid=False,
+        rangeselector=dict(
+            buttons=list([
+                dict(count=1, label="1d", step="day", stepmode="backward"),
+                dict(count=7, label="7d", step="day", stepmode="backward"),
+                dict(count=1, label="1m", step="month", stepmode="backward"),
+                dict(step="all")
+            ]),
+            bgcolor=COLORS['background'],  # Add your preferred color here
+            activecolor=COLORS['lightgray'],  # Change color of the active button
+            x=0.0,  # x position of buttons
+            y=1.1,  # y position of buttons
+        ),
+        type="date"
+    )
     fig.update_layout(
         title={
             'text': "Macro Economic",
-            'y': 0.9,
+            'y': 0.95,
             'x': 0.5,
             'xanchor': 'center',
             'yanchor': 'top',
@@ -385,20 +581,19 @@ def visualize_macro():
                 'size': 24
             }
         },
-        xaxis_title='Date',
         yaxis_title='Value',
-        plot_bgcolor=COLORS['background'],
+        plot_bgcolor=COLORS['black_chart'],
         paper_bgcolor=COLORS['background'],
         font=dict(
             color=COLORS['white'],
             size=12
         ),
-        legend=dict(orientation="h",  # horizontal legend
+        legend=dict(orientation="h",
                     yanchor="bottom",
-                    y=1.02,  # put it a bit above the bottom of the plot
+                    y=1.02,
                     xanchor="right",
-                    x=1),  # put it to the right of the plot
-        hovermode="x"  # on hover, show info for all data series for that x-value
+                    x=1),
+        hovermode="x",
     )
 
     return fig
@@ -417,52 +612,72 @@ def visualize_trade_results():
     fig = go.Figure()
 
     # Add a bar chart for PNL
-    fig.add_trace(go.Bar(x=df['weighted_score_category'], y=(df["PNL"] / 1000),
-                         name='PNL(K)', marker=dict(color=COLORS['lightgray'])))
+    fig.add_trace(go.Bar(
+        x=df['weighted_score_category'],
+        y=(df["PNL"] / 1000),
+        name='PNL(K)',
+        marker=dict(color=COLORS['lightgray']),
+        text=df["PNL"],
+        hoverinfo='none'
+    ))
 
-    # Add a bar chart for number_of_long
     fig.add_trace(go.Bar(x=df['weighted_score_category'], y=df["long_trades"],
-                         name='long trades Number', marker=dict(color=COLORS['green_chart'])))
+                         name='Long trades', marker=dict(color=COLORS['green_chart']),
+                         text=df["long_trades"].map('long {}'.format),
+                         hoverinfo='none'
+                         ))
 
-    # Add a bar chart for number_of_short
     fig.add_trace(go.Bar(x=df['weighted_score_category'], y=df["short_trades"],
-                         name='short trades Number', marker=dict(color=COLORS['red_chart'])))
-    # Add a bar chart for number_of_trades
-    fig.add_trace(go.Bar(x=df['weighted_score_category'], y=df["win_trades"],
-                         name='win trades'))
+                         name='Short trades', marker=dict(color=COLORS['red_chart']),
+                         text=df["short_trades"].map('short {}'.format),
+                         hoverinfo='none'
+                         ))
 
-    # Add a bar chart for number_of_trades
+    fig.add_trace(go.Bar(x=df['weighted_score_category'], y=df["win_trades"],
+                         name='Win trades', marker=dict(color='#006700'),
+                         text=df["win_trades"].map('win {}'.format),
+                         hoverinfo='none'
+                         ))
+
     fig.add_trace(go.Bar(x=df['weighted_score_category'], y=df["loss_trades"],
-                         name='loss trades'))
+                         name='Loss trades', marker=dict(color='#9a0000'),
+                         text=df["loss_trades"].map('loss {}'.format),
+                         hoverinfo='none'
+                         ))
 
     # Add a bar chart for number_of_trades
     # fig.add_trace(go.Bar(x=df['weighted_score_category'], y=df["total_trades"],
     #                    name='Number of Trades'))
 
-    # Update the layout and show the plot
     fig.update_xaxes(showgrid=False)
     fig.update_yaxes(showgrid=False)
     fig.update_layout(
-            title={
-                'text': "Trade Results",
-                'y': 0.9,  # Adjust this as needed. Default is 0.9
-                'x': 0.5,  # Places the title in the center
-                'xanchor': 'center',  # ensures the title remains at center when resizing
-                'yanchor': 'top',  # ensures the title remains at top when resizing
-                'font': {
-                 'color': COLORS['white'],  # Change this to your desired color
-                 'size': 24  # Change this to your desired size
-                    }
-                    },
-            xaxis_title='Model Category',
-            yaxis_title='Value',
-            barmode='group',
-            plot_bgcolor=COLORS['background'],
-            paper_bgcolor=COLORS['background'],
-            font=dict(
-                color=COLORS['white'],  # Change this to your desired color
-                size=12
-            )
+        title={
+            'text': "Trade Results",
+            'y': 0.95,  # Adjust this as needed. Default is 0.9
+            'x': 0.5,  # Places the title in the center
+            'xanchor': 'center',  # ensures the title remains at center when resizing
+            'yanchor': 'top',  # ensures the title remains at top when resizing
+            'font': {
+                'color': COLORS['white'],  # Change this to your desired color
+                'size': 24  # Change this to your desired size
+            }
+        },
+        xaxis_title='Model Category',
+        yaxis_title='Value',
+        barmode='group',
+        plot_bgcolor=COLORS['black_chart'],
+        paper_bgcolor=COLORS['background'],
+        font=dict(
+            color=COLORS['white'],  # Change this to your desired color
+            size=11
+        ),
+        legend=dict(orientation="h",
+                    yanchor="bottom",
+                    y=1.02,  # put it a bit above the bottom of the plot
+                    xanchor="right",
+                    x=1),
+        hovermode="x"  # on hover, show info for all data series for that x-value
     )
 
     return fig
@@ -675,11 +890,11 @@ def update_divs(n):
     ppi_announcement = layout_data["ppi_announcement"]
 
     return fed_rate_m_to_m, f'CPI MtoM: {cpi_m_to_m}', f'PPI MtoM: {ppi_m_to_m}', fed_announcement, cpi_announcement, \
-        ppi_announcement, f'T State: {trading_state}', f'Bid vol: {bid_volume}',\
-        f'Ask vol: {ask_volume}', f'Predicted: {predicted_price}',  f'Current: {current_price}',\
-        f'Diff: {price_difference}', f'RSI: {rsi}', f'Over 200EMA: {over_200EMA}',\
-        f'MACD up tr: {MACD_uptrend}', f'bb distance: {bb_MA_distance}', f'Rich receive: {BTC_received}',\
-        f'Rich send: {BTC_send}', f'+ news increase:{positive_news_polarity_change}',\
+        ppi_announcement, f'T State: {trading_state}', f'Bid vol: {bid_volume}', \
+        f'Ask vol: {ask_volume}', f'Predicted: {predicted_price}', f'Current: {current_price}', \
+        f'Diff: {price_difference}', f'RSI: {rsi}', f'Over 200EMA: {over_200EMA}', \
+        f'MACD up tr: {MACD_uptrend}', f'bb distance: {bb_MA_distance}', f'Rich receive: {BTC_received}', \
+        f'Rich send: {BTC_send}', f'+ news increase:{positive_news_polarity_change}', \
         f'- news increase: {negative_news_polarity_change}'
 
 
@@ -727,9 +942,9 @@ def create_html_divs(initial_layout_data):
                    style={'fontSize': '13px',
                           'margin': '0px',
                           'color': 'green' if initial_layout_data["trading_state"] == 'Trading state: long'
-                          else('red' if
-                               initial_layout_data["trading_state"] == 'Trading state: short'
-                               else COLORS['white'])}),
+                          else ('red' if
+                                initial_layout_data["trading_state"] == 'Trading state: short'
+                                else COLORS['white'])}),
         ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
         html.Div([
             html.P(f'Bid vol: {initial_layout_data["bid_volume"]}', id='bid-volume',
@@ -865,7 +1080,7 @@ def create_update_intervals():
 
     interval_component = dcc.Interval(
         id='interval-component',
-        interval=5 * 1000,  # in milliseconds
+        interval=50 * 1000,  # in milliseconds
         n_intervals=0
     )
 
@@ -873,16 +1088,16 @@ def create_update_intervals():
 
 
 def create_graphs(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest, fig_google, fig_reddit,
-                  fig_youtube, fig_news):
+                  fig_youtube, fig_news, fig_combined):
     graph_list = []
     graph_ids = ['live-update-graph', 'trade_results_chart', 'macro_chart', 'prediction_chart',
-                 'richest_chart', 'google_chart', 'reddit_chart', 'youtube_chart', 'news_chart']
+                 'richest_chart', 'google_chart', 'reddit_chart', 'youtube_chart', 'news_chart', 'combined_chart']
     fig_list = [fig, fig_trade_result, fig_macro, fig_prediction, fig_richest, fig_google, fig_reddit,
-                fig_youtube, fig_news]
+                fig_youtube, fig_news, fig_combined]
 
     for i in range(len(graph_ids)):
         graph_list.append(dcc.Graph(id=graph_ids[i], figure=fig_list[i],
-                                    style={'width': '100%', 'height': '70vh'}))
+                                    style={'width': '100%', 'height': '100vh'}))
 
     return graph_list
 
@@ -913,14 +1128,14 @@ def update_progress(n):
 
 # noinspection PyTypeChecker
 def create_layout(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest, fig_google, fig_reddit,
-                  fig_youtube, fig_news):
+                  fig_youtube, fig_news, fig_combined):
     initial_layout_data = read_layout_data()
     popover = create_popover()
     timer_interval_component, interval_component = create_update_intervals()
     progress_bar = create_progress_bar()
 
     graphs = create_graphs(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest, fig_google, fig_reddit,
-                           fig_youtube, fig_news)
+                           fig_youtube, fig_news, fig_combined)
     html_divs = create_html_divs(initial_layout_data)
 
     # the first figure that takes up 90% width
@@ -933,7 +1148,7 @@ def create_layout(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest,
     # div wrapping the layout and taking up 10% width
     layout_div = html.Div(
         children=[timer_interval_component, interval_component, popover] + html_divs,
-        style={'width': '11%', 'height': '90vh', 'display': 'inline-block', 'verticalAlign': 'top'}
+        style={'width': '11%', 'height': '100vh', 'display': 'inline-block', 'verticalAlign': 'top'}
     )
 
     # div wrapping the rest of the figures, taking up 100% width
@@ -948,7 +1163,6 @@ def create_layout(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest,
             html.Div(children=[progress_bar], style={'display': 'inline-block', 'width': '100%', 'height': '05vh'}),
             first_figure,
             layout_div, figure_div]
-
 
     )
 
@@ -965,8 +1179,9 @@ def visualize_charts():
     fig_reddit = visualized_reddit()
     fig_youtube = visualized_youtube()
     fig_news = visualized_news()
+    fig_combined = visualized_combined()
     create_layout(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest, fig_google, fig_reddit,
-                  fig_youtube, fig_news)
+                  fig_youtube, fig_news, fig_combined)
 
 
 if __name__ == '__main__':
