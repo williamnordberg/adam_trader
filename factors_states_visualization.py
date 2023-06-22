@@ -8,6 +8,7 @@ import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 import logging
 from datetime import timedelta
+from dash import dash_table
 
 from handy_modules import get_bitcoin_price, calculate_upcoming_events, \
     create_gauge_chart, COLORS
@@ -20,7 +21,36 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
 DATABASE_PATH = 'data/database.csv'
 TRADE_RESULT_PATH = 'data/trades_results.csv'
+TRADE_DETAILS_PATH = 'data/trades_details.csv'
+
 APP_UPDATE_TIME = 50
+
+
+def visualize_trade_details():
+    df = pd.read_csv(TRADE_DETAILS_PATH)
+
+    # Display all columns except index
+    columns = [{"name": i, "id": i} for i in df.columns]
+
+    # Create table
+    table = dash_table.DataTable(
+        data=df.to_dict('records'),
+        columns=columns,
+        fixed_rows={'headers': True, 'data': 0},  # Enable fixed headers
+        style_header={'backgroundColor': 'rgb(30, 30, 30)'},
+        style_cell={
+            'backgroundColor': 'rgb(50, 50, 50)',
+            'color': 'white'
+        },
+    )
+
+    return table
+
+
+@app.callback(Output('trade_details_table', 'children'),
+              [Input('interval-component', 'n_intervals')])
+def update_trade_details(n):
+    return visualize_trade_details()
 
 
 def visualized_combined():
@@ -874,13 +904,13 @@ def update_divs(n):
     ppi_m_to_m = layout_data["ppi_m_to_m"]
     bid_volume = layout_data["bid_volume"]
     ask_volume = layout_data["ask_volume"]
-    predicted_price = layout_data["predicted_price"]
-    current_price = layout_data["current_price"]
-    price_difference = predicted_price - current_price
+    predicted_price = int(layout_data["predicted_price"])
+    current_price = int(layout_data["current_price"])
+    price_difference = int(predicted_price - current_price)
     rsi = layout_data["rsi"]
     over_200EMA = layout_data["over_200EMA"]
     MACD_uptrend = layout_data["MACD_uptrend"]
-    bb_MA_distance = layout_data["bb_MA_distance"]
+    bb_MA_distance = int(layout_data["bb_MA_distance"])
     BTC_received = layout_data["BTC_received"]
     BTC_send = layout_data["BTC_send"]
     positive_news_polarity_change = layout_data["positive_news_polarity_change"]
@@ -958,8 +988,16 @@ def create_html_divs(initial_layout_data):
                    style={'fontSize': '13px', 'margin': '0px'}),
             html.P(f'Current: {initial_layout_data["current_price"]}', id='current-price', style={
                 'fontSize': '13px', 'margin': '0px'}),
-            html.P(f'Diff: {initial_layout_data["predicted_price"] - initial_layout_data["current_price"]}',
-                   id='price-difference', style={'fontSize': '13px', 'margin': '0px'}),
+            html.P(f'Diff: {int(initial_layout_data["predicted_price"] - initial_layout_data["current_price"])}',
+                   id='price-difference',
+                   # style={'fontSize': '13px', 'margin': '0px'}),
+                   style={'fontSize': '13px',
+                          'margin': '0px',
+                          'color': 'green' if int(initial_layout_data["predicted_price"] -
+                                                  initial_layout_data["current_price"]) > 300
+                          else ('red' if int(initial_layout_data["predicted_price"] -
+                                             initial_layout_data["current_price"]) < 300
+                                else COLORS['white'])}),
         ], style={'borderTop': '1px solid white'}),
 
         html.Div([
@@ -1091,7 +1129,8 @@ def create_graphs(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest,
                   fig_youtube, fig_news, fig_combined):
     graph_list = []
     graph_ids = ['live-update-graph', 'trade_results_chart', 'macro_chart', 'prediction_chart',
-                 'richest_chart', 'google_chart', 'reddit_chart', 'youtube_chart', 'news_chart', 'combined_chart']
+                 'richest_chart', 'google_chart', 'reddit_chart',
+                 'youtube_chart', 'news_chart', 'combined_chart']
     fig_list = [fig, fig_trade_result, fig_macro, fig_prediction, fig_richest, fig_google, fig_reddit,
                 fig_youtube, fig_news, fig_combined]
 
@@ -1138,7 +1177,6 @@ def create_layout(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest,
                            fig_youtube, fig_news, fig_combined)
     html_divs = create_html_divs(initial_layout_data)
 
-    # the first figure that takes up 90% width
     first_figure = dcc.Graph(
         id='live-update-graph',
         figure=fig,
@@ -1154,7 +1192,25 @@ def create_layout(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest,
     # div wrapping the rest of the figures, taking up 100% width
     figure_div = html.Div(
         children=graphs[1:] + generate_tooltips(),
-        style={'width': '100%', 'height': '90vh', 'display': 'inline-block', 'verticalAlign': 'top'}
+        style={'width': '100%', 'height': '90vh', 'display': 'inline-block', 'verticalAlign': 'top',
+
+               }
+    )
+
+    trade_details_div = html.Div(
+        [
+            html.H3('Latest trades', style={'textAlign': 'center'}),
+            html.Div(
+                id='trade_details_table',
+                style={
+                    'width': '90%',
+                    'height': '20vh',
+                    'overflowY': 'scroll',
+                    'fontSize': '14px',
+                    'margin': 'auto'  # Center the table
+                }
+            )
+        ]
     )
 
     app.layout = html.Div(
@@ -1162,8 +1218,10 @@ def create_layout(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest,
         children=[
             html.Div(children=[progress_bar], style={'display': 'inline-block', 'width': '100%', 'height': '05vh'}),
             first_figure,
-            layout_div, figure_div]
-
+            layout_div,
+            trade_details_div,
+            figure_div
+        ]
     )
 
     app.run_server(host='0.0.0.0', port=8051, debug=False)

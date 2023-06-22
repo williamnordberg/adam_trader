@@ -51,6 +51,9 @@ def make_trading_decision(macro_bullish: float, macro_bearish: float,
     """
     Makes a trading decision based on the conditions met.
     """
+
+    save_update_time('weighted_score')
+
     # Calculate the number of contributing factors
     num_contributing_factors = count_contributing_factors(
         (macro_bullish, macro_bearish),
@@ -111,7 +114,6 @@ def make_trading_decision(macro_bullish: float, macro_bearish: float,
         # Save the latest weighted score
         save_float_to_latest_saved('latest_weighted_score_up', normalized_score_up)
         save_float_to_latest_saved('latest_weighted_score_down', normalized_score_down)
-        save_update_time('weighted_score')
 
         # Save to database Check if an hour has passed since the last database update
         current_time = datetime.now()
@@ -129,7 +131,6 @@ def make_trading_decision(macro_bullish: float, macro_bearish: float,
         # Save the latest weighted score
         save_float_to_latest_saved('latest_weighted_score_up', 0.0)
         save_float_to_latest_saved('latest_weighted_score_down', 0.0)
-        save_update_time('weighted_score')
         logging.info(f"Minimum contributing factors not met: {num_contributing_factors}/{MIN_CONTRIBUTING_FACTORS}")
         return 0.0, 0.0
 
