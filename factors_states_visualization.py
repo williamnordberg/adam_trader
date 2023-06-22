@@ -14,6 +14,8 @@ from handy_modules import get_bitcoin_price, calculate_upcoming_events, \
     create_gauge_chart, COLORS
 from database import read_database
 
+logging.basicConfig(filename='app.log', level=logging.INFO)
+
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -22,8 +24,20 @@ LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
 DATABASE_PATH = 'data/database.csv'
 TRADE_RESULT_PATH = 'data/trades_results.csv'
 TRADE_DETAILS_PATH = 'data/trades_details.csv'
-
 APP_UPDATE_TIME = 50
+
+
+def tail(filename, lines=1):
+    with open(filename, 'r') as f:
+        return ''.join(list(f)[-lines:])
+
+
+@app.callback(
+    Output('log-data', 'value'),
+    Input('interval-component', 'n_intervals'))
+def update_metrics(n):
+    log_file_path = 'app.log'  # path to your log file
+    return tail(log_file_path, 300)
 
 
 def visualize_trade_details():
@@ -879,6 +893,7 @@ def create_initial_layout_data():
      Output('cpi-announcement', 'children'),
      Output('ppi-announcement', 'children'),
      Output('trading-state', 'children'),
+     Output('trading-state', 'style'),  # Add 'style' as an output
      Output('bid-volume', 'children'),
      Output('ask-volume', 'children'),
      Output('predicted-price', 'children'),
@@ -899,6 +914,14 @@ def update_divs(n):
 
     # Extract values
     trading_state = layout_data["trading_state"]
+    # Generate color based on trading_state
+    if trading_state == 'long':
+        color = 'green'
+    elif trading_state == 'short':
+        color = 'red'
+    else:
+        color = COLORS['white']
+
     fed_rate_m_to_m = layout_data["fed_rate_m_to_m"]
     cpi_m_to_m = layout_data["cpi_m_to_m"]
     ppi_m_to_m = layout_data["ppi_m_to_m"]
@@ -920,7 +943,7 @@ def update_divs(n):
     ppi_announcement = layout_data["ppi_announcement"]
 
     return fed_rate_m_to_m, f'CPI MtoM: {cpi_m_to_m}', f'PPI MtoM: {ppi_m_to_m}', fed_announcement, cpi_announcement, \
-        ppi_announcement, f'T State: {trading_state}', f'Bid vol: {bid_volume}', \
+        ppi_announcement, f'T State: {trading_state}', {'color': color}, f'Bid vol: {bid_volume}', \
         f'Ask vol: {ask_volume}', f'Predicted: {predicted_price}', f'Current: {current_price}', \
         f'Diff: {price_difference}', f'RSI: {rsi}', f'Over 200EMA: {over_200EMA}', \
         f'MACD up tr: {MACD_uptrend}', f'bb distance: {bb_MA_distance}', f'Rich receive: {BTC_received}', \
@@ -971,9 +994,9 @@ def create_html_divs(initial_layout_data):
             html.P(f'T State: {initial_layout_data["trading_state"]}', id='trading-state',
                    style={'fontSize': '13px',
                           'margin': '0px',
-                          'color': 'green' if initial_layout_data["trading_state"] == 'Trading state: long'
+                          'color': 'green' if initial_layout_data["trading_state"] == 'long'
                           else ('red' if
-                                initial_layout_data["trading_state"] == 'Trading state: short'
+                                initial_layout_data["trading_state"] == 'short'
                                 else COLORS['white'])}),
         ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
         html.Div([
@@ -1110,15 +1133,14 @@ def create_popover():
 
 
 def create_update_intervals():
+    interval_component = dcc.Interval(
+        id='interval-component',
+        interval=APP_UPDATE_TIME * 1000,  # in milliseconds
+        n_intervals=0
+    )
     timer_interval_component = dcc.Interval(
         id='timer-interval-component',
         interval=5 * 1000,  # in milliseconds
-        n_intervals=0
-    )
-
-    interval_component = dcc.Interval(
-        id='interval-component',
-        interval=50 * 1000,  # in milliseconds
         n_intervals=0
     )
 
@@ -1214,13 +1236,31 @@ def create_layout(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest,
     )
 
     app.layout = html.Div(
+
         style={'backgroundColor': COLORS['background'], 'color': COLORS['white']},
         children=[
             html.Div(children=[progress_bar], style={'display': 'inline-block', 'width': '100%', 'height': '05vh'}),
             first_figure,
             layout_div,
+            html.H3('Terminal putput', style={'textAlign': 'center'}),
+            html.Div(children=[
+                dcc.Textarea(id='log-data', style={
+                    'width': '90%',
+                    'height': '20vh',
+                    'backgroundColor': COLORS['black_chart'],
+                    'color': COLORS['white'],
+                    'margin': 'auto'
+                })
+            ],
+                style={
+                    'display': 'flex',
+                    'justifyContent': 'center',
+                    'alignItems': 'center',
+                    'width': '100%'
+                }
+            ),
             trade_details_div,
-            figure_div
+            figure_div,
         ]
     )
 
