@@ -1,70 +1,45 @@
-import pandas as pd
+import logging
 import dash
-from dash import dcc
+import dash_core_components as dcc
 from dash import html
 from dash.dependencies import Input, Output
-import dash_bootstrap_components as dbc
-from dash import dash_table
-import logging
 
-log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+# Set up logger
+logging.basicConfig(filename='app.log', level=logging.INFO)
 
-TRADE_DETAILS_PATH = 'data/trades_details.csv'
+app = dash.Dash(__name__)
 
-def visualize_trade_details():
-    df = pd.read_csv(TRADE_DETAILS_PATH)
 
-    # Display all columns except index
-    columns = [{"name": i, "id": i} for i in df.columns]
+@app.callback(Output('live-log', 'children'),
+              Input('interval-component', 'n_intervals'))
+def update_log(_):
+    # Each update, we will read the log file and return its contents
+    with open('app.log', 'r') as f:
+        content = f.read()
 
-    # Create table
-    table = dash_table.DataTable(
-        data=df.to_dict('records'),
-        columns=columns,
-        fixed_rows={'headers': True, 'data': 0},  # Enable fixed headers
-        style_header={'backgroundColor': 'rgb(30, 30, 30)'},
-        style_cell={
-            'backgroundColor': 'rgb(50, 50, 50)',
-            'color': 'white'
-        },
-    )
+    return html.Pre(content)
 
-    return table
 
-def create_layout():
-    interval_component = dcc.Interval(
-        id='interval-component',
-        interval=50 * 1000,  # in milliseconds
-        n_intervals=0
-    )
+@app.callback(Output('live-update-text', 'children'),
+              Input('interval-component', 'n_intervals'))
+def update_metrics(n):
+    logging.info('Metrics updated')
+    return f'Metrics updated: {n}'
 
-    trade_details_div = html.Div(
-        [
-            html.H3('Latest trades', style={'textAlign': 'center'}),
-            html.Div(
-                id='trade_details_table',
-                style={
-                    'width': '90%',
-                    'height': '20vh',
-                    'overflowY': 'scroll',
-                    'fontSize': '14px',
-                    'margin': 'auto'  # Center the table
-                }
-            ),
-            interval_component  # add the interval component to the layout
-        ]
-    )
 
-    app.layout = trade_details_div
+app.layout = html.Div(
+    [
+        dcc.Interval(
+            id='interval-component',
+            interval=1000,  # in milliseconds
+            n_intervals=0
+        ),
+        html.H2('Live metrics:'),
+        html.Div(id='live-update-text'),
+        html.H2('Live log:'),
+        html.Div(id='live-log'),
+    ]
+)
 
 if __name__ == '__main__':
-    create_layout()
-
-    @app.callback(Output('trade_details_table', 'children'),
-                  [Input('interval-component', 'n_intervals')])
-    def update_trade_details(n):
-        return visualize_trade_details()
-
-    app.run_server(host='0.0.0.0', port=8051, debug=False)
+    app.run_server(debug=True)
