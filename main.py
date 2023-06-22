@@ -5,6 +5,8 @@ import datetime
 import signal
 import sys
 
+# Logging config must be in begen of first import to inherit
+from logging_config import do_nothing
 from handy_modules import retrieve_richest_addresses_bullish_bearish, get_bitcoin_price, \
     save_trade_details, save_trade_result, save_trading_state,\
     calculate_score_margin, compare_send_receive_richest_addresses
@@ -32,6 +34,8 @@ SHORT_THRESHOLD = 0.7
 PROFIT_MARGIN = 0.005
 RICHEST_ADDRESSES_SLEEP_TIME = 20 * 60
 
+
+do_nothing()
 logging.basicConfig(filename='trading.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
@@ -152,7 +156,6 @@ def signal_handler(sig, frame):
 
 
 if __name__ == "__main__":
-
     # Register the signal handler
     signal.signal(signal.SIGINT, signal_handler)
 

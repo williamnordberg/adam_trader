@@ -14,6 +14,8 @@ from handy_modules import get_bitcoin_price, calculate_upcoming_events, \
     create_gauge_chart, COLORS
 from database import read_database
 
+logging.basicConfig(filename='app.log', level=logging.INFO)
+
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
