@@ -43,6 +43,9 @@ def update_metrics(n):
 def visualize_trade_details():
     df = pd.read_csv(TRADE_DETAILS_PATH)
 
+    # Select only the required columns
+    df = df[["weighted_score", "position_opening_time", "position_closing_time", "opening_price", "close_price", "position_type", "PNL"]]
+
     # Display all columns except index
     columns = [{"name": i, "id": i} for i in df.columns]
 

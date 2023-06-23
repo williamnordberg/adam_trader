@@ -39,20 +39,31 @@ def aggregate_and_save_values():
         aggregated_values[key] = []
 
 
-def make_trading_decision(macro_bullish: float, macro_bearish: float,
-                          order_book_bullish: float, order_book_bearish: float,
-                          prediction_bullish: float, prediction_bearish: float,
-                          technical_bullish: float, technical_bearish: float,
-                          richest_addresses_bullish: float, richest_addresses_bearish: float,
-                          google_search_bullish: float, google_search_bearish: float,
-                          reddit_bullish: float, reddit_bearish: float,
-                          youtube_bullish: float, youtube_bearish: float,
-                          news_bullish: float, news_bearish: float) -> Tuple[float, float]:
+def make_trading_decision(factor_values) -> Tuple[float, float]:
     """
     Makes a trading decision based on the conditions met.
     """
 
     save_update_time('weighted_score')
+
+    macro_bullish = factor_values['macro_bullish']
+    macro_bearish = factor_values['macro_bearish']
+    order_book_bullish = factor_values['order_book_bullish']
+    order_book_bearish = factor_values['order_book_bearish']
+    prediction_bullish = factor_values['prediction_bullish']
+    prediction_bearish = factor_values['prediction_bearish']
+    technical_bullish = factor_values['technical_bullish']
+    technical_bearish = factor_values['technical_bearish']
+    richest_addresses_bullish = factor_values['richest_bullish']
+    richest_addresses_bearish = factor_values['richest_bearish']
+    google_search_bullish = factor_values['google_bullish']
+    google_search_bearish = factor_values['google_bearish']
+    reddit_bullish = factor_values['reddit_bullish']
+    reddit_bearish = factor_values['reddit_bearish']
+    youtube_bullish = factor_values['youtube_bullish']
+    youtube_bearish = factor_values['youtube_bearish']
+    news_bullish = factor_values['news_bullish']
+    news_bearish = factor_values['news_bearish']
 
     # Calculate the number of contributing factors
     num_contributing_factors = count_contributing_factors(
@@ -136,13 +147,5 @@ def make_trading_decision(macro_bullish: float, macro_bearish: float,
 
 
 if __name__ == "__main__":
-    score_up, score_down = make_trading_decision(0, 0,
-                                                 0, 0,
-                                                 0, 0,
-                                                 0, 1,
-                                                 0, 1,
-                                                 0, 1,
-                                                 0, 0,
-                                                 0, 0,
-                                                 1, 0)
+    score_up, score_down = 0,0
     logging.info(f'score_up: {score_up}, score_down: {score_down}')
