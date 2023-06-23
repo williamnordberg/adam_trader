@@ -1,5 +1,4 @@
 weighted_score,position_opening_time,position_closing_time,opening_price,close_price,position_type,PNL
-0.0,0,0,0,0,0,0
 0.69,2023-06-10 20:36:54,2023-06-10 22:38:09,25727,25873,long,131
 0.7,2023-06-15 04:37:16,2023-06-15 07:14:17,25002,24870,long,-130
 0.7,2023-06-15 07:54:43,2023-06-15 18:14:19,24922,25096,long,175
