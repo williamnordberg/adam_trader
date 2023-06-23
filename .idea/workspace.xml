@@ -10,8 +10,16 @@
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="22June">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/app.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/youtube_token.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/config/youtube_token.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/latest_info_saved.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/main_dataset.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/main_dataset.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/factors_states_visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/factors_states_visualization.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logging_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/logging_config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old_factor_state_visualization.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/old_main.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test2.py" beforeDir="false" afterPath="$PROJECT_DIR$/test2.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,15 +96,15 @@
       <recent name="C:\will\Python_project\adam_trader\datasets" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\will\Python_project\adam_trader\logs" />
       <recent name="C:\will\Python_project\adam_trader" />
       <recent name="C:\will\Python_project\adam_trader\config" />
       <recent name="C:\will\Python_project\adam_trader\data" />
       <recent name="C:\will\Python_project\adam_trader\.mypy_cache" />
-      <recent name="C:\will\Python_project\adam_trader\logs" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main">
-    <configuration name="factors_sta (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.factors_states_visualization">
+    <configuration name="factors_states_visualization" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -108,7 +116,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/factors_sta.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/factors_states_visualization.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -217,20 +225,20 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.factors_states_visualization" />
       <item itemvalue="Python.logging_config" />
       <item itemvalue="Python.main" />
-      <item itemvalue="Python.factors_sta (1)" />
       <item itemvalue="Python.test2" />
       <item itemvalue="Python.test" />
       <item itemvalue="Python tests.Unittests with right config" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.factors_states_visualization" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.logging_config" />
         <item itemvalue="Python.test2" />
         <item itemvalue="Python.test" />
-        <item itemvalue="Python.factors_sta (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -242,13 +250,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675221866894</updated>
-    </task>
-    <task id="LOCAL-00283" summary="3">
-      <created>1685674451948</created>
-      <option name="number" value="00283" />
-      <option name="presentableId" value="LOCAL-00283" />
-      <option name="project" value="LOCAL" />
-      <updated>1685674451948</updated>
     </task>
     <task id="LOCAL-00284" summary="3">
       <created>1685675379815</created>
@@ -586,7 +587,14 @@
       <option name="project" value="LOCAL" />
       <updated>1687425287714</updated>
     </task>
-    <option name="localTasksCounter" value="332" />
+    <task id="LOCAL-00332" summary="22June">
+      <created>1687483422567</created>
+      <option name="number" value="00332" />
+      <option name="presentableId" value="LOCAL-00332" />
+      <option name="project" value="LOCAL" />
+      <updated>1687483422567</updated>
+    </task>
+    <option name="localTasksCounter" value="333" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
