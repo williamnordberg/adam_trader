@@ -7,7 +7,7 @@ import sys
 
 # Logging config must be in begen of first import to inherit
 from logging_config import do_nothing
-from handy_modules import retrieve_richest_addresses_bullish_bearish, get_bitcoin_price, \
+from handy_modules import richest_addresses_, get_bitcoin_price, \
     save_trade_details, save_trade_result, save_trading_state,\
     calculate_score_margin, compare_send_receive_richest_addresses
 from technical_analysis import technical_analyse
@@ -57,53 +57,62 @@ def run_monitor_richest_addresses():
         sleep(RICHEST_ADDRESSES_SLEEP_TIME)
 
 
+# noinspection PyDictCreation
 def trading_loop(long_threshold: float, short_threshold: float, profit_margin: float):
     LOOP_COUNTER = 0
     while True:
         LOOP_COUNTER += 1
         logging.info(f'threshold:{long_threshold} and loop counter: {LOOP_COUNTER} RUNS')
         save_trading_state('main')
+        factor_values = {
+            'macro_bullish': 0,
+            'macro_bearish': 0,
+            'order_book_bullish': 0,
+            'order_book_bearish': 0,
+            'prediction_bullish': 0,
+            'prediction_bearish': 0,
+            'technical_bullish': 0,
+            'technical_bearish': 0,
+            'richest_bullish': 0,
+            'richest_bearish': 0,
+            'google_bullish': 0,
+            'google_bearish': 0,
+            'reddit_bullish': 0,
+            'reddit_bearish': 0,
+            'youtube_bullish': 0,
+            'youtube_bearish': 0,
+            'news_bullish': 0,
+            'news_bearish': 0,
+            'weighted_score_up': 0,
+            'weighted_score_down': 0
+        }
 
-        # 1 Get the prediction
-        prediction_bullish, prediction_bearish = decision_tree_predictor()
+        factor_values['prediction_bullish'], factor_values['prediction_bearish'] = decision_tree_predictor()
 
-        # 2 Order book
         probabilities = get_probabilities(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
         assert probabilities is not None, "get_probabilities returned None"
-        order_book_bullish, order_book_bearish = probabilities
+        factor_values['order_book_bullish'], factor_values['order_book_bearish'] = probabilities
 
-        # 3 Monitor the richest Bitcoin addresses
-        richest_addresses_bullish, richest_addresses_bearish = retrieve_richest_addresses_bullish_bearish()
+        factor_values['richest_bullish'], factor_values['richest_bearish'] = richest_addresses_()
 
-        # 4 Check Google search trends for Bitcoin and cryptocurrency
-        google_search_bullish, google_search_bearish = check_search_trend(["Bitcoin", "Cryptocurrency"])
+        factor_values['google_bullish'], factor_values['google_bearish'] = check_search_trend(
+            ["Bitcoin", "Cryptocurrency"])
 
-        # 5 Macroeconomic
-        macro_bullish, macro_bearish, events_date_dict = macro_sentiment()
+        factor_values['macro_bullish'], factor_values['macro_bearish'], events_date_dict = macro_sentiment()
         print_upcoming_events(events_date_dict)
 
-        # 6 Reddit
-        reddit_bullish, reddit_bearish = reddit_check()
+        factor_values['reddit_bullish'], factor_values['reddit_bearish'] = reddit_check()
 
-        # 7 YouTube
-        youtube_bullish, youtube_bearish = check_bitcoin_youtube_videos_increase()
+        factor_values['youtube_bullish'], factor_values['youtube_bearish'] = check_bitcoin_youtube_videos_increase()
 
-        # 8 Collect data from news websites
-        news_bullish, news_bearish = check_sentiment_of_news()
+        factor_values['news_bullish'], factor_values['news_bearish'] = check_sentiment_of_news()
 
-        # 9 Technical analysis
-        technical_bullish, technical_bearish = technical_analyse()
+        factor_values['technical_bullish'], factor_values['technical_bearish'] = technical_analyse()
 
         # Make decision about the trade
-        weighted_score_up, weighted_score_down = make_trading_decision(
-            macro_bullish, macro_bearish, order_book_bullish, order_book_bearish,
-            prediction_bullish, prediction_bearish,
-            technical_bullish, technical_bearish,
-            richest_addresses_bullish, richest_addresses_bearish,
-            google_search_bullish, google_search_bearish,
-            reddit_bullish, reddit_bearish,
-            youtube_bullish, youtube_bearish,
-            news_bullish, news_bearish)
+        weighted_score_up, weighted_score_down = make_trading_decision(factor_values)
+        factor_values['weighted_score_up'] = weighted_score_up
+        factor_values['weighted_score_down'] = weighted_score_down
 
         # Trading decision
         if weighted_score_up > weighted_score_down and weighted_score_up > long_threshold:
@@ -120,7 +129,7 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
 
             save_trade_result(pnl, weighted_score_up, 'long')
             save_trade_details(weighted_score_up, trade_open_time,
-                               trade_close_time, 'long', opening_price, close_price, pnl)
+                               trade_close_time, 'long', opening_price, close_price, pnl, factor_values)
             logging.info(f"profit_after_trade:{profit_after_trade}, loss_after_trade:"
                          f"{loss_after_trade}")
 
@@ -139,7 +148,7 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
 
             save_trade_result(pnl, weighted_score_down, 'short')
             save_trade_details(weighted_score_down, trade_open_time, trade_close_time,
-                               'short', opening_price, close_price, pnl)
+                               'short', opening_price, close_price, pnl, factor_values)
 
             logging.info(f"profit_after_trade:{profit_after_trade}, "f"loss_after_trade:{loss_after_trade}")
         logging.info(f'Threshold:{long_threshold} and loop counter: {LOOP_COUNTER} SLEEPS')
@@ -148,7 +157,7 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
 
 
 def signal_handler(sig, frame):
-    print('Received interrupt signal. Cleaning up...')
+    logging.info('Received interrupt signal. Cleaning up...')
     # Stop child processes here.
     visualization_charts_process.terminate()
     process.terminate()

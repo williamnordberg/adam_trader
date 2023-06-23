@@ -283,7 +283,7 @@ def compare_send_receive_richest_addresses() -> Tuple[float, float]:
     return 0, 0
 
 
-def retrieve_richest_addresses_bullish_bearish() -> Tuple[float, float]:
+def richest_addresses_() -> Tuple[float, float]:
     database = read_database()
     richest_addresses_bullish = database['richest_addresses_bullish'][-1]
     richest_addresses_bearish = database['richest_addresses_bearish'][-1]
@@ -373,9 +373,8 @@ def compare_reddit(current_activity: float, previous_activity: float) -> Tuple[f
     return 0, 0
 
 
-def save_trade_details(weighted_score: float, position_opening_time: str,
-                       position_closing_time: str, position_type: str,
-                       opening_price: int, close_price: int, pnl: float):
+def save_trade_details(weighted_score, position_opening_time, position_closing_time,
+                       position_type, opening_price, close_price, pnl, factor_values):
 
     # Read the existing trade details CSV
     df = pd.read_csv(TRADE_DETAILS_PATH)
@@ -388,7 +387,27 @@ def save_trade_details(weighted_score: float, position_opening_time: str,
         'position_type': position_type,
         'opening_price': opening_price,
         'close_price': close_price,
-        'PNL': pnl
+        'PNL': pnl,
+        'macro_bullish': factor_values['macro_bullish'],
+        'macro_bearish': factor_values['macro_bearish'],
+        'order_book_bullish': factor_values['order_book_bullish'],
+        'order_book_bearish': factor_values['order_book_bearish'],
+        'prediction_bullish': factor_values['prediction_bullish'],
+        'prediction_bearish': factor_values['prediction_bearish'],
+        'technical_bullish': factor_values['technical_bullish'],
+        'technical_bearish': factor_values['technical_bearish'],
+        'richest_bullish': factor_values['richest_bullish'],
+        'richest_bearish': factor_values['richest_bearish'],
+        'google_bullish': factor_values['google_bullish'],
+        'google_bearish': factor_values['google_bearish'],
+        'reddit_bullish': factor_values['reddit_bullish'],
+        'reddit_bearish': factor_values['reddit_bearish'],
+        'youtube_bullish': factor_values['youtube_bullish'],
+        'youtube_bearish': factor_values['youtube_bearish'],
+        'news_bullish': factor_values['news_bullish'],
+        'news_bearish': factor_values['news_bearish'],
+        'weighted_score_up': factor_values['weighted_score_up'],
+        'weighted_score_down': factor_values['weighted_score_down']
     }
 
     # Use a list to store new rows
@@ -579,4 +598,26 @@ def read_time_last_update_time_difference(column: str) -> timedelta:
 
 
 if __name__ == '__main__':
-    save_float_to_latest_saved('fed_rate_m_to_m', 0.0)
+    factor_values = {
+        'macro_bullish': 1,
+        'macro_bearish': 0,
+        'order_book_bullish': 0,
+        'order_book_bearish': 0,
+        'prediction_bullish': 0,
+        'prediction_bearish': 0,
+        'technical_bullish': 0,
+        'technical_bearish': 0,
+        'richest_bullish': 0,
+        'richest_bearish': 0,
+        'google_bullish': 0,
+        'google_bearish': 0,
+        'reddit_bullish': 0,
+        'reddit_bearish': 1,
+        'youtube_bullish': 0,
+        'youtube_bearish': 0,
+        'news_bullish': 0,
+        'news_bearish': 0,
+        'weighted_score_up': 0,
+        'weighted_score_down': 0
+    }
+    save_trade_details(0,'0','0'',0',0,0,0,0,factor_values)
