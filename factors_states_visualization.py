@@ -36,7 +36,7 @@ def tail(filename, lines=1):
     Output('log-data', 'value'),
     Input('interval-component', 'n_intervals'))
 def update_metrics(n):
-    log_file_path = 'app.log'  # path to your log file
+    log_file_path = 'logs/app.log'  # path to your log file
     return tail(log_file_path, 300)
 
 
