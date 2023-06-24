@@ -9,7 +9,8 @@ import sys
 from logging_config import do_nothing
 from handy_modules import richest_addresses_, get_bitcoin_price, \
     save_trade_details, save_trade_result, save_trading_state,\
-    calculate_score_margin, compare_send_receive_richest_addresses
+    calculate_score_margin
+from compares import compare_richest_addresses
 from technical_analysis import technical_analyse
 from news_analyser import check_sentiment_of_news
 from youtube import check_bitcoin_youtube_videos_increase
@@ -47,7 +48,7 @@ def run_monitor_richest_addresses():
     while True:
         total_received, total_sent = monitor_bitcoin_richest_addresses()
 
-        richest_addresses_bullish, richest_addresses_bearish = compare_send_receive_richest_addresses()
+        richest_addresses_bullish, richest_addresses_bearish = compare_richest_addresses()
 
         # Save to database
         save_value_to_database('richest_addresses_bullish', richest_addresses_bullish)

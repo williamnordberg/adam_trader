@@ -1,18 +1,15 @@
-# Standard library
 import time
 import csv
 import logging
-
-# Third-party libraries
 import pandas as pd
 from typing import Tuple, List
 import configparser
 
-# Local imports
 from bs4_scraper import scrape_bitcoin_rich_list
 from api_blockcypher import get_address_transactions_24h_blockcypher
 from database import save_value_to_database
 from handy_modules import should_update, read_float_from_latest_saved, save_update_time, save_int_to_latest_saved
+from compares import compare_richest_addresses
 
 SATOSHI_TO_BITCOIN = 100000000
 LATEST_INFO_FILE = 'data/latest_info_saved.csv'

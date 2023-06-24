@@ -1,42 +1,8 @@
 from typing import Tuple, Optional
 import pandas as pd
+from compares import compare_macro_m_to_m
 
 LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
-
-
-def compare_cpi_ppi_m_to_m(cpi_m_to_m: float) -> Tuple[float, float]:
-    """
-    Compare CPI and PPI month-to-month.
-
-    Args:
-        cpi_m_to_m or ppi_m_to_m (float): CPI month-to-month value.
-
-    Returns:
-        tuple: Two floating point numbers representing bullishness ad bearishness.
-    """
-    if cpi_m_to_m <= -0.75:
-        return 1.0, 0.0
-    elif -0.75 < cpi_m_to_m <= -0.5:
-        return 0.85, 0.15
-    elif -0.5 < cpi_m_to_m <= -0.25:
-        return 0.7, 0.3
-    elif -0.25 < cpi_m_to_m <= 0.0:
-        return 0.6, 0.4
-    elif 0.0 < cpi_m_to_m < 0.25:
-        return 0.4, 0.6
-    elif 0.25 <= cpi_m_to_m < 0.5:
-        return 0.3, 0.7
-    elif 0.5 <= cpi_m_to_m < 0.75:
-        return 0.15, 0.85
-    elif cpi_m_to_m >= 0.75:
-        return 0.0, 1.0
-    else:
-        return 0.0, 0.0
-
-
-def compare_interest_rate(rate_this_month:  float, rate_month_before: float) -> Tuple[float, float]:
-    rate_increase = rate_this_month - rate_month_before
-    return compare_cpi_ppi_m_to_m(rate_increase)
 
 
 def calculate_macro_sentiment(rate_this_month: Optional[float], rate_month_before: Optional[float],
@@ -45,7 +11,8 @@ def calculate_macro_sentiment(rate_this_month: Optional[float], rate_month_befor
     latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
 
     if rate_this_month and rate_month_before:
-        rate_bullish, rate_bearish = compare_interest_rate(rate_this_month, rate_month_before)
+        rate_m_to_m = float(rate_this_month - rate_month_before)
+        rate_bullish, rate_bearish = compare_macro_m_to_m(rate_m_to_m)
         latest_info_saved.loc[0, 'rate_bullish'] = rate_bullish
         latest_info_saved.loc[0, 'rate_bearish'] = rate_bearish
         latest_info_saved.loc[0, 'fed_rate_m_to_m'] = float(rate_this_month - rate_this_month)
@@ -54,7 +21,7 @@ def calculate_macro_sentiment(rate_this_month: Optional[float], rate_month_befor
         rate_bearish = float(latest_info_saved['rate_bearish'][0])
 
     if cpi_m_to_m:
-        cpi_bullish, cpi_bearish = compare_cpi_ppi_m_to_m(cpi_m_to_m)
+        cpi_bullish, cpi_bearish = compare_macro_m_to_m(cpi_m_to_m)
         latest_info_saved.loc[0, 'cpi_bullish'] = cpi_bullish
         latest_info_saved.loc[0, 'cpi_bearish'] = cpi_bearish
         latest_info_saved.loc[0, 'cpi_m_to_m'] = cpi_m_to_m
@@ -64,7 +31,7 @@ def calculate_macro_sentiment(rate_this_month: Optional[float], rate_month_befor
         cpi_bearish = float(latest_info_saved['cpi_bearish'][0])
 
     if ppi_m_to_m:
-        ppi_bullish, ppi_bearish = compare_cpi_ppi_m_to_m(ppi_m_to_m)
+        ppi_bullish, ppi_bearish = compare_macro_m_to_m(ppi_m_to_m)
         latest_info_saved.loc[0, 'ppi_bullish'] = ppi_bullish
         latest_info_saved.loc[0, 'ppi_bearish'] = ppi_bearish
         latest_info_saved.loc[0, 'ppi_m_to_m'] = ppi_m_to_m
@@ -108,7 +75,4 @@ def calculate_macro_sentiment(rate_this_month: Optional[float], rate_month_befor
 
 
 if __name__ == "__main__":
-    # print(calculate_macro_sentiment(1, 0, -1, -1))
     print('calculate_macro_sentiment:', calculate_macro_sentiment(0, 0, 0, 0))
-    print(compare_cpi_ppi_m_to_m(0.3))
-    print(compare_cpi_ppi_m_to_m(0.4))

@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from handy_modules import read_current_trading_state
 from database import save_value_to_database
 from handy_modules import get_bitcoin_price, retry_on_error_fallback_0_0, save_float_to_latest_saved, save_update_time
-
+from compares import compare_order_volume
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 SPOT_ENDPOINT_DEPTH = "https://api.binance.com/api/v3/depth"
 FUTURES_ENDPOINT_DEPTH = 'https://fapi.binance.com/fapi/v1/depth'
@@ -59,37 +59,6 @@ def get_order_book(symbol: str, limit: int):
         return None
 
 
-def compare_probability(probability_up: float, probability_down: float) -> Tuple[float, float]:
-
-    if probability_up >= probability_down:
-        if probability_up >= 0.65:
-            return 1, 0
-        elif probability_up >= 0.62:
-            return 0.9, 0.1
-        elif probability_up >= 0.59:
-            return 0.8, 0.2
-        elif probability_up >= 0.56:
-            return 0.7, 0.3
-        elif probability_up >= 0.53:
-            return 0.6, 0.4
-        else:
-            return 0, 0
-
-    elif probability_up < probability_down:
-        if probability_down >= 0.65:
-            return 0, 1
-        elif probability_down >= 0.62:
-            return 0.1, 0.9
-        elif probability_down >= 0.59:
-            return 0.2, 0.8
-        elif probability_down >= 0.56:
-            return 0.3, 0.7
-        elif probability_down >= 0.53:
-            return 0.4, 0.6
-        else:
-            return 0, 0
-
-
 def get_probabilities(symbols: List[str], limit: int = LIMIT, bid_multiplier: float = 0.995,
                       ask_multiplier: float = 1.005) -> Optional[Tuple[float, float]]:
     bid_volume, ask_volume = 0.0000001, 0.0
@@ -107,7 +76,7 @@ def get_probabilities(symbols: List[str], limit: int = LIMIT, bid_multiplier: fl
     probability_up = bid_volume / (bid_volume + ask_volume)
     probability_down = ask_volume / (bid_volume + ask_volume)
 
-    order_book_bullish, order_book_bearish = compare_probability(probability_up, probability_down)
+    order_book_bullish, order_book_bearish = compare_order_volume(probability_up, probability_down)
 
     # Add the values to the temporary storage
     aggregated_values['bid_volume'].append(bid_volume)
@@ -166,16 +135,7 @@ if __name__ == '__main__':
     assert probabilities is not None, "get_probabilities returned None"
     order_book_bullish_outer, order_book_bearish_outer = probabilities
 
-    probabilities_hit = get_probabilities_hit_profit_or_stop(SYMBOLS, LIMIT, 30000, 20000)
-    assert probabilities_hit is not None, "get_probabilities_hit_profit_or_stop returned None"
-    order_book_hit_target_outer, order_book_hit_stop_outer = probabilities_hit
-
     logging.info(f'order_book_bullish:{order_book_bullish_outer},'
                  f'order_book_bearish: {order_book_bearish_outer}')
-
-    logging.info(f'order_book_hit_target:{order_book_hit_target_outer},'
-                 f'order_book_hit_stop: {order_book_hit_stop_outer}')
-
-
 
 

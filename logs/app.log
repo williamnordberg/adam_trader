@@ -88,3 +88,16 @@
 2023-06-23 15:00:28 - ERROR - Error occurred: error with request HTTPSConnectionPool(host='www.reddit.com', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname 'www.reddit.com' doesn't match 'trustpositif.globalxtreme.net'")))
 2023-06-23 15:00:42 - INFO - Threshold:0.68 and loop counter: 1 SLEEPS
 2023-06-23 15:00:45 - INFO - Received interrupt signal. Cleaning up...
+2023-06-24 13:50:21 - INFO - threshold:0.68 and loop counter: 1 RUNS
+2023-06-24 13:50:22 - INFO - Dash is running on http://0.0.0.0:8051/
+
+2023-06-24 13:50:45 - INFO - file_cache is only supported with oauth2client<4.0.0
+2023-06-24 13:51:21 - INFO - start scrapping list of bitcoin richest addresses
+2023-06-24 13:51:22 - WARNING - Attempt 1 failed with error: 403 Client Error: Forbidden for url: https://bitinfocharts.com/top-100-richest-bitcoin-addresses-1.html. Retrying in 5 seconds...
+2023-06-24 13:51:25 - INFO - Threshold:0.68 and loop counter: 1 SLEEPS
+2023-06-24 13:51:27 - INFO - start scrapping list of bitcoin richest addresses
+2023-06-24 13:51:28 - WARNING - Attempt 2 failed with error: 403 Client Error: Forbidden for url: https://bitinfocharts.com/top-100-richest-bitcoin-addresses-1.html. Retrying in 5 seconds...
+2023-06-24 13:51:33 - INFO - start scrapping list of bitcoin richest addresses
+2023-06-24 13:51:34 - WARNING - Attempt 3 failed with error: 403 Client Error: Forbidden for url: https://bitinfocharts.com/top-100-richest-bitcoin-addresses-1.html. Retrying in 5 seconds...
+2023-06-24 13:51:39 - ERROR - All 3 attempts failed.
+2023-06-24 13:51:39 - ERROR - Fallback value is 'pass'. Skipping this function.

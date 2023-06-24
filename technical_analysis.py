@@ -6,6 +6,7 @@ from typing import Tuple
 from indicator_calculator import bollinger_bands, exponential_moving_average, macd, relative_strength_index
 from handy_modules import get_bitcoin_price, should_update, save_update_time, retry_on_error_with_fallback
 from database import save_value_to_database, read_database
+from compares import compare_technical
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
@@ -138,25 +139,10 @@ def technical_analyse_wrapper() -> Tuple[float, float]:
     latest_info_saved.loc[0, 'over_200EMA'] = current_price >= ema200[-1]
     latest_info_saved.to_csv(LATEST_INFO_SAVED, index=False)
 
-    # Define a dictionary for all possibilities
-    possibilities = {
-        # Reversal, Trend, EMA200
-        ('up', True, True): (1, 0),
-        ('up', True, False): (0.9, 0.1),
-        ('up', False, True): (0.9, 0.1),
-        ('up', False, False): (0.8, 0.2),
+    technical_bullish, technical_bearish = compare_technical(
+        reversal, potential_up_trend, over_ema200)
 
-        ('down', False, False): (0, 1),
-        ('down', True, False): (0.1, 0.9),
-        ('down', False, True): (0.1, 0.9),
-        ('down', True, True): (0.2, 0.8),
-
-        ('neither', True, False): (0, 0),
-        ('neither', False, True): (0, 0),
-        ('neither', True, True): (0.7, 0.3),
-        ('neither', False, False): (0.3, 0.7)
-    }
-    return possibilities[(reversal, potential_up_trend, over_ema200)]
+    return technical_bullish, technical_bearish
 
 
 def technical_analyse_rounder():

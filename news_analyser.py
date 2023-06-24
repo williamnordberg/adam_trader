@@ -6,7 +6,8 @@ from handy_modules import should_update, save_update_time
 from typing import Tuple
 from database import read_database
 from newsAPI import check_news_api_sentiment
-from news_aggregate import aggregate_news, calculate_market_sentiment
+from news_aggregate import aggregate_news
+from compares import compare_news
 from database import save_value_to_database
 from update_bitcoin_price import update_bitcoin_price_in_database
 
@@ -45,7 +46,7 @@ def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
         latest_info_saved.loc[0, 'positive_news_polarity_change'] = int(positive_percentage_increase)
         latest_info_saved.loc[0, 'negative_news_polarity_change'] = int(negative_percentage_increase)
 
-        news_bullish, news_bearish = calculate_market_sentiment()
+        news_bullish, news_bearish = compare_news()
 
         # Save data on disk for later compare
         latest_info_saved.loc[0, 'positive_polarity_score'] = last_24_hours_positive_polarity
@@ -84,7 +85,7 @@ def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
             check_news_api_sentiment(start, end)
 
         # compare
-        news_bullish, news_bearish = calculate_market_sentiment()
+        news_bullish, news_bearish = compare_news()
 
         # Calculate and save value for visualisation
         positive_percentage_increase = (last_24_hours_positive_polarity - positive_polarity_48_hours_before
