@@ -40,7 +40,9 @@ VALUES_GOOGLE_DOWN = [(0.4, 0.6), (0.25, 0.75), (0.15, 0.85), (0, 1)]
 
 
 def compare(data, ranges, values):
-    index = bisect.bisect_right(ranges, data)
+    # Extract the right side of each range for comparison
+    right_ranges = [r[1] for r in ranges]
+    index = bisect.bisect_right(right_ranges, data)
     return values[index]
 
 
@@ -121,3 +123,4 @@ def compare_news() -> (float, float):
     weights = [0.1, 0.1, 0.2, 0.1]
     score = sum(c*w for c, w in zip(changes, weights) if c > 0)
     return max(0.5+score, 1), max(0.5-score, 1)  # Restrict between 0 and 1
+

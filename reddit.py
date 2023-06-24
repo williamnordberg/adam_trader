@@ -11,9 +11,9 @@ from urllib3.exceptions import MaxRetryError
 
 
 from database import save_value_to_database
-from handy_modules import save_update_time, should_update, retry_on_error_with_fallback, compare_google_and_reddit_and_youtube
+from handy_modules import save_update_time, should_update, retry_on_error_with_fallback
 from database import read_database
-
+from compares import compare_google_reddit_youtube
 
 ONE_DAYS_IN_SECONDS = 24 * 60 * 60
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -64,7 +64,7 @@ def reddit_check_wrapper() -> Tuple[float, float]:
     try:
         current_activity = reddit.subreddit("Bitcoin").active_user_count
         current_count = count_bitcoin_posts(reddit)
-        reddit_bullish, reddit_bearish = compare_google_and_reddit_and_youtube(int(current_activity), int(previous_activity))
+        reddit_bullish, reddit_bearish = compare_google_reddit_youtube(int(current_activity), int(previous_activity))
 
         latest_info_saved.loc[0, 'previous_activity'] = current_activity
         latest_info_saved.loc[0, 'previous_count'] = current_count

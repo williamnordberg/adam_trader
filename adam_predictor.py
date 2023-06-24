@@ -8,8 +8,8 @@ from database import save_value_to_database, read_database
 from update_dataset_yahoo import update_yahoo_data
 from update_dataset_macro import update_macro_economic
 from update_dataset_internal_factors import update_internal_factors, UpdateInternalFactorsError
-from handy_modules import compare_predicted_price, get_bitcoin_price, should_update, save_update_time
-
+from handy_modules import get_bitcoin_price, should_update, save_update_time
+from compares import compare_predicted_price
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 MAIN_DATASET_FILE = 'data/main_dataset.csv'

@@ -171,118 +171,6 @@ def get_bitcoin_price() -> int:
         sleep(61)  # wait for 61 seconds before retrying
 
 
-def compare_predicted_price(predicted_price: int, current_price: int) -> Tuple[float, float]:
-    """
-    Compare the predicted price to the current price and calculate the percentage difference.
-
-    Args:
-        predicted_price (int): The predicted price of Bitcoin.
-        current_price (int): The current price of Bitcoin.
-
-    Returns:
-        tuple: bullish and bearish probabilities based on the price difference percentage.
-    """
-    price_difference_percentage = (predicted_price - current_price) / current_price * 100
-
-    if price_difference_percentage > 0:
-        if price_difference_percentage >= 5:
-            return 1, 0
-        elif price_difference_percentage >= 4:
-            return 0.9, 0.1
-        elif price_difference_percentage >= 3:
-            return 0.8, 0.2
-        elif price_difference_percentage >= 2:
-            return 0.7, 0.3
-        elif price_difference_percentage >= 1:
-            return 0.6, 0.4
-    elif price_difference_percentage <= 0:
-        if price_difference_percentage <= -5:
-            return 0, 1
-        elif price_difference_percentage <= -4:
-            return 0.1, 0.9
-        elif price_difference_percentage <= -3:
-            return 0.2, 0.8
-        elif price_difference_percentage <= -2:
-            return 0.3, 0.7
-        elif price_difference_percentage <= -1:
-            return 0.4, 0.6
-
-    return 0, 0
-
-
-def compare_google_and_reddit_and_youtube(last_hour: int, two_hours_before: int) -> Tuple[float, float]:
-    """
-    Compare the search trends between the last hour and two hours before.
-
-    Args:
-        last_hour (int): The search volume of the last hour.
-        two_hours_before (int): The search volume of two hours before the last hour.
-
-    Returns:
-        tuple: bullish and bearish probabilities based on the search trends.
-    """
-    if last_hour >= two_hours_before:
-        if last_hour >= (two_hours_before * 1.25):
-            return 1, 0
-        elif last_hour >= (two_hours_before * 1.20):
-            return 0.85, 0.15
-        elif last_hour >= (two_hours_before * 1.15):
-            return 0.75, 0.25
-        elif last_hour >= (two_hours_before * 1.1):
-            return 0.6, 0.4
-        return 0, 0
-
-    elif last_hour <= two_hours_before:
-        if two_hours_before >= (last_hour * 1.25):
-            return 0, 1
-        elif two_hours_before >= (last_hour * 1.2):
-            return 0.15, 0.85
-        elif two_hours_before >= (last_hour * 1.15):
-            return 0.25, 0.75
-        elif two_hours_before >= (last_hour * 1.1):
-            return 0.4, 0.6
-        return 0, 0
-
-    return 0, 0
-
-
-def compare_send_receive_richest_addresses() -> Tuple[float, float]:
-    latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
-    total_received = latest_info_saved['total_received_coins_in_last_24'][0]
-    total_sent = latest_info_saved['total_sent_coins_in_last_24'][0]
-
-    # Save latest update time
-    save_update_time('richest_addresses')
-
-    activity_percentage = (total_received - total_sent) / total_sent * 100
-
-    if activity_percentage > 0:
-        if activity_percentage >= 50:
-            return 1, 0
-        elif activity_percentage >= 40:
-            return 0.9, 0.1
-        elif activity_percentage >= 30:
-            return 0.8, 0.2
-        elif activity_percentage >= 20:
-            return 0.7, 0.3
-        elif activity_percentage >= 10:
-            return 0.6, 0.4
-
-    elif activity_percentage <= 0:
-        if activity_percentage <= -50:
-            return 0, 1
-        elif activity_percentage <= -40:
-            return 0.1, 0.9
-        elif activity_percentage <= -30:
-            return 0.2, 0.8
-        elif activity_percentage <= -20:
-            return 0.3, 0.7
-        elif activity_percentage <= -10:
-            return 0.4, 0.6
-
-    return 0, 0
-
-
 def richest_addresses_() -> Tuple[float, float]:
     database = read_database()
     richest_addresses_bullish = database['richest_addresses_bullish'][-1]
@@ -341,36 +229,6 @@ def read_float_from_latest_saved(column: str) -> float:
     retrieved_value = latest_info_saved.iloc[0][f'{column}']
     latest_info_saved.to_csv(LATEST_INFO_FILE, index=False)
     return float(retrieved_value)
-
-
-def compare_reddit(current_activity: float, previous_activity: float) -> Tuple[float, float]:
-
-    activity_percentage = (current_activity - previous_activity) / previous_activity * 100
-    if activity_percentage > 0:
-        if activity_percentage >= 30:
-            return 1, 0
-        elif activity_percentage >= 20:
-            return 0.9, 0.1
-        elif activity_percentage >= 15:
-            return 0.8, 0.2
-        elif activity_percentage >= 10:
-            return 0.7, 0.3
-        elif activity_percentage >= 5:
-            return 0.6, 0.4
-
-    elif activity_percentage <= 0:
-        if activity_percentage <= -30:
-            return 0, 1
-        elif activity_percentage <= -20:
-            return 0.1, 0.9
-        elif activity_percentage <= -15:
-            return 0.2, 0.8
-        elif activity_percentage <= -10:
-            return 0.3, 0.7
-        elif activity_percentage <= -5:
-            return 0.4, 0.6
-
-    return 0, 0
 
 
 def save_trade_details(weighted_score, position_opening_time, position_closing_time,
@@ -598,26 +456,4 @@ def read_time_last_update_time_difference(column: str) -> timedelta:
 
 
 if __name__ == '__main__':
-    factor_values = {
-        'macro_bullish': 1,
-        'macro_bearish': 0,
-        'order_book_bullish': 0,
-        'order_book_bearish': 0,
-        'prediction_bullish': 0,
-        'prediction_bearish': 0,
-        'technical_bullish': 0,
-        'technical_bearish': 0,
-        'richest_bullish': 0,
-        'richest_bearish': 0,
-        'google_bullish': 0,
-        'google_bearish': 0,
-        'reddit_bullish': 0,
-        'reddit_bearish': 1,
-        'youtube_bullish': 0,
-        'youtube_bearish': 0,
-        'news_bullish': 0,
-        'news_bearish': 0,
-        'weighted_score_up': 0,
-        'weighted_score_down': 0
-    }
-    save_trade_details(0,'0','0'',0',0,0,0,0,factor_values)
+    print('')
