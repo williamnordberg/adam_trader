@@ -7,7 +7,7 @@ import os
 from datetime import datetime, timedelta
 
 from typing import Tuple
-from handy_modules import check_internet_connection, retry_on_error_with_fallback
+from handy_modules import check_internet_connection, retry_on_error
 
 SENTIMENT_POSITIVE_THRESHOLD = 0.1
 SENTIMENT_NEGATIVE_THRESHOLD = -0.001
@@ -20,7 +20,7 @@ config.read(config_path)
 API_NEWSAPI = config.get("API", "Newsapi")
 
 
-@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
         Exception, requests.exceptions.RequestException, json.JSONDecodeError), fallback_values=(0, 0, 0, 0))
 def check_news_api_sentiment(start: datetime, end: datetime) -> Tuple[float, float, int, int]:
     """

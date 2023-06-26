@@ -2,7 +2,7 @@ import pytz
 import requests
 import pandas as pd
 from datetime import datetime, timezone
-from handy_modules import retry_on_error_with_fallback
+from handy_modules import retry_on_error
 
 
 DATABASE_PATH = 'data/database.csv'
@@ -10,8 +10,8 @@ API_URL = 'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart'
 ALLOWED_EXCEPTIONS = (requests.exceptions.RequestException, ValueError)
 
 
-@retry_on_error_with_fallback(max_retries=3, delay=5,
-                              allowed_exceptions=ALLOWED_EXCEPTIONS, fallback_values='pass')
+@retry_on_error(max_retries=3, delay=5,
+                allowed_exceptions=ALLOWED_EXCEPTIONS, fallback_values='pass')
 def get_bitcoin_price(hours):
     response = requests.get(
         API_URL,

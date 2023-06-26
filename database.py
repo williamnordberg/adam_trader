@@ -7,7 +7,6 @@ import logging
 from time import sleep
 
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 DATABASE_PATH = 'data/database.csv'
 
 # Define column names
@@ -162,6 +161,5 @@ def save_value_to_database(column: str, value):
 
 
 if __name__ == '__main__':
-
     df_outer = read_database()
     print(df_outer['bitcoin_price'])

@@ -4,36 +4,18 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.impute import SimpleImputer
 from typing import Tuple
 
-from database import save_value_to_database, read_database
-from update_dataset_yahoo import update_yahoo_data
-from update_dataset_macro import update_macro_economic
-from update_dataset_internal_factors import update_internal_factors, UpdateInternalFactorsError
-from handy_modules import get_bitcoin_price, should_update, save_update_time
+from c_predictor_dataset_update import update_internal_factors, update_macro_economic
+from handy_modules import get_bitcoin_price
 from compares import compare_predicted_price
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-MAIN_DATASET_FILE = 'data/main_dataset.csv'
-
-
-def load_dataset() -> pd.DataFrame:
-    """Load the main dataset, set index, and fill missing values."""
-    main_dataset = pd.read_csv(MAIN_DATASET_FILE)
-    main_dataset = main_dataset.set_index(main_dataset['Date'])
-    main_dataset.fillna(method='ffill', limit=1, inplace=True)
-
-    return main_dataset
+from read_write_csv import save_value_to_database, \
+    should_update, save_update_time, retrieve_latest_factor_values_database, load_dataset
 
 
 def update_dataset():
-    """Update the dataset with new data from different sources."""
-    try:
-        update_internal_factors()
-        update_yahoo_data()
-        update_macro_economic()
-        logging.info('dataset has been updated')
-        save_update_time('dataset')
-    except UpdateInternalFactorsError as e:
-        logging.error(f"Failed to update internal factors: {e}")
+    update_internal_factors()
+    update_macro_economic()
+    logging.info('dataset has been updated')
+    save_update_time('dataset')
 
 
 def train_and_predict(dataset: pd.DataFrame) -> int:
@@ -72,17 +54,15 @@ def decision_tree_predictor_wrapper() -> Tuple[float, float]:
     if should_update('dataset'):
         update_dataset()
 
+    save_update_time('predicted_price')
     dataset = load_dataset()
-    prediction = train_and_predict(dataset)
+    dataset.fillna(method='ffill', limit=1, inplace=True)
 
+    prediction = train_and_predict(dataset)
     prediction_bullish, prediction_bearish = compare_predicted_price(prediction, get_bitcoin_price())
 
-    # Save to database
     save_value_to_database('prediction_bullish', prediction_bullish)
     save_value_to_database('prediction_bearish', prediction_bearish)
-
-    # Save latest update time
-    save_update_time('predicted_price')
 
     return prediction_bullish, prediction_bearish
 
@@ -91,14 +71,10 @@ def decision_tree_predictor() -> Tuple[float, float]:
     if should_update('predicted_price'):
         return decision_tree_predictor_wrapper()
     else:
-        database = read_database()
-        prediction_bullish = database['prediction_bullish'][-1]
-        prediction_bearish = database['prediction_bearish'][-1]
-        return prediction_bullish, prediction_bearish
+        return retrieve_latest_factor_values_database('prediction')
 
 
 if __name__ == "__main__":
     prediction_bullish_outer, prediction_bearish_outer = decision_tree_predictor_wrapper()
     logging.info(f"predicted bullish: {prediction_bullish_outer}")
     logging.info(f"predicted bearish: {prediction_bearish_outer}")
-    print(should_update('predicted_price'))

@@ -78,8 +78,8 @@ def retry_on_error_fallback_0_0(max_retries: int = 3, delay: int = 5, allowed_ex
     return decorator
 
 
-def retry_on_error_with_fallback(max_retries: int = 3, delay: int = 5,
-                                 allowed_exceptions: tuple = (), fallback_values=None):
+def retry_on_error(max_retries: int = 3, delay: int = 5,
+                   allowed_exceptions: tuple = (), fallback_values=None):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -107,7 +107,7 @@ def retry_on_error_with_fallback(max_retries: int = 3, delay: int = 5,
     return decorator
 
 
-@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
         requests.ConnectionError,), fallback_values=False)
 def check_internet_connection() -> bool:
     """
@@ -325,52 +325,7 @@ def calculate_score_margin(weighted_score):
         return 0.65
 
 
-def format_time(time_until):
-    days = time_until.days
-    hours, remainder = divmod(time_until.seconds, 3600)
-    minutes, _ = divmod(remainder, 60)
-
-    if days > 1:
-        return f"{days}d, {hours}h"
-    elif days == 1:
-        return f"{days}d, {hours}h"
-    elif hours > 0:
-        return f"{hours}h, {minutes}m"
-    else:
-        return f"{minutes}m"
-
-
-def calculate_upcoming_events():
-    latest_info_saved = pd.read_csv(LATEST_INFO_FILE).squeeze("columns")
-    fed = datetime.strptime(latest_info_saved['interest_rate_announcement_date'][0], "%Y-%m-%d %H:%M:%S")
-    cpi = datetime.strptime(latest_info_saved['cpi_announcement_date'][0], "%Y-%m-%d %H:%M:%S")
-    ppi = datetime.strptime(latest_info_saved['ppi_announcement_date'][0], "%Y-%m-%d %H:%M:%S")
-
-    now = datetime.utcnow()
-
-    time_until_fed = fed - now
-    time_until_cpi = cpi - now
-    time_until_ppi = ppi - now
-
-    fed_announcement = ''
-    cpi_fed_announcement = ''
-    ppi_fed_announcement = ''
-
-    if time_until_fed.days >= 0:
-        fed_announcement = f"Nxt FED:{format_time(time_until_fed)}"
-
-    if time_until_cpi.days >= 0:
-        cpi_fed_announcement = f"Nxt CPI:{format_time(time_until_cpi)}"
-
-    if time_until_ppi.days >= 0:
-        ppi_fed_announcement = f"Nxt PPI:{format_time(time_until_ppi)}"
-
-    return fed_announcement if time_until_fed.days <= 2 else '', \
-        cpi_fed_announcement if time_until_cpi.days <= 2 else '', \
-        ppi_fed_announcement if time_until_ppi.days <= 2 else ''
-
-
-@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
         pandas.errors.EmptyDataError, Exception), fallback_values=('0', '0'))
 def last_and_next_update(factor: str) -> Tuple[str, str]:
     latest_info_saved = pd.read_csv(LATEST_INFO_FILE)

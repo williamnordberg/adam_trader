@@ -4,7 +4,7 @@ import logging
 from typing import Tuple
 
 from indicator_calculator import bollinger_bands, exponential_moving_average, macd, relative_strength_index
-from handy_modules import get_bitcoin_price, should_update, save_update_time, retry_on_error_with_fallback
+from handy_modules import get_bitcoin_price, should_update, save_update_time, retry_on_error
 from database import save_value_to_database, read_database
 from compares import compare_technical
 
@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
 
 
-@retry_on_error_with_fallback(max_retries=3, delay=5, fallback_values=pd.Series(dtype=float))
+@retry_on_error(max_retries=3, delay=5, fallback_values=pd.Series(dtype=float))
 def get_historical_data(symbol: str, timeframe: str, limit: int) -> pd.Series:
     """
       Retrieves historical price data for a cryptocurrency from the Binance API.
