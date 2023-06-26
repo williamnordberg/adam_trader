@@ -6,6 +6,8 @@ from functools import wraps
 from time import sleep
 import plotly.graph_objects as go
 import pandas.errors
+from json import JSONDecodeError
+
 
 from datetime import datetime, timedelta
 from database import read_database
@@ -140,6 +142,10 @@ def get_bitcoin_future_market_price() -> int:
         sleep(61)  # wait for 61 seconds before retrying
 
 
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
+        requests.exceptions.RequestException, requests.exceptions.Timeout,
+        requests.exceptions.RequestException, requests.exceptions.Timeout,
+        ValueError, KeyError, JSONDecodeError), fallback_values=0)
 def get_bitcoin_price() -> int:
     """
     Retrieves the current Bitcoin price in USD from the CoinGecko API and Binance API.

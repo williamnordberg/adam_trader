@@ -6,8 +6,11 @@ import warnings
 from fredapi import Fred
 import configparser
 import os
+from pandas.errors import OutOfBoundsDatetime
+from requests.exceptions import RequestException
 
 from read_write_csv import load_dataset, save_dataset
+from handy_modules import retry_on_error
 
 warnings.filterwarnings('ignore', category=FutureWarning)
 warnings.filterwarnings('ignore', category=RuntimeWarning)
@@ -22,6 +25,8 @@ config.read_string(config_string)
 API_KEY_FRED = config.get('API', 'freed')
 
 
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
+        RequestException, ValueError, KeyError, OutOfBoundsDatetime))
 def update_macro_economic():
     """ Connect to FRED API and get the latest federal funds rate data"""
     try:
@@ -53,10 +58,8 @@ def update_macro_economic():
     save_dataset(main_dataset)
 
 
-def get_date_string(date_obj):
-    return date_obj.strftime("%Y-%m-%d")
-
-
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
+        RequestException, ValueError, KeyError, OutOfBoundsDatetime))
 def update_internal_factors():
     main_dataset = load_dataset()
 
@@ -67,8 +70,8 @@ def update_internal_factors():
     client = CoinMetricsClient()
 
     # Get the latest available data
-    end_date = get_date_string(datetime.now() - timedelta(days=1))
-    last_value_date = get_date_string(latest_date + timedelta(days=1))
+    end_date = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+    last_value_date = (latest_date + timedelta(days=1)).strftime("%Y-%m-%d")
     # Check if the start_date is later than the end_date
     if pd.to_datetime(last_value_date) > pd.to_datetime(end_date):
         logging.info("Dataset is already up to date.")
