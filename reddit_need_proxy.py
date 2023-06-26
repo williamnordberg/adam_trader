@@ -12,7 +12,7 @@ from prawcore import Requestor
 
 
 from database import save_value_to_database
-from handy_modules import save_update_time, should_update, retry_on_error_with_fallback, compare_reddit
+from handy_modules import save_update_time, should_update, retry_on_error, compare_reddit
 from database import read_database
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -41,7 +41,7 @@ class ProxyRequestor(Requestor):
         return request
 
 
-@retry_on_error_with_fallback(
+@retry_on_error(
     max_retries=3, delay=5, allowed_exceptions=(RequestException,), fallback_values=0)
 def count_bitcoin_posts(reddit: Reddit) -> int:
     """
@@ -63,7 +63,7 @@ def count_bitcoin_posts(reddit: Reddit) -> int:
     return count
 
 
-@retry_on_error_with_fallback(
+@retry_on_error(
     max_retries=3, delay=5, allowed_exceptions=(SSLError, MaxRetryError,), fallback_values=(0, 0))
 def reddit_check_wrapper() -> Tuple[float, float]:
 

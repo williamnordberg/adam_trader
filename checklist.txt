@@ -1,0 +1,13 @@
+1. Type Hints:  type hints for parameters and return values, MYPY
+
+2. Error Handling: Error handling for all func with retry on error
+
+3. all read and write with to csv will change
+
+4. All compare change the compare file
+
+5. save_update_time() at begin of all wrappers and retry_on_error decorator on wrappers
+
+6. check the functionality
+
+7. refactor module name with a Prefix(a) name(macro) suffix(compare)

@@ -105,7 +105,7 @@ def compare_google_reddit_youtube(last_hour: int, two_hours_before: int) -> Tupl
         return compare(ratio, RANGES_GOOGLE_DOWN, VALUES_GOOGLE_DOWN)
 
 
-def compare_news() -> (float, float):
+def compare_news() -> Tuple[float, float]:
     positive_polarity_24h, negative_polarity_24h, \
      positive_count_24h, negative_count_24h = aggregate_news()
 
@@ -123,4 +123,3 @@ def compare_news() -> (float, float):
     weights = [0.1, 0.1, 0.2, 0.1]
     score = sum(c*w for c, w in zip(changes, weights) if c > 0)
     return max(0.5+score, 1), max(0.5-score, 1)  # Restrict between 0 and 1
-

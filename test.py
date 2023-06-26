@@ -1,123 +1,169 @@
-import bisect
+import os
+import logging
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.common.exceptions import TimeoutException
+from bs4 import BeautifulSoup
+from datetime import datetime
+from typing import Tuple, Dict
 import pandas as pd
-from typing import Tuple
-from handy_modules import save_update_time, read_float_from_latest_saved
-from news_aggregate import aggregate_news
 
-LATEST_INFO_PATH = 'data/latest_info_saved.csv'
+from database import save_value_to_database, read_database
+from test2 import calculate_macro_sentiment
+from handy_modules import save_update_time, should_update, retry_on_error
 
-# constants
-INF = float('inf')
-
-# 1. Macro
-RANGES_MACRO_MTM = [(-INF, -0.75), (-0.75, -0.5), (-0.5, -0.25),
-                    (-0.25, 0), (0, 0.25), (0.25, 0.5), (0.5, 0.75), (0.75, INF)]
-VALUES_MACRO_MTM = [(1.0, 0.0), (0.85, 0.15), (0.7, 0.3), (0.6, 0.4), (0.4, 0.6), (0.3, 0.7), (0.15, 0.85), (0.0, 1.0)]
-
-# 2. Order book
-RANGES_ORDER_VOL = [(0.53, 0.56), (0.56, 0.59), (0.59, 0.62), (0.62, 0.65), (0.65, INF)]
-VALUES_ORDER_VOL = [(0.6, 0.4), (0.7, 0.3), (0.8, 0.2), (0.9, 0.1), (1.0, 0.0)]
-
-# 3. Prediction
-RANGES_PREDICTION = [(0, 5), (5, 10), (10, 20), (20, float('inf'))]
-VALUES_PREDICTION = [(0.1, 0.9), (0.2, 0.8), (0.5, 0.5), (1, 0)]
-
-# 4. Technical in function
-
-# 5.Richest
-RANGES_RICH = [(-INF, -50), (-50, -40), (-40, -30), (-30, -20),
-               (-20, -10), (-10, 0), (0, 10), (10, 20), (20, 30), (30, 40), (40, 50), (50, INF)]
-VALUES_RICH = [(0.0, 1.0), (0.1, 0.9), (0.2, 0.8), (0.3, 0.7),
-               (0.4, 0.6), (0.0, 0.0), (0.6, 0.4), (0.7, 0.3), (0.8, 0.2), (0.9, 0.1), (1.0, 0.0)]
-
-# 6,7,8. Google, Reddit, Youtube
-RANGES_GOOGLE = [(1.1, 1.15), (1.15, 1.2), (1.2, 1.25), (1.25, float('inf'))]
-VALUES__GOOGLE = [(0.6, 0.4), (0.75, 0.25), (0.85, 0.15), (1, 0)]
-RANGES_GOOGLE_DOWN = [(1.1, 1.15), (1.15, 1.2), (1.2, 1.25), (1.25, float('inf'))]
-VALUES_GOOGLE_DOWN = [(0.4, 0.6), (0.25, 0.75), (0.15, 0.85), (0, 1)]
-
-# 9.News in function
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
 
 
-def compare(data, ranges, values):
-    index = bisect.bisect_right(ranges, data)
-    return values[index]
+def print_upcoming_events(events_date_dict):
+    """
+       Print upcoming events within a specified time range.
+
+       This function takes a dictionary containing events and their corresponding dates,
+       and logs information about events that are happening within the specified number of days.
+
+       :param events_date_dict: A dictionary containing events as keys and their corresponding
+                                datetime objects as values.
+       """
+    now = datetime.utcnow()
+    days_to_check = 5
+
+    for event, event_date in events_date_dict.items():
+        if event_date is None:
+            continue
+
+        days_until_event = (event_date - now).days
+
+        if 0 <= days_until_event <= days_to_check:
+            time_until_event = event_date - now
+            hours, remainder = divmod(time_until_event.seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            time_str = f"{days_until_event} day(s), {hours} hour(s), {minutes} min(s)"
+            logging.info(f"Upcoming event: {event} , {time_str} remaining")
 
 
-def compare_macro_m_to_m(cpi_m_to_m: float) -> Tuple[float, float]:
-    return compare(cpi_m_to_m, RANGES_MACRO_MTM, VALUES_MACRO_MTM)
+def get_chrome_options():
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)"
+                         " Chrome/87.0.4280.67 Safari/537.36")
+    return options
 
 
-def compare_order_volume(probability_up: float, probability_down: float) -> Tuple[float, float]:
-    if probability_up >= probability_down:
-        return compare(probability_up, RANGES_ORDER_VOL, VALUES_ORDER_VOL)
-    else:
-        return compare(probability_down, RANGES_ORDER_VOL, [val[::-1] for val in VALUES_ORDER_VOL[::-1]])
+def get_service():
+    return Service(executable_path=os.environ.get("CHROMEDRIVER_PATH", "chromedriver.exe"))
 
 
-def compare_predicted_price(predicted_price: int, current_price: int) -> Tuple[float, float]:
-    price_difference_percentage = (predicted_price - current_price) / current_price * 100
-    return compare(price_difference_percentage, RANGES_PREDICTION, VALUES_PREDICTION)
-
-
-def compare_technical(reversal: str, potential_up_trend: bool, over_ema200: bool) -> Tuple[float, float]:
-    # Define a dictionary for all possibilities
-    technical_mapping = {
-        # Reversal, Trend, EMA200
-        ('up', True, True): (1, 0),
-        ('up', True, False): (0.9, 0.1),
-        ('up', False, True): (0.9, 0.1),
-        ('up', False, False): (0.8, 0.2),
-
-        ('down', False, False): (0, 1),
-        ('down', True, False): (0.1, 0.9),
-        ('down', False, True): (0.1, 0.9),
-        ('down', True, True): (0.2, 0.8),
-
-        ('neither', True, False): (0, 0),
-        ('neither', False, True): (0, 0),
-        ('neither', True, True): (0.7, 0.3),
-        ('neither', False, False): (0.3, 0.7)
-    }
-    return technical_mapping[(reversal, potential_up_trend, over_ema200)]
-
-
-def compare_richest_addresses() -> Tuple[float, float]:
-    latest_info_saved = pd.read_csv(LATEST_INFO_PATH)
-    total_received = latest_info_saved['total_received_coins_in_last_24'][0]
-    total_sent = latest_info_saved['total_sent_coins_in_last_24'][0]
-
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
+        Exception, TimeoutException), fallback_values=(0, 0, {}))
+def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
     # Save latest update time
-    save_update_time('richest_addresses')
+    save_update_time('macro')
 
-    activity_percentage = (total_received - total_sent) / total_sent * 100
-    return compare(activity_percentage, RANGES_RICH, VALUES_RICH)
+    latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
 
+    events_list = ["Federal Funds Rate", "CPI m/m", "PPI m/m"]
+    url = "https://www.forexfactory.com/calendar"
+    options = get_chrome_options()
+    service = get_service()
+    service.start()
 
-def compare_google_reddit_youtube(last_hour: int, two_hours_before: int) -> Tuple[float, float]:
-    if last_hour >= two_hours_before:
-        ratio = last_hour / two_hours_before
-        return compare(ratio, RANGES_GOOGLE, VALUES__GOOGLE)
+    events_date_dict = {}
+
+    with webdriver.Remote(service.service_url, options=options) as browser:
+        browser.get(url)
+        browser.implicitly_wait(10)
+
+        html = browser.page_source
+        soup = BeautifulSoup(html, "html.parser")
+
+        table = soup.find("table", class_="calendar__table")
+        if not table:
+            logging.warning("Table not found")
+            service.stop()
+            return 0, 0, {}
+
+        rate_this_month = None
+        rate_month_before = None
+        cpi_m_to_m = None
+        ppi_m_to_m = None
+        for event in events_list:
+            for row in table.find_all("tr"):
+                event_cell = row.find("td", class_="calendar__cell calendar__event event")
+                if event_cell and event_cell.find("span", class_="calendar__event-title").text == event:
+                    currency_cell = row.find("td", class_="calendar__cell calendar__currency currency")
+                    if currency_cell and (currency_cell.string.strip() == "USD"):
+                        events_date_dict[event] = datetime.utcfromtimestamp(int(row['data-timestamp']))
+                        if event == 'Federal Funds Rate':
+                            latest_info_saved.loc[0, 'interest_rate_announcement_date'] = events_date_dict[event]
+                        elif event == 'CPI m/m':
+                            latest_info_saved.loc[0, 'cpi_announcement_date'] = events_date_dict[event]
+                        elif event == 'PPI m/m':
+                            latest_info_saved.loc[0, 'ppi_announcement_date'] = events_date_dict[event]
+
+                        interest_cell = event_cell.find_next_sibling(
+                            "td", class_="calendar__cell calendar__forecast forecast")
+                        forecast_value = interest_cell.find("span", class_="calendar-forecast")\
+                            .text if interest_cell else None
+
+                        actual_cell = row.find("td", class_="calendar__cell calendar__actual actual")
+                        actual_value = actual_cell.text.strip().rstrip('%') if actual_cell and actual_cell\
+                            .text.strip() else None
+
+                        previous_value_cell = row.find("td", class_="calendar__cell calendar__previous previous")
+                        previous_value = previous_value_cell.text.strip() if previous_value_cell else None
+
+                        if actual_value or forecast_value:
+                            value = float(actual_value if actual_value else forecast_value.rstrip('%'))
+                            events_date_dict[event] = datetime.utcfromtimestamp(int(row['data-timestamp']))
+
+                            if event == "Federal Funds Rate":
+                                rate_this_month = value
+                                rate_month_before = float(previous_value.rstrip('%'))
+                            elif event == "CPI m/m":
+                                cpi_m_to_m = value
+                            elif event == "PPI m/m":
+                                ppi_m_to_m = value
+
+    service.stop()
+
+    if rate_this_month or cpi_m_to_m or ppi_m_to_m:
+        macro_bullish, macro_bearish = calculate_macro_sentiment(
+            rate_this_month, rate_month_before, cpi_m_to_m, ppi_m_to_m)
+
+        # Save in database
+        if rate_this_month and rate_month_before:
+            save_value_to_database('fed_rate_m_to_m', (rate_this_month-rate_month_before))
+        save_value_to_database('interest_rate', rate_this_month)
+        save_value_to_database('cpi_m_to_m', cpi_m_to_m)
+        save_value_to_database('ppi_m_to_m', ppi_m_to_m)
+        save_value_to_database('macro_bullish', round(macro_bullish, 2))
+        save_value_to_database('macro_bearish', round(macro_bearish, 2))
+
+        # Save the next event date
+        latest_info_saved.loc[0, 'next-fed-announcement'] = str(events_date_dict['Federal Funds Rate'])
+
+        latest_info_saved.to_csv(LATEST_INFO_SAVED, index=False)
+
+        return macro_bullish, macro_bearish, events_date_dict
+
     else:
-        ratio = two_hours_before / last_hour
-        return compare(ratio, RANGES_GOOGLE_DOWN, VALUES_GOOGLE_DOWN)
+        return 0, 0, {}
 
 
-def compare_news() -> (float, float):
-    positive_polarity_24h, negative_polarity_24h, \
-     positive_count_24h, negative_count_24h = aggregate_news()
+def macro_sentiment() -> Tuple[float, float, Dict[str, datetime]]:
+    if should_update('macro'):
+        return macro_sentiment_wrapper()
+    else:
+        database = read_database()
+        macro_bullish = database['macro_bullish'][-1]
+        macro_bearish = database['macro_bearish'][-1]
+        return macro_bullish, macro_bearish, {}
 
-    positive_polarity_48h = round(read_float_from_latest_saved('positive_polarity_score'), 2)
-    positive_count_48h = read_float_from_latest_saved('positive_news_count')
-    negative_polarity_48h = round(read_float_from_latest_saved('negative_polarity_score'), 2)
-    negative_count_48h = read_float_from_latest_saved('negative_news_count')
 
-    positive_pol_change = positive_polarity_24h - positive_polarity_48h
-    positive_count_change = positive_count_24h - positive_count_48h
-    negative_pol_change = negative_polarity_24h - negative_polarity_48h
-    negative_count_change = negative_count_24h - negative_count_48h
-
-    changes = [positive_pol_change, positive_count_change, -negative_pol_change, -negative_count_change]
-    weights = [0.1, 0.1, 0.2, 0.1]
-    score = sum(c*w for c, w in zip(changes, weights) if c > 0)
-    return max(0.5+score, 1), max(0.5-score, 1)  # Restrict between 0 and 1
+if __name__ == "__main__":
+    macro_bullish_outer, macro_bearish_outer, events_date_dict_outer = macro_sentiment_wrapper()
+    logging.info(f"{macro_bullish_outer}, {macro_bearish_outer}, event: {events_date_dict_outer}")

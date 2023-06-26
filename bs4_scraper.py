@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import logging
-from handy_modules import save_update_time, retry_on_error_with_fallback
+from handy_modules import save_update_time, retry_on_error
 
 LATEST_INFO_FILE = 'data/latest_info_saved.csv'
 BASE_URL = "https://bitinfocharts.com/top-100-richest-bitcoin-addresses"
@@ -14,9 +14,9 @@ HEADERS = {
 logging.basicConfig(level=logging.INFO)
 
 
-@retry_on_error_with_fallback(max_retries=3, delay=5,
-                              allowed_exceptions=(requests.exceptions.RequestException,),
-                              fallback_values='pass')
+@retry_on_error(max_retries=3, delay=5,
+                allowed_exceptions=(requests.exceptions.RequestException,),
+                fallback_values='pass')
 def scrape_bitcoin_rich_list():
     logging.info('start scrapping list of bitcoin richest addresses')
     df = pd.DataFrame(columns=["address"])

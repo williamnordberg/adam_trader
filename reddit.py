@@ -11,7 +11,7 @@ from urllib3.exceptions import MaxRetryError
 
 
 from database import save_value_to_database
-from handy_modules import save_update_time, should_update, retry_on_error_with_fallback
+from handy_modules import save_update_time, should_update, retry_on_error
 from database import read_database
 from compares import compare_google_reddit_youtube
 
@@ -21,7 +21,7 @@ LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
 CONFIG_PATH = 'config/config.ini'
 
 
-@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(RequestException,), fallback_values=0)
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(RequestException,), fallback_values=0)
 def count_bitcoin_posts(reddit: Reddit) -> int:
     """
         Counts the number of Bitcoin-related posts on Reddit in the last 7 days.
@@ -43,7 +43,7 @@ def count_bitcoin_posts(reddit: Reddit) -> int:
     return count
 
 
-@retry_on_error_with_fallback(
+@retry_on_error(
     max_retries=3, delay=5, allowed_exceptions=(SSLError, MaxRetryError,), fallback_values=(0, 0))
 def reddit_check_wrapper() -> Tuple[float, float]:
 

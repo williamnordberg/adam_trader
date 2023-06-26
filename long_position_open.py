@@ -3,13 +3,13 @@ import logging
 from typing import Tuple
 
 from order_book import get_probabilities, get_probabilities_hit_profit_or_stop
-from macro_analyser import macro_sentiment, print_upcoming_events
+from a_macro import macro_sentiment, print_upcoming_events
 from technical_analysis import technical_analyse
 from news_analyser import check_sentiment_of_news
 from google_search import check_search_trend
 from reddit import reddit_check
 from youtube import check_bitcoin_youtube_videos_increase
-from adam_predictor import decision_tree_predictor
+from c_predictor import decision_tree_predictor
 from position_decision_maker import position_decision
 from handy_modules import get_bitcoin_price, richest_addresses_
 from testnet_spot_trade_executor import place_market_buy_order, close_position_at_market, get_btc_open_positions

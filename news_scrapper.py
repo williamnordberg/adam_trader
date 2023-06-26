@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from textblob import TextBlob
 import logging
 from typing import Tuple
-from handy_modules import check_internet_connection, retry_on_error_with_fallback
+from handy_modules import check_internet_connection, retry_on_error
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -11,9 +11,9 @@ SENTIMENT_POSITIVE_THRESHOLD = 0.1
 SENTIMENT_NEGATIVE_THRESHOLD = -0.001
 
 
-@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
         Exception, requests.exceptions.RequestException),
-                              fallback_values=(0, 0, 0, 0))
+                fallback_values=(0, 0, 0, 0))
 def check_news_sentiment_scrapper() -> Tuple[float, float, int, int]:
     positive_polarity_score = 0.0
     positive_count = 0

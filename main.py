@@ -15,9 +15,9 @@ from technical_analysis import technical_analyse
 from news_analyser import check_sentiment_of_news
 from youtube import check_bitcoin_youtube_videos_increase
 from reddit import reddit_check
-from macro_analyser import macro_sentiment, print_upcoming_events
+from a_macro import macro_sentiment, print_upcoming_events
 from google_search import check_search_trend
-from adam_predictor import decision_tree_predictor
+from c_predictor import decision_tree_predictor
 from order_book import get_probabilities
 from trading_decision import make_trading_decision
 from long_position_open import long_position

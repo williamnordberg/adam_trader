@@ -8,7 +8,7 @@ import logging
 from datetime import datetime, timedelta
 from compares import compare_google_reddit_youtube
 from database import save_value_to_database
-from handy_modules import should_update, save_update_time, retry_on_error_with_fallback, retry_on_error_fallback_0_0
+from handy_modules import should_update, save_update_time, retry_on_error, retry_on_error_fallback_0_0
 from typing import Tuple
 from database import read_database
 from googleapiclient.errors import HttpError
@@ -78,7 +78,7 @@ def get_youtube_videos(youtube, published_after, published_before):
     return search_results
 
 
-@retry_on_error_with_fallback(
+@retry_on_error(
     max_retries=3, delay=5, allowed_exceptions=(RefreshError,),
     fallback_values=(0, 0))
 def youtube_wrapper() -> Tuple[float, float]:

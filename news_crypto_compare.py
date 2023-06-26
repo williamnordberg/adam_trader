@@ -2,7 +2,7 @@ import requests
 from textblob import TextBlob
 import logging
 from typing import Tuple
-from handy_modules import check_internet_connection, retry_on_error_with_fallback
+from handy_modules import check_internet_connection, retry_on_error
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 SENTIMENT_THRESHOLD = 0.1
@@ -16,8 +16,8 @@ class UpdateCryptoCompareData(Exception):
     pass
 
 
-@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(UpdateCryptoCompareData,),
-                              fallback_values=(0, 0, 0, 0))
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(UpdateCryptoCompareData,),
+                fallback_values=(0, 0, 0, 0))
 def check_news_cryptocompare_sentiment() -> Tuple[float, float, int, int]:
 
     positive_polarity_score = 0.0

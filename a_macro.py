@@ -3,20 +3,110 @@ import logging
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 from datetime import datetime
-from typing import Tuple, Dict
-import pandas as pd
+from typing import Tuple, Optional, Dict
+from datetime import timedelta
 
-from database import save_value_to_database, read_database
-from macro_compare import calculate_macro_sentiment
-from handy_modules import save_update_time, should_update, retry_on_error_with_fallback
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
+from compares import compare_macro_m_to_m
+from read_write_csv import read_latest_data, write_latest_data, save_value_to_database, \
+    should_update, save_update_time, retrieve_latest_factor_values_database
+from handy_modules import retry_on_error
 
 
-def print_upcoming_events(events_date_dict):
+def format_time(time_until: timedelta) -> str:
+    days = time_until.days
+    hours, remainder = divmod(time_until.seconds, 3600)
+    minutes, _ = divmod(remainder, 60)
+
+    if days > 1:
+        return f"{days}d, {hours}h"
+    elif days == 1:
+        return f"{days}d, {hours}h"
+    elif hours > 0:
+        return f"{hours}h, {minutes}m"
+    else:
+        return f"{minutes}m"
+
+
+def calculate_upcoming_events() -> Tuple[str, str, str]:
+    fed = datetime.strptime(read_latest_data('interest_rate_announcement_date', str), "%Y-%m-%d %H:%M:%S")
+    cpi = datetime.strptime(read_latest_data('cpi_announcement_date', str), "%Y-%m-%d %H:%M:%S")
+    ppi = datetime.strptime(read_latest_data('ppi_announcement_date', str), "%Y-%m-%d %H:%M:%S")
+
+    now = datetime.utcnow()
+
+    time_until_fed = fed - now
+    time_until_cpi = cpi - now
+    time_until_ppi = ppi - now
+
+    fed_announcement = ''
+    cpi_fed_announcement = ''
+    ppi_fed_announcement = ''
+
+    if time_until_fed.days >= 0:
+        fed_announcement = f"Nxt FED:{format_time(time_until_fed)}"
+
+    if time_until_cpi.days >= 0:
+        cpi_fed_announcement = f"Nxt CPI:{format_time(time_until_cpi)}"
+
+    if time_until_ppi.days >= 0:
+        ppi_fed_announcement = f"Nxt PPI:{format_time(time_until_ppi)}"
+
+    return fed_announcement if time_until_fed.days <= 2 else '', \
+        cpi_fed_announcement if time_until_cpi.days <= 2 else '', \
+        ppi_fed_announcement if time_until_ppi.days <= 2 else ''
+
+
+def handle_macro_data(metric_value: Optional[float], metric_name: str) -> Tuple[float, float]:
+    if metric_value is None:
+        bullish_value = read_latest_data(f'{metric_name}_bullish', float)
+        bearish_value = read_latest_data(f'{metric_name}_bearish', float)
+    else:
+        bullish_value, bearish_value = compare_macro_m_to_m(metric_value)
+        write_latest_data(f'{metric_name}_bullish', bullish_value)
+        write_latest_data(f'{metric_name}_bearish', bearish_value)
+        write_latest_data(f'{metric_name}_m_to_m', bullish_value)
+    return bullish_value, bearish_value
+
+
+def calculate_macro_sentiment(rate_this_month: Optional[float], rate_month_before: Optional[float],
+                              cpi_m_to_m: Optional[float], ppi_m_to_m: Optional[float]) -> Tuple[float, float]:
+
+    weights: Dict[str, float] = {"interest_rate": 0.5, "cpi": 0.25, "ppi": 0.25}
+
+    rate_m_to_m = rate_this_month - rate_month_before if rate_this_month and rate_month_before else None
+    rate_bullish, rate_bearish = handle_macro_data(rate_m_to_m, 'rate')
+    cpi_bullish, cpi_bearish = handle_macro_data(cpi_m_to_m, 'cpi')
+    ppi_bullish, ppi_bearish = handle_macro_data(ppi_m_to_m, 'ppi')
+
+    # Calculate the weighted score for each alternative:
+    weighted_score_up = (
+            weights["interest_rate"] * rate_bullish +
+            weights["cpi"] * cpi_bullish +
+            weights["ppi"] * ppi_bullish
+    )
+
+    weighted_score_down = (
+            weights["interest_rate"] * rate_bearish +
+            weights["cpi"] * cpi_bearish +
+            weights["ppi"] * ppi_bearish
+    )
+
+    total_score = weighted_score_up + weighted_score_down
+
+    # Normalize the scores
+    if total_score == 0:
+        normalized_score_up, normalized_score_down = 0.0, 0.0
+    else:
+        normalized_score_up = weighted_score_up / total_score
+        normalized_score_down = weighted_score_down / total_score
+
+    return round(normalized_score_up, 2), round(normalized_score_down, 2)
+
+
+def print_upcoming_events(events_date_dict: dict):
     """
        Print upcoming events within a specified time range.
 
@@ -43,7 +133,7 @@ def print_upcoming_events(events_date_dict):
             logging.info(f"Upcoming event: {event} , {time_str} remaining")
 
 
-def get_chrome_options():
+def get_chrome_options() -> Options:
     options = webdriver.ChromeOptions()
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
@@ -53,17 +143,14 @@ def get_chrome_options():
     return options
 
 
-def get_service():
+def get_service() -> Service:
     return Service(executable_path=os.environ.get("CHROMEDRIVER_PATH", "chromedriver.exe"))
 
 
-@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
         Exception, TimeoutException), fallback_values=(0, 0, {}))
 def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
-    # Save latest update time
     save_update_time('macro')
-
-    latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
 
     events_list = ["Federal Funds Rate", "CPI m/m", "PPI m/m"]
     url = "https://www.forexfactory.com/calendar"
@@ -98,11 +185,12 @@ def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
                     if currency_cell and (currency_cell.string.strip() == "USD"):
                         events_date_dict[event] = datetime.utcfromtimestamp(int(row['data-timestamp']))
                         if event == 'Federal Funds Rate':
-                            latest_info_saved.loc[0, 'interest_rate_announcement_date'] = events_date_dict[event]
+                            write_latest_data('interest_rate_announcement_date', events_date_dict[event])
                         elif event == 'CPI m/m':
-                            latest_info_saved.loc[0, 'cpi_announcement_date'] = events_date_dict[event]
+                            write_latest_data('cpi_announcement_date', events_date_dict[event])
+
                         elif event == 'PPI m/m':
-                            latest_info_saved.loc[0, 'ppi_announcement_date'] = events_date_dict[event]
+                            write_latest_data('ppi_announcement_date', events_date_dict[event])
 
                         interest_cell = event_cell.find_next_sibling(
                             "td", class_="calendar__cell calendar__forecast forecast")
@@ -133,38 +221,37 @@ def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
     if rate_this_month or cpi_m_to_m or ppi_m_to_m:
         macro_bullish, macro_bearish = calculate_macro_sentiment(
             rate_this_month, rate_month_before, cpi_m_to_m, ppi_m_to_m)
+        save_value_to_database('macro_bullish', round(macro_bullish, 2))
+        save_value_to_database('macro_bearish', round(macro_bearish, 2))
 
         # Save in database
         if rate_this_month and rate_month_before:
             save_value_to_database('fed_rate_m_to_m', (rate_this_month-rate_month_before))
-        save_value_to_database('interest_rate', rate_this_month)
-        save_value_to_database('cpi_m_to_m', cpi_m_to_m)
-        save_value_to_database('ppi_m_to_m', ppi_m_to_m)
-        save_value_to_database('macro_bullish', round(macro_bullish, 2))
-        save_value_to_database('macro_bearish', round(macro_bearish, 2))
+            save_value_to_database('interest_rate', rate_this_month)
+
+        if cpi_m_to_m:
+            save_value_to_database('cpi_m_to_m', cpi_m_to_m)
+        if ppi_m_to_m:
+            save_value_to_database('ppi_m_to_m', ppi_m_to_m)
 
         # Save the next event date
-        latest_info_saved.loc[0, 'next-fed-announcement'] = str(events_date_dict['Federal Funds Rate'])
-
-        latest_info_saved.to_csv(LATEST_INFO_SAVED, index=False)
+        write_latest_data('next-fed-announcement', events_date_dict['Federal Funds Rate'])
 
         return macro_bullish, macro_bearish, events_date_dict
 
     else:
-        return 0, 0, {}
+        macro_bullish, macro_bearish = retrieve_latest_factor_values_database('macro')
+        return macro_bullish, macro_bearish, {}
 
 
 def macro_sentiment() -> Tuple[float, float, Dict[str, datetime]]:
     if should_update('macro'):
         return macro_sentiment_wrapper()
     else:
-        database = read_database()
-        macro_bullish = database['macro_bullish'][-1]
-        macro_bearish = database['macro_bearish'][-1]
+        macro_bullish, macro_bearish = retrieve_latest_factor_values_database('macro')
         return macro_bullish, macro_bearish, {}
 
 
 if __name__ == "__main__":
     macro_bullish_outer, macro_bearish_outer, events_date_dict_outer = macro_sentiment_wrapper()
-    # logging.info(f"{macro_bullish_outer}, {macro_bearish_outer}, event: {events_date_dict_outer}")
-    print(events_date_dict_outer)
+    print(macro_bullish_outer, macro_bearish_outer, events_date_dict_outer)

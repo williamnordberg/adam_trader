@@ -10,8 +10,8 @@ import logging
 from datetime import timedelta
 from dash import dash_table
 
-from handy_modules import get_bitcoin_price, calculate_upcoming_events, \
-    create_gauge_chart, COLORS
+from macro_analyser import calculate_upcoming_events
+from handy_modules import get_bitcoin_price, create_gauge_chart, COLORS
 from database import read_database
 
 logging.basicConfig(filename='app.log', level=logging.INFO)
