@@ -11,9 +11,9 @@ from praw import Reddit
 from prawcore import Requestor
 
 
-from database import save_value_to_database
+from z_database import save_value_to_database
 from handy_modules import save_update_time, should_update, retry_on_error, compare_reddit
-from database import read_database
+from z_database import read_database
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 

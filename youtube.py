@@ -6,11 +6,11 @@ import os.path
 from google.auth.transport.requests import Request
 import logging
 from datetime import datetime, timedelta
-from compares import compare_google_reddit_youtube
-from database import save_value_to_database
+from z_compares import compare_google_reddit_youtube
+from z_database import save_value_to_database
 from handy_modules import should_update, save_update_time, retry_on_error, retry_on_error_fallback_0_0
 from typing import Tuple
-from database import read_database
+from z_database import read_database
 from googleapiclient.errors import HttpError
 from google.auth.exceptions import RefreshError
 

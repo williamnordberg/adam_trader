@@ -10,10 +10,10 @@ from requests.exceptions import SSLError
 from urllib3.exceptions import MaxRetryError
 
 
-from database import save_value_to_database
+from z_database import save_value_to_database
 from handy_modules import save_update_time, should_update, retry_on_error
-from database import read_database
-from compares import compare_google_reddit_youtube
+from z_database import read_database
+from z_compares import compare_google_reddit_youtube
 
 ONE_DAYS_IN_SECONDS = 24 * 60 * 60
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

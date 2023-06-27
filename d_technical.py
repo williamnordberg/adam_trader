@@ -3,10 +3,10 @@ import ccxt
 import logging
 from typing import Tuple
 
-from indicator_calculator import bollinger_bands, exponential_moving_average, macd, relative_strength_index
+from d_technical_indicators import bollinger_bands, exponential_moving_average, macd, relative_strength_index
 from handy_modules import get_bitcoin_price, should_update, save_update_time, retry_on_error
-from database import save_value_to_database, read_database
-from compares import compare_technical
+from z_database import save_value_to_database, read_database
+from z_compares import compare_technical
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
