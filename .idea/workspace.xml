@@ -9,8 +9,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="27June_after change">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_api_blockcypher.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_api_blockcypher.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/google_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/f_google.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/long_position_open.py" beforeDir="false" afterPath="$PROJECT_DIR$/long_position_open.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/short_position_open.py" beforeDir="false" afterPath="$PROJECT_DIR$/short_position_open.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/z_checklist.txt" beforeDir="false" afterPath="$PROJECT_DIR$/z_checklist.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -585,7 +588,7 @@
       <option name="project" value="LOCAL" />
       <updated>1687483422567</updated>
     </task>
-    <option name="localTasksCounter" value="343" />
+    <option name="localTasksCounter" value="344" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">

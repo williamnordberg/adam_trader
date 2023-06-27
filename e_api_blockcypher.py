@@ -30,7 +30,7 @@ config.read_string(config_string)
 
 @retry_on_error(max_retries=3, delay=5,
                 allowed_exceptions=(RequestException, Timeout, TooManyRedirects, HTTPError,),
-                fallback_values=(0, 0))
+                fallback_values=(0.0, 0.0))
 def get_address_transactions_24h_blockcypher(address: str, api_keys_cycle=itertools.cycle([
     'Blockcypher1', 'Blockcypher2', 'Blockcypher3', 'Blockcypher4', 'Blockcypher5'])) \
         -> Tuple[float, float]:

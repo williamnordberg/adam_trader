@@ -148,7 +148,7 @@ def get_service() -> Service:
 
 
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
-        Exception, TimeoutException), fallback_values=(0, 0, {}))
+        Exception, TimeoutException), fallback_values=(0.0, 0.0, {}))
 def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
     save_update_time('macro')
 
