@@ -16,7 +16,7 @@ from news_analyser import check_sentiment_of_news
 from youtube import check_bitcoin_youtube_videos_increase
 from reddit import reddit_check
 from a_macro import macro_sentiment, print_upcoming_events
-from google_search import check_search_trend
+from f_google import check_search_trend
 from c_predictor import decision_tree_predictor
 from b_order_book import order_book
 from trading_decision import make_trading_decision

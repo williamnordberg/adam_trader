@@ -2,12 +2,13 @@ import logging
 from typing import List, Tuple
 from pytrends.request import TrendReq as UTrendReq
 from pytrends.exceptions import ResponseError
+from requests.exceptions import RequestException, ConnectionError, Timeout, TooManyRedirects
 
-from z_database import save_value_to_database, read_database
-from handy_modules import check_internet_connection, retry_on_error_fallback_0_0,  \
-    save_update_time, should_update
+
+from read_write_csv import save_value_to_database, \
+    should_update, save_update_time, retrieve_latest_factor_values_database
+from handy_modules import check_internet_connection, retry_on_error
 from z_compares import compare_google_reddit_youtube
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 headers = {
     'authority': 'ogs.google.com',
@@ -50,10 +51,12 @@ class TrendReq(UTrendReq):
         return super()._get_data(url, method=method, trim_chars=trim_chars, headers=headers, **kwargs)
 
 
-@retry_on_error_fallback_0_0(max_retries=3, delay=5, allowed_exceptions=(ResponseError,))
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
+        ResponseError, RequestException, ConnectionError, Timeout,
+        TooManyRedirects), fallback_values=(0.0, 0.0))
 def check_search_trend_wrapper(keywords: List[str]) -> Tuple[float, float]:
     """
-    Check if there is a significant increase in search volume for a list of keywords in the past 7 days.
+    Check if there is a significant increase in search volume for a list of keywords in the past 1 hour.
 
     Args:
         keywords (List[str]): The list of keywords to search for.
@@ -64,8 +67,10 @@ def check_search_trend_wrapper(keywords: List[str]) -> Tuple[float, float]:
     """
 
     if not check_internet_connection():
-        logging.info('unable to get google trend')
-        return 0, 0
+        logging.info('No internet connection, unable to get google trend')
+        return 0.0, 0.0
+
+    save_update_time('google_search')
 
     keywords = [keyword.lower() for keyword in keywords]
 
@@ -76,18 +81,16 @@ def check_search_trend_wrapper(keywords: List[str]) -> Tuple[float, float]:
         trend = pytrends.interest_over_time()
         last_hour, two_hours_before = trend.iloc[-1].values[0], trend.iloc[-2].values[0]
 
-        youtube_bullish, youtube_bearish = compare_google_reddit_youtube(last_hour, two_hours_before)
+        google_bullish,  google_bearish = compare_google_reddit_youtube(last_hour, two_hours_before)
 
         save_value_to_database('hourly_google_search', last_hour)
-        save_value_to_database('google_search_bullish', youtube_bullish)
-        save_value_to_database('google_search_bearish', youtube_bearish)
+        save_value_to_database('google_search_bullish', google_bullish)
+        save_value_to_database('google_search_bearish', google_bearish)
 
-        save_update_time('google_search')
-
-        return youtube_bullish, youtube_bearish
+        return google_bullish,  google_bearish
 
     except ResponseError as e:
-        logging.error(f"An error occurred: {e}")
+        logging.error(f"An error occurred in google: {e}")
         return 0, 0
 
 
@@ -95,10 +98,7 @@ def check_search_trend(keywords: List[str]) -> Tuple[float, float]:
     if should_update('google_search'):
         return check_search_trend_wrapper(keywords)
     else:
-        database = read_database()
-        youtube_bullish = database['google_search_bullish'][-1]
-        youtube_bearish = database['google_search_bearish'][-1]
-        return youtube_bullish, youtube_bearish
+        return retrieve_latest_factor_values_database('google_search')
 
 
 if __name__ == "__main__":
