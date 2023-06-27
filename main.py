@@ -10,8 +10,8 @@ from logging_config import do_nothing
 from handy_modules import richest_addresses_, get_bitcoin_price, \
     save_trade_details, save_trade_result, save_trading_state,\
     calculate_score_margin
-from compares import compare_richest_addresses
-from technical_analysis import technical_analyse
+from z_compares import compare_richest_addresses
+from d_technical import technical_analyse
 from news_analyser import check_sentiment_of_news
 from youtube import check_bitcoin_youtube_videos_increase
 from reddit import reddit_check
@@ -25,7 +25,7 @@ from short_position_open import short_position
 from factors_states_visualization import visualize_charts
 from testnet_future_short_trade import check_no_open_future_position
 from monitor_richest import monitor_bitcoin_richest_addresses
-from database import save_value_to_database
+from z_database import save_value_to_database
 
 # Constants
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']

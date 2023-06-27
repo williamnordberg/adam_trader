@@ -3,10 +3,10 @@ from typing import List, Tuple
 from pytrends.request import TrendReq as UTrendReq
 from pytrends.exceptions import ResponseError
 
-from database import save_value_to_database, read_database
+from z_database import save_value_to_database, read_database
 from handy_modules import check_internet_connection, retry_on_error_fallback_0_0,  \
     save_update_time, should_update
-from compares import compare_google_reddit_youtube
+from z_compares import compare_google_reddit_youtube
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 headers = {

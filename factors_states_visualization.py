@@ -12,7 +12,7 @@ from dash import dash_table
 
 from macro_analyser import calculate_upcoming_events
 from handy_modules import get_bitcoin_price, create_gauge_chart, COLORS
-from database import read_database
+from z_database import read_database
 
 logging.basicConfig(filename='app.log', level=logging.INFO)
 

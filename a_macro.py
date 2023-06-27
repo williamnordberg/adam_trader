@@ -9,7 +9,7 @@ from datetime import datetime
 from typing import Tuple, Optional, Dict
 from datetime import timedelta
 
-from compares import compare_macro_m_to_m
+from z_compares import compare_macro_m_to_m
 from read_write_csv import read_latest_data, write_latest_data, save_value_to_database, \
     should_update, save_update_time, retrieve_latest_factor_values_database
 from handy_modules import retry_on_error

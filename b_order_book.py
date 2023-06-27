@@ -2,10 +2,10 @@ from typing import List, Tuple
 import requests
 import logging
 
-from database import save_value_to_database
+from z_database import save_value_to_database
 from read_write_csv import save_update_time, save_value_to_database, read_latest_data, write_latest_data
 from handy_modules import get_bitcoin_price, retry_on_error
-from compares import compare_order_volume
+from z_compares import compare_order_volume
 
 SPOT_ENDPOINT_DEPTH = "https://api.binance.com/api/v3/depth"
 FUTURES_ENDPOINT_DEPTH = 'https://fapi.binance.com/fapi/v1/depth'

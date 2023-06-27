@@ -4,7 +4,7 @@ from typing import Tuple
 
 from b_order_book import order_book, order_book_hit_target
 from a_macro import macro_sentiment, print_upcoming_events
-from technical_analysis import technical_analyse
+from d_technical import technical_analyse
 from news_analyser import check_sentiment_of_news
 from google_search import check_search_trend
 from reddit import reddit_check

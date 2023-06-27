@@ -4,11 +4,11 @@ from datetime import datetime, timedelta
 
 from handy_modules import should_update, save_update_time
 from typing import Tuple
-from database import read_database
+from z_database import read_database
 from newsAPI import check_news_api_sentiment
 from news_aggregate import aggregate_news
-from compares import compare_news
-from database import save_value_to_database
+from z_compares import compare_news
+from z_database import save_value_to_database
 from update_bitcoin_price import update_bitcoin_price_in_database
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

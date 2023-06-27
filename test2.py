@@ -1,6 +1,6 @@
 from typing import Tuple, Optional
 import pandas as pd
-from compares import compare_macro_m_to_m
+from z_compares import compare_macro_m_to_m
 
 LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
 
