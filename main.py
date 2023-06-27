@@ -1,7 +1,7 @@
 import logging
 from time import sleep
 from multiprocessing import Process
-import datetime
+from _datetime import datetime
 import signal
 import sys
 
@@ -18,7 +18,7 @@ from reddit import reddit_check
 from a_macro import macro_sentiment, print_upcoming_events
 from google_search import check_search_trend
 from c_predictor import decision_tree_predictor
-from order_book import get_probabilities
+from b_order_book import order_book
 from trading_decision import make_trading_decision
 from long_position_open import long_position
 from short_position_open import short_position
@@ -35,9 +35,7 @@ SHORT_THRESHOLD = 0.7
 PROFIT_MARGIN = 0.005
 RICHEST_ADDRESSES_SLEEP_TIME = 20 * 60
 
-
 do_nothing()
-logging.basicConfig(filename='trading.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def run_visualize_factors_states():
@@ -90,17 +88,16 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
 
         factor_values['prediction_bullish'], factor_values['prediction_bearish'] = decision_tree_predictor()
 
-        probabilities = get_probabilities(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
-        assert probabilities is not None, "get_probabilities returned None"
-        factor_values['order_book_bullish'], factor_values['order_book_bearish'] = probabilities
+        factor_values['order_book_bullish'], factor_values['order_book_bearish'] =\
+            order_book(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
+
+        factor_values['macro_bullish'], factor_values['macro_bearish'], events_date_dict = macro_sentiment()
+        print_upcoming_events(events_date_dict)
 
         factor_values['richest_bullish'], factor_values['richest_bearish'] = richest_addresses_()
 
         factor_values['google_bullish'], factor_values['google_bearish'] = check_search_trend(
             ["Bitcoin", "Cryptocurrency"])
-
-        factor_values['macro_bullish'], factor_values['macro_bearish'], events_date_dict = macro_sentiment()
-        print_upcoming_events(events_date_dict)
 
         factor_values['reddit_bullish'], factor_values['reddit_bearish'] = reddit_check()
 
@@ -118,14 +115,14 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
         # Trading decision
         if weighted_score_up > weighted_score_down and weighted_score_up > long_threshold:
             logging.info(f'Opening a long position with score of: {weighted_score_up}')
-            trade_open_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            trade_open_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             opening_price = get_bitcoin_price()
             score_margin_to_close = calculate_score_margin(weighted_score_up)
 
             save_trading_state('long')
             profit_after_trade, loss_after_trade = long_position(score_margin_to_close, profit_margin)
             pnl = profit_after_trade - loss_after_trade
-            trade_close_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            trade_close_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             close_price = get_bitcoin_price()
 
             save_trade_result(pnl, weighted_score_up, 'long')
@@ -137,14 +134,14 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
         elif weighted_score_down > weighted_score_up and weighted_score_down > short_threshold and \
                 check_no_open_future_position(SYMBOL):
             logging.info(f'Opening short position with score of: {weighted_score_down}')
-            trade_open_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            trade_open_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             opening_price = get_bitcoin_price()
             score_margin_to_close = calculate_score_margin(weighted_score_down)
 
             save_trading_state('short')
             profit_after_trade, loss_after_trade = short_position(score_margin_to_close, profit_margin)
             pnl = profit_after_trade - loss_after_trade
-            trade_close_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            trade_close_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             close_price = get_bitcoin_price()
 
             save_trade_result(pnl, weighted_score_down, 'short')
