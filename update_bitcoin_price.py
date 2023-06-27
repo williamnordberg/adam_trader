@@ -2,7 +2,7 @@ import pytz
 import requests
 import pandas as pd
 from datetime import datetime, timezone
-from handy_modules import retry_on_error
+from z_handy_modules import retry_on_error
 
 
 DATABASE_PATH = 'data/database.csv'

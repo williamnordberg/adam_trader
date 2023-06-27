@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import logging
-from handy_modules import retry_on_error
+from z_handy_modules import retry_on_error
 from read_write_csv import save_update_time
 from http.client import HTTPException
 

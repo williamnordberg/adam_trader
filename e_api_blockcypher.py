@@ -7,7 +7,7 @@ from dateutil.parser import parse
 from typing import Tuple
 from requests.exceptions import RequestException, Timeout, TooManyRedirects, HTTPError
 
-from handy_modules import check_internet_connection, retry_on_error
+from z_handy_modules import check_internet_connection, retry_on_error
 import itertools
 
 # Initialize a session object

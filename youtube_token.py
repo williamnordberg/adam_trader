@@ -8,7 +8,7 @@ import logging
 from datetime import datetime, timedelta
 from z_compares import compare_google_reddit_youtube
 from z_database import save_value_to_database
-from handy_modules import should_update, save_update_time, retry_on_error_fallback_0_0
+from z_handy_modules import should_update, save_update_time, retry_on_error_fallback_0_0
 from typing import Tuple
 from z_database import read_database
 from googleapiclient.errors import HttpError

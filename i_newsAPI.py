@@ -7,7 +7,7 @@ import os
 from datetime import datetime, timedelta
 
 from typing import Tuple
-from handy_modules import check_internet_connection, retry_on_error
+from z_handy_modules import check_internet_connection, retry_on_error
 
 SENTIMENT_POSITIVE_THRESHOLD = 0.1
 SENTIMENT_NEGATIVE_THRESHOLD = -0.001

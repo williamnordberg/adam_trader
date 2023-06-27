@@ -7,7 +7,7 @@ from requests.exceptions import RequestException, ConnectionError, Timeout, TooM
 
 from read_write_csv import save_value_to_database, \
     should_update, save_update_time, retrieve_latest_factor_values_database
-from handy_modules import check_internet_connection, retry_on_error
+from z_handy_modules import check_internet_connection, retry_on_error
 from z_compares import compare_google_reddit_youtube
 
 headers = {

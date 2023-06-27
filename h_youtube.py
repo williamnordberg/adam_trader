@@ -11,7 +11,7 @@ from googleapiclient.errors import HttpError
 from google.auth.exceptions import RefreshError
 
 from z_compares import compare_google_reddit_youtube
-from handy_modules import retry_on_error
+from z_handy_modules import retry_on_error
 from read_write_csv import save_value_to_database, \
     should_update, save_update_time, retrieve_latest_factor_values_database
 

@@ -11,7 +11,7 @@ from urllib3.exceptions import MaxRetryError
 
 
 from database import save_value_to_database
-from handy_modules import save_update_time, should_update, retry_on_error_with_fallback
+from z_handy_modules import save_update_time, should_update, retry_on_error_with_fallback
 from database import read_database
 from compares import compare_google_reddit_youtube
 

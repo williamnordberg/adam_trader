@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
 import logging
 
-from newsAPI import check_news_api_sentiment
-from news_crypto_compare import check_news_cryptocompare_sentiment
-from news_scrapper import check_news_sentiment_scrapper
+from i_newsAPI import check_news_api_sentiment
+from i_news_crypto_compare import check_news_cryptocompare_sentiment
+from i_news_scrapper import check_news_sentiment_scrapper
 from typing import Tuple
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
