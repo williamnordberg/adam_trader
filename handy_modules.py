@@ -60,26 +60,6 @@ update_intervals = {
 }
 
 
-def retry_on_error_fallback_0_0(max_retries: int = 3, delay: int = 5, allowed_exceptions: tuple = ()):
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            retries = 0
-            while retries < max_retries:
-                try:
-                    return func(*args, **kwargs)
-                except allowed_exceptions as e:
-                    retries += 1
-                    logging.warning(f"Attempt {retries} failed with error: {e}. Retrying in {delay} seconds...")
-                    sleep(delay)
-            logging.error(f"All {max_retries} attempts failed. Returning fallback values (0, 0).")
-            return 0, 0
-
-        return wrapper
-
-    return decorator
-
-
 def retry_on_error(max_retries: int = 3, delay: int = 5,
                    allowed_exceptions: tuple = (), fallback_values=None):
     def decorator(func):
@@ -210,12 +190,6 @@ def save_trading_state(state: str):
     latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
     latest_info_saved.loc[0, 'latest_trading_state'] = state
     latest_info_saved.to_csv(LATEST_INFO_FILE, index=False)
-
-
-def read_current_trading_state() -> str:
-    latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
-    state = latest_info_saved.iloc[0]['latest_trading_state']
-    return state
 
 
 def save_float_to_latest_saved(column: str, value: float):

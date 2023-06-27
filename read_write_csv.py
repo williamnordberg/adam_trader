@@ -155,6 +155,7 @@ def save_value_to_database(column: str, value: Any):
 
     # Save the updated DataFrame back to the CSV file without the index
     df.reset_index(inplace=True)
+    df.rename(columns={'index': 'date'}, inplace=True)
     df.to_csv(DATABASE_PATH, index=False)
 
 

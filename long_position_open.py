@@ -2,7 +2,7 @@ from time import sleep
 import logging
 from typing import Tuple
 
-from order_book import get_probabilities, get_probabilities_hit_profit_or_stop
+from b_order_book import order_book, order_book_hit_target
 from a_macro import macro_sentiment, print_upcoming_events
 from technical_analysis import technical_analyse
 from news_analyser import check_sentiment_of_news
@@ -13,10 +13,6 @@ from c_predictor import decision_tree_predictor
 from position_decision_maker import position_decision
 from handy_modules import get_bitcoin_price, richest_addresses_
 from testnet_spot_trade_executor import place_market_buy_order, close_position_at_market, get_btc_open_positions
-
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
 
 SCORE_MARGIN_TO_CLOSE = 0.65
 PROFIT_MARGIN = 0.01
@@ -53,7 +49,7 @@ def long_position(score_margin_to_close: float, profit_margin: float) -> Tuple[i
             return profit, loss
 
         # Order book Hit
-        probabilities_hit = get_probabilities_hit_profit_or_stop(SYMBOLS, 1000, profit_point, stop_loss)
+        probabilities_hit = order_book_hit_target(SYMBOLS, 1000, profit_point, stop_loss)
         assert probabilities_hit is not None, "get_probabilities_hit_profit_or_stop returned None"
         probability_to_hit_target, probability_to_hit_stop_loss = probabilities_hit
 
@@ -64,7 +60,7 @@ def long_position(score_margin_to_close: float, profit_margin: float) -> Tuple[i
         prediction_bullish, prediction_bearish = decision_tree_predictor()
 
         # 2 Get probabilities of price going up or down
-        probabilities = get_probabilities(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
+        probabilities = order_book(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
         assert probabilities is not None, "get_probabilities returned None"
         order_book_bullish, order_book_bearish = probabilities
 
