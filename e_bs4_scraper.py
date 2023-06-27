@@ -2,20 +2,23 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import logging
-from handy_modules import save_update_time, retry_on_error
+from handy_modules import retry_on_error
+from read_write_csv import save_update_time
+from http.client import HTTPException
 
-LATEST_INFO_FILE = 'data/latest_info_saved.csv'
+
 BASE_URL = "https://bitinfocharts.com/top-100-richest-bitcoin-addresses"
 OUTPUT_FILE = "data/bitcoin_rich_list2000.csv"
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
                   " (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36",
 }
-logging.basicConfig(level=logging.INFO)
 
 
 @retry_on_error(max_retries=3, delay=5,
-                allowed_exceptions=(requests.exceptions.RequestException,),
+                allowed_exceptions=(requests.exceptions.RequestException,
+                                    FileNotFoundError, IOError, AttributeError,
+                                    TimeoutError, ConnectionError, HTTPException),
                 fallback_values='pass')
 def scrape_bitcoin_rich_list():
     logging.info('start scrapping list of bitcoin richest addresses')
@@ -27,12 +30,17 @@ def scrape_bitcoin_rich_list():
             response = requests.get(url, headers=HEADERS)
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
-            print(f"Error while fetching data: {e}")
+            logging.error(f"Error while fetching data: {e}")
             raise
 
         try:
             soup = BeautifulSoup(response.text, "html.parser")
             tables = soup.find_all("table")
+
+            # check if there are tables
+            if not tables:
+                logging.warning(f"No tables found on page {i}")
+                continue
 
             for table in tables:
                 data = []
@@ -47,7 +55,7 @@ def scrape_bitcoin_rich_list():
                 df2 = pd.DataFrame(data)
                 df = pd.concat([df, df2], ignore_index=True)
         except Exception as e:
-            print(f"Error while parsing data: {e}")
+            logging.error(f"Error while parsing data: {e}")
             continue
 
     df.dropna(subset=["address"], inplace=True)

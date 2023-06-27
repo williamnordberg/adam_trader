@@ -7,7 +7,7 @@ import sys
 
 # Logging config must be in begen of first import to inherit
 from logging_config import do_nothing
-from handy_modules import richest_addresses_, get_bitcoin_price, \
+from handy_modules import get_bitcoin_price, \
     save_trade_details, save_trade_result, save_trading_state,\
     calculate_score_margin
 from z_compares import compare_richest_addresses
@@ -24,8 +24,10 @@ from long_position_open import long_position
 from short_position_open import short_position
 from factors_states_visualization import visualize_charts
 from testnet_future_short_trade import check_no_open_future_position
-from monitor_richest import monitor_bitcoin_richest_addresses
+from e_richest import monitor_bitcoin_richest_addresses
 from z_database import save_value_to_database
+from read_write_csv import retrieve_latest_factor_values_database
+
 
 # Constants
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
@@ -45,14 +47,15 @@ def run_visualize_factors_states():
 def run_monitor_richest_addresses():
     while True:
         total_received, total_sent = monitor_bitcoin_richest_addresses()
+        if total_received != 0.0:
+            richest_addresses_bullish, richest_addresses_bearish = compare_richest_addresses()
 
-        richest_addresses_bullish, richest_addresses_bearish = compare_richest_addresses()
+            # Save to database
+            save_value_to_database('richest_addresses_bullish', richest_addresses_bullish)
+            save_value_to_database('richest_addresses_bearish', richest_addresses_bearish)
 
-        # Save to database
-        save_value_to_database('richest_addresses_bullish', richest_addresses_bullish)
-        save_value_to_database('richest_addresses_bearish', richest_addresses_bearish)
-
-        logging.info(f'300 Richest addresses sent: {int(total_sent)} and receive: {int(total_received)} in last 24h')
+            logging.info(f'Richest addresses updated sent: {int(total_sent)} '
+                         f'and receive: {int(total_received)} in last 24h')
         sleep(RICHEST_ADDRESSES_SLEEP_TIME)
 
 
@@ -94,7 +97,8 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
         factor_values['macro_bullish'], factor_values['macro_bearish'], events_date_dict = macro_sentiment()
         print_upcoming_events(events_date_dict)
 
-        factor_values['richest_bullish'], factor_values['richest_bearish'] = richest_addresses_()
+        factor_values['richest_bullish'], factor_values['richest_bearish'] = \
+            retrieve_latest_factor_values_database('richest_addresses')
 
         factor_values['google_bullish'], factor_values['google_bearish'] = check_search_trend(
             ["Bitcoin", "Cryptocurrency"])
