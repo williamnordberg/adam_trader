@@ -1,66 +1,100 @@
-import requests
-from bs4 import BeautifulSoup
+import praw
+import time
 import pandas as pd
 import logging
-from handy_modules import retry_on_error
-from read_write_csv import save_update_time
-
-BASE_URL = "https://bitinfocharts.com/top-100-richest-bitcoin-addresses"
-OUTPUT_FILE = "data/bitcoin_rich_list2000.csv"
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-                  " (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36",
-}
+import configparser
+from typing import Tuple
+from praw import Reddit
+from prawcore.exceptions import RequestException
+from requests.exceptions import SSLError
+from urllib3.exceptions import MaxRetryError
 
 
-@retry_on_error(max_retries=3, delay=5,
-                allowed_exceptions=(requests.exceptions.RequestException,),
-                fallback_values='pass')
-def scrape_bitcoin_rich_list():
-    logging.info('start scrapping list of bitcoin richest addresses')
-    df = pd.DataFrame(columns=["address"])
+from database import save_value_to_database
+from handy_modules import save_update_time, should_update, retry_on_error_with_fallback
+from database import read_database
+from compares import compare_google_reddit_youtube
 
-    for i in range(1, 4):
-        url = f"{BASE_URL}-{i}.html"
-        try:
-            response = requests.get(url, headers=HEADERS)
-            response.raise_for_status()
-        except requests.exceptions.RequestException as e:
-            logging.error(f"Error while fetching data: {e}")
-            raise
-
-        try:
-            soup = BeautifulSoup(response.text, "html.parser")
-            tables = soup.find_all("table")
-
-            # check if there are tables
-            if not tables:
-                logging.warning(f"No tables found on page {i}")
-                continue
-
-            for table in tables:
-                data = []
-                for row in table.find_all("tr")[1:]:
-                    cells = row.find_all("td")
-                    address_link = cells[1].find("a")
-                    if address_link:
-                        data.append({
-                            "address": address_link.get_text()
-                        })
-
-                df2 = pd.DataFrame(data)
-                df = pd.concat([df, df2], ignore_index=True)
-        except Exception as e:
-            logging.error(f"Error while parsing data: {e}")
-            continue
-
-    df.dropna(subset=["address"], inplace=True)
-    df.to_csv(OUTPUT_FILE, index=False)
-
-    # Save update time
-    # save_update_time('richest_addresses_scrap')
+ONE_DAYS_IN_SECONDS = 24 * 60 * 60
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
+CONFIG_PATH = 'config/config.ini'
 
 
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)  # added to ensure logging is set up
-    scrape_bitcoin_rich_list()
+@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(RequestException,), fallback_values=0)
+def count_bitcoin_posts(reddit: Reddit) -> int:
+    """
+        Counts the number of Bitcoin-related posts on Reddit in the last 7 days.
+
+        Args:
+            reddit (praw.Reddit): An authenticated Reddit instance.
+
+        Returns:
+            int: The number of Bitcoin-related posts in the last 7 days.
+
+        """
+    subreddit = reddit.subreddit("all")
+    bitcoin_posts = subreddit.search("#Crypto ", limit=1000)
+    count = 0
+    for post in bitcoin_posts:
+        if post.created_utc > (time.time() - ONE_DAYS_IN_SECONDS):
+            count += 1
+
+    return count
+
+
+@retry_on_error_with_fallback(
+    max_retries=3, delay=5, allowed_exceptions=(SSLError, MaxRetryError,), fallback_values=(0, 0))
+def reddit_check_wrapper() -> Tuple[float, float]:
+
+    config = configparser.ConfigParser()
+    config.read(CONFIG_PATH)
+
+    reddit_config = config['reddit']
+    reddit = praw.Reddit(
+        client_id=reddit_config['client_id'],
+        client_secret=reddit_config['client_secret'],
+        user_agent=reddit_config['user_agent']
+    )
+
+    latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
+
+    previous_activity = float(latest_info_saved['previous_activity'][0])
+    # previous_count = float(latest_info_saved['previous_count'][0])
+    try:
+        current_activity = reddit.subreddit("Bitcoin").active_user_count
+        current_count = count_bitcoin_posts(reddit)
+        reddit_bullish, reddit_bearish = compare_google_reddit_youtube(int(current_activity), int(previous_activity))
+
+
+
+        latest_info_saved.to_csv(LATEST_INFO_SAVED, index=False)
+
+        # Save latest update time
+        save_update_time('reddit')
+
+        # Save to database
+        save_value_to_database('reddit_bullish', reddit_bullish)
+        save_value_to_database('reddit_bearish', reddit_bearish)
+        save_value_to_database('reddit_count_bitcoin_posts_24h', current_count)
+        save_value_to_database('reddit_activity_24h', current_activity)
+    except Exception as e:
+        logging.error(f"Error occurred: {e}")
+        reddit_bullish, reddit_bearish = 0, 0
+
+    return reddit_bullish, reddit_bearish
+
+
+def reddit_check() -> Tuple[float, float]:
+    if should_update('reddit'):
+        return reddit_check_wrapper()
+    else:
+        database = read_database()
+        reddit_bullish = database['reddit_bullish'][-1]
+        reddit_bearish = database['reddit_bearish'][-1]
+        return reddit_bullish, reddit_bearish
+
+
+if __name__ == '__main__':
+    reddit_bullish_outer, reddit_bearish_outer = reddit_check_wrapper()
+    logging.info(f", reddit_bullish: {reddit_bullish_outer}, reddit_bearish: {reddit_bearish_outer}")
