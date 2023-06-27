@@ -39,8 +39,7 @@ def order_book(symbols: List[str], limit: int = LIMIT, bid_multiplier: float = 0
     for symbol in symbols:
         data = get_volume(symbol, limit)
         if data is None:
-            return 0, 0
-
+            return 0.0, 0.0
         bid_volume += sum([float(bid[1]) for bid in data['bids'] if float(bid[0]) >=
                            (current_price * bid_multiplier)])
         ask_volume += sum([float(ask[1]) for ask in data['asks'] if float(ask[0]) <=
@@ -66,7 +65,7 @@ def order_book_hit_target(symbols: List[str], limit: int, profit_target: float,
     for symbol in symbols:
         data = get_volume(symbol, limit)
         if data is None:
-            return 0, 0
+            return 0.0, 0.0
 
         bids = data.get('bids')
         asks = data.get('asks')

@@ -171,7 +171,7 @@ def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
         if not table:
             logging.warning("Table not found")
             service.stop()
-            return 0, 0, {}
+            return 0.0, 0.0, {}
 
         rate_this_month = None
         rate_month_before = None

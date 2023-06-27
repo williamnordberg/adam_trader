@@ -20,7 +20,7 @@ VALUES_ORDER_VOL = [(0.6, 0.4), (0.7, 0.3), (0.8, 0.2), (0.9, 0.1), (1.0, 0.0)]
 
 # 3. Prediction
 RANGES_PREDICTION = [(0, 5), (5, 10), (10, 20), (20, float('inf'))]
-VALUES_PREDICTION = [(0.1, 0.9), (0.2, 0.8), (0.5, 0.5), (1, 0)]
+VALUES_PREDICTION = [(0.1, 0.9), (0.2, 0.8), (0.5, 0.5), (1, 0.0)]
 
 # 4. Technical in function
 
@@ -32,9 +32,9 @@ VALUES_RICH = [(0.0, 1.0), (0.1, 0.9), (0.2, 0.8), (0.3, 0.7),
 
 # 6,7,8. Google, Reddit, Youtube
 RANGES_GOOGLE = [(1.1, 1.15), (1.15, 1.2), (1.2, 1.25), (1.25, float('inf'))]
-VALUES__GOOGLE = [(0.6, 0.4), (0.75, 0.25), (0.85, 0.15), (1, 0)]
+VALUES__GOOGLE = [(0.6, 0.4), (0.75, 0.25), (0.85, 0.15), (1, 0.0)]
 RANGES_GOOGLE_DOWN = [(1.1, 1.15), (1.15, 1.2), (1.2, 1.25), (1.25, float('inf'))]
-VALUES_GOOGLE_DOWN = [(0.4, 0.6), (0.25, 0.75), (0.15, 0.85), (0, 1)]
+VALUES_GOOGLE_DOWN = [(0.4, 0.6), (0.25, 0.75), (0.15, 0.85), (0.0, 1)]
 
 # 9.News in function
 
