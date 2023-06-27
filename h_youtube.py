@@ -6,16 +6,14 @@ import os.path
 from google.auth.transport.requests import Request
 import logging
 from datetime import datetime, timedelta
-from z_compares import compare_google_reddit_youtube
-from z_database import save_value_to_database
-from handy_modules import should_update, save_update_time, retry_on_error, retry_on_error_fallback_0_0
 from typing import Tuple
-from z_database import read_database
 from googleapiclient.errors import HttpError
 from google.auth.exceptions import RefreshError
 
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+from z_compares import compare_google_reddit_youtube
+from handy_modules import retry_on_error
+from read_write_csv import save_value_to_database, \
+    should_update, save_update_time, retrieve_latest_factor_values_database
 
 
 def get_authenticated_service():
@@ -56,7 +54,7 @@ def get_authenticated_service():
     return youtube
 
 
-@retry_on_error_fallback_0_0(max_retries=3, delay=5, allowed_exceptions=(HttpError, RefreshError, ))
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(HttpError, RefreshError), fallback_values='pass')
 def get_youtube_videos(youtube, published_after, published_before):
     search_request = youtube.search().list(
         part="id,snippet",
@@ -80,9 +78,11 @@ def get_youtube_videos(youtube, published_after, published_before):
 
 @retry_on_error(
     max_retries=3, delay=5, allowed_exceptions=(RefreshError,),
-    fallback_values=(0, 0))
+    fallback_values=(0.0, 0.0))
 def youtube_wrapper() -> Tuple[float, float]:
     # If so, check the increase in the number of YouTube videos with the #bitcoin hashtag
+    save_update_time('youtube')
+
     youtube = get_authenticated_service()
 
     now = datetime.utcnow()
@@ -100,18 +100,13 @@ def youtube_wrapper() -> Tuple[float, float]:
         youtube_bullish, youtube_bearish = compare_google_reddit_youtube(
             num_last_24_hours, num_last_48_to_24_hours)
 
-        # Save latest update time
-        save_update_time('youtube')
-
         # Save to database
         save_value_to_database('last_24_youtube', num_last_24_hours)
         save_value_to_database('youtube_bullish', youtube_bullish)
         save_value_to_database('youtube_bearish', youtube_bearish)
     except Exception as e:
         logging.error(f"Error occurred: {e}")
-        save_value_to_database('youtube_bullish', 0)
-        save_value_to_database('youtube_bearish', 0)
-        youtube_bullish, youtube_bearish = 0, 0
+        youtube_bullish, youtube_bearish = 0.0, 0.0
 
     return youtube_bullish, youtube_bearish
 
@@ -120,10 +115,7 @@ def check_bitcoin_youtube_videos_increase() -> Tuple[float, float]:
     if should_update('youtube'):
         return youtube_wrapper()
     else:
-        database = read_database()
-        youtube_bullish = database['youtube_bullish'][-1]
-        youtube_bearish = database['youtube_bearish'][-1]
-        return youtube_bullish, youtube_bearish
+        return retrieve_latest_factor_values_database('youtube')
 
 
 if __name__ == "__main__":

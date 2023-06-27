@@ -13,7 +13,7 @@ from handy_modules import get_bitcoin_price, \
 from z_compares import compare_richest_addresses
 from d_technical import technical_analyse
 from news_analyser import check_sentiment_of_news
-from youtube import check_bitcoin_youtube_videos_increase
+from h_youtube import check_bitcoin_youtube_videos_increase
 from g_reddit import reddit_check
 from a_macro import macro_sentiment, print_upcoming_events
 from f_google import check_search_trend
