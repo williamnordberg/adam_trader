@@ -7,7 +7,7 @@ import configparser
 
 from e_bs4_scraper import scrape_bitcoin_rich_list
 from e_api_blockcypher import get_address_transactions_24h_blockcypher
-from handy_modules import retry_on_error
+from z_handy_modules import retry_on_error
 from read_write_csv import save_value_to_database, should_update, save_update_time
 
 SATOSHI_TO_BITCOIN = 100000000

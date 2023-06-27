@@ -2,7 +2,7 @@ import requests
 from textblob import TextBlob
 import logging
 from typing import Tuple
-from handy_modules import check_internet_connection, retry_on_error
+from z_handy_modules import check_internet_connection, retry_on_error
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 SENTIMENT_THRESHOLD = 0.1

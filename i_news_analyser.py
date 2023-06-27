@@ -1,15 +1,14 @@
 import logging
-import pandas as pd
 from datetime import datetime, timedelta
-
-from handy_modules import should_update, save_update_time
 from typing import Tuple
-from z_database import read_database
-from newsAPI import check_news_api_sentiment
-from news_aggregate import aggregate_news
+
+from z_handy_modules import retry_on_error
+from i_newsAPI import check_news_api_sentiment
+from i_news_aggregate import aggregate_news
 from z_compares import compare_news
-from z_database import save_value_to_database
 from update_bitcoin_price import update_bitcoin_price_in_database
+from read_write_csv import read_latest_data, write_latest_data, save_value_to_database, \
+    should_update, save_update_time, retrieve_latest_factor_values_database, read_database
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -24,14 +23,13 @@ def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
     # Save latest update time
     save_update_time('sentiment_of_news')
 
-    latest_info_saved = pd.read_csv(LATEST_INFO_SAVED_PATH).squeeze("columns")
-    last_news_sentiment_str = latest_info_saved['last_news_update_time'][0]
+    last_news_sentiment_str = read_latest_data('last_news_update_time', str)
     last_news_sentiment = datetime.strptime(last_news_sentiment_str, '%Y-%m-%d %H:%M:%S')
     last_update_time_difference = datetime.now() - last_news_sentiment
 
     if last_update_time_difference < timedelta(hours=48):
-        saved_positive_polarity = latest_info_saved['positive_polarity_score'][0]
-        saved_negative_polarity = latest_info_saved['negative_polarity_score'][0]
+        saved_positive_polarity = read_latest_data('positive_polarity_score', float)
+        saved_negative_polarity = read_latest_data('negative_polarity_score', float)
 
         # Get aggregated value from 3 function for las 24 hours
         last_24_hours_positive_polarity, last_24_hours_negative_polarity,\

@@ -10,7 +10,7 @@ from urllib3.exceptions import MaxRetryError
 
 from read_write_csv import save_value_to_database, save_update_time, \
     should_update, read_latest_data, write_latest_data, retrieve_latest_factor_values_database
-from handy_modules import retry_on_error
+from z_handy_modules import retry_on_error
 from z_compares import compare_google_reddit_youtube
 
 ONE_DAYS_IN_SECONDS = 24 * 60 * 60

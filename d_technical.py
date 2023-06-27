@@ -4,7 +4,7 @@ import logging
 from typing import Tuple
 
 from d_technical_indicators import bollinger_bands, exponential_moving_average, macd, relative_strength_index
-from handy_modules import get_bitcoin_price, retry_on_error
+from z_handy_modules import get_bitcoin_price, retry_on_error
 from z_compares import compare_technical
 from read_write_csv import write_latest_data, save_value_to_database, should_update,\
     save_update_time, retrieve_latest_factor_values_database

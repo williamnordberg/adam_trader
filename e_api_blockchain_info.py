@@ -2,7 +2,7 @@ import time
 import logging
 from requests.sessions import Session
 from typing import Tuple
-from handy_modules import check_internet_connection
+from z_handy_modules import check_internet_connection
 
 # Initialize a session object
 session = Session()

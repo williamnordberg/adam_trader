@@ -10,7 +10,7 @@ from pandas.errors import OutOfBoundsDatetime
 from requests.exceptions import RequestException
 
 from read_write_csv import load_dataset, save_dataset
-from handy_modules import retry_on_error
+from z_handy_modules import retry_on_error
 
 warnings.filterwarnings('ignore', category=FutureWarning)
 warnings.filterwarnings('ignore', category=RuntimeWarning)

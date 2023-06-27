@@ -1,8 +1,8 @@
 import bisect
 import pandas as pd
 from typing import Tuple
-from handy_modules import save_update_time, read_float_from_latest_saved
-from news_aggregate import aggregate_news
+from z_handy_modules import save_update_time, read_float_from_latest_saved
+from i_news_aggregate import aggregate_news
 
 LATEST_INFO_PATH = 'data/latest_info_saved.csv'
 
