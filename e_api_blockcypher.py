@@ -97,4 +97,6 @@ def get_address_transactions_24h_blockcypher(address: str, api_keys_cycle=iterto
 
 
 if __name__ == "__main__":
-    received, sent = get_address_transactions_24h_blockcypher('13nxifM4WUfT8fBd2caeaxTtUe4zeQa9zB')
+    received, sent = get_address_transactions_24h_blockcypher('1LQoWist8KkaUXSPKZHNvEyfrEkPHzSsCd')
+    print('received', received)
+    print('sent', sent)
