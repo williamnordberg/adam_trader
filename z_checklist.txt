@@ -1,6 +1,8 @@
 1. Type Hints:  type hints for parameters and return values, MYPY
+return 0.0, 0.0
 
 2. Error Handling: Error handling for all func with retry on error
+decorate all wrappers
 
 3. all read and write with to csv will change
 

@@ -1,9 +1,6 @@
 import numpy as np
-import logging
 from typing import Tuple, List, Union
 import pandas as pd
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def simple_moving_average(data: np.ndarray, window: int) -> np.ndarray:

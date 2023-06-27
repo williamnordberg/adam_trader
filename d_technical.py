@@ -4,12 +4,10 @@ import logging
 from typing import Tuple
 
 from d_technical_indicators import bollinger_bands, exponential_moving_average, macd, relative_strength_index
-from handy_modules import get_bitcoin_price, should_update, save_update_time, retry_on_error
-from z_database import save_value_to_database, read_database
+from handy_modules import get_bitcoin_price, retry_on_error
 from z_compares import compare_technical
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
+from read_write_csv import write_latest_data, save_value_to_database, should_update,\
+    save_update_time, retrieve_latest_factor_values_database
 
 
 @retry_on_error(max_retries=3, delay=5, fallback_values=pd.Series(dtype=float))
@@ -41,7 +39,6 @@ def potential_reversal(data_close: pd.Series) -> Tuple[bool, bool]:
        Returns:
            tuple: A tuple containing the potential bullish and bearish reversal flags as booleans.
        """
-    latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
 
     potential_up_reversal_bullish, potential_down_reversal_bearish = False, False
     upper_band, moving_average, lower_band = bollinger_bands(data_close)
@@ -67,7 +64,7 @@ def potential_reversal(data_close: pd.Series) -> Tuple[bool, bool]:
             current_distance = last_moving_average - current_price
             percentage = -((current_distance / total_scope) * 100)
 
-            latest_info_saved.loc[0, 'bb_band_MA_distance'] = round(percentage, 0)
+            write_latest_data('bb_band_MA_distance', round(percentage, 0))
 
         elif current_price > last_moving_average:
             if (current_price - last_moving_average) > distance_middle_upper:
@@ -77,7 +74,8 @@ def potential_reversal(data_close: pd.Series) -> Tuple[bool, bool]:
             total_scope = last_upper_band - last_moving_average
             current_distance = current_price - last_moving_average
             percentage = (current_distance / total_scope) * 100
-            latest_info_saved.loc[0, 'bb_band_MA_distance'] = round(percentage, 0)
+            write_latest_data('bb_band_MA_distance', round(percentage, 0))
+
     # RSI overbought or oversold
     rsi = relative_strength_index(data_close, 14)
     if rsi[-1] < 30:
@@ -88,8 +86,8 @@ def potential_reversal(data_close: pd.Series) -> Tuple[bool, bool]:
     save_value_to_database('technical_potential_up_reversal_bullish', potential_up_reversal_bullish)
     save_value_to_database('technical_potential_down_reversal_bearish', potential_down_reversal_bearish)
 
-    latest_info_saved.loc[0, 'latest_rsi'] = round(rsi[-1], 0)
-    latest_info_saved.to_csv(LATEST_INFO_SAVED, index=False)
+    write_latest_data('latest_rsi', round(rsi[-1], 0))
+
     return potential_up_reversal_bullish, potential_down_reversal_bearish
 
 
@@ -114,19 +112,18 @@ def potential_up_trending(data_close: pd.Series) -> bool:
 
 
 def technical_analyse_wrapper() -> Tuple[float, float]:
-    """
-       Performs a technical analysis of the Bitcoin market using various indicators.
 
-       Returns:
-           tuple: A tuple containing the bullish and bearish technical analysis flags as booleans.
-       """
+    save_update_time('technical_analysis')
+
     # read the data
     data_close = get_historical_data('BTC/USDT', '1d', 200)
+    if data_close.empty:
+        logging.error('Could not get historical data from binance to technical analysis')
+        return 0.0, 0.0
 
     potential_up_reversal_bullish, potential_down_reversal_bearish = potential_reversal(data_close)
     potential_up_trend = potential_up_trending(data_close)
 
-    # Set initial value base on ema200
     ema200 = exponential_moving_average(data_close, 200)
     current_price = get_bitcoin_price()
 
@@ -135,37 +132,24 @@ def technical_analyse_wrapper() -> Tuple[float, float]:
     over_ema200 = current_price >= ema200[-1]
 
     # Save for visualization
-    latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
-    latest_info_saved.loc[0, 'over_200EMA'] = current_price >= ema200[-1]
-    latest_info_saved.to_csv(LATEST_INFO_SAVED, index=False)
+    write_latest_data('over_200EMA', over_ema200)
 
     technical_bullish, technical_bearish = compare_technical(
         reversal, potential_up_trend, over_ema200)
 
-    return technical_bullish, technical_bearish
-
-
-def technical_analyse_rounder():
-    technical_bullish, technical_bearish = technical_analyse_wrapper()
-    # Save the values to the database
     save_value_to_database('technical_bullish', technical_bullish)
     save_value_to_database('technical_bearish', technical_bearish)
-    save_update_time('technical_analysis')
 
-    # Return the same values as the original function
     return technical_bullish, technical_bearish
 
 
 def technical_analyse() -> Tuple[float, float]:
     if should_update('technical_analysis'):
-        return technical_analyse_rounder()
+        return technical_analyse_wrapper()
     else:
-        database = read_database()
-        technical_bullish = database['technical_bullish'][-1]
-        technical_bearish = database['technical_bearish'][-1]
-        return technical_bullish, technical_bearish
+        return retrieve_latest_factor_values_database('technical')
 
 
 if __name__ == '__main__':
-    technical_bullish1, technical_bearish1 = technical_analyse_rounder()
+    technical_bullish1, technical_bearish1 = technical_analyse_wrapper()
     logging.info(f'Bullish: {technical_bullish1}, Bearish: {technical_bearish1}')

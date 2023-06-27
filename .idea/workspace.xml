@@ -8,15 +8,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="26June_after change">
+    <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="27June_after change">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/a_macro.py" beforeDir="false" afterPath="$PROJECT_DIR$/a_macro.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/b_order_book.py" beforeDir="false" afterPath="$PROJECT_DIR$/b_order_book.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/d_technical.py" beforeDir="false" afterPath="$PROJECT_DIR$/d_technical.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/d_technical_indicators.py" beforeDir="false" afterPath="$PROJECT_DIR$/d_technical_indicators.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/latest_info_saved.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handy_modules.py" beforeDir="false" afterPath="$PROJECT_DIR$/handy_modules.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/long_position_open.py" beforeDir="false" afterPath="$PROJECT_DIR$/long_position_open.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order_book.py" beforeDir="false" afterPath="$PROJECT_DIR$/b_order_book.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/read_write_csv.py" beforeDir="false" afterPath="$PROJECT_DIR$/read_write_csv.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/short_position_open.py" beforeDir="false" afterPath="$PROJECT_DIR$/short_position_open.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/z_checklist.txt" beforeDir="false" afterPath="$PROJECT_DIR$/z_checklist.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/z_compares.py" beforeDir="false" afterPath="$PROJECT_DIR$/z_compares.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +101,7 @@
       <recent name="C:\will\Python_project\adam_trader\.mypy_cache" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.b_order_book">
+  <component name="RunManager" selected="Python.d_technical">
     <configuration name="b_order_book" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -164,6 +165,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="d_technical" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="adam_trader" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/d_technical.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="update_dataset_macro" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -177,27 +199,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/update_dataset_macro.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="update_dataset_yahoo" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="adam_trader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/update_dataset_yahoo.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -225,17 +226,17 @@
       <item itemvalue="Python.b_order_book" />
       <item itemvalue="Python.c_predictor" />
       <item itemvalue="Python.c_predictor_dataset_update" />
+      <item itemvalue="Python.d_technical" />
       <item itemvalue="Python.update_dataset_macro" />
-      <item itemvalue="Python.update_dataset_yahoo" />
       <item itemvalue="Python tests.Unittests with right config" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.d_technical" />
         <item itemvalue="Python.b_order_book" />
         <item itemvalue="Python.c_predictor" />
         <item itemvalue="Python.c_predictor_dataset_update" />
         <item itemvalue="Python.update_dataset_macro" />
-        <item itemvalue="Python.update_dataset_yahoo" />
       </list>
     </recent_temporary>
   </component>
@@ -591,7 +592,7 @@
       <option name="project" value="LOCAL" />
       <updated>1687483422567</updated>
     </task>
-    <option name="localTasksCounter" value="339" />
+    <option name="localTasksCounter" value="341" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -703,6 +704,7 @@
     <MESSAGE value="23June" />
     <MESSAGE value="24June" />
     <MESSAGE value="26June_after change" />
-    <option name="LAST_COMMIT_MESSAGE" value="26June_after change" />
+    <MESSAGE value="27June_after change" />
+    <option name="LAST_COMMIT_MESSAGE" value="27June_after change" />
   </component>
 </project>
