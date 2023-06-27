@@ -8,7 +8,7 @@ from d_technical import technical_analyse
 from news_analyser import check_sentiment_of_news
 from f_google import check_search_trend
 from g_reddit import reddit_check
-from youtube import check_bitcoin_youtube_videos_increase
+from h_youtube import check_bitcoin_youtube_videos_increase
 from c_predictor import decision_tree_predictor
 from position_decision_maker import position_decision
 from handy_modules import get_bitcoin_price, richest_addresses_
