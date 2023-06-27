@@ -5,9 +5,10 @@ import configparser
 from requests.sessions import Session
 from dateutil.parser import parse
 from typing import Tuple
-from handy_modules import check_internet_connection
-import itertools
+from requests.exceptions import RequestException, Timeout, TooManyRedirects, HTTPError
 
+from handy_modules import check_internet_connection, retry_on_error
+import itertools
 
 # Initialize a session object
 session = Session()
@@ -15,7 +16,6 @@ session = Session()
 SATOSHI_TO_BITCOIN = 100000000
 API_BASE_URL = "https://api.blockcypher.com/v1/btc/main/addrs/"
 SLEEP_TIME = 60
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Load the config file
 config = configparser.ConfigParser()
@@ -28,6 +28,9 @@ config.read_string(config_string)
 # API_KEY_BLOCKCYPHER = config.get('API', 'Blockcypher')
 
 
+@retry_on_error(max_retries=3, delay=5,
+                allowed_exceptions=(RequestException, Timeout, TooManyRedirects, HTTPError,),
+                fallback_values=(0, 0))
 def get_address_transactions_24h_blockcypher(address: str, api_keys_cycle=itertools.cycle([
     'Blockcypher1', 'Blockcypher2', 'Blockcypher3', 'Blockcypher4', 'Blockcypher5'])) \
         -> Tuple[float, float]:
@@ -94,6 +97,4 @@ def get_address_transactions_24h_blockcypher(address: str, api_keys_cycle=iterto
 
 
 if __name__ == "__main__":
-    for i in range(1, 20):
-        received, sent = get_address_transactions_24h_blockcypher('13nxifM4WUfT8fBd2caeaxTtUe4zeQa9zB')
-        logging.info(f'receive: {received}, sent: {sent} ')
+    received, sent = get_address_transactions_24h_blockcypher('13nxifM4WUfT8fBd2caeaxTtUe4zeQa9zB')

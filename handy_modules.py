@@ -10,7 +10,6 @@ from json import JSONDecodeError
 
 
 from datetime import datetime, timedelta
-from z_database import read_database
 from binance.exceptions import BinanceAPIException, BinanceRequestException
 from testnet_future_short_trade import initialized_future_client
 
@@ -155,13 +154,6 @@ def get_bitcoin_price() -> int:
             logging.error("No internet connection.")
         logging.error(f"Error: Could not retrieve BTC price, Sleep for 61 seconds ")
         sleep(61)  # wait for 61 seconds before retrying
-
-
-def richest_addresses_() -> Tuple[float, float]:
-    database = read_database()
-    richest_addresses_bullish = database['richest_addresses_bullish'][-1]
-    richest_addresses_bearish = database['richest_addresses_bearish'][-1]
-    return richest_addresses_bullish, richest_addresses_bearish
 
 
 def should_update(factor: str) -> bool:
