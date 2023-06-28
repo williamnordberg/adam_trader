@@ -213,3 +213,13 @@ pandas.errors.EmptyDataError: No columns to parse from file
 2023-06-28 11:58:34 - INFO - threshold:0.68 and loop counter: 1 RUNS
 2023-06-28 11:58:35 - INFO - Threshold:0.68 and loop counter: 1 SLEEPS
 2023-06-28 11:59:04 - INFO - Received interrupt signal. Cleaning up...
+2023-06-28 12:15:53 - INFO - Dash is running on http://0.0.0.0:8051/
+
+2023-06-28 12:15:53 - INFO - threshold:0.68 and loop counter: 1 RUNS
+2023-06-28 12:15:55 - INFO - Threshold:0.68 and loop counter: 1 SLEEPS
+2023-06-28 12:15:56 - INFO - Received interrupt signal. Cleaning up...
+2023-06-28 12:57:31 - INFO - threshold:0.68 and loop counter: 1 RUNS
+2023-06-28 12:57:31 - INFO - Dash is running on http://0.0.0.0:8051/
+
+2023-06-28 12:57:40 - INFO - Threshold:0.68 and loop counter: 1 SLEEPS
+2023-06-28 12:57:43 - INFO - Received interrupt signal. Cleaning up...

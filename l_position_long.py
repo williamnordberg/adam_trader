@@ -2,6 +2,7 @@ from time import sleep
 import logging
 from typing import Tuple
 
+from z_read_write_csv import retrieve_latest_factor_values_database
 from b_order_book import order_book, order_book_hit_target
 from a_macro import macro_sentiment, print_upcoming_events
 from d_technical import technical_analyse
@@ -10,9 +11,9 @@ from f_google import check_search_trend
 from g_reddit import reddit_check
 from h_youtube import check_bitcoin_youtube_videos_increase
 from c_predictor import decision_tree_predictor
-from position_decision_maker import position_decision
+from l_position_decision import position_decision
 from z_handy_modules import get_bitcoin_price
-from testnet_spot_trade_executor import place_market_buy_order, close_position_at_market, get_btc_open_positions
+from l_position_long_testnet import place_market_buy_order, close_position_at_market, get_btc_open_positions
 
 SCORE_MARGIN_TO_CLOSE = 0.65
 PROFIT_MARGIN = 0.01
@@ -65,7 +66,8 @@ def long_position(score_margin_to_close: float, profit_margin: float) -> Tuple[i
         order_book_bullish, order_book_bearish = probabilities
 
         # 3 Monitor the richest Bitcoin addresses
-        richest_addresses_bullish, richest_addresses_bearish = richest_addresses_()
+        richest_addresses_bullish, richest_addresses_bearish = \
+            retrieve_latest_factor_values_database('richest_addresses')
 
         # 4 Check Google search trends for Bitcoin and cryptocurrency
         google_search_bullish, google_search_bearish = check_search_trend(["Bitcoin", "Cryptocurrency"])
