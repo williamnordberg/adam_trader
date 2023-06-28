@@ -1,7 +1,6 @@
 import logging
 from typing import Dict, List, Tuple
-from datetime import datetime, timedelta
-from z_read_write_csv import save_value_to_database, save_update_time, write_latest_data
+from z_read_write_csv import save_value_to_database, save_update_time
 
 MIN_CONTRIBUTING_FACTORS = 4
 
@@ -18,22 +17,6 @@ def count_contributing_factors(*factors: Tuple[float, float]) -> int:
         if bullish != 0 or bearish != 0:
             count += 1
     return count
-
-
-def aggregate_and_save_values():
-    if not aggregated_values['weighted_score_up']:  # If there are no values, do nothing
-        return
-
-    # Calculate the average values for each key in the temporary storage
-    avg_values = {key: sum(values) / len(values) for key, values in aggregated_values.items()}
-
-    # Save the average values to the database
-    save_value_to_database('weighted_score_up', avg_values['weighted_score_up'])
-    save_value_to_database('weighted_score_down', avg_values['weighted_score_down'])
-
-    # Clear the temporary storage
-    for key in aggregated_values:
-        aggregated_values[key] = []
 
 
 def make_trading_decision(factor_values) -> Tuple[float, float]:
@@ -116,29 +99,18 @@ def make_trading_decision(factor_values) -> Tuple[float, float]:
         # Normalize the scores
         total_score = weighted_score_up + weighted_score_down
 
-        normalized_score_up = weighted_score_up / total_score
-        normalized_score_down = weighted_score_down / total_score
+        normalized_score_up = round((weighted_score_up / total_score), 2)
+        normalized_score_down = round((weighted_score_down / total_score), 2)
 
         # Save the latest weighted score
-        write_latest_data('latest_weighted_score_up', normalized_score_up)
-        write_latest_data('latest_weighted_score_down', normalized_score_down)
+        save_value_to_database('weighted_score_up', normalized_score_up)
+        save_value_to_database('weighted_score_down', normalized_score_down)
 
-        # Save to database Check if an hour has passed since the last database update
-        current_time = datetime.now()
-        last_hour = current_time.replace(minute=0, second=0, microsecond=0)
-        if current_time - last_hour >= timedelta(hours=1):
-            aggregate_and_save_values()
-
-        # Save the value in database for a run before an hour pass
-        else:
-            save_value_to_database('weighted_score_up', round(normalized_score_up, 2))
-            save_value_to_database('weighted_score_down', round(normalized_score_down, 2))
-
-        return round(normalized_score_up, 2), round(normalized_score_down, 2)    # ...
+        return normalized_score_up, normalized_score_down
     else:
         # Save the latest weighted score
-        write_latest_data('latest_weighted_score_up', 0.0)
-        write_latest_data('latest_weighted_score_down', 0.0)
+        save_value_to_database('weighted_score_up', 0.0)
+        save_value_to_database('weighted_score_down',  0.0)
 
         logging.info(f"Minimum contributing factors not met: {num_contributing_factors}/{MIN_CONTRIBUTING_FACTORS}")
         return 0.0, 0.0
