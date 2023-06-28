@@ -1,100 +1,45 @@
-import praw
-import time
-import pandas as pd
-import logging
-import configparser
-from typing import Tuple
-from praw import Reddit
-from prawcore.exceptions import RequestException
-from requests.exceptions import SSLError
-from urllib3.exceptions import MaxRetryError
+def calculate_market_sentiment() -> (float, float):
 
+    positive_polarity_24h, negative_polarity_24h, \
+        positive_count_24h, negative_count_24h = aggregate_news()
 
-from database import save_value_to_database
-from z_handy_modules import save_update_time, should_update, retry_on_error_with_fallback
-from database import read_database
-from compares import compare_google_reddit_youtube
+    positive_polarity_48h = round(read_float_from_latest_saved('positive_polarity_score'), 2)
+    positive_count_48h = read_float_from_latest_saved('positive_news_count')
+    negative_polarity_48h = round(read_float_from_latest_saved('negative_polarity_score'), 2)
+    negative_count_48h = read_float_from_latest_saved('negative_news_count')
 
-ONE_DAYS_IN_SECONDS = 24 * 60 * 60
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-LATEST_INFO_SAVED = 'data/latest_info_saved.csv'
-CONFIG_PATH = 'config/config.ini'
+    # Calculate changes in counts and polarities
+    positive_pol_change = positive_polarity_24h - positive_polarity_48h
+    positive_count_change = positive_count_24h - positive_count_48h
+    negative_pol_change = negative_polarity_24h - negative_polarity_48h
+    negative_count_change = negative_count_24h - negative_count_48h
 
+    score, news_bullish, news_bearish = 0, 0, 0
+    if positive_pol_change > 0:
+        score += 0.1
+    elif positive_pol_change < 0:
+        score -= 0.1
 
-@retry_on_error_with_fallback(max_retries=3, delay=5, allowed_exceptions=(RequestException,), fallback_values=0)
-def count_bitcoin_posts(reddit: Reddit) -> int:
-    """
-        Counts the number of Bitcoin-related posts on Reddit in the last 7 days.
+    if positive_count_change > 0:
+        score += 0.1
+    elif positive_count_change < 0:
+        score -= 0.1
 
-        Args:
-            reddit (praw.Reddit): An authenticated Reddit instance.
+    if negative_pol_change > 0:
+        score -= 0.2
+    elif negative_pol_change < 0:
+        score += 0.2
 
-        Returns:
-            int: The number of Bitcoin-related posts in the last 7 days.
+    if negative_count_change > 0:
+        score -= 0.1
+    elif negative_count_change < 0:
+        score += 0.1
 
-        """
-    subreddit = reddit.subreddit("all")
-    bitcoin_posts = subreddit.search("#Crypto ", limit=1000)
-    count = 0
-    for post in bitcoin_posts:
-        if post.created_utc > (time.time() - ONE_DAYS_IN_SECONDS):
-            count += 1
-
-    return count
-
-
-@retry_on_error_with_fallback(
-    max_retries=3, delay=5, allowed_exceptions=(SSLError, MaxRetryError,), fallback_values=(0, 0))
-def reddit_check_wrapper() -> Tuple[float, float]:
-
-    config = configparser.ConfigParser()
-    config.read(CONFIG_PATH)
-
-    reddit_config = config['reddit']
-    reddit = praw.Reddit(
-        client_id=reddit_config['client_id'],
-        client_secret=reddit_config['client_secret'],
-        user_agent=reddit_config['user_agent']
-    )
-
-    latest_info_saved = pd.read_csv(LATEST_INFO_SAVED).squeeze("columns")
-
-    previous_activity = float(latest_info_saved['previous_activity'][0])
-    # previous_count = float(latest_info_saved['previous_count'][0])
-    try:
-        current_activity = reddit.subreddit("Bitcoin").active_user_count
-        current_count = count_bitcoin_posts(reddit)
-        reddit_bullish, reddit_bearish = compare_google_reddit_youtube(int(current_activity), int(previous_activity))
-
-
-
-        latest_info_saved.to_csv(LATEST_INFO_SAVED, index=False)
-
-        # Save latest update time
-        save_update_time('reddit')
-
-        # Save to database
-        save_value_to_database('reddit_bullish', reddit_bullish)
-        save_value_to_database('reddit_bearish', reddit_bearish)
-        save_value_to_database('reddit_count_bitcoin_posts_24h', current_count)
-        save_value_to_database('reddit_activity_24h', current_activity)
-    except Exception as e:
-        logging.error(f"Error occurred: {e}")
-        reddit_bullish, reddit_bearish = 0, 0
-
-    return reddit_bullish, reddit_bearish
-
-
-def reddit_check() -> Tuple[float, float]:
-    if should_update('reddit'):
-        return reddit_check_wrapper()
+    if score > 0:
+        news_bullish = 0.5 + score
+    elif score < 0:
+        news_bearish = 0.5 + abs(score)
     else:
-        database = read_database()
-        reddit_bullish = database['reddit_bullish'][-1]
-        reddit_bearish = database['reddit_bearish'][-1]
-        return reddit_bullish, reddit_bearish
+        news_bullish, news_bearish = 0, 0
 
-
-if __name__ == '__main__':
-    reddit_bullish_outer, reddit_bearish_outer = reddit_check_wrapper()
-    logging.info(f", reddit_bullish: {reddit_bullish_outer}, reddit_bearish: {reddit_bearish_outer}")
+    return news_bullish, news_bearish

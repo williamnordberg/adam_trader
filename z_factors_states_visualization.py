@@ -10,7 +10,7 @@ import logging
 from datetime import timedelta
 from dash import dash_table
 
-from macro_analyser import calculate_upcoming_events
+from a_macro import calculate_upcoming_events
 from z_handy_modules import get_bitcoin_price, create_gauge_chart, COLORS
 from z_database import read_database
 

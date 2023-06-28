@@ -2,33 +2,26 @@ import requests
 from textblob import TextBlob
 import logging
 from typing import Tuple
-from z_handy_modules import check_internet_connection, retry_on_error
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-SENTIMENT_THRESHOLD = 0.1
-POSITIVITY_PERCENT = 1.8
+from z_handy_modules import check_internet_connection, retry_on_error
 
 SENTIMENT_POSITIVE_THRESHOLD = 0.1
 SENTIMENT_NEGATIVE_THRESHOLD = -0.001
 
 
-class UpdateCryptoCompareData(Exception):
-    pass
-
-
-@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(UpdateCryptoCompareData,),
-                fallback_values=(0, 0, 0, 0))
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(Exception,),
+                fallback_values=(0.0, 0.0, 0, 0))
 def check_news_cryptocompare_sentiment() -> Tuple[float, float, int, int]:
 
     positive_polarity_score = 0.0
-    positive_count = 0
     negative_polarity_score = 0.0
+    positive_count = 0
     negative_count = 0
 
     # Check for internet connection
     if not check_internet_connection():
         logging.info('unable to get news sentiment')
-        return 0, 0, 0, 0
+        return 0.0, 0.0, 0, 0
 
     url = 'https://min-api.cryptocompare.com/data/v2/news/?lang=EN'
     response = requests.get(url)
@@ -57,13 +50,12 @@ def check_news_cryptocompare_sentiment() -> Tuple[float, float, int, int]:
 
             except Exception as e:
                 logging.error(f"Error analyzing content: {e}")
-                return 0, 0, 0, 0
+                return 0.0, 0.0, 0, 0
         return positive_polarity_score / positive_count, abs(negative_polarity_score / negative_count), \
             positive_count, negative_count
 
     else:
         logging.error(f'Error{response.status_code}')
-        raise UpdateCryptoCompareData
 
 
 if __name__ == "__main__":

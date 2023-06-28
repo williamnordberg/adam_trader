@@ -5,7 +5,6 @@ import logging
 from typing import Tuple
 from z_handy_modules import check_internet_connection, retry_on_error
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 SENTIMENT_POSITIVE_THRESHOLD = 0.1
 SENTIMENT_NEGATIVE_THRESHOLD = -0.001
@@ -13,17 +12,17 @@ SENTIMENT_NEGATIVE_THRESHOLD = -0.001
 
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
         Exception, requests.exceptions.RequestException),
-                fallback_values=(0, 0, 0, 0))
+                fallback_values=(0.0, 0.0, 0, 0))
 def check_news_sentiment_scrapper() -> Tuple[float, float, int, int]:
     positive_polarity_score = 0.0
-    positive_count = 0
     negative_polarity_score = 0.0
+    positive_count = 0
     negative_count = 0
 
     # Check for internet connection
     if not check_internet_connection():
         logging.info('unable to get news sentiment')
-        return 0, 0, 0, 0
+        return 0.0, 0.0, 0, 0
 
     # Set up the search query
     search_query = "Bitcoin"

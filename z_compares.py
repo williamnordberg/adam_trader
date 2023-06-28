@@ -1,8 +1,8 @@
 import bisect
 import pandas as pd
 from typing import Tuple
-from z_handy_modules import save_update_time, read_float_from_latest_saved
-from i_news_aggregate import aggregate_news
+from z_handy_modules import save_update_time
+from read_write_csv import read_latest_data
 
 LATEST_INFO_PATH = 'data/latest_info_saved.csv'
 
@@ -105,21 +105,57 @@ def compare_google_reddit_youtube(last_hour: int, two_hours_before: int) -> Tupl
         return compare(ratio, RANGES_GOOGLE_DOWN, VALUES_GOOGLE_DOWN)
 
 
-def compare_news() -> Tuple[float, float]:
-    positive_polarity_24h, negative_polarity_24h, \
-     positive_count_24h, negative_count_24h = aggregate_news()
+def compare_news(last_24_hours_positive_polarity,
+                 last_24_hours_negative_polarity, positive_count_24_hours_before,
+                 negative_count_24_hours_before) -> (float, float):
+    polarity_threshold = 0.01
+    threshold = 1
 
-    positive_polarity_48h = round(read_float_from_latest_saved('positive_polarity_score'), 2)
-    positive_count_48h = read_float_from_latest_saved('positive_news_count')
-    negative_polarity_48h = round(read_float_from_latest_saved('negative_polarity_score'), 2)
-    negative_count_48h = read_float_from_latest_saved('negative_news_count')
+    positive_polarity_48h = read_latest_data('positive_polarity_score', float)
+    negative_polarity_48h = read_latest_data('negative_polarity_score', float)
 
-    positive_pol_change = positive_polarity_24h - positive_polarity_48h
-    positive_count_change = positive_count_24h - positive_count_48h
-    negative_pol_change = negative_polarity_24h - negative_polarity_48h
-    negative_count_change = negative_count_24h - negative_count_48h
+    positive_count_48h = read_latest_data('positive_news_count', int)
+    negative_count_48h = read_latest_data('negative_news_count', int)
 
-    changes = [positive_pol_change, positive_count_change, -negative_pol_change, -negative_count_change]
-    weights = [0.1, 0.1, 0.2, 0.1]
-    score = sum(c*w for c, w in zip(changes, weights) if c > 0)
-    return max(0.5+score, 1), max(0.5-score, 1)  # Restrict between 0 and 1
+    # Calculate changes in counts and polarities
+    positive_pol_change = abs(last_24_hours_positive_polarity - positive_polarity_48h)
+    negative_pol_change = abs(last_24_hours_negative_polarity - negative_polarity_48h)
+    positive_count_change = abs(positive_count_24_hours_before - positive_count_48h)
+    negative_count_change = abs(negative_count_24_hours_before - negative_count_48h)
+
+    score = 0.5  # start point for score
+
+    if positive_pol_change > polarity_threshold:
+        if last_24_hours_positive_polarity > positive_polarity_48h:
+            score += 0.1
+        else:
+            score -= 0.1
+
+    if negative_pol_change > polarity_threshold:
+        if last_24_hours_negative_polarity < negative_polarity_48h:
+            score += 0.2
+        else:
+            score -= 0.2
+
+    if positive_count_change > threshold:
+        if positive_count_24_hours_before > positive_count_48h:
+            score += 0.1
+        else:
+            score -= 0.1
+
+    if negative_count_change > threshold:
+        if negative_count_24_hours_before < negative_count_48h:
+            score += 0.1
+        else:
+            score -= 0.1
+
+    # ensure the score is between 0 and 1
+    score = min(max(score, 0), 1)
+
+    # use the score to calculate news_bullish and news_bearish
+    if score == 0.5:
+        return 0.0, 0.0
+    news_bullish = score
+    news_bearish = 1 - score
+
+    return round(news_bullish, 2), round(news_bearish, 2)

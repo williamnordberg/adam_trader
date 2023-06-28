@@ -33,7 +33,7 @@ from read_write_csv import retrieve_latest_factor_values_database
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 SYMBOL = 'BTCUSDT'
 LONG_THRESHOLD = 0.68
-SHORT_THRESHOLD = 0.7
+SHORT_THRESHOLD = 0.70
 PROFIT_MARGIN = 0.005
 RICHEST_ADDRESSES_SLEEP_TIME = 20 * 60
 
