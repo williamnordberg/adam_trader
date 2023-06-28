@@ -156,53 +156,6 @@ def get_bitcoin_price() -> int:
         sleep(61)  # wait for 61 seconds before retrying
 
 
-def should_update(factor: str) -> bool:
-    latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
-    last_update_time_str = latest_info_saved.iloc[0][f'latest_{factor}_update']
-    last_update_time = datetime.strptime(last_update_time_str, '%Y-%m-%d %H:%M:%S')
-
-    return datetime.now() - last_update_time > update_intervals[factor]
-
-
-def save_update_time(factor_name: str):
-    """
-    save update time
-
-    Args:
-        factor_name (str): the factor that get updated
-
-    """
-
-    latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
-    latest_info_saved.loc[0, f'latest_{factor_name}_update'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    latest_info_saved.to_csv(LATEST_INFO_FILE, index=False)
-
-
-def save_trading_state(state: str):
-    latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
-    latest_info_saved.loc[0, 'latest_trading_state'] = state
-    latest_info_saved.to_csv(LATEST_INFO_FILE, index=False)
-
-
-def save_float_to_latest_saved(column: str, value: float):
-    latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
-    latest_info_saved.loc[0, f'{column}'] = round(value, 2)
-    latest_info_saved.to_csv(LATEST_INFO_FILE, index=False)
-
-
-def save_int_to_latest_saved(column: str, value: int):
-    latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
-    latest_info_saved.loc[0, f'{column}'] = value
-    latest_info_saved.to_csv(LATEST_INFO_FILE, index=False)
-
-
-def read_float_from_latest_saved(column: str) -> float:
-    latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
-    retrieved_value = latest_info_saved.iloc[0][f'{column}']
-    latest_info_saved.to_csv(LATEST_INFO_FILE, index=False)
-    return float(retrieved_value)
-
-
 def save_trade_details(weighted_score, position_opening_time, position_closing_time,
                        position_type, opening_price, close_price, pnl, factor_values):
 
