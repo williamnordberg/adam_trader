@@ -758,8 +758,8 @@ def read_gauge_chart_data():
         'youtube_bearish': database['youtube_bearish'][-1],
         'news_bullish': database['news_bullish'][-1],
         'news_bearish': database['news_bearish'][-1],
-        'weighted_score_up': latest_info_saved.iloc[0]['latest_weighted_score_up'],
-        'weighted_score_down': latest_info_saved.iloc[0]['latest_weighted_score_down'],
+        'weighted_score_up': database['weighted_score_up'][-1],
+        'weighted_score_down': database['weighted_score_down'][-1],
     }
 
     if data_dict['trading_state'] in ['long', 'short']:
