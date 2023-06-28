@@ -1,11 +1,8 @@
 import logging
-from z_database import save_value_to_database
 from typing import Dict, List, Tuple
 from datetime import datetime, timedelta
-from z_handy_modules import save_float_to_latest_saved, save_update_time
+from read_write_csv import save_value_to_database, save_update_time, write_latest_data
 
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 MIN_CONTRIBUTING_FACTORS = 4
 
 # Temporary storage for aggregated values
@@ -123,8 +120,8 @@ def make_trading_decision(factor_values) -> Tuple[float, float]:
         normalized_score_down = weighted_score_down / total_score
 
         # Save the latest weighted score
-        save_float_to_latest_saved('latest_weighted_score_up', normalized_score_up)
-        save_float_to_latest_saved('latest_weighted_score_down', normalized_score_down)
+        write_latest_data('latest_weighted_score_up', normalized_score_up)
+        write_latest_data('latest_weighted_score_down', normalized_score_down)
 
         # Save to database Check if an hour has passed since the last database update
         current_time = datetime.now()
@@ -140,12 +137,12 @@ def make_trading_decision(factor_values) -> Tuple[float, float]:
         return round(normalized_score_up, 2), round(normalized_score_down, 2)    # ...
     else:
         # Save the latest weighted score
-        save_float_to_latest_saved('latest_weighted_score_up', 0.0)
-        save_float_to_latest_saved('latest_weighted_score_down', 0.0)
+        write_latest_data('latest_weighted_score_up', 0.0)
+        write_latest_data('latest_weighted_score_down', 0.0)
+
         logging.info(f"Minimum contributing factors not met: {num_contributing_factors}/{MIN_CONTRIBUTING_FACTORS}")
         return 0.0, 0.0
 
 
 if __name__ == "__main__":
-    score_up, score_down = 0,0
-    logging.info(f'score_up: {score_up}, score_down: {score_down}')
+    score_up, score_down = 0, 0

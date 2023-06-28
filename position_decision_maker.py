@@ -1,7 +1,6 @@
 import logging
 from typing import Tuple
-from z_handy_modules import save_float_to_latest_saved
-
+from read_write_csv import write_latest_data
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -64,8 +63,8 @@ def position_decision(macro_bullish: float, macro_bearish: float,
     normalized_score_up = weighted_score_up / total_score
     normalized_score_down = weighted_score_down / total_score
 
-    save_float_to_latest_saved('score_profit_position', round(normalized_score_up, 2))
-    save_float_to_latest_saved('score_loss_position', round(normalized_score_up, 2))
+    write_latest_data('score_profit_position', round(normalized_score_up, 2))
+    write_latest_data('score_loss_position',  round(normalized_score_down, 2))
 
     return normalized_score_up, normalized_score_down
 
