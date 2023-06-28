@@ -8,8 +8,7 @@ import sys
 # Logging config must be in begen of first import to inherit
 from logging_config import do_nothing
 from z_handy_modules import get_bitcoin_price, \
-    save_trade_details, save_trade_result, save_trading_state,\
-    calculate_score_margin
+    save_trade_details, save_trade_result, calculate_score_margin
 from z_compares import compare_richest_addresses
 from d_technical import technical_analyse
 from i_news_analyser import check_sentiment_of_news
@@ -25,8 +24,7 @@ from short_position_open import short_position
 from z_factors_states_visualization import visualize_charts
 from testnet_future_short_trade import check_no_open_future_position
 from e_richest import monitor_bitcoin_richest_addresses
-from z_database import save_value_to_database
-from read_write_csv import retrieve_latest_factor_values_database
+from read_write_csv import retrieve_latest_factor_values_database, save_value_to_database, write_latest_data
 
 
 # Constants
@@ -65,7 +63,7 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
     while True:
         LOOP_COUNTER += 1
         logging.info(f'threshold:{long_threshold} and loop counter: {LOOP_COUNTER} RUNS')
-        save_trading_state('main')
+        write_latest_data('latest_trading_state', 'main')
         factor_values = {
             'macro_bullish': 0,
             'macro_bearish': 0,
@@ -123,7 +121,7 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
             opening_price = get_bitcoin_price()
             score_margin_to_close = calculate_score_margin(weighted_score_up)
 
-            save_trading_state('long')
+            write_latest_data('latest_trading_state', 'long')
             profit_after_trade, loss_after_trade = long_position(score_margin_to_close, profit_margin)
             pnl = profit_after_trade - loss_after_trade
             trade_close_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -142,7 +140,7 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
             opening_price = get_bitcoin_price()
             score_margin_to_close = calculate_score_margin(weighted_score_down)
 
-            save_trading_state('short')
+            write_latest_data('latest_trading_state', 'short')
             profit_after_trade, loss_after_trade = short_position(score_margin_to_close, profit_margin)
             pnl = profit_after_trade - loss_after_trade
             trade_close_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -154,7 +152,7 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
 
             logging.info(f"profit_after_trade:{profit_after_trade}, "f"loss_after_trade:{loss_after_trade}")
         logging.info(f'Threshold:{long_threshold} and loop counter: {LOOP_COUNTER} SLEEPS')
-        save_trading_state('main')
+        write_latest_data('latest_trading_state', 'main')
         sleep(60 * 20)  # Sleep for 20 minutes
 
 
