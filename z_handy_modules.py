@@ -327,13 +327,5 @@ def create_gauge_chart(bullish, bearish, factor):
     )
 
 
-def read_time_last_update_time_difference(column: str) -> timedelta:
-    latest_info_saved = pd.read_csv(LATEST_INFO_FILE).squeeze("columns")
-    last_news_sentiment_str = latest_info_saved.iloc[0][f'{column}']
-    last_news_sentiment = datetime.strptime(last_news_sentiment_str, '%Y-%m-%d %H:%M:%S')
-    last_update_time_difference = datetime.now() - last_news_sentiment
-    return last_update_time_difference
-
-
 if __name__ == '__main__':
     print('')

@@ -1,8 +1,7 @@
 import bisect
 import pandas as pd
 from typing import Tuple
-from z_handy_modules import save_update_time
-from read_write_csv import read_latest_data
+from read_write_csv import read_latest_data, save_update_time
 
 LATEST_INFO_PATH = 'data/latest_info_saved.csv'
 
