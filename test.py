@@ -1,45 +1,37 @@
-def calculate_market_sentiment() -> (float, float):
+from typing import Tuple
+from z_read_write_csv import write_latest_data
 
-    positive_polarity_24h, negative_polarity_24h, \
-        positive_count_24h, negative_count_24h = aggregate_news()
+# Define constants
+INDICATORS = ["macro", "order_book", "probability_to_hit", "predicted", "technical", 
+              "richest_addresses", "google_search", "reddit", "youtube", "news"]
+WEIGHTS = [0.2, 0.2, 0.15, 0.10, 0.125, 0.125, 0.01, 0.01, 0.02, 0.05]
 
-    positive_polarity_48h = round(read_float_from_latest_saved('positive_polarity_score'), 2)
-    positive_count_48h = read_float_from_latest_saved('positive_news_count')
-    negative_polarity_48h = round(read_float_from_latest_saved('negative_polarity_score'), 2)
-    negative_count_48h = read_float_from_latest_saved('negative_news_count')
 
-    # Calculate changes in counts and polarities
-    positive_pol_change = positive_polarity_24h - positive_polarity_48h
-    positive_count_change = positive_count_24h - positive_count_48h
-    negative_pol_change = negative_polarity_24h - negative_polarity_48h
-    negative_count_change = negative_count_24h - negative_count_48h
+def position_decision(indicators: dict) -> Tuple[float, float]:
+    assert all(key in indicators for key in INDICATORS), "Missing indicator"
 
-    score, news_bullish, news_bearish = 0, 0, 0
-    if positive_pol_change > 0:
-        score += 0.1
-    elif positive_pol_change < 0:
-        score -= 0.1
+    weighted_score_up = sum(indicators[ind+"_bullish"] * weight for ind, weight in zip(INDICATORS, WEIGHTS))
+    weighted_score_down = sum(indicators[ind+"_bearish"] * weight for ind, weight in zip(INDICATORS, WEIGHTS))
 
-    if positive_count_change > 0:
-        score += 0.1
-    elif positive_count_change < 0:
-        score -= 0.1
+    total_score = weighted_score_up + weighted_score_down
+    normalized_score_up = weighted_score_up / total_score
+    normalized_score_down = weighted_score_down / total_score
 
-    if negative_pol_change > 0:
-        score -= 0.2
-    elif negative_pol_change < 0:
-        score += 0.2
+    write_latest_data('score_profit_position', round(normalized_score_up, 2))
+    write_latest_data('score_loss_position',  round(normalized_score_down, 2))
 
-    if negative_count_change > 0:
-        score -= 0.1
-    elif negative_count_change < 0:
-        score += 0.1
+    return normalized_score_up, normalized_score_down
 
-    if score > 0:
-        news_bullish = 0.5 + score
-    elif score < 0:
-        news_bearish = 0.5 + abs(score)
-    else:
-        news_bullish, news_bearish = 0, 0
+if __name__ == "__main__":
+    score_up, score_down = position_decision(1, 0,
+                                             0, 1,
+                                             1, 0,
+                                             1, 1,
+                                             0, 1,
+                                             1, 0,
+                                             1, 0,
+                                             1, 0,
+                                             1, 0,
+                                             1, 0)
 
-    return news_bullish, news_bearish
+    print(f'score_up: {score_up}, score_down: {score_down}')

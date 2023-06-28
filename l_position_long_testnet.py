@@ -3,6 +3,7 @@ import logging
 import configparser
 import os
 from datetime import datetime
+from z_handy_modules import retry_on_error
 
 
 CONFIG_PATH = 'config/config.ini'
@@ -54,22 +55,6 @@ def get_account_assets():
         free = balance['free']
         locked = balance['locked']
         logging.info(f"Asset: {asset} - Free: {free} - Locked: {locked}")
-
-
-def place_market_buy_order(btc_amount: float):
-    # Place a market buy order for a given amount of BTC
-    # Params: btc_amount - the quantity to buy
-    client = initialized_client()
-
-    # Place a market buy order for the desired amount of BTC
-    client.create_order(
-        symbol='BTCUSDT',
-        side='BUY',
-        type='MARKET',
-        quantity=btc_amount
-    )
-
-    logging.info('Buy order placed successfully at market price')
 
 
 def get_open_orders(symbol: str):
@@ -164,6 +149,20 @@ def cancel_all_open_orders(symbol: str):
                 logging.error(f"Error cancelling order ID: {order_id}, Error: {e}")
 
 
+def get_all_orders(symbol: str):
+    client = initialized_client()
+    all_orders = client.get_all_orders(symbol=symbol)
+    logging.info(f"All orders for {symbol}:")
+    if not all_orders:
+        logging.info("No orders.")
+    else:
+        for order in all_orders:
+            logging.info(f"Order ID: {order['orderId']} - Side: {order['side']} -"
+                         f" Type: {order['type']} - Quantity: {order['origQty']} -"
+                         f" Price: {order['price']} - Time: {order['time']} - Status: {order['status']}")
+
+
+@retry_on_error(3, 5, (Exception,))
 def close_position_at_market(btc_amount: float):
     client = initialized_client()
 
@@ -178,19 +177,7 @@ def close_position_at_market(btc_amount: float):
     logging.info('Sell order placed successfully at market price')
 
 
-def get_all_orders(symbol: str):
-    client = initialized_client()
-    all_orders = client.get_all_orders(symbol=symbol)
-    logging.info(f"All orders for {symbol}:")
-    if not all_orders:
-        logging.info("No orders.")
-    else:
-        for order in all_orders:
-            logging.info(f"Order ID: {order['orderId']} - Side: {order['side']} -"
-                         f" Type: {order['type']} - Quantity: {order['origQty']} -"
-                         f" Price: {order['price']} - Time: {order['time']} - Status: {order['status']}")
-
-
+@retry_on_error(3, 5, (Exception,))
 def get_open_positions():
     client = initialized_client()
     account_info = client.get_account()
@@ -205,6 +192,23 @@ def get_open_positions():
             logging.info(f"Asset: {position['asset']} - Free: {position['free']} - Locked: {position['locked']}")
 
 
+def place_market_buy_order(btc_amount: float):
+    # Place a market buy order for a given amount of BTC
+    # Params: btc_amount - the quantity to buy
+    client = initialized_client()
+
+    # Place a market buy order for the desired amount of BTC
+    client.create_order(
+        symbol='BTCUSDT',
+        side='BUY',
+        type='MARKET',
+        quantity=btc_amount
+    )
+
+    logging.info('Buy order placed successfully at market price')
+
+
+@retry_on_error(3, 5, (Exception,), fallback_values='could not retrieve')
 def get_btc_open_positions():
     client = initialized_client()
     account_info = client.get_account()

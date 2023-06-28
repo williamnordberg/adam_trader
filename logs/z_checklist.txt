@@ -12,4 +12,3 @@ decorate all wrappers
 
 6. check the functionality
 
-7. refactor module name with a Prefix(a) name(macro) suffix(compare)
