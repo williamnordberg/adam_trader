@@ -11,7 +11,7 @@ from g_reddit import reddit_check
 from h_youtube import check_bitcoin_youtube_videos_increase
 from c_predictor import decision_tree_predictor
 from position_decision_maker import position_decision
-from z_handy_modules import get_bitcoin_price, richest_addresses_
+from z_handy_modules import get_bitcoin_price
 from testnet_spot_trade_executor import place_market_buy_order, close_position_at_market, get_btc_open_positions
 
 SCORE_MARGIN_TO_CLOSE = 0.65

@@ -11,7 +11,7 @@ from g_reddit import reddit_check
 from h_youtube import check_bitcoin_youtube_videos_increase
 from c_predictor import decision_tree_predictor
 from position_decision_maker import position_decision
-from z_handy_modules import richest_addresses_, get_bitcoin_future_market_price
+from z_handy_modules import get_bitcoin_future_market_price
 from testnet_future_short_trade import short_market, close_shorts_open_positions, get_open_futures_positions
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 

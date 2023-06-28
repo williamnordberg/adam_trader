@@ -129,3 +129,82 @@
 2023-06-26 09:31:24 - ERROR - Error occurred: error with request HTTPSConnectionPool(host='www.reddit.com', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname 'www.reddit.com' doesn't match 'trustpositif.globalxtreme.net'")))
 2023-06-26 09:31:24 - INFO - Threshold:0.68 and loop counter: 1 SLEEPS
 2023-06-26 09:34:26 - INFO - Received interrupt signal. Cleaning up...
+2023-06-28 11:37:58 - INFO - threshold:0.68 and loop counter: 1 RUNS
+2023-06-28 11:38:00 - INFO - 2 new rows of internal factors added.
+2023-06-28 11:38:00 - INFO - Dash is running on http://0.0.0.0:8051/
+
+2023-06-28 11:38:02 - INFO - interest rate added to the main dataset
+2023-06-28 11:38:02 - INFO - dataset has been updated
+2023-06-28 11:38:48 - INFO - file_cache is only supported with oauth2client<4.0.0
+2023-06-28 11:38:58 - INFO - start scrapping list of bitcoin richest addresses
+2023-06-28 11:39:00 - ERROR - Error while fetching data: 403 Client Error: Forbidden for url: https://bitinfocharts.com/top-100-richest-bitcoin-addresses-1.html
+2023-06-28 11:39:00 - WARNING - Attempt 1 failed with error: 403 Client Error: Forbidden for url: https://bitinfocharts.com/top-100-richest-bitcoin-addresses-1.html. Retrying in 5 seconds...
+2023-06-28 11:39:05 - INFO - start scrapping list of bitcoin richest addresses
+2023-06-28 11:39:05 - ERROR - Error while fetching data: 403 Client Error: Forbidden for url: https://bitinfocharts.com/top-100-richest-bitcoin-addresses-1.html
+2023-06-28 11:39:05 - WARNING - Attempt 2 failed with error: 403 Client Error: Forbidden for url: https://bitinfocharts.com/top-100-richest-bitcoin-addresses-1.html. Retrying in 5 seconds...
+2023-06-28 11:39:10 - INFO - start scrapping list of bitcoin richest addresses
+2023-06-28 11:39:11 - ERROR - Error while fetching data: 403 Client Error: Forbidden for url: https://bitinfocharts.com/top-100-richest-bitcoin-addresses-1.html
+2023-06-28 11:39:11 - WARNING - Attempt 3 failed with error: 403 Client Error: Forbidden for url: https://bitinfocharts.com/top-100-richest-bitcoin-addresses-1.html. Retrying in 5 seconds...
+2023-06-28 11:39:16 - ERROR - All 3 attempts failed.
+2023-06-28 11:39:16 - ERROR - Fallback value is 'pass'. Skipping this function.
+2023-06-28 11:39:19 - INFO - Opening short position with score of: 0.72
+2023-06-28 11:39:28 - INFO - Leverage set to 10x for BTCUSDT
+2023-06-28 11:39:32 - INFO - latest price: 30451.79
+2023-06-28 11:39:33 - INFO - Short order placed successfully
+2023-06-28 11:39:33 - INFO - ******************************************
+2023-06-28 11:39:37 - INFO - current_price:30050, PNL:157 profit_point:30055,stop_loss:30358 
+2023-06-28 11:39:41 - INFO - Closed position for symbol BTCUSDT with position amount -0.010.
+2023-06-28 11:39:41 - INFO - &&&&&&&&&&&&&& TARGET HIT &&&&&&&&&&&&&&&&&&&&&
+2023-06-28 11:39:43 - INFO - profit_after_trade:157, loss_after_trade:0
+2023-06-28 11:39:43 - INFO - Threshold:0.68 and loop counter: 1 SLEEPS
+2023-06-28 11:39:49 - INFO - Received interrupt signal. Cleaning up...
+2023-06-28 11:39:59 - INFO - threshold:0.68 and loop counter: 1 RUNS
+2023-06-28 11:39:59 - INFO - Dash is running on http://0.0.0.0:8051/
+
+2023-06-28 11:40:07 - INFO - Opening short position with score of: 0.72
+2023-06-28 11:40:16 - INFO - Leverage set to 10x for BTCUSDT
+2023-06-28 11:40:19 - INFO - latest price: 30451.63
+2023-06-28 11:40:20 - INFO - Short order placed successfully
+2023-06-28 11:40:20 - INFO - ******************************************
+2023-06-28 11:40:21 - INFO - Received interrupt signal. Cleaning up...
+2023-06-28 11:40:32 - INFO - Received interrupt signal. Cleaning up...
+2023-06-28 11:40:56 - INFO - threshold:0.68 and loop counter: 1 RUNS
+2023-06-28 11:40:57 - INFO - Dash is running on http://0.0.0.0:8051/
+
+2023-06-28 11:41:01 - INFO - Threshold:0.68 and loop counter: 1 SLEEPS
+2023-06-28 11:41:01 - ERROR - Exception on /_dash-update-component [POST]
+Traceback (most recent call last):
+  File "C:\will\Python_project\adam_trader\venv\lib\site-packages\flask\app.py", line 2528, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\will\Python_project\adam_trader\venv\lib\site-packages\flask\app.py", line 1825, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\will\Python_project\adam_trader\venv\lib\site-packages\flask\app.py", line 1823, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\will\Python_project\adam_trader\venv\lib\site-packages\flask\app.py", line 1799, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "C:\will\Python_project\adam_trader\venv\lib\site-packages\dash\dash.py", line 1283, in dispatch
+    ctx.run(
+  File "C:\will\Python_project\adam_trader\venv\lib\site-packages\dash\_callback.py", line 450, in add_context
+    output_value = func(*func_args, **func_kwargs)  # %% callback invoked %%
+  File "C:\will\Python_project\adam_trader\z_factors_states_visualization.py", line 293, in update_youtube
+    return visualized_youtube()
+  File "C:\will\Python_project\adam_trader\z_factors_states_visualization.py", line 224, in visualized_youtube
+    df = pd.read_csv(DATABASE_PATH)
+  File "C:\will\Python_project\adam_trader\venv\lib\site-packages\pandas\io\parsers\readers.py", line 912, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "C:\will\Python_project\adam_trader\venv\lib\site-packages\pandas\io\parsers\readers.py", line 577, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "C:\will\Python_project\adam_trader\venv\lib\site-packages\pandas\io\parsers\readers.py", line 1407, in __init__
+    self._engine = self._make_engine(f, self.engine)
+  File "C:\will\Python_project\adam_trader\venv\lib\site-packages\pandas\io\parsers\readers.py", line 1679, in _make_engine
+    return mapping[engine](f, **self.options)
+  File "C:\will\Python_project\adam_trader\venv\lib\site-packages\pandas\io\parsers\c_parser_wrapper.py", line 93, in __init__
+    self._reader = parsers.TextReader(src, **kwds)
+  File "pandas\_libs\parsers.pyx", line 555, in pandas._libs.parsers.TextReader.__cinit__
+pandas.errors.EmptyDataError: No columns to parse from file
+2023-06-28 11:41:13 - INFO - Received interrupt signal. Cleaning up...
+2023-06-28 11:41:22 - INFO - threshold:0.68 and loop counter: 1 RUNS
+2023-06-28 11:41:23 - INFO - Dash is running on http://0.0.0.0:8051/
+
+2023-06-28 11:41:27 - INFO - Threshold:0.68 and loop counter: 1 SLEEPS
+2023-06-28 11:41:41 - INFO - Received interrupt signal. Cleaning up...
