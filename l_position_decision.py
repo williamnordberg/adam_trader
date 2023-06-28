@@ -1,8 +1,5 @@
-import logging
 from typing import Tuple
 from z_read_write_csv import write_latest_data
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def position_decision(macro_bullish: float, macro_bearish: float,
@@ -81,4 +78,4 @@ if __name__ == "__main__":
                                              1, 0,
                                              1, 0)
 
-    logging.info(f'score_up: {score_up}, score_down: {score_down}')
+    print(f'score_up: {score_up}, score_down: {score_down}')

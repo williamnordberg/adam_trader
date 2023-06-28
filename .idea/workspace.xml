@@ -8,7 +8,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="27June_after change" />
+    <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="27June_after change">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/l_position_decision.py" beforeDir="false" afterPath="$PROJECT_DIR$/l_position_decision.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/l_position_long.py" beforeDir="false" afterPath="$PROJECT_DIR$/l_position_long.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/l_position_long_testnet.py" beforeDir="false" afterPath="$PROJECT_DIR$/l_position_long_testnet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/z_checklist.txt" beforeDir="false" afterPath="$PROJECT_DIR$/logs/z_checklist.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m_visualization_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/m_visualization_app.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -91,7 +98,7 @@
       <recent name="C:\will\Python_project\adam_trader\data" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.l_position_long_testnet">
     <configuration name="a_macro" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -134,27 +141,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="i_news_crypto_compare" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="adam_trader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/i_news_crypto_compare.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="i_news_scrapper" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -168,6 +154,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/i_news_scrapper.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="l_position_long_testnet" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="adam_trader" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/l_position_long_testnet.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -214,19 +221,19 @@
     </configuration>
     <list>
       <item itemvalue="Python.a_macro" />
+      <item itemvalue="Python.l_position_long_testnet" />
       <item itemvalue="Python.i_news_analyser" />
-      <item itemvalue="Python.i_news_crypto_compare" />
       <item itemvalue="Python.i_news_scrapper" />
       <item itemvalue="Python.main" />
       <item itemvalue="Python tests.Unittests with right config" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.l_position_long_testnet" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.a_macro" />
         <item itemvalue="Python.i_news_analyser" />
         <item itemvalue="Python.i_news_scrapper" />
-        <item itemvalue="Python.i_news_crypto_compare" />
       </list>
     </recent_temporary>
   </component>
@@ -582,7 +589,7 @@
       <option name="project" value="LOCAL" />
       <updated>1687483422567</updated>
     </task>
-    <option name="localTasksCounter" value="353" />
+    <option name="localTasksCounter" value="354" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">

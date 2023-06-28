@@ -1,10 +1,9 @@
 from binance.client import Client
-import logging
 import configparser
 import os
-
+import logging
+from z_handy_modules import retry_on_error
 CONFIG_PATH = 'config/config.ini'
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Load the config file
 config = configparser.ConfigParser()
@@ -15,14 +14,13 @@ with open(config_path, 'r') as f:
 
 config.read_string(config_string)
 api_key = config.get('binance', 'api_key')
-print('api_key: ', api_key)
 api_secret = config.get('binance', 'api_secret')
-print('api_secret: ', api_secret)
 
 # Initialize the Binance client with your API key and secret key
 client = Client(api_key, api_secret)
 
 
+@retry_on_error(3, 5, (Exception,))
 def buy_btc_at_price(btc_amount: float, price: float):
     # Get the latest ticker price for BTC
     ticker = client.get_symbol_ticker(symbol='BTCUSDT')
@@ -46,5 +44,6 @@ def buy_btc_at_price(btc_amount: float, price: float):
         print('Target price has not been reached')
 
 
-# Example usage: Buy 0.01 BTC when the price drops to $5,000
-buy_btc_at_price(0.001, 11000)
+if __name__ == '__main__':
+    # Example usage: Buy 0.01 BTC when the price drops to $5,000
+    buy_btc_at_price(0.001, 11000)

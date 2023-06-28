@@ -4,6 +4,8 @@ import configparser
 import os
 from binance.exceptions import BinanceAPIException, BinanceRequestException
 from time import sleep
+from z_read_write_csv import retry_on_error
+
 
 CONFIG_PATH = 'config/config.ini'
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -81,6 +83,7 @@ def short_market_on_specific_price(btc_amount: float, price: float, leverage: in
         logging.info('Target price has not been reached')
 
 
+@retry_on_error(3, 5, (Exception,), 'could not retrieve future position')
 def get_open_futures_positions():
     client = initialized_future_client()
     open_positions = client.futures_position_information()
@@ -95,6 +98,7 @@ def get_open_futures_positions():
                              f" Entry Price: {position['entryPrice']} - Unrealized PnL: {position['unRealizedProfit']}")
 
 
+@retry_on_error(3, 5, (Exception,), 'could not close future position')
 def close_shorts_open_positions(symbol: str):
     client = initialized_future_client()
     open_positions = client.futures_position_information()
@@ -165,4 +169,3 @@ if __name__ == '__main__':
     # close_shorts_open_positions(SYMBOL)
     # short_market(0.1, 3, 'isolated')
     get_open_futures_positions()
-

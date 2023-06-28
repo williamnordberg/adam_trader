@@ -13,7 +13,7 @@ from h_youtube import check_bitcoin_youtube_videos_increase
 from c_predictor import decision_tree_predictor
 from l_position_decision import position_decision
 from z_handy_modules import get_bitcoin_price
-from l_position_long_testnet import place_market_buy_order, close_position_at_market, get_btc_open_positions
+from l_position_long_testnet import place_market_buy_order, close_position_at_market
 
 SCORE_MARGIN_TO_CLOSE = 0.65
 PROFIT_MARGIN = 0.01
@@ -28,6 +28,10 @@ def long_position(score_margin_to_close: float, profit_margin: float) -> Tuple[i
     profit_point = int(current_price + (current_price * profit_margin))
     stop_loss = int(current_price - (current_price * profit_margin))
     profit, loss = 0, 0
+
+    # Remind upcoming macro events
+    macro_bullish_NA, macro_bearish_NA, events_date_dict = macro_sentiment()
+    print_upcoming_events(events_date_dict)
 
     # Place order o spot testnet
     place_market_buy_order(POSITION_SIZE)
@@ -49,21 +53,15 @@ def long_position(score_margin_to_close: float, profit_margin: float) -> Tuple[i
             logging.info('&&&&&&&&&&&&&& STOP LOSS &&&&&&&&&&&&&&&&&&&&&')
             return profit, loss
 
-        # Order book Hit
-        probabilities_hit = order_book_hit_target(SYMBOLS, 1000, profit_point, stop_loss)
-        assert probabilities_hit is not None, "get_probabilities_hit_profit_or_stop returned None"
-        probability_to_hit_target, probability_to_hit_stop_loss = probabilities_hit
-
-        logging.info(f'Profit probability: {round(probability_to_hit_target, 1)}'
-                     f' Stop probability: {round(probability_to_hit_stop_loss, 1)}')
+        probability_to_hit_target, probability_to_hit_stop_loss = \
+            order_book_hit_target(SYMBOLS, 1000, profit_point, stop_loss)
 
         # 1 Get the prediction
         prediction_bullish, prediction_bearish = decision_tree_predictor()
 
         # 2 Get probabilities of price going up or down
-        probabilities = order_book(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
-        assert probabilities is not None, "get_probabilities returned None"
-        order_book_bullish, order_book_bearish = probabilities
+        order_book_bullish, order_book_bearish = \
+            order_book(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
 
         # 3 Monitor the richest Bitcoin addresses
         richest_addresses_bullish, richest_addresses_bearish = \
@@ -74,9 +72,6 @@ def long_position(score_margin_to_close: float, profit_margin: float) -> Tuple[i
 
         # 5 Check macroeconomic indicators
         macro_bullish, macro_bearish, events_date_dict = macro_sentiment()
-
-        # remind upcoming macro events
-        print_upcoming_events(events_date_dict)
 
         # 6 Reddit
         reddit_bullish, reddit_bearish = reddit_check()
@@ -114,7 +109,6 @@ def long_position(score_margin_to_close: float, profit_margin: float) -> Tuple[i
                 loss = int(position_opening_price - current_price)
                 logging.info('long position closed with loss')
                 return profit, loss
-        get_btc_open_positions()
         sleep(TRADING_LOOP_SLEEP_TIME)
 
 
