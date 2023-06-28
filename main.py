@@ -6,7 +6,7 @@ import signal
 import sys
 
 # Logging config must be in begen of first import to inherit
-from logging_config import do_nothing
+from a_a_logging_config import do_nothing
 from z_handy_modules import get_bitcoin_price, \
     save_trade_details, save_trade_result, calculate_score_margin
 from z_compares import compare_richest_addresses
@@ -18,13 +18,13 @@ from a_macro import macro_sentiment, print_upcoming_events
 from f_google import check_search_trend
 from c_predictor import decision_tree_predictor
 from b_order_book import order_book
-from trading_decision import make_trading_decision
-from long_position_open import long_position
-from short_position_open import short_position
-from z_factors_states_visualization import visualize_charts
-from testnet_future_short_trade import check_no_open_future_position
+from k_combined_score import make_trading_decision
+from l_position_long import long_position
+from l_position_short import short_position
+from m_visualization_app import visualize_charts
+from l_position_short_testnet import check_no_open_future_position
 from e_richest import monitor_bitcoin_richest_addresses
-from read_write_csv import retrieve_latest_factor_values_database, save_value_to_database, write_latest_data
+from z_read_write_csv import retrieve_latest_factor_values_database, save_value_to_database, write_latest_data
 
 
 # Constants

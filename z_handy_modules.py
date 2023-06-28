@@ -11,7 +11,7 @@ from json import JSONDecodeError
 
 from datetime import datetime, timedelta
 from binance.exceptions import BinanceAPIException, BinanceRequestException
-from testnet_future_short_trade import initialized_future_client
+from l_position_short_testnet import initialized_future_client
 
 
 BINANCE_ENDPOINT_PRICE = "https://api.binance.com/api/v3/ticker/price"

@@ -8,9 +8,11 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from typing import Tuple, Optional, Dict
 from datetime import timedelta
+import platform
+
 
 from z_compares import compare_macro_m_to_m
-from read_write_csv import read_latest_data, write_latest_data, save_value_to_database, \
+from z_read_write_csv import read_latest_data, write_latest_data, save_value_to_database, \
     should_update, save_update_time, retrieve_latest_factor_values_database
 from z_handy_modules import retry_on_error
 
@@ -144,7 +146,13 @@ def get_chrome_options() -> Options:
 
 
 def get_service() -> Service:
-    return Service(executable_path=os.environ.get("CHROMEDRIVER_PATH", "chromedriver.exe"))
+    os_name = platform.system()
+    if os_name == "Windows":
+        return Service(executable_path=os.environ.get("CHROMEDRIVER_PATH", "chromedriver.exe"))
+    elif os_name == "Linux":
+        return Service(executable_path=os.environ.get("CHROMEDRIVER_PATH", "chromedriver"))
+    else:
+        raise ValueError(f"Unsupported operating system: {os_name}")
 
 
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=(

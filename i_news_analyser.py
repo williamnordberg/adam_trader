@@ -11,8 +11,8 @@ from i_news_scrapper import check_news_sentiment_scrapper
 
 from z_handy_modules import retry_on_error
 from z_compares import compare_news
-from update_bitcoin_price import update_bitcoin_price_in_database
-from read_write_csv import write_latest_data, save_value_to_database, \
+from z_update_bitcoin_price import update_bitcoin_price_in_database
+from z_read_write_csv import write_latest_data, save_value_to_database, \
     should_update, save_update_time, retrieve_latest_factor_values_database
 
 

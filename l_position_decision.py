@@ -1,6 +1,6 @@
 import logging
 from typing import Tuple
-from read_write_csv import write_latest_data
+from z_read_write_csv import write_latest_data
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
