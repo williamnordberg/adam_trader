@@ -1,11 +1,8 @@
 import requests
 import logging
-from typing import Tuple
 import pandas as pd
 from functools import wraps
 from time import sleep
-import plotly.graph_objects as go
-import pandas.errors
 from json import JSONDecodeError
 
 
@@ -248,83 +245,6 @@ def calculate_score_margin(weighted_score):
         return 0.7
     else:
         return 0.65
-
-
-@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
-        pandas.errors.EmptyDataError, Exception), fallback_values=('0', '0'))
-def last_and_next_update(factor: str) -> Tuple[str, str]:
-    latest_info_saved = pd.read_csv(LATEST_INFO_FILE)
-    last_update_time_str = latest_info_saved.iloc[0][f'latest_{factor}_update']
-    last_update_time = datetime.strptime(last_update_time_str, '%Y-%m-%d %H:%M:%S')
-
-    # Calculate the time difference between now and the last update time
-    time_since_last_update = datetime.now() - last_update_time
-
-    # If the time since last update is more than 1 hour, convert it to hours
-    if time_since_last_update.total_seconds() > 3600:
-        time_since_last_update_str = f'{int(time_since_last_update.total_seconds() // 3600)}h'
-    else:  # else, convert it to minutes
-        time_since_last_update_str = f'{int(time_since_last_update.total_seconds() // 60)}m'
-
-    if update_intervals[factor] < time_since_last_update:
-        next_update = timedelta(seconds=0)  # equivalent to zero
-    else:
-        next_update = update_intervals[factor] - time_since_last_update
-
-    # Similar conversion for next update
-    if next_update.total_seconds() > 3600:
-        next_update_str = f'{int(next_update.total_seconds() // 3600)}h'
-    else:
-        next_update_str = f'{int(next_update.total_seconds() // 60)}m'
-
-    return time_since_last_update_str, next_update_str
-
-
-def create_gauge_chart(bullish, bearish, factor):
-    last_update_time_str, next_update_str = last_and_next_update(factor)
-
-    if bullish == 0 and bearish == 0:
-        value = 0
-        gauge_steps = [
-            {"range": [0, 1], "color": COLORS['lightgray']},
-        ]
-        bar_thickness = 0
-        mode_str = "gauge"
-        number = {}
-
-    else:
-        value = round(((bullish / (bullish + bearish)) * 1), 2)
-        gauge_steps = [
-            {"range": [0, 1], "color": COLORS['red_chart']}
-        ]
-        bar_thickness = 1
-
-        mode_str = "gauge+number"
-        if factor == 'weighted_score':
-            if value >= 0.55:
-                number = {"font": {"size": 26, "color": COLORS['green_chart']}}
-            elif value <= 0.45:
-                number = {"font": {"size": 26, "color": COLORS['red_chart']}}
-            else:
-                number = {"font": {"size": 26, "color": COLORS['white']}}
-        else:
-            number = {"font": {"size": 12, "color": COLORS['white']}}
-    return go.Indicator(
-        mode=mode_str,
-        value=value,
-        title={
-            "text": f"L: {last_update_time_str}   N: {next_update_str}",
-            "font": {"size": 12, "color": COLORS['lightgray']}
-        },
-        domain={"x": [0, 1], "y": [0, 1]},
-        gauge={
-            "axis": {"range": [0, 1], "showticklabels": False},
-            "bar": {"color": COLORS['green_chart'], "thickness": bar_thickness},
-            "steps": gauge_steps,
-            "bgcolor": COLORS['black']
-        },
-        number=number,
-    )
 
 
 if __name__ == '__main__':
