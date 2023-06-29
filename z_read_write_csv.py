@@ -8,6 +8,9 @@ from datetime import datetime, timedelta
 LATEST_INFO_FILE = "data/latest_info_saved.csv"
 DATABASE_PATH = 'data/database.csv'
 DATASET_PATH = 'data/dataset.csv'
+TRADE_RESULT_PATH = 'data/trades_results.csv'
+TRADE_DETAILS_PATH = 'data/trades_details.csv'
+
 CSV_ALLOWED_EXCEPTIONS = (pd.errors.EmptyDataError, FileNotFoundError, PermissionError, pd.errors.ParserError, IOError)
 T = TypeVar('T')
 fallback_values_types = {str: '', int: 0, float: 0.0, datetime: datetime.min}
@@ -185,6 +188,18 @@ def load_dataset() -> pd.DataFrame:
 
 def save_dataset(dataset: pd.DataFrame):
     dataset.to_csv(DATASET_PATH, index=True)
+
+
+def read_trading_details() -> pd.DataFrame:
+    """Read the CSV file into a DataFrame and set the "date" column as the index"""
+    df = pd.read_csv(TRADE_DETAILS_PATH)
+    return df
+
+
+def read_trading_results() -> pd.DataFrame:
+    """Read the CSV file into a DataFrame and set the "date" column as the index"""
+    df = pd.read_csv(TRADE_RESULT_PATH)
+    return df
 
 
 if __name__ == '__main__':

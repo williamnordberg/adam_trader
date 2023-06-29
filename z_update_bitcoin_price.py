@@ -55,4 +55,4 @@ def update_bitcoin_price_in_database():
 
 if __name__ == '__main__':
     df_outer = update_bitcoin_price_in_database()
-    print(df_outer['bitcoin_price'])
+    print(df_outer['actual_price_12h_later'])

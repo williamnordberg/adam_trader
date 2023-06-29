@@ -104,9 +104,9 @@ def compare_google_reddit_youtube(last_hour: int, two_hours_before: int) -> Tupl
         return compare(ratio, RANGES_GOOGLE_DOWN, VALUES_GOOGLE_DOWN)
 
 
-def compare_news(last_24_hours_positive_polarity,
-                 last_24_hours_negative_polarity, positive_count_24_hours_before,
-                 negative_count_24_hours_before) -> (float, float):
+def compare_news(last_24_hours_positive_polarity: float,
+                 last_24_hours_negative_polarity: float, positive_count_24_hours_before: int,
+                 negative_count_24_hours_before: int) -> Tuple[float, float]:
     polarity_threshold = 0.01
     threshold = 1
 

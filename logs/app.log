@@ -223,3 +223,39 @@ pandas.errors.EmptyDataError: No columns to parse from file
 
 2023-06-28 12:57:40 - INFO - Threshold:0.68 and loop counter: 1 SLEEPS
 2023-06-28 12:57:43 - INFO - Received interrupt signal. Cleaning up...
+2023-06-29 16:06:39 - INFO - threshold:0.68 and loop counter: 1 RUNS
+2023-06-29 16:06:41 - INFO - Dash is running on http://0.0.0.0:8051/
+
+2023-06-29 16:06:41 - INFO - 2 new rows of internal factors added.
+2023-06-29 16:06:43 - INFO - interest rate added to the main dataset
+2023-06-29 16:06:43 - INFO - dataset has been updated
+2023-06-29 16:07:34 - INFO - file_cache is only supported with oauth2client<4.0.0
+2023-06-29 16:07:39 - INFO - start scrapping list of bitcoin richest addresses
+2023-06-29 16:07:41 - ERROR - Error while fetching data: 403 Client Error: Forbidden for url: https://bitinfocharts.com/top-100-richest-bitcoin-addresses-1.html
+2023-06-29 16:07:41 - WARNING - Attempt 1 failed with error: 403 Client Error: Forbidden for url: https://bitinfocharts.com/top-100-richest-bitcoin-addresses-1.html. Retrying in 5 seconds...
+2023-06-29 16:07:46 - INFO - start scrapping list of bitcoin richest addresses
+2023-06-29 16:07:47 - ERROR - Error while fetching data: 403 Client Error: Forbidden for url: https://bitinfocharts.com/top-100-richest-bitcoin-addresses-1.html
+2023-06-29 16:07:47 - WARNING - Attempt 2 failed with error: 403 Client Error: Forbidden for url: https://bitinfocharts.com/top-100-richest-bitcoin-addresses-1.html. Retrying in 5 seconds...
+2023-06-29 16:07:52 - INFO - start scrapping list of bitcoin richest addresses
+2023-06-29 16:07:53 - ERROR - Error while fetching data: 403 Client Error: Forbidden for url: https://bitinfocharts.com/top-100-richest-bitcoin-addresses-1.html
+2023-06-29 16:07:53 - WARNING - Attempt 3 failed with error: 403 Client Error: Forbidden for url: https://bitinfocharts.com/top-100-richest-bitcoin-addresses-1.html. Retrying in 5 seconds...
+2023-06-29 16:07:58 - ERROR - All 3 attempts failed.
+2023-06-29 16:07:58 - ERROR - Fallback value is 'pass'. Skipping this function.
+2023-06-29 16:08:30 - INFO - Opening short position with score of: 0.71
+2023-06-29 16:08:39 - INFO - Leverage set to 10x for BTCUSDT
+2023-06-29 16:08:42 - INFO - latest price: 30369.05
+2023-06-29 16:08:43 - INFO - Short order placed successfully
+2023-06-29 16:08:50 - INFO - Closed position for symbol BTCUSDT with position amount -0.010.
+2023-06-29 16:08:50 - INFO - &&&&&&&&&&&&&& TARGET HIT &&&&&&&&&&&&&&&&&&&&&
+2023-06-29 16:08:52 - INFO - profit_after_trade:359, loss_after_trade:0
+2023-06-29 16:08:52 - INFO - Threshold:0.68 and loop counter: 1 SLEEPS
+2023-06-29 16:10:23 - INFO - threshold:0.68 and loop counter: 1 RUNS
+2023-06-29 16:10:23 - INFO - Dash is running on http://0.0.0.0:8051/
+
+2023-06-29 16:10:26 - INFO - Threshold:0.68 and loop counter: 1 SLEEPS
+2023-06-29 16:11:23 - INFO - start scrapping list of bitcoin richest addresses
+2023-06-29 16:12:53 - INFO - Dash is running on http://0.0.0.0:8051/
+
+2023-06-29 16:12:54 - INFO - threshold:0.68 and loop counter: 1 RUNS
+2023-06-29 16:12:55 - INFO - Threshold:0.68 and loop counter: 1 SLEEPS
+2023-06-29 16:19:50 - INFO - Richest addresses updated sent: 98571 and receive: 111389 in last 24h
