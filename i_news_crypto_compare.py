@@ -56,6 +56,7 @@ def check_news_cryptocompare_sentiment() -> Tuple[float, float, int, int]:
 
     else:
         logging.error(f'Error{response.status_code}')
+        return 0.0, 0.0, 0, 0
 
 
 if __name__ == "__main__":
