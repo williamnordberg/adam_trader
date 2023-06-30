@@ -7,8 +7,7 @@ import sys
 
 # Logging config must be in begen of first import to inherit
 from a_a_logging_config import do_nothing
-from z_handy_modules import get_bitcoin_price, \
-    save_trade_details, save_trade_result, calculate_score_margin
+from z_handy_modules import get_bitcoin_price, calculate_score_margin
 from z_compares import compare_richest_addresses
 from d_technical import technical_analyse
 from i_news_analyser import check_sentiment_of_news
@@ -24,7 +23,8 @@ from l_position_short import short_position
 from m_visualization_app import visualize_charts
 from l_position_short_testnet import check_no_open_future_position
 from e_richest import monitor_bitcoin_richest_addresses
-from z_read_write_csv import retrieve_latest_factor_values_database, save_value_to_database, write_latest_data
+from z_read_write_csv import retrieve_latest_factor_values_database, \
+    save_value_to_database, write_latest_data, save_trade_details, save_trade_result
 
 
 # Constants
@@ -34,6 +34,8 @@ LONG_THRESHOLD = 0.68
 SHORT_THRESHOLD = 0.70
 PROFIT_MARGIN = 0.005
 RICHEST_ADDRESSES_SLEEP_TIME = 20 * 60
+MAIN_TRADING_LOOP_SLEEP_TIME = 20 * 60
+
 
 do_nothing()
 
@@ -52,8 +54,8 @@ def run_monitor_richest_addresses():
             save_value_to_database('richest_addresses_bullish', richest_addresses_bullish)
             save_value_to_database('richest_addresses_bearish', richest_addresses_bearish)
 
-            logging.info(f'Richest addresses updated sent: {int(total_sent)} '
-                         f'and receive: {int(total_received)} in last 24h')
+            logging.info(f'Richest addresses sent: {total_sent} '
+                         f'and receive: {total_received} in last 24h')
         sleep(RICHEST_ADDRESSES_SLEEP_TIME)
 
 
@@ -65,26 +67,26 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
         logging.info(f'threshold:{long_threshold} and loop counter: {LOOP_COUNTER} RUNS')
         write_latest_data('latest_trading_state', 'main')
         factor_values = {
-            'macro_bullish': 0,
-            'macro_bearish': 0,
-            'order_book_bullish': 0,
-            'order_book_bearish': 0,
-            'prediction_bullish': 0,
-            'prediction_bearish': 0,
-            'technical_bullish': 0,
-            'technical_bearish': 0,
-            'richest_bullish': 0,
-            'richest_bearish': 0,
-            'google_bullish': 0,
-            'google_bearish': 0,
-            'reddit_bullish': 0,
-            'reddit_bearish': 0,
-            'youtube_bullish': 0,
-            'youtube_bearish': 0,
-            'news_bullish': 0,
-            'news_bearish': 0,
-            'weighted_score_up': 0,
-            'weighted_score_down': 0
+            'macro_bullish': 0.0,
+            'macro_bearish': 0.0,
+            'order_book_bullish': 0.0,
+            'order_book_bearish': 0.0,
+            'prediction_bullish': 0.0,
+            'prediction_bearish': 0.0,
+            'technical_bullish': 0.0,
+            'technical_bearish': 0.0,
+            'richest_bullish': 0.0,
+            'richest_bearish': 0.0,
+            'google_bullish': 0.0,
+            'google_bearish': 0.0,
+            'reddit_bullish': 0.0,
+            'reddit_bearish': 0.0,
+            'youtube_bullish': 0.0,
+            'youtube_bearish': 0.0,
+            'news_bullish': 0.0,
+            'news_bearish': 0.0,
+            'weighted_score_up': 0.0,
+            'weighted_score_down': 0.0
         }
 
         factor_values['prediction_bullish'], factor_values['prediction_bearish'] = decision_tree_predictor()
@@ -93,7 +95,8 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
             order_book(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
 
         factor_values['macro_bullish'], factor_values['macro_bearish'], events_date_dict = macro_sentiment()
-        print_upcoming_events(events_date_dict)
+        if LOOP_COUNTER % 6 == 0:
+            print_upcoming_events(events_date_dict)
 
         factor_values['richest_bullish'], factor_values['richest_bearish'] = \
             retrieve_latest_factor_values_database('richest_addresses')
@@ -151,9 +154,9 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
                                'short', opening_price, close_price, pnl, factor_values)
 
             logging.info(f"profit_after_trade:{profit_after_trade}, "f"loss_after_trade:{loss_after_trade}")
-        logging.info(f'Threshold:{long_threshold} and loop counter: {LOOP_COUNTER} SLEEPS')
+        logging.info(f'Loop number: {LOOP_COUNTER} SLEEPS')
         write_latest_data('latest_trading_state', 'main')
-        sleep(60 * 20)  # Sleep for 20 minutes
+        sleep(MAIN_TRADING_LOOP_SLEEP_TIME)
 
 
 def signal_handler(sig, frame):
@@ -172,8 +175,8 @@ if __name__ == "__main__":
     visualization_charts_process.start()
     sleep(2)
 
-    process = Process(target=trading_loop, args=[LONG_THRESHOLD, SHORT_THRESHOLD, PROFIT_MARGIN])
-    process.start()
+    main_trading_loop_process = Process(target=trading_loop, args=[LONG_THRESHOLD, SHORT_THRESHOLD, PROFIT_MARGIN])
+    main_trading_loop_process.start()
     sleep(60)
 
     process = Process(target=run_monitor_richest_addresses)

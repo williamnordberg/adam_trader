@@ -54,7 +54,7 @@ def check_multiple_addresses(addresses: List[str]) -> Tuple[int, int]:
     return int(total_received), int(total_sent)
 
 
-def monitor_bitcoin_richest_addresses() -> Tuple[float, float]:
+def monitor_bitcoin_richest_addresses() -> Tuple[int, int]:
     """
     Monitor the richest Bitcoin addresses and calculate the total received and sent in the last 24 hours.
     Returns:
@@ -71,20 +71,18 @@ def monitor_bitcoin_richest_addresses() -> Tuple[float, float]:
 
         if not addresses:
             logging.info('list of reach addresses not found')
-            return 0.0, 0.0
+            return 0, 0
 
         # Check the total Bitcoin received and sent in the last 24 hours for all addresses
         total_received, total_sent = check_multiple_addresses(addresses)
 
         save_update_time('richest_addresses')
-
-        # Save to database
         save_value_to_database('richest_addresses_total_received', total_received)
         save_value_to_database('richest_addresses_total_sent', total_sent)
 
         return total_received, total_sent
     else:
-        return 0.0, 0.0
+        return 0, 0
 
 
 if __name__ == "__main__":

@@ -9,16 +9,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="27June_after change">
-      <change afterPath="$PROJECT_DIR$/test2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/i_news_analyser.py" beforeDir="false" afterPath="$PROJECT_DIR$/i_news_analyser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/m_visualization_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/m_visualization_app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/m_visualization_create_figures.py" beforeDir="false" afterPath="$PROJECT_DIR$/m_visualization_create_figures.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/bitcoin_rich_list2000.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/youtube_token.py" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore/youtube_token.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/e_richest.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_richest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/i_news_crypto_compare.py" beforeDir="false" afterPath="$PROJECT_DIR$/i_news_crypto_compare.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/z_checklist.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/m_visualization_side.py" beforeDir="false" afterPath="$PROJECT_DIR$/m_visualization_side.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/z_compares.py" beforeDir="false" afterPath="$PROJECT_DIR$/z_compares.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/z_handy_modules.py" beforeDir="false" afterPath="$PROJECT_DIR$/z_handy_modules.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/z_read_write_csv.py" beforeDir="false" afterPath="$PROJECT_DIR$/z_read_write_csv.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/z_update_bitcoin_price.py" beforeDir="false" afterPath="$PROJECT_DIR$/z_update_bitcoin_price.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/z_update_bitcoin_price.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,14 +98,35 @@
       <recent name="C:\will\Python_project\adam_trader\datasets" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\will\Python_project\adam_trader\.gitignore" />
       <recent name="C:\will\Python_project\adam_trader\logs" />
       <recent name="C:\will\Python_project\adam_trader\config" />
       <recent name="C:\will\Python_project\adam_trader\src" />
       <recent name="C:\will\Python_project\adam_trader" />
-      <recent name="C:\will\Python_project\adam_trader\data" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.m_visualization_app">
+  <component name="RunManager" selected="Python.i_news_crypto_compare">
+    <configuration name="i_news_crypto_compare" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="adam_trader" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/i_news_crypto_compare.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="m_visualization_app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -116,27 +140,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/m_visualization_app.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="adam_trader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -187,7 +190,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="z_update_bitcoin_price" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="z_read_write_csv" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -199,7 +202,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/z_update_bitcoin_price.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/z_read_write_csv.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -224,20 +227,20 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.i_news_crypto_compare" />
+      <item itemvalue="Python.z_read_write_csv" />
       <item itemvalue="Python.test2" />
-      <item itemvalue="Python.z_update_bitcoin_price" />
       <item itemvalue="Python.m_visualization_app" />
       <item itemvalue="Python.test" />
-      <item itemvalue="Python.main" />
       <item itemvalue="Python tests.Unittests with right config" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.m_visualization_app" />
+        <item itemvalue="Python.i_news_crypto_compare" />
         <item itemvalue="Python.test" />
+        <item itemvalue="Python.z_read_write_csv" />
+        <item itemvalue="Python.m_visualization_app" />
         <item itemvalue="Python.test2" />
-        <item itemvalue="Python.z_update_bitcoin_price" />
-        <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
   </component>
@@ -593,7 +596,7 @@
       <option name="project" value="LOCAL" />
       <updated>1687483422567</updated>
     </task>
-    <option name="localTasksCounter" value="356" />
+    <option name="localTasksCounter" value="357" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
