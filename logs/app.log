@@ -259,3 +259,53 @@ pandas.errors.EmptyDataError: No columns to parse from file
 2023-06-29 16:12:54 - INFO - threshold:0.68 and loop counter: 1 RUNS
 2023-06-29 16:12:55 - INFO - Threshold:0.68 and loop counter: 1 SLEEPS
 2023-06-29 16:19:50 - INFO - Richest addresses updated sent: 98571 and receive: 111389 in last 24h
+2023-06-30 13:39:59 - INFO - Dash is running on http://0.0.0.0:8051/
+
+2023-06-30 13:39:59 - INFO - threshold:0.68 and loop counter: 1 RUNS
+2023-06-30 13:40:01 - WARNING - Attempt 1 failed with error: No columns to parse from file. Retrying in 5 seconds...
+2023-06-30 13:40:02 - WARNING - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '0470C7C960094383A1514F61989D2F14BEB3', 'notBefore': 'May 21 20:54:12 2023 GMT', 'notAfter': 'Aug 19 20:54:11 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-06-30 13:40:02 - WARNING - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-06-30 13:40:03 - WARNING - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '0470C7C960094383A1514F61989D2F14BEB3', 'notBefore': 'May 21 20:54:12 2023 GMT', 'notAfter': 'Aug 19 20:54:11 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-06-30 13:40:03 - WARNING - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-06-30 13:40:06 - WARNING - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '0470C7C960094383A1514F61989D2F14BEB3', 'notBefore': 'May 21 20:54:12 2023 GMT', 'notAfter': 'Aug 19 20:54:11 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-06-30 13:40:06 - ERROR - Error occurred: error with request HTTPSConnectionPool(host='www.reddit.com', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname 'www.reddit.com' doesn't match 'trustpositif.globalxtreme.net'")))
+2023-06-30 13:40:06 - INFO - file_cache is only supported with oauth2client<4.0.0
+2023-06-30 13:40:12 - INFO - Received interrupt signal. Cleaning up...
+2023-06-30 13:40:38 - INFO - threshold:0.68 and loop counter: 1 RUNS
+2023-06-30 13:40:40 - INFO - Dash is running on http://0.0.0.0:8051/
+
+2023-06-30 13:41:15 - INFO - Loop number: 1 SLEEPS
+2023-06-30 13:41:38 - INFO - start scrapping list of bitcoin richest addresses
+2023-06-30 13:41:39 - ERROR - Error while fetching data: 403 Client Error: Forbidden for url: https://bitinfocharts.com/top-100-richest-bitcoin-addresses-1.html
+2023-06-30 13:41:39 - WARNING - Attempt 1 failed with error: 403 Client Error: Forbidden for url: https://bitinfocharts.com/top-100-richest-bitcoin-addresses-1.html. Retrying in 5 seconds...
+2023-06-30 13:41:44 - INFO - start scrapping list of bitcoin richest addresses
+2023-06-30 13:41:45 - ERROR - Error while fetching data: 403 Client Error: Forbidden for url: https://bitinfocharts.com/top-100-richest-bitcoin-addresses-1.html
+2023-06-30 13:41:45 - WARNING - Attempt 2 failed with error: 403 Client Error: Forbidden for url: https://bitinfocharts.com/top-100-richest-bitcoin-addresses-1.html. Retrying in 5 seconds...
+2023-06-30 13:41:50 - INFO - start scrapping list of bitcoin richest addresses
+2023-06-30 13:41:51 - ERROR - Error while fetching data: 403 Client Error: Forbidden for url: https://bitinfocharts.com/top-100-richest-bitcoin-addresses-1.html
+2023-06-30 13:41:51 - WARNING - Attempt 3 failed with error: 403 Client Error: Forbidden for url: https://bitinfocharts.com/top-100-richest-bitcoin-addresses-1.html. Retrying in 5 seconds...
+2023-06-30 13:41:56 - ERROR - All 3 attempts failed.
+2023-06-30 13:41:56 - ERROR - Fallback value is 'pass'. Skipping this function.
+2023-06-30 13:43:12 - INFO - Received interrupt signal. Cleaning up...
+2023-06-30 13:43:20 - INFO - Loop Number: 1 RUNS
+2023-06-30 13:43:21 - INFO - Dash is running on http://0.0.0.0:8051/
+
+2023-06-30 13:43:25 - INFO - Loop number: 1 SLEEPS
+2023-06-30 13:43:51 - INFO - Received interrupt signal. Cleaning up...
+2023-06-30 13:44:00 - INFO - Loop number: 1 runs
+2023-06-30 13:44:01 - INFO - Dash is running on http://0.0.0.0:8051/
+
+2023-06-30 13:44:05 - INFO - Loop number: 1 SLEEPS
+2023-06-30 13:44:13 - INFO - Received interrupt signal. Cleaning up...
+2023-06-30 13:44:46 - INFO - Loop number: 1 RUNNING
+2023-06-30 13:44:46 - INFO - Dash is running on http://0.0.0.0:8051/
+
+2023-06-30 13:44:51 - INFO - Loop number: 1 SLEEPS
+2023-06-30 13:44:57 - INFO - Received interrupt signal. Cleaning up...
+2023-06-30 13:46:45 - INFO - Received interrupt signal. Cleaning up...
+2023-06-30 13:47:55 - INFO - Dash is running on http://0.0.0.0:8051/
+
+2023-06-30 13:47:55 - INFO - Loop number: 1 RUNNING
+2023-06-30 13:47:56 - INFO - Loop number: 1 SLEEPS
+2023-06-30 13:59:02 - INFO - Received interrupt signal. Cleaning up...
+2023-06-30 13:59:09 - INFO - Received interrupt signal. Cleaning up...

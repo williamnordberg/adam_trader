@@ -64,7 +64,7 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
     LOOP_COUNTER = 0
     while True:
         LOOP_COUNTER += 1
-        logging.info(f'threshold:{long_threshold} and loop counter: {LOOP_COUNTER} RUNS')
+        logging.info(f'Loop number: {LOOP_COUNTER} RUNNING')
         write_latest_data('latest_trading_state', 'main')
         factor_values = {
             'macro_bullish': 0.0,

@@ -1,6 +1,6 @@
 import bisect
 from typing import Tuple
-from z_read_write_csv import read_latest_data
+from z_read_write_csv import read_latest_data, write_latest_data
 
 LATEST_INFO_PATH = 'data/latest_info_saved.csv'
 
@@ -116,6 +116,10 @@ def compare_news(last_24_hours_positive_polarity: float,
     negative_pol_change = abs(last_24_hours_negative_polarity - negative_polarity_48h)
     positive_count_change = abs(positive_count_24_hours_before - positive_count_48h)
     negative_count_change = abs(negative_count_24_hours_before - negative_count_48h)
+
+    # Save for visualization
+    write_latest_data('positive_news_polarity_change', round(positive_pol_change, 2))
+    write_latest_data('negative_news_polarity_change', round(negative_pol_change, 2))
 
     score = 0.5  # start point for score
 
