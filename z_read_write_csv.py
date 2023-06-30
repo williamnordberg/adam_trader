@@ -5,6 +5,7 @@ from functools import wraps
 from time import sleep
 from datetime import datetime, timedelta
 
+
 LATEST_INFO_FILE = "data/latest_info_saved.csv"
 DATABASE_PATH = 'data/database.csv'
 DATASET_PATH = 'data/dataset.csv'

@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 from z_read_write_csv import read_database, read_latest_data
 from a_macro import calculate_upcoming_events
-from z_handy_modules import get_bitcoin_price, retry_on_error, COLORS, update_intervals
+from z_handy_modules import get_bitcoin_price, retry_on_error, update_intervals
 
 
 def generate_tooltips():

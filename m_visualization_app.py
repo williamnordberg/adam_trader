@@ -5,12 +5,11 @@ from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 import logging
 
-from z_handy_modules import COLORS
 from m_visualization_side import generate_tooltips, read_layout_data
 from m_visualization_create_figures import visualize_trade_details, visualized_combined,\
     visualized_news, visualized_youtube, visualized_reddit, visualized_google, visualized_richest,\
     visualize_macro, visualize_prediction, visualize_trade_results, create_gauge_charts
-
+from z_handy_modules import COLORS
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
@@ -34,7 +33,6 @@ APP_UPDATE_TIME = 50
      Output('trade_results_chart', 'figure'),
      Output('log-data', 'value'),
      Output('live-update-graph', 'figure')],
-
     [Input('interval-component', 'n_intervals')])
 def update_all(n):
     return (visualize_trade_details(),
