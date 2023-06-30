@@ -116,8 +116,8 @@ def update_divs(n):
         f'Ask vol: {ask_volume}', f'Predicted: {predicted_price}', f'Current: {current_price}', \
         f'Diff: {price_difference}', f'RSI: {rsi}', f'Over 200EMA: {over_200EMA}', \
         f'MACD up tr: {MACD_uptrend}', f'bb distance: {bb_MA_distance}', f'Rich receive: {BTC_received}', \
-        f'Rich send: {BTC_send}', f'+ news increase:{positive_news_polarity_change}', \
-        f'- news increase: {negative_news_polarity_change}'
+        f'Rich send: {BTC_send}', f'+ POL news inc: {positive_news_polarity_change}', \
+        f'- POL news inc: {negative_news_polarity_change}'
 
 
 def create_html_divs(initial_layout_data):
