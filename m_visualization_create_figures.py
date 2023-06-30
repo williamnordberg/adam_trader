@@ -209,10 +209,9 @@ def visualize_macro(latest_days_ago=7):
 
 def visualize_prediction(latest_days_ago=1):
     df = read_database()
-
     trace_list = [
         go.Scatter(x=df.index, y=df["predicted_price"], name='Predicted price'),
-        go.Scatter(x=df.index, y=df["actual_price_12h_later"], name='Actual price'),
+        go.Scatter(x=df.index, y=df["bitcoin_price"].shift(-12), name='Actual price'),
         go.Scatter(x=df.index, y=df["prediction_bullish"], name='Prediction bullish', visible='legendonly'),
         go.Scatter(x=df.index, y=df["prediction_bearish"], name='Prediction bearish', visible='legendonly')
     ]

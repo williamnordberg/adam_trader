@@ -47,7 +47,6 @@ def update_bitcoin_price_in_database():
     df.update(df_new)
     df.index = df.index.tz_localize(None)
     df['actual_price_12h_later'] = df['bitcoin_price'].shift(-12)
-
     df.to_csv(DATABASE_PATH)
 
     return df

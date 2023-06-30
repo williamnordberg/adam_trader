@@ -9,15 +9,6 @@ from json import JSONDecodeError
 from datetime import datetime, timedelta
 from binance.exceptions import BinanceAPIException, BinanceRequestException
 from l_position_short_testnet import initialized_future_client
-
-
-BINANCE_ENDPOINT_PRICE = "https://api.binance.com/api/v3/ticker/price"
-GECKO_ENDPOINT_PRICE = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
-LATEST_INFO_FILE = "data/latest_info_saved.csv"
-SYMBOL = 'BTCUSDT'
-TRADE_RESULT_PATH = 'data/trades_results.csv'
-TRADE_DETAILS_PATH = 'data/trades_details.csv'
-
 COLORS = {
     'red_chart': '#ca3f64',
     'green_chart': '#25a750',
@@ -29,7 +20,12 @@ COLORS = {
     'black_chart': '#141414'
 }
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+BINANCE_ENDPOINT_PRICE = "https://api.binance.com/api/v3/ticker/price"
+GECKO_ENDPOINT_PRICE = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
+LATEST_INFO_FILE = "data/latest_info_saved.csv"
+SYMBOL = 'BTCUSDT'
+TRADE_RESULT_PATH = 'data/trades_results.csv'
+TRADE_DETAILS_PATH = 'data/trades_details.csv'
 
 
 def read_fed_announcement() -> str:
