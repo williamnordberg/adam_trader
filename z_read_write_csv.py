@@ -93,7 +93,8 @@ def write_latest_data(column: str, value: Any):
 
 update_intervals = {
     "dataset": timedelta(hours=24),
-    "macro": timedelta(hours=1) if datetime.now(timezone.utc) <= read_latest_data('next-fed-announcement', datetime)
+    "macro": timedelta(hours=1) if datetime.now(timezone.utc).replace(
+        tzinfo=None, microsecond=0) <= read_latest_data('next-fed-announcement', datetime)
     else timedelta(hours=24),
     "order_book": timedelta(minutes=10),
     "predicted_price": timedelta(hours=12),
@@ -128,7 +129,7 @@ def read_database() -> pd.DataFrame:
 def save_value_to_database(column: str, value: Any):
     """Get the value and column name and save it in the database base of current hour"""
     # Get the current datetime and round it down to the nearest hour
-    current_hour = pd.Timestamp.now(tz='UTC').floor("H")
+    current_hour = pd.Timestamp.now(tz='UTC').floor("H").tz_localize(None)
 
     df = read_database()
 
@@ -162,7 +163,8 @@ def save_value_to_database(column: str, value: Any):
                 fallback_values=datetime.min)
 def should_update(factor: str) -> bool:
     last_update_time = datetime.strptime(read_latest_data(f'latest_{factor}_update', str), '%Y-%m-%d %H:%M:%S')
-    return datetime.now(timezone.utc) - last_update_time > update_intervals[factor]
+    return datetime.now(timezone.utc).replace(tzinfo=None, microsecond=0) -\
+        last_update_time > update_intervals[factor]
 
 
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=CSV_ALLOWED_EXCEPTIONS,
