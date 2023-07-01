@@ -1,16 +1,44 @@
 import pandas as pd
-from datetime import datetime, timezone, timedelta
-from pytz import UTC
 
-current_hour = pd.Timestamp.now(tz='utc').floor("H").strftime('%Y-%m-%d %H:%M:%S')
-test3 = datetime.now(timezone.utc).replace(tzinfo=None, microsecond=0)
-last_update_time21 = datetime.strptime('2023-06-14 18:00:00', '%Y-%m-%d %H:%M:%S')
-bool = datetime.now(timezone.utc).replace(tzinfo=None, microsecond=0) - last_update_time21 < timedelta(hours=1)
 
-current_hour_pandas = pd.Timestamp.now(tz='UTC').floor("H")
-print(current_hour_pandas)
-print(type(current_hour_pandas))
+def remove_duplicates(csv_file):
+    # Read the csv file
+    df = pd.read_csv(csv_file, header=None, skipinitialspace=True)
 
-current_hour3 = pd.Timestamp.now(tz='UTC').floor("H").tz_localize(None)
-print(type(current_hour3))
-print(current_hour3)
+    # Remove duplicates
+    df.drop_duplicates(inplace=True)
+
+    # Write the data back to csv
+    df.to_csv(csv_file, index=False, header=False)
+
+
+def check_common_addresses(csv_file1, csv_file2):
+    # Read the csv files
+    df1 = pd.read_csv(csv_file1, header=None, skipinitialspace=True)
+    df2 = pd.read_csv(csv_file2, header=None, skipinitialspace=True)
+
+    # Find common addresses
+    common_addresses = pd.merge(df1, df2, how='inner')
+
+    if not common_addresses.empty:
+        print("Common addresses found:")
+        print(common_addresses)
+    else:
+        print("No common addresses found.")
+
+
+def remove_trailing_spaces(filename):
+    with open(filename, 'r') as file:
+        lines = file.readlines()
+
+    with open(filename, 'w') as file:
+        for line in lines:
+            file.write(line.rstrip() + '\n')
+
+
+remove_trailing_spaces('data/exchange_addresses.csv')
+
+
+# check_common_addresses('data/exchange_adresses.csv', 'data/bitcoin_rich_list2000.csv')
+
+# remove_duplicates('data/exchange_addresses.csv')

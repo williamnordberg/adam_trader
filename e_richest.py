@@ -1,36 +1,16 @@
 import logging
 import time
-import csv
-
 from typing import Tuple, List
 import configparser
 
 from e_richest_scraper import scrape_bitcoin_rich_list
 from e_api_blockcypher import get_address_transactions_24h_blockcypher
-from z_handy_modules import retry_on_error
-from z_read_write_csv import save_value_to_database, should_update, save_update_time
+from z_read_write_csv import save_value_to_database, should_update, save_update_time, read_rich_addresses
 
 SATOSHI_TO_BITCOIN = 100000000
-BITCOIN_RICH_LIST_FILE = 'data/bitcoin_rich_list2000.csv'
+
 config = configparser.ConfigParser()
 config.read('config/config.ini')
-
-
-@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
-        FileNotFoundError,), fallback_values=[])
-def read_addresses_from_csv() -> List[str]:
-    """
-        Read Bitcoin addresses from a CSV file.
-
-        Returns:
-            addresses (list): A list of Bitcoin addresses.
-        """
-    addresses = []
-    with open(BITCOIN_RICH_LIST_FILE, 'r') as file:
-        reader = csv.reader(file)
-        for row in reader:
-            addresses.append(row[0])
-    return addresses
 
 
 def check_multiple_addresses(addresses: List[str]) -> Tuple[int, int]:
@@ -67,7 +47,7 @@ def monitor_bitcoin_richest_addresses() -> Tuple[int, int]:
     if should_update('richest_addresses'):
 
         # Read addresses from the CSV file
-        addresses = read_addresses_from_csv()
+        addresses = read_rich_addresses()
 
         if not addresses:
             logging.info('list of reach addresses not found')
