@@ -1,4 +1,4 @@
-from typing import TypeVar, Type, Any, Dict, Tuple
+from typing import TypeVar, Type, Any, Dict, Tuple, List
 import pandas as pd
 import logging
 from functools import wraps
@@ -10,6 +10,8 @@ DATABASE_PATH = 'data/database.csv'
 DATASET_PATH = 'data/dataset.csv'
 TRADE_RESULT_PATH = 'data/trades_results.csv'
 TRADE_DETAILS_PATH = 'data/trades_details.csv'
+BITCOIN_RICH_LIST_FILE = 'data/bitcoin_rich_list2000.csv'
+EXCHANGE_ADDRESSES = 'data/exchange_addresses.csv'
 
 CSV_ALLOWED_EXCEPTIONS = (pd.errors.EmptyDataError, FileNotFoundError, PermissionError, pd.errors.ParserError, IOError)
 T = TypeVar('T')
@@ -299,3 +301,26 @@ def save_trade_result(pnl: float, weighted_score: float, trade_type: str):
 
     # Save the updated DataFrame to the CSV file
     df.to_csv(TRADE_RESULT_PATH, index=False)
+
+
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
+        FileNotFoundError,), fallback_values=[])
+def read_rich_addresses() -> List[str]:
+    """
+       Read Bitcoin addresses from a CSV file and remove addresses that exist in 'data/exchange_addresses.csv'.
+
+       Returns:
+           addresses (list): A list of Bitcoin addresses.
+       """
+    # Read Bitcoin rich list addresses
+    df1 = pd.read_csv(BITCOIN_RICH_LIST_FILE, header=None, skipinitialspace=True)
+    addresses = df1[0].tolist()
+
+    # Read exchange addresses
+    df2 = pd.read_csv(EXCHANGE_ADDRESSES, header=None, skipinitialspace=True)
+    exchange_addresses = df2[0].tolist()
+
+    # Remove exchange addresses from the rich list addresses
+    addresses = [addr for addr in addresses if addr not in exchange_addresses]
+
+    return addresses
