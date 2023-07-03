@@ -20,7 +20,7 @@ CONFIG_PATH = 'config/config.ini'
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=(RequestException,), fallback_values=0)
 def count_bitcoin_posts(reddit: Reddit) -> int:
     """
-        Counts the number of Bitcoin-related posts on Reddit in the last 7 days.
+        Counts the number of Bitcoin-related posts on Reddit in the last day.
 
         Args:
             reddit (praw.Reddit): An authenticated Reddit instance.
