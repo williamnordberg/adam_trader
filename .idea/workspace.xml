@@ -10,13 +10,13 @@
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="27June_after change">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/bitcoin_rich_list2000.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/bitcoin_rich_list2000.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/latest_info_saved.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/e_api_blockcypher.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_api_blockcypher.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/e_richest.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_richest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/f_google.py" beforeDir="false" afterPath="$PROJECT_DIR$/f_google.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/z_compares.py" beforeDir="false" afterPath="$PROJECT_DIR$/z_compares.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/z_read_write_csv.py" beforeDir="false" afterPath="$PROJECT_DIR$/z_read_write_csv.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +100,7 @@
       <recent name="C:\will\Python_project\adam_trader\src" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.e_richest">
+  <component name="RunManager" selected="Python.f_google">
     <configuration name="e_api_blockcypher" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -143,7 +143,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="g_reddit" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="f_google" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -155,7 +155,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/g_reddit.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/f_google.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -223,7 +223,7 @@
     </configuration>
     <list>
       <item itemvalue="Python.e_api_blockcypher" />
-      <item itemvalue="Python.g_reddit" />
+      <item itemvalue="Python.f_google" />
       <item itemvalue="Python.z_compares" />
       <item itemvalue="Python.e_richest" />
       <item itemvalue="Python.main" />
@@ -231,11 +231,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.f_google" />
+        <item itemvalue="Python.z_compares" />
+        <item itemvalue="Python.e_api_blockcypher" />
         <item itemvalue="Python.e_richest" />
         <item itemvalue="Python.main" />
-        <item itemvalue="Python.e_api_blockcypher" />
-        <item itemvalue="Python.z_compares" />
-        <item itemvalue="Python.g_reddit" />
       </list>
     </recent_temporary>
   </component>
@@ -591,7 +591,7 @@
       <option name="project" value="LOCAL" />
       <updated>1687483422567</updated>
     </task>
-    <option name="localTasksCounter" value="368" />
+    <option name="localTasksCounter" value="369" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
