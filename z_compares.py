@@ -1,6 +1,6 @@
 import bisect
 from typing import Tuple
-from z_read_write_csv import read_latest_data, write_latest_data
+from z_read_write_csv import read_latest_data, write_latest_data, read_database
 
 LATEST_INFO_PATH = 'data/latest_info_saved.csv'
 
@@ -29,10 +29,10 @@ VALUES_RICH = [(0.0, 1.0), (0.1, 0.9), (0.2, 0.8), (0.3, 0.7),
                (0.4, 0.6), (0.0, 0.0), (0.6, 0.4), (0.7, 0.3), (0.8, 0.2), (0.9, 0.1), (1.0, 0.0)]
 
 # 6,7,8. Google, Reddit, Youtube
-RANGES_GOOGLE = [(1.1, 1.15), (1.15, 1.2), (1.2, 1.25), (1.25, float('inf'))]
-VALUES__GOOGLE = [(0.6, 0.4), (0.75, 0.25), (0.85, 0.15), (1, 0.0)]
-RANGES_GOOGLE_DOWN = [(1.1, 1.15), (1.15, 1.2), (1.2, 1.25), (1.25, float('inf'))]
-VALUES_GOOGLE_DOWN = [(0.4, 0.6), (0.25, 0.75), (0.15, 0.85), (0.0, 1)]
+RANGES_GOOGLE = [(1.0, 1.1), (1.1, 1.15), (1.15, 1.2), (1.2, 1.25), (1.25, float('inf'))]
+VALUES__GOOGLE = [(0.0, 0.0), (0.6, 0.4), (0.75, 0.25), (0.85, 0.15), (1, 0.0)]
+RANGES_GOOGLE_DOWN = [(1.0, 1.1), (1.1, 1.15), (1.15, 1.2), (1.2, 1.25), (1.25, float('inf'))]
+VALUES_GOOGLE_DOWN = [(0.0, 0.0), (0.4, 0.6), (0.25, 0.75), (0.15, 0.85), (0.0, 1)]
 
 # 9.News in function
 
@@ -91,6 +91,11 @@ def compare_richest_addresses() -> Tuple[float, float]:
 
 
 def compare_google_reddit_youtube(last_hour: int, two_hours_before: int) -> Tuple[float, float]:
+    # prevent division by zero
+    if last_hour == 0 or two_hours_before == 0:
+        last_hour += 0.0001
+        two_hours_before += 0.0001
+
     if last_hour >= two_hours_before:
         ratio = last_hour / two_hours_before
         return compare(ratio, RANGES_GOOGLE, VALUES__GOOGLE)
@@ -105,11 +110,12 @@ def compare_news(last_24_hours_positive_polarity: float,
     polarity_threshold = 0.01
     threshold = 1
 
-    positive_polarity_48h = read_latest_data('positive_polarity_score', float)
-    negative_polarity_48h = read_latest_data('negative_polarity_score', float)
+    df = read_database()
+    positive_polarity_48h = df['news_positive_polarity'][-1]
+    negative_polarity_48h = df['news_negative_polarity'][-1]
 
-    positive_count_48h = read_latest_data('positive_news_count', int)
-    negative_count_48h = read_latest_data('negative_news_count', int)
+    positive_count_48h = df['news_positive_count'][-1]
+    negative_count_48h = df['news_negative_count'][-1]
 
     # Calculate changes in counts and polarities
     positive_pol_change = abs(last_24_hours_positive_polarity - positive_polarity_48h)
@@ -157,3 +163,6 @@ def compare_news(last_24_hours_positive_polarity: float,
     news_bearish = 1 - score
 
     return round(news_bullish, 2), round(news_bearish, 2)
+
+
+compare_google_reddit_youtube(11,0)
