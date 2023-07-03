@@ -10,6 +10,8 @@ from m_visualization_side import read_gauge_chart_data
 
 
 APP_UPDATE_TIME = 50
+LONG_THRESHOLD = 0.68
+SHORT_THRESHOLD = 0.30
 
 
 def create_figure(trace_list, title_text, yaxis_title='Value', latest_days_ago=7):
@@ -309,6 +311,12 @@ def create_single_gauge_chart(bullish, bearish, factor):
         bar_thickness = 0
         mode_str = "gauge"
         number = {}
+        gauge_dict = {
+            "axis": {"range": [0, 1], "showticklabels": False},
+            "bar": {"color": COLORS['green_chart'], "thickness": bar_thickness},
+            "steps": gauge_steps,
+            "bgcolor": COLORS['black'],
+        }
 
     else:
         value = round(((bullish / (bullish + bearish)) * 1), 2)
@@ -316,12 +324,23 @@ def create_single_gauge_chart(bullish, bearish, factor):
             {"range": [0, 1], "color": COLORS['red_chart']}
         ]
         bar_thickness = 1
-
         mode_str = "gauge+number"
+        gauge_dict = {
+            "axis": {"range": [0, 1], "showticklabels": False,
+                     "tickfont": {"size": 10,  "color": COLORS['white']},
+                     },
+            "bar": {"color": COLORS['green_chart'], "thickness": bar_thickness},
+            "steps": gauge_steps,
+            "bgcolor": COLORS['black'],
+        }
         if factor == 'weighted_score':
-            if value >= 0.55:
+            gauge_dict["axis"]["tickvals"] = [SHORT_THRESHOLD, LONG_THRESHOLD]  # Add ticks
+            gauge_dict["axis"]["ticktext"] = [f"short {SHORT_THRESHOLD}", f"long {LONG_THRESHOLD}"]  # Add tick labels
+            gauge_dict["axis"]["showticklabels"] = True
+
+            if value >= LONG_THRESHOLD:
                 number = {"font": {"size": 26, "color": COLORS['green_chart']}}
-            elif value <= 0.45:
+            elif value <= SHORT_THRESHOLD:
                 number = {"font": {"size": 26, "color": COLORS['red_chart']}}
             else:
                 number = {"font": {"size": 26, "color": COLORS['white']}}
@@ -335,12 +354,7 @@ def create_single_gauge_chart(bullish, bearish, factor):
             "font": {"size": 12, "color": COLORS['lightgray']}
         },
         domain={"x": [0, 1], "y": [0, 1]},
-        gauge={
-            "axis": {"range": [0, 1], "showticklabels": False},
-            "bar": {"color": COLORS['green_chart'], "thickness": bar_thickness},
-            "steps": gauge_steps,
-            "bgcolor": COLORS['black']
-        },
+        gauge=gauge_dict,
         number=number,
     )
 
