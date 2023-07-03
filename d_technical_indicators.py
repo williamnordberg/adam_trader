@@ -94,45 +94,6 @@ def bollinger_bands(data: pd.Series, window: int = 20, std_dev: int = 2) -> Tupl
     return upper_band, rolling_mean, lower_band
 
 
-def relative_strength_index1(data_rsi: pd.Series, window: int) -> np.ndarray:
-    """
-        Calculates the Relative Strength Index (RSI) of a dataset.
-
-        Args:
-            data_rsi (pandas.Series): The input dataset.
-            window (int): The size of the window used to calculate the RSI.
-
-        Returns:
-            numpy array: The RSI of the input dataset.
-        """
-    delta = data_rsi - np.roll(data_rsi, 1)
-    gain = np.where(delta > 0, delta, 0)
-    loss = np.where(delta < 0, -delta, 0)
-    avg_gain = exponential_moving_average(gain, window)
-    avg_loss = exponential_moving_average(loss, window)
-
-    # Replace NaN values with zero to avoid division by zero error
-    avg_gain = np.nan_to_num(avg_gain)
-    avg_loss = np.nan_to_num(avg_loss)
-
-    # Check for consecutive zero values in avg_loss
-    zero_runs = np.split(avg_loss, np.where(avg_loss != 0)[0])
-    for zero_run in zero_runs:
-        if len(zero_run) > 1:
-            # If there is a run of consecutive zero values, replace them with the previous non-zero value
-            zero_start_idx = np.where(avg_loss == zero_run[0])[0][0]
-            prev_non_zero = avg_loss[zero_start_idx - 1]
-            avg_loss[zero_start_idx:zero_start_idx + len(zero_run)] = prev_non_zero
-
-    # Add a small constant to avoid division by zero
-    avg_loss = np.nan_to_num(avg_loss) + 1e-10
-
-    # Calculate RS and RSI
-    rs = avg_gain / avg_loss
-    rsi = 100.0 - (100.0 / (1.0 + rs))
-    return rsi
-
-
 def macd(data_macd: pd.Series, fast_window: int = 12, slow_window: int = 26, signal_window: int = 9)\
         -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
 
