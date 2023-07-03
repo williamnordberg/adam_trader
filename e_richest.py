@@ -5,7 +5,8 @@ import configparser
 
 from e_richest_scraper import scrape_bitcoin_rich_list
 from e_api_blockcypher import get_address_transactions_24h_blockcypher
-from z_read_write_csv import save_value_to_database, should_update, save_update_time, read_rich_addresses
+from z_read_write_csv import save_value_to_database, should_update, save_update_time, \
+    read_rich_addresses, write_latest_data
 
 SATOSHI_TO_BITCOIN = 100000000
 
