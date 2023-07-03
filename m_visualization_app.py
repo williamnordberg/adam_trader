@@ -5,6 +5,7 @@ from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 import logging
 
+
 from m_visualization_side import generate_tooltips, read_layout_data
 from m_visualization_create_figures import visualize_trade_details, visualized_combined,\
     visualized_news, visualized_youtube, visualized_reddit, visualized_google, visualized_richest,\
@@ -13,7 +14,8 @@ from z_handy_modules import COLORS
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP,
+                                                'https://use.fontawesome.com/releases/v5.8.1/css/all.css'])
 
 TRADE_RESULT_PATH = 'data/trades_results.csv'
 TRADE_DETAILS_PATH = 'data/trades_details.csv'
@@ -45,7 +47,7 @@ def update_all(n):
             visualize_macro(),
             visualize_prediction(),
             visualize_trade_results(),
-            visualization_log('logs/app.log', 300),
+            visualization_log('logs/app.log', 100),
             create_gauge_charts())
 
 
@@ -284,6 +286,23 @@ def update_progress(n):
     return countdown
 
 
+# Create a button component
+top_button = dbc.Button(
+    children=[html.I(className="fa fa-arrow-up", style={'margin': 'auto'})],  # Add this
+    id="top-button",
+    className="mr-1",
+    outline=True,
+    color="secondary",
+    style={'position': 'fixed', 'bottom': '1%', 'right': '1%',
+           'z-index': '9999', 'height': '40px', 'width': '40px',
+           'opacity': '0.4', 'border-radius': '50%',
+           'padding': '6px', 'display': 'flex',  # Add this
+           'justify-content': 'center',  # Add this
+           'align-items': 'center'  # Add this
+    }
+)
+
+
 # noinspection PyTypeChecker
 def create_layout(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest, fig_google, fig_reddit,
                   fig_youtube, fig_news, fig_combined):
@@ -303,7 +322,7 @@ def create_layout(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest,
 
     # div wrapping the layout and taking up 10% width
     layout_div = html.Div(
-        children=[timer_interval_component, interval_component] + html_divs,
+        children=[timer_interval_component, interval_component, top_button] + html_divs,
         style={'width': '11%', 'height': '100vh', 'display': 'inline-block', 'verticalAlign': 'top'}
     )
 
@@ -336,6 +355,7 @@ def create_layout(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest,
         style={'backgroundColor': COLORS['background'], 'color': COLORS['white']},
         children=[
             html.Div(children=[progress_bar], style={'display': 'inline-block', 'width': '100%', 'height': '05vh'}),
+            html.Div(id='dummy-output', style={'display': 'none'}),  # Add this
             first_figure,
             layout_div,
             html.H3('Terminal putput', style={'textAlign': 'center'}),
@@ -358,6 +378,20 @@ def create_layout(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest,
             trade_details_div,
             figure_div,
         ]
+    )
+
+    # Add the following callback after your app's layout definition:
+    app.clientside_callback(
+        """
+        function(n_clicks) {
+            if(n_clicks > 0){
+                window.scrollTo(0, 0);
+            }
+            return null;
+        }
+        """,
+        Output('dummy-output', 'children'),  # a dummy output, not used
+        [Input('top-button', 'n_clicks')],
     )
 
     app.run_server(host='0.0.0.0', port=8051, debug=False)
