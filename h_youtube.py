@@ -96,7 +96,6 @@ def youtube_wrapper() -> Tuple[float, float]:
 
         num_last_24_hours = len(search_results_last_24_hours)
         num_last_48_to_24_hours = len(search_results_last_48_to_24_hours)
-
         youtube_bullish, youtube_bearish = compare_google_reddit_youtube(
             num_last_24_hours, num_last_48_to_24_hours)
 
