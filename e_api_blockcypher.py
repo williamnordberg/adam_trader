@@ -80,7 +80,7 @@ def get_address_transactions_24h_blockcypher(address: str, api_keys_cycle=iterto
                 if output["addresses"] == [address]:
                     total_received += output["value"]
             for input_inner in tx["inputs"]:
-                if input_inner["addresses"] == [address]:
+                if "addresses" in input_inner and input_inner["addresses"] == [address]:
                     total_sent += input_inner["output_value"]
 
         # Convert from Satoshi to BTC
@@ -97,6 +97,6 @@ def get_address_transactions_24h_blockcypher(address: str, api_keys_cycle=iterto
 
 
 if __name__ == "__main__":
-    received, sent = get_address_transactions_24h_blockcypher('1LQoWist8KkaUXSPKZHNvEyfrEkPHzSsCd')
+    received, sent = get_address_transactions_24h_blockcypher('bc1q4c8n5t00jmj8temxdgcc3t32nkg2wjwz24lywv')
     print('received', received)
     print('sent', sent)

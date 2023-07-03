@@ -163,3 +163,6 @@ def compare_news(last_24_hours_positive_polarity: float,
     news_bearish = 1 - score
 
     return round(news_bullish, 2), round(news_bearish, 2)
+
+
+print(compare_google_reddit_youtube(63, 77))
