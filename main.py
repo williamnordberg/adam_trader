@@ -180,4 +180,4 @@ if __name__ == "__main__":
     sleep(60)
 
     process = Process(target=run_monitor_richest_addresses)
-    process.start()
+    # process.start()

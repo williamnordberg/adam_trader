@@ -28,11 +28,8 @@ def check_multiple_addresses(addresses: List[str]) -> Tuple[int, int]:
 
     for i, address in enumerate(addresses):
         received, sent = get_address_transactions_24h_blockcypher(address)
-        print('address', address)
         total_received += received
-        print('total_received', total_received)
         total_sent += sent
-        print('total_sent', total_sent)
         time.sleep(0.5)
 
     return int(total_received), int(total_sent)
