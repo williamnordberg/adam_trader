@@ -338,3 +338,21 @@ pandas.errors.EmptyDataError: No columns to parse from file
 2023-07-01 11:03:31 - INFO - Loop number: 2 RUNNING
 2023-07-01 11:03:32 - INFO - Loop number: 2 SLEEPS
 2023-07-01 11:09:24 - INFO - Richest addresses sent: 33440 and receive: 49293 in last 24h
+2023-07-03 11:59:10 - INFO - Dash is running on http://0.0.0.0:8051/
+
+2023-07-03 11:59:11 - INFO - Loop number: 1 RUNNING
+2023-07-03 11:59:12 - INFO - 2 new rows of internal factors added.
+2023-07-03 11:59:13 - INFO - interest rate added to the main dataset
+2023-07-03 11:59:13 - INFO - dataset has been updated
+2023-07-03 11:59:24 - ERROR - An error occurred in google: The request failed: Google returned a response with code 500
+2023-07-03 12:00:11 - INFO - start scrapping list of bitcoin richest addresses
+2023-07-03 12:18:45 - INFO - Loop number: 1 RUNNING
+2023-07-03 12:18:46 - INFO - Dash is running on http://0.0.0.0:8051/
+
+2023-07-03 12:18:51 - INFO - file_cache is only supported with oauth2client<4.0.0
+2023-07-03 12:19:15 - INFO - Loop number: 1 SLEEPS
+2023-07-03 12:19:42 - INFO - Received interrupt signal. Cleaning up...
+2023-07-03 12:20:03 - INFO - Dash is running on http://0.0.0.0:8051/
+
+2023-07-03 12:20:03 - INFO - Loop number: 1 RUNNING
+2023-07-03 12:20:04 - INFO - Loop number: 1 SLEEPS

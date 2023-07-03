@@ -11,7 +11,7 @@ from i_news_scrapper import check_news_sentiment_scrapper
 
 from z_handy_modules import retry_on_error, get_bitcoin_price
 from z_compares import compare_news
-from z_read_write_csv import write_latest_data, save_value_to_database, \
+from z_read_write_csv import save_value_to_database, \
     should_update, save_update_time, retrieve_latest_factor_values_database
 
 # remove last_news_update_time, news_bullish, news_bearish,
@@ -85,12 +85,6 @@ def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
 
     news_bullish, news_bearish = compare_news(last_24_hours_positive_polarity, last_24_hours_negative_polarity,
                                               positive_count_24_hours_before, negative_count_24_hours_before)
-
-    # Save data on disk for later compare
-    write_latest_data('positive_polarity_score', round(last_24_hours_positive_polarity, 2))
-    write_latest_data('negative_polarity_score', round(last_24_hours_negative_polarity, 2))
-    write_latest_data('positive_news_count', positive_count_24_hours_before)
-    write_latest_data('negative_news_count', negative_count_24_hours_before)
 
     # Save data on database
     save_value_to_database('news_positive_polarity', round(last_24_hours_positive_polarity, 2))
