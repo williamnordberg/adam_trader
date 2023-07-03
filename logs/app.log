@@ -356,3 +356,16 @@ pandas.errors.EmptyDataError: No columns to parse from file
 
 2023-07-03 12:20:03 - INFO - Loop number: 1 RUNNING
 2023-07-03 12:20:04 - INFO - Loop number: 1 SLEEPS
+2023-07-03 12:40:04 - INFO - Loop number: 2 RUNNING
+2023-07-03 12:40:11 - INFO - Loop number: 2 SLEEPS
+2023-07-03 12:55:16 - INFO - Received interrupt signal. Cleaning up...
+2023-07-03 12:56:02 - INFO - Dash is running on http://0.0.0.0:8051/
+
+2023-07-03 12:56:03 - INFO - Loop number: 1 RUNNING
+2023-07-03 12:56:04 - INFO - Loop number: 1 SLEEPS
+2023-07-03 13:00:25 - INFO - Received interrupt signal. Cleaning up...
+2023-07-03 13:00:32 - INFO - Dash is running on http://0.0.0.0:8051/
+
+2023-07-03 13:00:33 - INFO - Loop number: 1 RUNNING
+2023-07-03 13:00:34 - INFO - Loop number: 1 SLEEPS
+2023-07-03 13:01:13 - INFO - Received interrupt signal. Cleaning up...
