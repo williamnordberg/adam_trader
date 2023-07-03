@@ -54,8 +54,8 @@ def run_monitor_richest_addresses():
             save_value_to_database('richest_addresses_bullish', richest_addresses_bullish)
             save_value_to_database('richest_addresses_bearish', richest_addresses_bearish)
 
-            logging.info(f'Richest addresses sent: {total_sent} '
-                         f'and receive: {total_received} in last 24 H')
+            logging.info(f'Richest addresses Send: {total_sent} '
+                         f' RECEIVE: {total_received} in 24 H')
         sleep(RICHEST_ADDRESSES_SLEEP_TIME)
 
 
