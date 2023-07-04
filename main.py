@@ -1,12 +1,12 @@
 import logging
+# Logging config must be in begen of first import to inherit
+from a_a_logging_config import do_nothing
 from time import sleep
 from multiprocessing import Process
 from _datetime import datetime
 import signal
 import sys
 
-# Logging config must be in begen of first import to inherit
-from a_a_logging_config import do_nothing
 from z_handy_modules import get_bitcoin_price, calculate_score_margin
 from z_compares import compare_richest_addresses
 from d_technical import technical_analyse
@@ -180,4 +180,4 @@ if __name__ == "__main__":
     sleep(60)
 
     process = Process(target=run_monitor_richest_addresses)
-    # process.start()
+    process.start()

@@ -1,6 +1,6 @@
 import bisect
 from typing import Tuple
-from z_read_write_csv import read_latest_data, write_latest_data, read_database
+from z_read_write_csv import write_latest_data, read_database
 
 LATEST_INFO_PATH = 'data/latest_info_saved.csv'
 
@@ -83,9 +83,10 @@ def compare_technical(reversal: str, potential_up_trend: bool, over_ema200: bool
 
 
 def compare_richest_addresses() -> Tuple[float, float]:
-    total_received = read_latest_data('total_received_coins_in_last_24', int)
-    total_sent = read_latest_data('total_sent_coins_in_last_24', int)
 
+    df = read_database()
+    total_received = df['richest_addresses_total_received'][-1]
+    total_sent = df['richest_addresses_total_sent'][-1]
     activity_percentage = (total_received - total_sent) / total_sent * 100
     return compare(activity_percentage, RANGES_RICH, VALUES_RICH)
 
@@ -163,5 +164,3 @@ def compare_news(last_24_hours_positive_polarity: float,
     news_bearish = 1 - score
 
     return round(news_bullish, 2), round(news_bearish, 2)
-
-
