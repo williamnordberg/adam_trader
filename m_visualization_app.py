@@ -5,10 +5,9 @@ from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 import logging
 
-
 from m_visualization_side import generate_tooltips, read_layout_data
-from m_visualization_create_figures import visualize_trade_details, visualized_combined,\
-    visualized_news, visualized_youtube, visualized_reddit, visualized_google, visualized_richest,\
+from m_visualization_create_figures import visualize_trade_details, visualized_combined, \
+    visualized_news, visualized_youtube, visualized_reddit, visualized_google, visualized_richest, \
     visualize_macro, visualize_prediction, visualize_trade_results, create_gauge_charts
 from z_handy_modules import COLORS
 
@@ -288,7 +287,7 @@ def update_progress(n):
 
 # Create a button component
 top_button = dbc.Button(
-    children=[html.I(className="fa fa-arrow-up", style={'margin': 'auto'})],  # Add this
+    children=[html.I(className="fa fa-arrow-up", style={'margin': 'auto'})],
     id="top-button",
     className="mr-1",
     outline=True,
@@ -296,10 +295,10 @@ top_button = dbc.Button(
     style={'position': 'fixed', 'bottom': '1%', 'right': '1%',
            'z-index': '9999', 'height': '40px', 'width': '40px',
            'opacity': '0.4', 'border-radius': '50%',
-           'padding': '6px', 'display': 'flex',  # Add this
-           'justify-content': 'center',  # Add this
-           'align-items': 'center'  # Add this
-    }
+           'padding': '6px', 'display': 'flex',
+           'justify-content': 'center',
+           'align-items': 'center'
+           }
 )
 
 
@@ -380,7 +379,6 @@ def create_layout(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest,
         ]
     )
 
-    # Add the following callback after your app's layout definition:
     app.clientside_callback(
         """
         function(n_clicks) {
