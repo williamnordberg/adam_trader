@@ -394,3 +394,36 @@ pandas.errors.EmptyDataError: No columns to parse from file
 2023-07-04 10:33:36 - INFO - root - Loop number: 1 SLEEPS
 2023-07-04 10:53:36 - INFO - root - Loop number: 2 RUNNING
 2023-07-04 10:53:37 - INFO - root - Loop number: 2 SLEEPS
+2023-07-04 11:05:06 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-04 11:05:07 - INFO - root - Loop number: 1 RUNNING
+2023-07-04 11:05:08 - INFO - root - Loop number: 1 SLEEPS
+2023-07-04 11:05:41 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-04 11:06:25 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-04 11:06:26 - INFO - root - Loop number: 1 RUNNING
+2023-07-04 11:06:26 - WARNING - root - Attempt 1 failed with error: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)). Retrying in 5 seconds...
+2023-07-04 11:06:31 - WARNING - root - Attempt 2 failed with error: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)). Retrying in 5 seconds...
+2023-07-04 11:06:33 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-04 11:06:42 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-04 11:06:43 - INFO - root - Loop number: 1 RUNNING
+2023-07-04 11:06:43 - WARNING - root - Attempt 1 failed with error: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)). Retrying in 5 seconds...
+2023-07-04 11:06:48 - WARNING - root - Attempt 2 failed with error: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)). Retrying in 5 seconds...
+2023-07-04 11:06:53 - WARNING - root - Attempt 3 failed with error: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)). Retrying in 5 seconds...
+2023-07-04 11:06:55 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-04 11:07:48 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-04 11:07:49 - INFO - root - Loop number: 1 RUNNING
+2023-07-04 11:07:50 - INFO - root - Loop number: 1 SLEEPS
+2023-07-04 11:07:53 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-04 11:08:21 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-04 11:08:22 - INFO - root - Loop number: 1 RUNNING
+2023-07-04 11:08:24 - INFO - root - Loop number: 1 SLEEPS
+2023-07-04 11:08:26 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-04 11:10:16 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-04 11:10:17 - INFO - root - Loop number: 1 RUNNING
+2023-07-04 11:10:18 - INFO - root - Loop number: 1 SLEEPS
+2023-07-04 11:10:54 - INFO - root - Received interrupt signal. Cleaning up...
