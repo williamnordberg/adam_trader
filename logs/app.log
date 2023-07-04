@@ -369,3 +369,28 @@ pandas.errors.EmptyDataError: No columns to parse from file
 2023-07-03 13:00:33 - INFO - Loop number: 1 RUNNING
 2023-07-03 13:00:34 - INFO - Loop number: 1 SLEEPS
 2023-07-03 13:01:13 - INFO - Received interrupt signal. Cleaning up...
+2023-07-03 17:15:23 - INFO - Dash is running on http://0.0.0.0:8051/
+
+2023-07-03 17:15:23 - INFO - Loop number: 1 RUNNING
+2023-07-03 17:15:33 - INFO - Loop number: 1 SLEEPS
+2023-07-03 17:16:39 - INFO - Received interrupt signal. Cleaning up...
+2023-07-04 10:29:17 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-04 10:29:17 - INFO - root - Loop number: 1 RUNNING
+2023-07-04 10:29:19 - ERROR - root - An error occurred in google: The request failed: Google returned a response with code 500
+2023-07-04 10:29:19 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '0470C7C960094383A1514F61989D2F14BEB3', 'notBefore': 'May 21 20:54:12 2023 GMT', 'notAfter': 'Aug 19 20:54:11 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-04 10:29:19 - WARNING - prawcore - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-07-04 10:29:21 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '0470C7C960094383A1514F61989D2F14BEB3', 'notBefore': 'May 21 20:54:12 2023 GMT', 'notAfter': 'Aug 19 20:54:11 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-04 10:29:21 - WARNING - prawcore - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-07-04 10:29:25 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '0470C7C960094383A1514F61989D2F14BEB3', 'notBefore': 'May 21 20:54:12 2023 GMT', 'notAfter': 'Aug 19 20:54:11 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-04 10:29:25 - ERROR - root - Error occurred: error with request HTTPSConnectionPool(host='www.reddit.com', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname 'www.reddit.com' doesn't match 'trustpositif.globalxtreme.net'")))
+2023-07-04 10:29:25 - INFO - googleapiclient.discovery_cache - file_cache is only supported with oauth2client<4.0.0
+2023-07-04 10:29:39 - INFO - root - Loop number: 1 SLEEPS
+2023-07-04 10:30:17 - INFO - root - start scrapping list of bitcoin richest addresses
+2023-07-04 10:33:18 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-04 10:33:34 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-04 10:33:35 - INFO - root - Loop number: 1 RUNNING
+2023-07-04 10:33:36 - INFO - root - Loop number: 1 SLEEPS
+2023-07-04 10:53:36 - INFO - root - Loop number: 2 RUNNING
+2023-07-04 10:53:37 - INFO - root - Loop number: 2 SLEEPS
