@@ -11,7 +11,9 @@ from m_visualization_side import read_gauge_chart_data
 
 APP_UPDATE_TIME = 50
 LONG_THRESHOLD = 0.68
-SHORT_THRESHOLD = 0.30
+SHORT_THRESHOLD = 0.70
+LONG_THRESHOLD_GAUGE = 0.68
+SHORT_THRESHOLD_GAUGE = 0.30
 
 
 def create_figure(trace_list, title_text, yaxis_title='Value'):
@@ -41,9 +43,10 @@ def create_figure(trace_list, title_text, yaxis_title='Value'):
         ),
         type="date"
     )
-    fig.update_layout(
-        xaxis_range=[days_ago, latest_date],
-        title={
+
+    layout_kwargs = {
+        'xaxis_range': [days_ago, latest_date],
+        'title': {
             'text': title_text,
             'y': 0.95,
             'x': 0.5,
@@ -54,20 +57,60 @@ def create_figure(trace_list, title_text, yaxis_title='Value'):
                 'size': 24
             }
         },
-        yaxis_title=yaxis_title,
-        plot_bgcolor=COLORS['black_chart'],
-        paper_bgcolor=COLORS['background'],
-        font=dict(
+        'yaxis_title': yaxis_title,
+        'plot_bgcolor': COLORS['black_chart'],
+        'paper_bgcolor': COLORS['background'],
+        'font': dict(
             color=COLORS['white'],
             size=12
         ),
-        legend=dict(orientation="h",
-                    yanchor="bottom",
-                    y=1.02,
-                    xanchor="right",
-                    x=1),
-        hovermode="x"
-    )
+        'legend': dict(orientation="h",
+                       yanchor="bottom",
+                       y=1.02,
+                       xanchor="right",
+                       x=1),
+        'hovermode': "x"
+    }
+
+    if title_text == "Combined score":
+        layout_kwargs['shapes'] = [
+            dict(
+                type="line",
+                xref="paper", x0=0, x1=1,
+                yref="y", y0=LONG_THRESHOLD, y1=LONG_THRESHOLD,
+                line=dict(color=COLORS['lightgray'], width=1)
+            ),
+            dict(
+                type="line",
+                xref="paper", x0=0, x1=1,
+                yref="y", y0=SHORT_THRESHOLD, y1=SHORT_THRESHOLD,
+                line=dict(color=COLORS['lightgray'], width=1)
+            )
+        ]
+        layout_kwargs['annotations'] = [
+            dict(
+                xref='paper', x=0.05,
+                yref='y', y=LONG_THRESHOLD,
+                text='Long',
+                showarrow=False,
+                font=dict(
+                    size=10,
+                    color=COLORS['white']
+                )
+            ),
+            dict(
+                xref='paper', x=0.08,
+                yref='y', y=SHORT_THRESHOLD,
+                text='Short',
+                showarrow=False,
+                font=dict(
+                    size=10,
+                    color=COLORS['white']
+                )
+            )
+        ]
+
+    fig.update_layout(**layout_kwargs)
 
     return fig
 
@@ -334,13 +377,13 @@ def create_single_gauge_chart(bullish, bearish, factor):
             "bgcolor": COLORS['black'],
         }
         if factor == 'weighted_score':
-            gauge_dict["axis"]["tickvals"] = [SHORT_THRESHOLD, LONG_THRESHOLD]  # Add ticks
-            gauge_dict["axis"]["ticktext"] = [f"short {SHORT_THRESHOLD}", f"long {LONG_THRESHOLD}"]  # Add tick labels
+            gauge_dict["axis"]["tickvals"] = [SHORT_THRESHOLD_GAUGE, LONG_THRESHOLD_GAUGE]  # Add ticks
+            gauge_dict["axis"]["ticktext"] = [f"short {SHORT_THRESHOLD_GAUGE}", f"long {LONG_THRESHOLD_GAUGE}"]
             gauge_dict["axis"]["showticklabels"] = True
 
-            if value >= LONG_THRESHOLD:
+            if value >= LONG_THRESHOLD_GAUGE:
                 number = {"font": {"size": 26, "color": COLORS['green_chart']}}
-            elif value <= SHORT_THRESHOLD:
+            elif value <= SHORT_THRESHOLD_GAUGE:
                 number = {"font": {"size": 26, "color": COLORS['red_chart']}}
             else:
                 number = {"font": {"size": 26, "color": COLORS['white']}}

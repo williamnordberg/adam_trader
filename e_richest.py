@@ -30,7 +30,6 @@ def check_multiple_addresses(addresses: List[str]) -> Tuple[int, int]:
         received, sent = get_address_transactions_24h_blockcypher(address)
         total_received += received
         total_sent += sent
-        print('received, sent', received, sent)
         time.sleep(0.5)
 
     return int(total_received), int(total_sent)

@@ -41,9 +41,10 @@ def create_figure(trace_list, title_text, yaxis_title='Value'):
         ),
         type="date"
     )
-    fig.update_layout(
-        xaxis_range=[days_ago, latest_date],
-        title={
+
+    layout_kwargs = {
+        'xaxis_range': [days_ago, latest_date],
+        'title': {
             'text': title_text,
             'y': 0.95,
             'x': 0.5,
@@ -54,20 +55,38 @@ def create_figure(trace_list, title_text, yaxis_title='Value'):
                 'size': 24
             }
         },
-        yaxis_title=yaxis_title,
-        plot_bgcolor=COLORS['black_chart'],
-        paper_bgcolor=COLORS['background'],
-        font=dict(
+        'yaxis_title': yaxis_title,
+        'plot_bgcolor': COLORS['black_chart'],
+        'paper_bgcolor': COLORS['background'],
+        'font': dict(
             color=COLORS['white'],
             size=12
         ),
-        legend=dict(orientation="h",
+        'legend': dict(orientation="h",
                     yanchor="bottom",
                     y=1.02,
                     xanchor="right",
                     x=1),
-        hovermode="x"
-    )
+        'hovermode': "x"
+    }
+
+    if title_text == "Combined score":
+        layout_kwargs['shapes'] = [
+            dict(
+                type="line",
+                xref="paper", x0=0, x1=1,  # these values mean the line spans the entire x range
+                yref="y", y0=0.7, y1=0.7,  # these values place the line at y=0.7
+                line=dict(color="Red", width=1)
+            ),
+            dict(
+                type="line",
+                xref="paper", x0=0, x1=1,  # these values mean the line spans the entire x range
+                yref="y", y0=0.68, y1=0.68,  # these values place the line at y=0.68
+                line=dict(color="Red", width=1)
+            )
+        ]
+
+    fig.update_layout(**layout_kwargs)
 
     return fig
 
