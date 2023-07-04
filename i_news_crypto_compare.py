@@ -3,7 +3,7 @@ from textblob import TextBlob
 import logging
 from typing import Tuple
 
-from z_handy_modules import check_internet_connection, retry_on_error
+from z_handy_modules import retry_on_error
 
 SENTIMENT_POSITIVE_THRESHOLD = 0.1
 SENTIMENT_NEGATIVE_THRESHOLD = -0.001
@@ -17,11 +17,6 @@ def check_news_cryptocompare_sentiment() -> Tuple[float, float, int, int]:
     negative_polarity_score = 0.0
     positive_count = 0
     negative_count = 0
-
-    # Check for internet connection
-    if not check_internet_connection():
-        logging.info('unable to get news sentiment')
-        return 0.0, 0.0, 0, 0
 
     url = 'https://min-api.cryptocompare.com/data/v2/news/?lang=EN'
     response = requests.get(url)

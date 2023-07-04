@@ -7,7 +7,7 @@ from requests.exceptions import RequestException, ConnectionError, Timeout, TooM
 
 from z_read_write_csv import save_value_to_database, \
     should_update, save_update_time, retrieve_latest_factor_values_database
-from z_handy_modules import check_internet_connection, retry_on_error
+from z_handy_modules import retry_on_error
 from z_compares import compare_google_reddit_youtube
 
 headers = {
@@ -65,10 +65,6 @@ def check_search_trend_wrapper(keywords: List[str]) -> Tuple[float, float]:
         bullish_score: a value between 0 (the lowest probability) and 1 (highest probability).
         bearish_score: a value between 0 (the lowest probability) and 1 (highest probability).
     """
-
-    if not check_internet_connection():
-        logging.info('No internet connection, unable to get google trend')
-        return 0.0, 0.0
 
     save_update_time('google_search')
 

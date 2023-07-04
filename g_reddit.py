@@ -1,10 +1,8 @@
 import praw
-import time
 import logging
 import configparser
 from typing import Tuple
-from praw import Reddit
-from prawcore.exceptions import RequestException
+
 from requests.exceptions import SSLError
 from urllib3.exceptions import MaxRetryError
 

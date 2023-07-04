@@ -7,7 +7,7 @@ from dateutil.parser import parse
 from typing import Tuple
 from requests.exceptions import RequestException, Timeout, TooManyRedirects, HTTPError
 
-from z_handy_modules import check_internet_connection, retry_on_error
+from z_handy_modules import retry_on_error
 import itertools
 
 # Initialize a session object
@@ -45,11 +45,6 @@ def get_address_transactions_24h_blockcypher(address: str, api_keys_cycle=iterto
         total_received (float): Total Bitcoin received in the last 24 hours.
         total_sent (float): Total Bitcoin sent in the last 24 hours.
     """
-
-    # Check for internet connection
-    if not check_internet_connection():
-        logging.info('unable to connect to Internet')
-        return 0, 0
 
     # Get the current time and time 24 hours ago
     current_time = int(time.time())

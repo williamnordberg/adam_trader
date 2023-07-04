@@ -508,3 +508,9 @@ pandas.errors.EmptyDataError: No columns to parse from file
 2023-07-04 11:37:40 - INFO - root - Loop number: 1 RUNNING
 2023-07-04 11:37:41 - INFO - root - Loop number: 1 SLEEPS
 2023-07-04 11:37:57 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-04 16:40:38 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-04 16:40:39 - INFO - root - Loop number: 1 RUNNING
+2023-07-04 16:40:51 - ERROR - root - An error occurred in google: The request failed: Google returned a response with code 500
+2023-07-04 16:41:07 - INFO - root - Loop number: 1 SLEEPS
+2023-07-04 16:41:33 - INFO - root - Received interrupt signal. Cleaning up...

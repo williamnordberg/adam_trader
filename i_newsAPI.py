@@ -7,7 +7,7 @@ import os
 from datetime import datetime, timedelta
 from typing import Tuple
 
-from z_handy_modules import check_internet_connection, retry_on_error
+from z_handy_modules import retry_on_error
 
 SENTIMENT_POSITIVE_THRESHOLD = 0.1
 SENTIMENT_NEGATIVE_THRESHOLD = -0.001
@@ -30,10 +30,6 @@ def check_news_api_sentiment(start: datetime, end: datetime) -> Tuple[float, flo
         :return: A tuple containing the average positive polarity,
          average negative polarity, positive count, and negative count.
         """
-
-    if not check_internet_connection():
-        logging.info('unable to get news sentiment')
-        return 0.0, 0.0, 0, 0
 
     start_date = start.strftime('%Y-%m-%d')
     end_date = end.strftime('%Y-%m-%d')
