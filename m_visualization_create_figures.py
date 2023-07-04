@@ -14,11 +14,11 @@ LONG_THRESHOLD = 0.68
 SHORT_THRESHOLD = 0.30
 
 
-def create_figure(trace_list, title_text, yaxis_title='Value', latest_days_ago=7):
+def create_figure(trace_list, title_text, yaxis_title='Value'):
 
     df = read_database()
     latest_date = df.index.max()  # get the latest date in your data
-    days_ago = latest_date - timedelta(days=latest_days_ago)
+    days_ago = latest_date - timedelta(days=1)
 
     fig = make_subplots(shared_xaxes=True, vertical_spacing=0.02)
     for trace in trace_list:
@@ -111,7 +111,7 @@ def visualized_combined():
     return fig
 
 
-def visualized_news(latest_days_ago=1):
+def visualized_news():
     df = read_database()
 
     trace_list = [
@@ -129,11 +129,11 @@ def visualized_news(latest_days_ago=1):
                    name='Negative count', visible='legendonly'),
     ]
 
-    fig = create_figure(trace_list, "News", latest_days_ago=latest_days_ago)
+    fig = create_figure(trace_list, "News")
     return fig
 
 
-def visualized_youtube(latest_days_ago=7):
+def visualized_youtube():
     df = read_database()
 
     trace_list = [
@@ -145,11 +145,11 @@ def visualized_youtube(latest_days_ago=7):
                    name='Number of Video in 24h')
     ]
 
-    fig = create_figure(trace_list, "Youtube", latest_days_ago=latest_days_ago)
+    fig = create_figure(trace_list, "Youtube")
     return fig
 
 
-def visualized_reddit(latest_days_ago=7):
+def visualized_reddit():
     df = read_database()
 
     trace_list = [
@@ -163,11 +163,11 @@ def visualized_reddit(latest_days_ago=7):
                    name='Reddit activity')
     ]
 
-    fig = create_figure(trace_list, "Reddit", latest_days_ago=latest_days_ago)
+    fig = create_figure(trace_list, "Reddit")
     return fig
 
 
-def visualized_google(latest_days_ago=7):
+def visualized_google():
     df = read_database()
 
     trace_list = [
@@ -176,11 +176,11 @@ def visualized_google(latest_days_ago=7):
         go.Scatter(x=df.index, y=df["google_search_bearish"], name='Google Bearish', visible='legendonly')
     ]
 
-    fig = create_figure(trace_list, "Google search", latest_days_ago=latest_days_ago)
+    fig = create_figure(trace_list, "Google search")
     return fig
 
 
-def visualized_richest(latest_days_ago=7):
+def visualized_richest():
     df = read_database()
 
     trace_list = [
@@ -190,11 +190,11 @@ def visualized_richest(latest_days_ago=7):
         go.Scatter(x=df.index, y=df["richest_addresses_total_sent"], name='Received in last 24H')
     ]
 
-    fig = create_figure(trace_list, "Richest Addresses", 'Value', latest_days_ago)
+    fig = create_figure(trace_list, "Richest Addresses", 'Value')
     return fig
 
 
-def visualize_macro(latest_days_ago=7):
+def visualize_macro():
     df = read_database()
 
     trace_list = [
@@ -205,11 +205,11 @@ def visualize_macro(latest_days_ago=7):
         go.Scatter(x=df.index, y=df["macro_bearish"], name='Macro Bearish', visible='legendonly')
     ]
 
-    fig = create_figure(trace_list, "Macro Economic", 'Value', latest_days_ago)
+    fig = create_figure(trace_list, "Macro Economic", 'Value')
     return fig
 
 
-def visualize_prediction(latest_days_ago=1):
+def visualize_prediction():
     df = read_database()
     trace_list = [
         go.Scatter(x=df.index, y=df["predicted_price"], name='Predicted price'),
@@ -218,7 +218,7 @@ def visualize_prediction(latest_days_ago=1):
         go.Scatter(x=df.index, y=df["prediction_bearish"], name='Prediction bearish', visible='legendonly')
     ]
 
-    fig = create_figure(trace_list, "Prediction", 'Value', latest_days_ago)
+    fig = create_figure(trace_list, "Prediction", 'Value')
     return fig
 
 
