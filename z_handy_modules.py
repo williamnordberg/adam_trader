@@ -54,75 +54,40 @@ def retry_on_error(max_retries: int = 3, delay: int = 5,
 
 
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
-        requests.ConnectionError,), fallback_values=False)
-def check_internet_connection() -> bool:
-    """
-    Check if there is an internet connection.
-
-    Returns:
-        bool: True if there is an internet connection, False otherwise.
-    """
-    try:
-        requests.get("http://www.google.com", timeout=5)
-        return True
-    except (requests.ConnectionError, requests.exceptions.Timeout, requests.exceptions.ReadTimeout):
-        logging.warning("No internet connection available.")
-        return False
-
-
-@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
-        requests.exceptions.RequestException, requests.exceptions.Timeout,
         requests.exceptions.RequestException, requests.exceptions.Timeout,
         ValueError, KeyError, JSONDecodeError), fallback_values=0)
 def get_bitcoin_future_market_price() -> int:
-    while True:
-        if check_internet_connection():
-            client = initialized_future_client()
-            try:
-                ticker = client.futures_ticker(symbol=SYMBOL)
-                current_price = int(float(ticker['lastPrice']))
-                return current_price
-            except (BinanceAPIException, BinanceRequestException) as e:
-                logging.error(f"Error: Could not connect to Binance API:{e}")
-        else:
-            logging.error("No internet connection.")
-        logging.error('Sleep 61 Sec and try again to retrieve Bitcoin price')
-        sleep(61)  # wait for 61 seconds before retrying
+    client = initialized_future_client()
+    try:
+        ticker = client.futures_ticker(symbol=SYMBOL)
+        current_price = int(float(ticker['lastPrice']))
+        return current_price
+    except (BinanceAPIException, BinanceRequestException) as e:
+        logging.error(f"Error: Could not connect to Binance API:{e}")
+    raise requests.exceptions.RequestException("Both API calls failed")
 
 
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
-        requests.exceptions.RequestException, requests.exceptions.Timeout,
-        requests.exceptions.RequestException, requests.exceptions.Timeout,
-        ValueError, KeyError, JSONDecodeError), fallback_values=0)
+    requests.exceptions.RequestException, requests.exceptions.Timeout,
+    ValueError, KeyError, JSONDecodeError), fallback_values=0)
 def get_bitcoin_price() -> int:
-    """
-    Retrieves the current Bitcoin price in USD from the CoinGecko API and Binance API.
-    Continuously retries until a valid price is obtained.
+    try:
+        response = requests.get(GECKO_ENDPOINT_PRICE)
+        if response.status_code == 200:
+            data = response.json()
+            current_price = int(data['bitcoin']['usd'])
+            return current_price
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Error: Could not connect to CoinGecko API:{e}, It will try with Binance")
 
-    Returns:
-        Int: The current Bitcoin price in USD or None if an error occurred.
-    """
-    while True:
-        if check_internet_connection():
-            try:
-                response = requests.get(GECKO_ENDPOINT_PRICE)
-                if response.status_code == 200:
-                    data = response.json()
-                    current_price = int(data['bitcoin']['usd'])
-                    return current_price
-            except requests.exceptions.RequestException as e:
-                logging.error(f"Error: Could not connect to CoinGecko API:{e}")
+    try:
+        response = requests.get(BINANCE_ENDPOINT_PRICE, params={'symbol': 'BTCUSDT'})
+        if response.status_code == 200:
+            return int(float(response.json()['price']))
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Error: Could not connect to Binance API:{e}")
 
-            try:
-                response = requests.get(BINANCE_ENDPOINT_PRICE, params={'symbol': 'BTCUSDT'})
-                if response.status_code == 200:
-                    return int(float(response.json()['price']))
-            except requests.exceptions.RequestException as e:
-                logging.error(f"Error: Could not connect to Binance API:{e}")
-        else:
-            logging.error("No internet connection.")
-        logging.error(f"Error: Could not retrieve BTC price, Sleep for 61 seconds ")
-        sleep(61)  # wait for 61 seconds before retrying
+    raise requests.exceptions.RequestException("Both API calls failed")
 
 
 def calculate_score_margin(weighted_score):
@@ -137,4 +102,4 @@ def calculate_score_margin(weighted_score):
 
 
 if __name__ == '__main__':
-    print('')
+    print(get_bitcoin_price())
