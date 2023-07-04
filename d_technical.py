@@ -153,4 +153,3 @@ def technical_analyse() -> Tuple[float, float]:
 if __name__ == '__main__':
     technical_bullish1, technical_bearish1 = technical_analyse_wrapper()
     logging.info(f'Bullish: {technical_bullish1}, Bearish: {technical_bearish1}')
-

@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from textblob import TextBlob
 import logging
 from typing import Tuple
-from z_handy_modules import check_internet_connection, retry_on_error
+from z_handy_modules import retry_on_error
 
 
 SENTIMENT_POSITIVE_THRESHOLD = 0.1
@@ -18,11 +18,6 @@ def check_news_sentiment_scrapper() -> Tuple[float, float, int, int]:
     negative_polarity_score = 0.0
     positive_count = 0
     negative_count = 0
-
-    # Check for internet connection
-    if not check_internet_connection():
-        logging.info('unable to get news sentiment')
-        return 0.0, 0.0, 0, 0
 
     # Set up the search query
     search_query = "Bitcoin"
