@@ -65,34 +65,29 @@ def check_search_trend_wrapper(keywords: List[str]) -> Tuple[float, float]:
         bullish_score: a value between 0 (the lowest probability) and 1 (highest probability).
         bearish_score: a value between 0 (the lowest probability) and 1 (highest probability).
     """
-
+    # it will be here until google trend server recover
     save_update_time('google_search')
-
     keywords = [keyword.lower() for keyword in keywords]
 
-    try:
-        pytrends = TrendReq(hl='en-US', tz=360, requests_args={'headers': headers})
-        pytrends.build_payload(keywords, cat=0, timeframe='now 7-d', geo='', gprop='')
+    pytrends = TrendReq(hl='en-US', tz=360, requests_args={'headers': headers})
+    pytrends.build_payload(keywords, cat=0, timeframe='now 7-d', geo='', gprop='')
 
-        trend = pytrends.interest_over_time()
-        last_hour, two_hours_before = trend.iloc[-1].values[0], trend.iloc[-2].values[0]
+    trend = pytrends.interest_over_time()
+    last_hour, two_hours_before = trend.iloc[-1].values[0], trend.iloc[-2].values[0]
+    google_bullish,  google_bearish = compare_google_reddit_youtube(last_hour, two_hours_before)
 
-        google_bullish,  google_bearish = compare_google_reddit_youtube(last_hour, two_hours_before)
+    save_value_to_database('hourly_google_search', last_hour)
+    # save_update_time('google_search')
 
-        save_value_to_database('hourly_google_search', last_hour)
-        save_value_to_database('google_search_bullish', google_bullish)
-        save_value_to_database('google_search_bearish', google_bearish)
-
-        return google_bullish,  google_bearish
-
-    except ResponseError as e:
-        logging.error(f"An error occurred in google: {e}")
-        return 0, 0
+    return google_bullish,  google_bearish
 
 
 def check_search_trend(keywords: List[str]) -> Tuple[float, float]:
     if should_update('google_search'):
-        return check_search_trend_wrapper(keywords)
+        google_bullish, google_bearish = check_search_trend_wrapper(keywords)
+        save_value_to_database('google_search_bullish', google_bullish)
+        save_value_to_database('google_search_bearish', google_bearish)
+        return google_bullish, google_bearish
     else:
         return retrieve_latest_factor_values_database('google_search')
 
