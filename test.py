@@ -1,412 +1,80 @@
-import dash
-from dash import dcc
-from dash import html
-from dash.dependencies import Input, Output
-import dash_bootstrap_components as dbc
 import logging
-
-from m_visualization_side import generate_tooltips, read_layout_data
-from m_visualization_create_figures import visualize_trade_details, visualized_combined, \
-    visualized_news, visualized_youtube, visualized_reddit, visualized_google, visualized_richest, \
-    visualize_macro, visualize_prediction, visualize_trade_results, create_gauge_charts
-from z_handy_modules import COLORS
-
-log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
-
-app = dash.Dash(__name__, external_stylesheets=[
-    dbc.themes.BOOTSTRAP, 'https://use.fontawesome.com/releases/v5.8.1/css/all.css'])
-APP_UPDATE_TIME = 50
+from typing import List, Tuple
+from pytrends.request import TrendReq as UTrendReq
+from pytrends.exceptions import ResponseError
+from requests.exceptions import RequestException, ConnectionError, Timeout, TooManyRedirects
 
 
-@app.callback(
-    [Output('trade_details_table', 'children'),
-     Output('combined_chart', 'figure'),
-     Output('news_chart', 'figure'),
-     Output('youtube_chart', 'figure'),
-     Output('reddit_chart', 'figure'),
-     Output('google_chart', 'figure'),
-     Output('richest_chart', 'figure'),
-     Output('macro_chart', 'figure'),
-     Output('prediction_chart', 'figure'),
-     Output('trade_results_chart', 'figure'),
-     Output('log-data', 'value'),
-     Output('live-update-graph', 'figure')],
-    [Input('interval-component', 'n_intervals')])
-def update_all(n):
-    return (visualize_trade_details(),
-            visualized_combined(),
-            visualized_news(),
-            visualized_youtube(),
-            visualized_reddit(),
-            visualized_google(),
-            visualized_richest(),
-            visualize_macro(),
-            visualize_prediction(),
-            visualize_trade_results(),
-            visualization_log('logs/app.log', 100),
-            create_gauge_charts())
+from z_read_write_csv import save_value_to_database, \
+    should_update, save_update_time, retrieve_latest_factor_values_database
+from z_handy_modules import retry_on_error
+from z_compares import compare_google_reddit_youtube
+
+headers = {
+    'authority': 'trends.google.com',
+    'accept': 'application/json, text/plain, /',
+    'accept-language': 'en-US,en;q=0.5',
+    'cookie': 'HSID=AdcKfk_1mAM433GfE; SSID=AsxV9rh2FIY9PJmZQ; APISID=4_3quztPi8mrmBJx/ArmLIYnAU1nekqQzH; SAPISID=2lIiX6Tj2Nt6g51d/AmmZuyJ6wWkCH_oHV; _Secure-1PAPISID=2lIiX6Tj2Nt6g51d/AmmZuyJ6wWkCH_oHV; __Secure-3PAPISID=2lIiX6Tj2Nt6g51d/AmmZuyJ6wWkCH_oHV; SEARCH_SAMESITE=CgQIuJgB; SID=XQgKWDtvzBiMaRI7RA56arPOvH3qh60ElvI71tJ3df8ep7IlwNkVTHJlzE_osgeTMu-afA.; __Secure-1PSID=XQgKWDtvzBiMaRI7RA56arPOvH3qh60ElvI71tJ3df8ep7IlI1U72Lb4_fdJ5B3ZU77PCA.; __Secure-3PSID=XQgKWDtvzBiMaRI7RA56arPOvH3qh60ElvI71tJ3df8ep7IlE2_3IcYkgTIUX-QYrEMuhw.; AEC=Ad49MVEPzYv0WqBnoX2jLu-mAZ5CNCQA5BmKPz2DCKN7_W31p5OT7Y6iOw; 1P_JAR=2023-07-05-03; NID=511=sAEXqat3gVlSDxKF_M-vUFYRkVf1kxoXNG8O6SZuKi3v2E4aStabDaSzxLYZRjlvVAIH7TmxxIqS8mhd7FC9xmh755AHz9MCXcoQ50LlmohkGo3UFEDXCV2ZaVQrTC-tMbFfUG96z89X5rityw1i35g8x7ieWre_4y3ortAZbtqWLS_9lyKNHI9B7v5bWNjaQOipQKVYEkNauEOosBMAFkR29fAjH38n2RSQV3TlEDMmk6tRLHZUg73ght1UsnfFjjvufZqbRqj1-lM0pi-oQDew9xBc7_YIBlpI2-DrLfxdnBYAeYFewxONuB3InGJV_8l48dw; __Secure-1PSIDTS=sidts-CjIBPu3jIdWwFkOY44BZ9SMOoFWuihPBhHNHG02vLRyS3Awn27tC-ndL4Ajqa1nP4PxTwxAA; __Secure-3PSIDTS=sidts-CjIBPu3jIdWwFkOY44BZ9SMOoFWuihPBhHNHG02vLRyS3Awn27tC-ndL4Ajqa1nP4PxTwxAA; OTZ=7103723_24_2424; SIDCC=AP8dLtzivtzJ0Rw_VyCppkP2N4Rt0xU79XiH6pJSaUclTnEaFYrDT6xgI6Rtxf9D9YHc8G3d3EQ; __Secure-1PSIDCC=AP8dLtxWRYXXDYdFaob_hsK1Kqpxd6kg4udc51-7h0CrfDSOqOb9_Q_X2jYyES1IQccgDGfrZqY; __Secure-3PSIDCC=AP8dLtyvqSyYPdwiZJ1uvZ9N0bfelUnSovHr_hujMnFirEwBtTaGYnJ3tT9FJs3bNP40U9sdUh21',
+    'referer': 'https://trends.google.com/trends/explore?date=now%207-d&q=Fourth%20of%20july&hl=en',
+    'sec-ch-ua': '"Not.A/Brand";v="8", "Chromium";v="114", "Brave";v="114"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-model': '""',
+    'sec-ch-ua-platform': '"macOS"',
+    'sec-ch-ua-platform-version': '"13.0.0"',
+    'sec-fetch-dest': 'empty',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-site': 'same-origin',
+    'sec-gpc': '1',
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
+}
+
+class TrendReq(UTrendReq):
+    def _get_data(self, url, method='get', trim_chars=0, **kwargs):
+        return super()._get_data(url, method=method, trim_chars=trim_chars, headers=headers, **kwargs)
 
 
-def visualization_log(filename, lines=1):
-    with open(filename, 'r') as f:
-        return ''.join(list(f)[-lines:])
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
+        ResponseError, RequestException, ConnectionError, Timeout,
+        TooManyRedirects), fallback_values=(0.0, 0.0))
+def check_search_trend_wrapper(keywords: List[str]) -> Tuple[float, float]:
+    """
+    Check if there is a significant increase in search volume for a list of keywords in the past 1 hour.
+
+    Args:
+        keywords (List[str]): The list of keywords to search for.
+
+    Returns:
+        bullish_score: a value between 0 (the lowest probability) and 1 (highest probability).
+        bearish_score: a value between 0 (the lowest probability) and 1 (highest probability).
+    """
+
+    keywords = [keyword.lower() for keyword in keywords]
+
+    pytrends = TrendReq(hl='en-US', tz=360, requests_args={'headers': headers})
+    pytrends.build_payload(keywords, cat=0, timeframe='now 7-d', geo='', gprop='')
+
+    trend = pytrends.interest_over_time()
+    print('trend', trend)
+    last_hour, two_hours_before = trend.iloc[-1].values[0], trend.iloc[-2].values[0]
+    print('last_hour, two_hours_before', last_hour, two_hours_before)
+    google_bullish,  google_bearish = compare_google_reddit_youtube(last_hour, two_hours_before)
+
+    save_value_to_database('hourly_google_search', last_hour)
+    save_update_time('google_search')
+
+    return google_bullish,  google_bearish
 
 
-@app.callback(
-    [Output('fed-rate', 'children'),
-     Output('cpi-rate', 'children'),
-     Output('ppi-rate', 'children'),
-     Output('fed-announcement', 'children'),
-     Output('cpi-announcement', 'children'),
-     Output('ppi-announcement', 'children'),
-     Output('trading-state', 'children'),
-     Output('trading-state', 'style'),  # Add 'style' as an output
-     Output('bid-volume', 'children'),
-     Output('ask-volume', 'children'),
-     Output('predicted-price', 'children'),
-     Output('current-price', 'children'),
-     Output('price-difference', 'children'),
-     Output('rsi', 'children'),
-     Output('over-200EMA', 'children'),
-     Output('MACD-uptrend', 'children'),
-     Output('MA-distance', 'children'),
-     Output('BTC-received', 'children'),
-     Output('BTC-sent', 'children'),
-     Output('positive-news-change', 'children'),
-     Output('negative-news-change', 'children')],
-    [Input('interval-component', 'n_intervals')])
-def update_divs(n):
-    # Get the latest data
-    layout_data = read_layout_data()
-
-    # Extract values
-    trading_state = layout_data["trading_state"]
-    # Generate color based on trading_state
-    if trading_state == 'long':
-        color = 'green'
-    elif trading_state == 'short':
-        color = 'red'
+def check_search_trend(keywords: List[str]) -> Tuple[float, float]:
+    if should_update('google_search'):
+        google_bullish, google_bearish = check_search_trend_wrapper(keywords)
+        save_value_to_database('google_search_bullish', google_bullish)
+        save_value_to_database('google_search_bearish', google_bearish)
+        return google_bullish, google_bearish
     else:
-        color = COLORS['white']
-
-    fed_rate_m_to_m = layout_data["fed_rate_m_to_m"]
-    cpi_m_to_m = layout_data["cpi_m_to_m"]
-    ppi_m_to_m = layout_data["ppi_m_to_m"]
-    bid_volume = layout_data["bid_volume"]
-    ask_volume = layout_data["ask_volume"]
-    predicted_price = int(layout_data["predicted_price"])
-    current_price = int(layout_data["current_price"])
-    price_difference = int(predicted_price - current_price)
-    rsi = layout_data["rsi"]
-    over_200EMA = layout_data["over_200EMA"]
-    MACD_uptrend = layout_data["MACD_uptrend"]
-    bb_MA_distance = int(layout_data["bb_MA_distance"])
-    BTC_received = layout_data["BTC_received"]
-    BTC_send = layout_data["BTC_send"]
-    positive_news_polarity_change = layout_data["positive_news_polarity_change"]
-    negative_news_polarity_change = layout_data["negative_news_polarity_change"]
-    fed_announcement = layout_data["fed_announcement"]
-    cpi_announcement = layout_data["cpi_announcement"]
-    ppi_announcement = layout_data["ppi_announcement"]
-
-    return fed_rate_m_to_m, f'CPI MtoM: {cpi_m_to_m}', f'PPI MtoM: {ppi_m_to_m}', fed_announcement, cpi_announcement, \
-        ppi_announcement, f'T State: {trading_state}', {'color': color}, f'Bid vol: {bid_volume}', \
-        f'Ask vol: {ask_volume}', f'Predicted: {predicted_price}', f'Current: {current_price}', \
-        f'Diff: {price_difference}', f'RSI: {rsi}', f'Over 200EMA: {over_200EMA}', \
-        f'MACD up tr: {MACD_uptrend}', f'bb distance: {bb_MA_distance}', f'Rich receive: {BTC_received}', \
-        f'Rich send: {BTC_send}', f'+ POL news inc: {positive_news_polarity_change}', \
-        f'- POL news inc: {negative_news_polarity_change}'
+        return retrieve_latest_factor_values_database('google_search')
 
 
-def create_html_divs(initial_layout_data):
-    html_div_list = [
-        html.Div([
-            html.P('L: last update', id='last_update', style={
-                'fontSize': '13px', 'margin': '0px'}),
-            html.P('N: next update', id='next_update',
-                   style={'fontSize': '13px', 'margin': '0px'}),
-        ], ),
-
-        html.Div([
-            html.A(
-                f'{initial_layout_data["fed_rate_m_to_m"]}',
-                id='fed-rate',
-                target='_blank',  # Opens link in new tab
-                href="https://www.forexfactory.com/calendar",
-                style={'fontSize': '13px'}
-            ),
-            html.P(f'CPI MtoM: {initial_layout_data["cpi_m_to_m"]}', id='cpi-rate', style={
-                'fontSize': '13px', 'marginBottom': '0px'}),
-            html.P(f'PPI MtoM: {initial_layout_data["ppi_m_to_m"]}', id='ppi-rate', style={
-                'fontSize': '13px', 'marginBottom': '0px'}),
-            html.P(initial_layout_data["fed_announcement"] if initial_layout_data["fed_announcement"] != '' else "",
-                   id='fed-announcement',
-                   style={'fontSize': '13px', 'marginBottom': '0px',
-                          'color': 'red' if initial_layout_data["fed_announcement"] != '' else None,
-                          'fontWeight': '' if initial_layout_data["fed_announcement"] != '' else None}),
-            html.P(initial_layout_data["cpi_announcement"] if initial_layout_data["cpi_announcement"] != '' else "",
-                   id='cpi-announcement', style={'fontSize': '13px',
-                                                 'marginBottom': '0px',
-                                                 'color': 'red' if initial_layout_data["cpi_announcement"] != '' else
-                                                 None,
-                                                 'fontWeight': '' if initial_layout_data["cpi_announcement"] != '' else
-                                                 None}),
-            html.P(initial_layout_data["ppi_announcement"] if initial_layout_data["ppi_announcement"] else "",
-                   id='ppi-announcement',
-                   style={'fontSize': '13px', 'marginBottom': '0px',
-                          'color': 'red' if initial_layout_data["ppi_announcement"] != '' else None,
-                          'fontWeight': '' if initial_layout_data["ppi_announcement"] != '' else None}),
-        ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
-        html.Div([
-            html.P(f'T State: {initial_layout_data["trading_state"]}', id='trading-state',
-                   style={'fontSize': '13px',
-                          'margin': '0px',
-                          'color': 'green' if initial_layout_data["trading_state"] == 'long'
-                          else ('red' if
-                                initial_layout_data["trading_state"] == 'short'
-                                else COLORS['white'])}),
-        ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
-        html.Div([
-            html.P(f'Bid vol: {initial_layout_data["bid_volume"]}', id='bid-volume',
-                   style={'fontSize': '14px', 'margin': '0px'}),
-            html.P(f'Ask vol: {initial_layout_data["ask_volume"]}', id='ask-volume',
-                   style={'fontSize': '14px', 'margin': '0px'}),
-        ], style={'borderTop': '1px solid white'}),
-
-        html.Div([
-            html.P(f'Predicted: {initial_layout_data["predicted_price"]}', id='predicted-price',
-                   style={'fontSize': '13px', 'margin': '0px'}),
-            html.P(f'Current: {initial_layout_data["current_price"]}', id='current-price', style={
-                'fontSize': '13px', 'margin': '0px'}),
-            html.P(f'Diff: {int(initial_layout_data["predicted_price"] - initial_layout_data["current_price"])}',
-                   id='price-difference',
-                   # style={'fontSize': '13px', 'margin': '0px'}),
-                   style={'fontSize': '13px',
-                          'margin': '0px',
-                          'color': 'green' if int(initial_layout_data["predicted_price"] -
-                                                  initial_layout_data["current_price"]) > 300
-                          else ('red' if int(initial_layout_data["predicted_price"] -
-                                             initial_layout_data["current_price"]) < 300
-                                else COLORS['white'])}),
-        ], style={'borderTop': '1px solid white'}),
-
-        html.Div([
-            html.P(f'RSI: {initial_layout_data["rsi"]}', id='rsi', style={'fontSize': '13px', 'margin': '0px'}),
-            html.P(f'Over 200EMA: {initial_layout_data["over_200EMA"]}', id='over-200EMA',
-                   style={'fontSize': '13px', 'margin': '0px'}),
-            html.P(f'MACD uptrend: {initial_layout_data["MACD_uptrend"]}', id='MACD-uptrend',
-                   style={'fontSize': '13px', 'margin': '0px'}),
-            html.P(f'MA distance: {initial_layout_data["bb_MA_distance"]}', id='MA-distance',
-                   style={'fontSize': '13px', 'margin': '0px'}),
-        ], style={'borderTop': '1px solid white'}),
-
-        html.Div([
-            html.P(f'BTC received: {initial_layout_data["BTC_received"]}', id='BTC-received',
-                   style={'fontSize': '13px', 'margin': '0px'}),
-            html.P(f'BTC sent: {initial_layout_data["BTC_send"]}', id='BTC-sent', style={
-                'fontSize': '13px', 'margin': '0px'}),
-        ], style={'borderTop': '1px solid white'}),
-
-        html.Div([
-            html.P(f'+ news change: {initial_layout_data["positive_news_polarity_change"]}',
-                   id='positive-news-change', style={'fontSize': '13px', 'margin': '0px'}),
-            html.P(f'- news change: {initial_layout_data["negative_news_polarity_change"]}',
-                   id='negative-news-change', style={'fontSize': '13px', 'margin': '0px'}),
-        ], style={'borderTop': '1px solid white'})
-    ]
-
-    return html_div_list
-
-
-@app.callback(
-    Output('timer', 'children'),
-    [Input('timer-interval-component', 'n_intervals')]
-)
-def update_timer(n):
-    countdown = APP_UPDATE_TIME - (n * 5) % APP_UPDATE_TIME
-    return f'Next update in {countdown} sec'
-
-
-def create_update_intervals():
-    interval_component = dcc.Interval(
-        id='interval-component',
-        interval=APP_UPDATE_TIME * 1000,  # in milliseconds
-        n_intervals=0
-    )
-    timer_interval_component = dcc.Interval(
-        id='timer-interval-component',
-        interval=5 * 1000,  # in milliseconds
-        n_intervals=0
-    )
-
-    return timer_interval_component, interval_component
-
-
-def create_graphs(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest, fig_google, fig_reddit,
-                  fig_youtube, fig_news, fig_combined):
-    graph_list = []
-    graph_ids = ['live-update-graph', 'trade_results_chart', 'macro_chart', 'prediction_chart',
-                 'richest_chart', 'google_chart', 'reddit_chart',
-                 'youtube_chart', 'news_chart', 'combined_chart']
-    fig_list = [fig, fig_trade_result, fig_macro, fig_prediction, fig_richest, fig_google, fig_reddit,
-                fig_youtube, fig_news, fig_combined]
-
-    for i in range(len(graph_ids)):
-        graph_list.append(dcc.Graph(id=graph_ids[i], figure=fig_list[i],
-                                    style={'width': '100%', 'height': '100vh'}))
-
-    return graph_list
-
-
-def create_progress_bar():
-    return html.Div([
-        dbc.Progress(value=50, color=COLORS['background'], striped=True, animated=True, id="progress",
-                     className="custom-progress", style={'position': 'fixed', 'top': '0', 'width': '100%',
-                                                         'backgroundColor': COLORS['background']}),
-        html.Div(id='timer', style={
-            'position': 'fixed',
-            'top': '0',
-            'width': '100%',
-            'textAlign': 'center',
-            'color': '#D3D3D3',
-            'fontSize': '14px',
-            'marginTop': '-3px'
-        })
-    ])
-
-
-@app.callback(Output('progress', 'value'),
-              [Input('timer-interval-component', 'n_intervals')])
-def update_progress(n):
-    countdown = 100 if n % 10 == 0 else 100 - (n % 10) * 10
-    return countdown
-
-
-# Create a button component
-top_button = dbc.Button(
-    children=[html.I(className="fa fa-arrow-up", style={'margin': 'auto'})],
-    id="top-button",
-    className="mr-1",
-    outline=True,
-    color="secondary",
-    style={'position': 'fixed', 'bottom': '1%', 'right': '1%',
-           'z-index': '9999', 'height': '40px', 'width': '40px',
-           'opacity': '0.4', 'border-radius': '50%',
-           'padding': '6px', 'display': 'flex',
-           'justify-content': 'center',
-           'align-items': 'center'
-           }
-)
-
-
-# noinspection PyTypeChecker
-def create_layout(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest, fig_google, fig_reddit,
-                  fig_youtube, fig_news, fig_combined):
-    initial_layout_data = read_layout_data()
-    timer_interval_component, interval_component = create_update_intervals()
-    progress_bar = create_progress_bar()
-
-    graphs = create_graphs(fig, fig_trade_result, fig_macro, fig_prediction, fig_richest, fig_google, fig_reddit,
-                           fig_youtube, fig_news, fig_combined)
-    html_divs = create_html_divs(initial_layout_data)
-
-    first_figure = dcc.Graph(
-        id='live-update-graph',
-        figure=fig,
-        style={'width': '89%', 'height': '100vh', 'display': 'inline-block', 'marginTop': '-18px'}
-    )
-
-    # div wrapping the layout and taking up 10% width
-    layout_div = html.Div(
-        children=[timer_interval_component, interval_component, top_button] + html_divs,
-        style={'width': '11%', 'height': '100vh', 'display': 'inline-block', 'verticalAlign': 'top'}
-    )
-
-    # div wrapping the rest of the figures, taking up 100% width
-    figure_div = html.Div(
-        children=graphs[1:] + generate_tooltips(),
-        style={'width': '100%', 'height': '90vh', 'display': 'inline-block', 'verticalAlign': 'top',
-
-               }
-    )
-
-    trade_details_div = html.Div(
-        [
-            html.H3('Latest trades', style={'textAlign': 'center'}),
-            html.Div(
-                id='trade_details_table',
-                style={
-                    'width': '90%',
-                    'height': '20vh',
-                    'overflowY': 'scroll',
-                    'fontSize': '14px',
-                    'margin': 'auto'  # Center the table
-                }
-            )
-        ]
-    )
-
-    app.layout = html.Div(
-
-        style={'backgroundColor': COLORS['background'], 'color': COLORS['white']},
-        children=[
-            html.Div(children=[progress_bar], style={'display': 'inline-block', 'width': '100%', 'height': '05vh'}),
-            html.Div(id='dummy-output', style={'display': 'none'}),  # Add this
-            first_figure,
-            layout_div,
-            html.H3('Terminal putput', style={'textAlign': 'center'}),
-            html.Div(children=[
-                dcc.Textarea(id='log-data', style={
-                    'width': '90%',
-                    'height': '20vh',
-                    'backgroundColor': COLORS['black_chart'],
-                    'color': COLORS['white'],
-                    'margin': 'auto'
-                })
-            ],
-                style={
-                    'display': 'flex',
-                    'justifyContent': 'center',
-                    'alignItems': 'center',
-                    'width': '100%'
-                }
-            ),
-            trade_details_div,
-            figure_div,
-        ]
-    )
-
-    app.clientside_callback(
-        """
-        function(n_clicks) {
-            if(n_clicks > 0){
-                window.scrollTo(0, 0);
-            }
-            return null;
-        }
-        """,
-        Output('dummy-output', 'children'),  # a dummy output, not used
-        [Input('top-button', 'n_clicks')],
-    )
-
-    app.run_server(host='0.0.0.0', port=8051, debug=False)
-
-
-def visualize_charts():
-    fig_gauge = create_gauge_charts()
-    fig_trade_result = visualize_trade_results()
-    fig_macro = visualize_macro()
-    fig_prediction = visualize_prediction()
-    fig_richest = visualized_richest()
-    fig_google = visualized_google()
-    fig_reddit = visualized_reddit()
-    fig_youtube = visualized_youtube()
-    fig_news = visualized_news()
-    fig_combined = visualized_combined()
-    create_layout(fig_gauge, fig_trade_result, fig_macro, fig_prediction, fig_richest, fig_google, fig_reddit,
-                  fig_youtube, fig_news, fig_combined)
-
-
-if __name__ == '__main__':
-    visualize_charts()
+if __name__ == "__main__":
+    bullish_score_outer, bearish_score_outer = check_search_trend_wrapper(["Bitcoin"])
+    logging.info(f'google_bullish: {bullish_score_outer}   google_bearish:{bearish_score_outer}')
