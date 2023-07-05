@@ -64,7 +64,7 @@ def update_internal_factors():
     main_dataset = load_dataset()
 
     # Get the latest date in the main dataset
-    latest_date = main_dataset.loc[main_dataset['DiffLast'].last_valid_index()].name
+    latest_date = main_dataset['DiffLast'].last_valid_index()
 
     # Initialize CoinMetricsClient
     client = CoinMetricsClient()
