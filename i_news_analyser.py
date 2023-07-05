@@ -77,8 +77,6 @@ def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
     # We need to update Bitcoin price hourly (same as news)
     update_bitcoin_price_in_database()
 
-    save_update_time('sentiment_of_news')
-
     # Get aggregated value from 3 function for las 24 hours
     last_24_hours_positive_polarity, last_24_hours_negative_polarity,\
         positive_count_24_hours_before, negative_count_24_hours_before = aggregate_news()
@@ -91,15 +89,18 @@ def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
     save_value_to_database('news_negative_polarity', round(last_24_hours_negative_polarity, 2))
     save_value_to_database('news_positive_count', positive_count_24_hours_before)
     save_value_to_database('news_negative_count', negative_count_24_hours_before)
-    save_value_to_database('news_bullish', news_bullish)
-    save_value_to_database('news_bearish', news_bearish)
+
+    save_update_time('sentiment_of_news')
 
     return news_bullish, news_bearish
 
 
 def check_sentiment_of_news() -> Tuple[float, float]:
     if should_update('sentiment_of_news'):
-        return check_sentiment_of_news_wrapper()
+        news_bullish, news_bearish = check_sentiment_of_news_wrapper()
+        save_value_to_database('news_bullish', news_bullish)
+        save_value_to_database('news_bearish', news_bearish)
+        return news_bullish, news_bearish
     else:
         return retrieve_latest_factor_values_database('news')
 

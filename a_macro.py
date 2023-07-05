@@ -158,7 +158,6 @@ def get_service() -> Service:
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
         Exception, TimeoutException), fallback_values=(0.0, 0.0, {}))
 def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
-    save_update_time('macro')
 
     events_list = ["Federal Funds Rate", "CPI m/m", "PPI m/m"]
     url = "https://www.forexfactory.com/calendar"
@@ -229,8 +228,6 @@ def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
     if rate_this_month or cpi_m_to_m or ppi_m_to_m:
         macro_bullish, macro_bearish = calculate_macro_sentiment(
             rate_this_month, rate_month_before, cpi_m_to_m, ppi_m_to_m)
-        save_value_to_database('macro_bullish', round(macro_bullish, 2))
-        save_value_to_database('macro_bearish', round(macro_bearish, 2))
 
         # Save in database
         if rate_this_month and rate_month_before:
@@ -245,6 +242,7 @@ def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
         # Save the next event date
         write_latest_data('next-fed-announcement', events_date_dict['Federal Funds Rate'])
 
+        save_update_time('macro')
         return macro_bullish, macro_bearish, events_date_dict
 
     else:
@@ -254,7 +252,10 @@ def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
 
 def macro_sentiment() -> Tuple[float, float, Dict[str, datetime]]:
     if should_update('macro'):
-        return macro_sentiment_wrapper()
+        macro_bullish, macro_bearish, events_date_dict = macro_sentiment_wrapper()
+        save_value_to_database('macro_bullish', round(macro_bullish, 2))
+        save_value_to_database('macro_bearish', round(macro_bearish, 2))
+        return macro_bullish, macro_bearish, events_date_dict
     else:
         macro_bullish, macro_bearish = retrieve_latest_factor_values_database('macro')
         return macro_bullish, macro_bearish, {}

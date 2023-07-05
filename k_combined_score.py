@@ -24,8 +24,6 @@ def make_trading_decision(factor_values) -> Tuple[float, float]:
     Makes a trading decision based on the conditions met.
     """
 
-    save_update_time('weighted_score')
-
     macro_bullish = factor_values['macro_bullish']
     macro_bearish = factor_values['macro_bearish']
     order_book_bullish = factor_values['order_book_bullish']
@@ -94,6 +92,9 @@ def make_trading_decision(factor_values) -> Tuple[float, float]:
             weights["youtube"] * youtube_bearish +
             weights["sentiment_of_news"] * news_bearish
     )
+
+    save_update_time('weighted_score')
+
     # Check if the minimum number of contributing factors is met
     if num_contributing_factors >= MIN_CONTRIBUTING_FACTORS:
         # Normalize the scores

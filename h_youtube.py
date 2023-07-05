@@ -1,6 +1,9 @@
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
+from googleapiclient.errors import UnknownApiNameOrVersion
+
+
 import pickle
 import os.path
 from google.auth.transport.requests import Request
@@ -10,12 +13,16 @@ from typing import Tuple
 from googleapiclient.errors import HttpError
 from google.auth.exceptions import RefreshError
 
+
 from z_compares import compare_google_reddit_youtube
 from z_handy_modules import retry_on_error
 from z_read_write_csv import save_value_to_database, \
     should_update, save_update_time, retrieve_latest_factor_values_database
 
 
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
+        FileNotFoundError, pickle.UnpicklingError,
+        RefreshError, HttpError, UnknownApiNameOrVersion), fallback_values='pass')
 def get_authenticated_service():
     api_service_name = "youtube"
     api_version = "v3"
@@ -29,26 +36,16 @@ def get_authenticated_service():
             creds = pickle.load(token)
 
     if not creds or not creds.valid:
-        try:
-            if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            else:
-                flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
-                    client_secrets_file, scopes)
-                creds = flow.run_local_server(port=0)
-        except RefreshError as e:
-            logging.error(f"Error refreshing token: {e}. Token update required.")
-            logging.info("Manually authenticate and save the token in youtube_token.pickle")
-            # Exception is re-raised so that the retry decorator on youtube_wrapper can handle it
-            raise
-        except Exception as e:
-            logging.error(f"An unexpected error occurred: {e}")
-            # If there are other exceptions that are not RefreshError, you can decide how to handle them.
-            # You may choose to re-raise them if they should trigger a retry in youtube_wrapper.
-            raise
 
-        with open(token_file, 'wb') as token:
-            pickle.dump(creds, token)
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
+                client_secrets_file, scopes)
+            creds = flow.run_local_server(port=0)
+
+    with open(token_file, 'wb') as token:
+        pickle.dump(creds, token)
 
     youtube = googleapiclient.discovery.build(api_service_name, api_version, credentials=creds)
     return youtube
@@ -81,7 +78,6 @@ def get_youtube_videos(youtube, published_after, published_before):
     fallback_values=(0.0, 0.0))
 def youtube_wrapper() -> Tuple[float, float]:
     # If so, check the increase in the number of YouTube videos with the #bitcoin hashtag
-    save_update_time('youtube')
 
     youtube = get_authenticated_service()
 
@@ -90,29 +86,30 @@ def youtube_wrapper() -> Tuple[float, float]:
     last_48_hours_start = (now - timedelta(days=2)).strftime('%Y-%m-%dT%H:%M:%SZ')
     last_24_hours_end = now.strftime('%Y-%m-%dT%H:%M:%SZ')
 
-    try:
-        search_results_last_24_hours = get_youtube_videos(youtube, last_24_hours_start, last_24_hours_end)
-        search_results_last_48_to_24_hours = get_youtube_videos(youtube, last_48_hours_start, last_24_hours_start)
+    search_results_last_24_hours = get_youtube_videos(youtube, last_24_hours_start, last_24_hours_end)
+    search_results_last_48_to_24_hours = get_youtube_videos(youtube, last_48_hours_start, last_24_hours_start)
 
-        num_last_24_hours = len(search_results_last_24_hours)
-        num_last_48_to_24_hours = len(search_results_last_48_to_24_hours)
-        youtube_bullish, youtube_bearish = compare_google_reddit_youtube(
-            num_last_24_hours, num_last_48_to_24_hours)
+    num_last_24_hours = len(search_results_last_24_hours)
+    num_last_48_to_24_hours = len(search_results_last_48_to_24_hours)
+    youtube_bullish, youtube_bearish = compare_google_reddit_youtube(
+        num_last_24_hours, num_last_48_to_24_hours)
 
-        # Save to database
-        save_value_to_database('last_24_youtube', num_last_24_hours)
-        save_value_to_database('youtube_bullish', youtube_bullish)
-        save_value_to_database('youtube_bearish', youtube_bearish)
-    except Exception as e:
-        logging.error(f"Error occurred: {e}")
-        youtube_bullish, youtube_bearish = 0.0, 0.0
+    # Save to database
+    save_value_to_database('last_24_youtube', num_last_24_hours)
+
+    save_update_time('youtube')
 
     return youtube_bullish, youtube_bearish
 
 
 def check_bitcoin_youtube_videos_increase() -> Tuple[float, float]:
     if should_update('youtube'):
-        return youtube_wrapper()
+
+        youtube_bullish, youtube_bearish = youtube_wrapper()
+        save_value_to_database('youtube_bullish', youtube_bullish)
+        save_value_to_database('youtube_bearish', youtube_bearish)
+
+        return youtube_bullish, youtube_bearish
     else:
         return retrieve_latest_factor_values_database('youtube')
 

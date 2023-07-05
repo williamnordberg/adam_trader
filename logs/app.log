@@ -540,3 +540,32 @@ pandas.errors.EmptyDataError: No columns to parse from file
 2023-07-05 11:44:51 - ERROR - root - Error occurred: error with request HTTPSConnectionPool(host='www.reddit.com', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname 'www.reddit.com' doesn't match 'trustpositif.globalxtreme.net'")))
 2023-07-05 11:45:07 - INFO - root - Loop number: 1 SLEEPS
 2023-07-05 11:45:43 - INFO - root - start scrapping list of bitcoin richest addresses
+2023-07-05 12:23:04 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-05 12:23:05 - INFO - root - Loop number: 1 RUNNING
+2023-07-05 12:23:06 - INFO - root - Loop number: 1 SLEEPS
+2023-07-05 13:22:58 - INFO - root - Loop number: 1 RUNNING
+2023-07-05 13:22:58 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-05 13:23:03 - WARNING - root - Attempt 1 failed with error: The request failed: Google returned a response with code 500. Retrying in 5 seconds...
+2023-07-05 13:23:10 - WARNING - root - Attempt 2 failed with error: The request failed: Google returned a response with code 500. Retrying in 5 seconds...
+2023-07-05 13:23:17 - WARNING - root - Attempt 3 failed with error: The request failed: Google returned a response with code 500. Retrying in 5 seconds...
+2023-07-05 13:23:22 - ERROR - root - All 3 attempts failed.
+2023-07-05 13:23:22 - ERROR - root - Returning fallback values (0.0, 0.0).
+2023-07-05 13:23:29 - INFO - root - Loop number: 1 SLEEPS
+2023-07-05 13:29:07 - INFO - root - Richest addresses Send: 18726  RECEIVE: 19489 in 24H
+2023-07-05 13:36:19 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-05 13:53:37 - INFO - root - Loop number: 1 RUNNING
+2023-07-05 13:53:37 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-05 13:54:10 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-05 14:01:30 - INFO - root - Loop number: 1 RUNNING
+2023-07-05 14:01:30 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-05 14:01:32 - INFO - root - Loop number: 1 SLEEPS
+2023-07-05 14:01:45 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-05 14:01:52 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-05 14:01:53 - INFO - root - Loop number: 1 RUNNING
+2023-07-05 14:01:55 - INFO - root - Loop number: 1 SLEEPS
+2023-07-05 14:01:58 - INFO - root - Received interrupt signal. Cleaning up...

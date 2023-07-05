@@ -48,38 +48,27 @@ def check_news_api_sentiment(start: datetime, end: datetime) -> Tuple[float, flo
     positive_count = 0
     negative_count = 0
 
-    try:
-        response = requests.get(endpoint, params=params)
-        response.raise_for_status()
-        data = json.loads(response.text)
+    response = requests.get(endpoint, params=params)
+    response.raise_for_status()
+    data = json.loads(response.text)
 
-        for article in data['articles']:
-            content = article['content']
+    for article in data['articles']:
+        content = article['content']
 
-            try:
-                blob = TextBlob(content)
-                sentiment_score = blob.sentiment.polarity
-                if sentiment_score > SENTIMENT_POSITIVE_THRESHOLD:
-                    positive_polarity_score += sentiment_score
-                    positive_count += 1
-                elif sentiment_score < SENTIMENT_NEGATIVE_THRESHOLD:
-                    negative_polarity_score += sentiment_score
-                    negative_count += 1
-            except Exception as e:
-                logging.error(f"Error analyzing content: {e}")
+        blob = TextBlob(content)
+        sentiment_score = blob.sentiment.polarity
+        if sentiment_score > SENTIMENT_POSITIVE_THRESHOLD:
+            positive_polarity_score += sentiment_score
+            positive_count += 1
+        elif sentiment_score < SENTIMENT_NEGATIVE_THRESHOLD:
+            negative_polarity_score += sentiment_score
+            negative_count += 1
 
         # Handle division by zero cases
         avg_positive_polarity = positive_polarity_score / positive_count if positive_count > 0 else 0
         avg_negative_polarity = negative_polarity_score / negative_count if negative_count > 0 else 0
 
         return avg_positive_polarity, abs(avg_negative_polarity), positive_count, negative_count
-
-    except requests.exceptions.RequestException as e:
-        logging.error(f'Error occurred: {e}')
-        return 0.0, 0.0, 0, 0
-    except json.JSONDecodeError as e:
-        logging.error(f'Error decoding JSON response: {e}')
-        return 0.0, 0.0, 0, 0
 
 
 if __name__ == "__main__":

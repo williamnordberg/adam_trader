@@ -9,10 +9,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="5July">
-      <change afterPath="$PROJECT_DIR$/config/dataset.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c_predictor_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/c_predictor_dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/dataset.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/dataset.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/a_macro.py" beforeDir="false" afterPath="$PROJECT_DIR$/a_macro.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/b_order_book.py" beforeDir="false" afterPath="$PROJECT_DIR$/b_order_book.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c_predictor.py" beforeDir="false" afterPath="$PROJECT_DIR$/c_predictor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/dataset.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/youtube_token.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/config/youtube_token.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/d_technical.py" beforeDir="false" afterPath="$PROJECT_DIR$/d_technical.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/latest_info_saved.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/g_reddit.py" beforeDir="false" afterPath="$PROJECT_DIR$/g_reddit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/h_youtube.py" beforeDir="false" afterPath="$PROJECT_DIR$/h_youtube.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/i_newsAPI.py" beforeDir="false" afterPath="$PROJECT_DIR$/i_newsAPI.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/i_news_analyser.py" beforeDir="false" afterPath="$PROJECT_DIR$/i_news_analyser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/i_news_crypto_compare.py" beforeDir="false" afterPath="$PROJECT_DIR$/i_news_crypto_compare.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/i_news_scrapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/i_news_scrapper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k_combined_score.py" beforeDir="false" afterPath="$PROJECT_DIR$/k_combined_score.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +110,28 @@
       <recent name="C:\will\Python_project\adam_trader\src" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.c_predictor_dataset">
+  <component name="RunManager" selected="Python.main">
+    <configuration name="b_order_book" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="adam_trader" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/b_order_book.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="c_predictor" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -118,7 +153,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="c_predictor_dataset" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="i_newsAPI" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -130,28 +165,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/c_predictor_dataset.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="f_google" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="adam_trader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/f_google.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/i_newsAPI.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -218,20 +232,20 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.b_order_book" />
       <item itemvalue="Python.c_predictor" />
-      <item itemvalue="Python.c_predictor_dataset" />
-      <item itemvalue="Python.f_google" />
+      <item itemvalue="Python.i_newsAPI" />
       <item itemvalue="Python.test" />
       <item itemvalue="Python.main" />
       <item itemvalue="Python tests.Unittests with right config" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.c_predictor_dataset" />
-        <item itemvalue="Python.c_predictor" />
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.b_order_book" />
         <item itemvalue="Python.test" />
-        <item itemvalue="Python.f_google" />
+        <item itemvalue="Python.c_predictor" />
+        <item itemvalue="Python.i_newsAPI" />
       </list>
     </recent_temporary>
   </component>
@@ -587,7 +601,7 @@
       <option name="project" value="LOCAL" />
       <updated>1687483422567</updated>
     </task>
-    <option name="localTasksCounter" value="382" />
+    <option name="localTasksCounter" value="383" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">

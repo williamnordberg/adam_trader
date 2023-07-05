@@ -56,7 +56,6 @@ def decision_tree_predictor_wrapper() -> Tuple[float, float]:
     if should_update('dataset'):
         update_dataset()
 
-    save_update_time('predicted_price')
     dataset = load_dataset()
     dataset.fillna(method='ffill', limit=1, inplace=True)
 
@@ -65,6 +64,7 @@ def decision_tree_predictor_wrapper() -> Tuple[float, float]:
 
     save_value_to_database('prediction_bullish', prediction_bullish)
     save_value_to_database('prediction_bearish', prediction_bearish)
+    save_update_time('predicted_price')
 
     return prediction_bullish, prediction_bearish
 

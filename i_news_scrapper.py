@@ -32,19 +32,15 @@ def check_news_sentiment_scrapper() -> Tuple[float, float, int, int]:
     for article in articles:
         content = article.text
 
-        try:
-            blob = TextBlob(content)
-            sentiment_score = blob.sentiment.polarity
+        blob = TextBlob(content)
+        sentiment_score = blob.sentiment.polarity
 
-            if sentiment_score > SENTIMENT_POSITIVE_THRESHOLD:
-                positive_polarity_score += sentiment_score
-                positive_count += 1
-            elif sentiment_score < SENTIMENT_NEGATIVE_THRESHOLD:
-                negative_polarity_score += sentiment_score
-                negative_count += 1
-        except Exception as e:
-            logging.error(f"Error analyzing content: {e}")
-            raise Exception
+        if sentiment_score > SENTIMENT_POSITIVE_THRESHOLD:
+            positive_polarity_score += sentiment_score
+            positive_count += 1
+        elif sentiment_score < SENTIMENT_NEGATIVE_THRESHOLD:
+            negative_polarity_score += sentiment_score
+            negative_count += 1
 
     # prevent division by zero
     positive_polarity = positive_polarity_score / positive_count if positive_count > 0 else 0
