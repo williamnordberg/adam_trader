@@ -111,6 +111,9 @@ def update_internal_factors():
         # Set first 'Open' value in new_data
         new_data['Open'].iloc[0] = last_close
 
+        # Remove rows where any of the required metrics have NaN values
+        new_data.dropna(subset=["DiffLast", "DiffMean", "CapAct1yrUSD", "HashRate", "Close"], inplace=True)
+
         # Append the new rows to the main dataset
         main_dataset = pd.concat([main_dataset, new_data])
 
@@ -130,3 +133,4 @@ def update_internal_factors():
 
 if __name__ == "__main__":
     update_internal_factors()
+    update_macro_economic()
