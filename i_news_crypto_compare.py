@@ -32,20 +32,16 @@ def check_news_cryptocompare_sentiment() -> Tuple[float, float, int, int]:
         for article in data:
             content = article['body']
 
-            try:
-                blob = TextBlob(content)
-                sentiment_score = blob.sentiment.polarity
+            blob = TextBlob(content)
+            sentiment_score = blob.sentiment.polarity
 
-                if sentiment_score > SENTIMENT_POSITIVE_THRESHOLD:
-                    positive_polarity_score += sentiment_score
-                    positive_count += 1
-                elif sentiment_score < SENTIMENT_NEGATIVE_THRESHOLD:
-                    negative_polarity_score += sentiment_score
-                    negative_count += 1
+            if sentiment_score > SENTIMENT_POSITIVE_THRESHOLD:
+                positive_polarity_score += sentiment_score
+                positive_count += 1
+            elif sentiment_score < SENTIMENT_NEGATIVE_THRESHOLD:
+                negative_polarity_score += sentiment_score
+                negative_count += 1
 
-            except Exception as e:
-                logging.error(f"Error analyzing content: {e}")
-                return 0.0, 0.0, 0, 0
         return positive_polarity_score / positive_count, abs(negative_polarity_score / negative_count), \
             positive_count, negative_count
 

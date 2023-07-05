@@ -32,8 +32,6 @@ def get_volume(symbol: str, limit: int) -> dict:
 def order_book(symbols: List[str], limit: int = LIMIT, bid_multiplier: float = 0.995,
                ask_multiplier: float = 1.005) -> Tuple[float, float]:
 
-    save_update_time('order_book')
-
     bid_volume, ask_volume = 0.0000001, 0.0
     current_price = get_bitcoin_price()
     for symbol in symbols:
@@ -54,6 +52,8 @@ def order_book(symbols: List[str], limit: int = LIMIT, bid_multiplier: float = 0
     save_value_to_database('ask_volume', round(ask_volume, 2))
     save_value_to_database('order_book_bullish', order_book_bullish)
     save_value_to_database('order_book_bearish', order_book_bearish)
+
+    save_update_time('order_book')
 
     return order_book_bullish, order_book_bearish
 

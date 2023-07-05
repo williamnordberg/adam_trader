@@ -113,8 +113,6 @@ def potential_up_trending(data_close: pd.Series) -> bool:
 
 def technical_analyse_wrapper() -> Tuple[float, float]:
 
-    save_update_time('technical_analysis')
-
     # read the data
     data_close = get_historical_data('BTC/USDT', '1d', 200)
     if data_close.empty:
@@ -139,6 +137,7 @@ def technical_analyse_wrapper() -> Tuple[float, float]:
 
     save_value_to_database('technical_bullish', technical_bullish)
     save_value_to_database('technical_bearish', technical_bearish)
+    save_update_time('technical_analysis')
 
     return technical_bullish, technical_bearish
 

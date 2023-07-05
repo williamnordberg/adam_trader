@@ -1,80 +1,92 @@
-import logging
 from typing import List, Tuple
-from pytrends.request import TrendReq as UTrendReq
-from pytrends.exceptions import ResponseError
-from requests.exceptions import RequestException, ConnectionError, Timeout, TooManyRedirects
+import requests
+import logging
+
+from z_read_write_csv import save_update_time, read_latest_data,\
+    write_latest_data, save_value_to_database
+from z_handy_modules import get_bitcoin_price, retry_on_error
+from z_compares import compare_order_volume
+
+SPOT_ENDPOINT_DEPTH = "https://api.binance.com/api/v3/depth"
+FUTURES_ENDPOINT_DEPTH = 'https://fapi.binance.com/fapi/v1/depth'
+
+LIMIT = 1000
+SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 
 
-from z_read_write_csv import save_value_to_database, \
-    should_update, save_update_time, retrieve_latest_factor_values_database
-from z_handy_modules import retry_on_error
-from z_compares import compare_google_reddit_youtube
-
-headers = {
-    'authority': 'trends.google.com',
-    'accept': 'application/json, text/plain, /',
-    'accept-language': 'en-US,en;q=0.5',
-    'cookie': 'HSID=AdcKfk_1mAM433GfE; SSID=AsxV9rh2FIY9PJmZQ; APISID=4_3quztPi8mrmBJx/ArmLIYnAU1nekqQzH; SAPISID=2lIiX6Tj2Nt6g51d/AmmZuyJ6wWkCH_oHV; _Secure-1PAPISID=2lIiX6Tj2Nt6g51d/AmmZuyJ6wWkCH_oHV; __Secure-3PAPISID=2lIiX6Tj2Nt6g51d/AmmZuyJ6wWkCH_oHV; SEARCH_SAMESITE=CgQIuJgB; SID=XQgKWDtvzBiMaRI7RA56arPOvH3qh60ElvI71tJ3df8ep7IlwNkVTHJlzE_osgeTMu-afA.; __Secure-1PSID=XQgKWDtvzBiMaRI7RA56arPOvH3qh60ElvI71tJ3df8ep7IlI1U72Lb4_fdJ5B3ZU77PCA.; __Secure-3PSID=XQgKWDtvzBiMaRI7RA56arPOvH3qh60ElvI71tJ3df8ep7IlE2_3IcYkgTIUX-QYrEMuhw.; AEC=Ad49MVEPzYv0WqBnoX2jLu-mAZ5CNCQA5BmKPz2DCKN7_W31p5OT7Y6iOw; 1P_JAR=2023-07-05-03; NID=511=sAEXqat3gVlSDxKF_M-vUFYRkVf1kxoXNG8O6SZuKi3v2E4aStabDaSzxLYZRjlvVAIH7TmxxIqS8mhd7FC9xmh755AHz9MCXcoQ50LlmohkGo3UFEDXCV2ZaVQrTC-tMbFfUG96z89X5rityw1i35g8x7ieWre_4y3ortAZbtqWLS_9lyKNHI9B7v5bWNjaQOipQKVYEkNauEOosBMAFkR29fAjH38n2RSQV3TlEDMmk6tRLHZUg73ght1UsnfFjjvufZqbRqj1-lM0pi-oQDew9xBc7_YIBlpI2-DrLfxdnBYAeYFewxONuB3InGJV_8l48dw; __Secure-1PSIDTS=sidts-CjIBPu3jIdWwFkOY44BZ9SMOoFWuihPBhHNHG02vLRyS3Awn27tC-ndL4Ajqa1nP4PxTwxAA; __Secure-3PSIDTS=sidts-CjIBPu3jIdWwFkOY44BZ9SMOoFWuihPBhHNHG02vLRyS3Awn27tC-ndL4Ajqa1nP4PxTwxAA; OTZ=7103723_24_2424; SIDCC=AP8dLtzivtzJ0Rw_VyCppkP2N4Rt0xU79XiH6pJSaUclTnEaFYrDT6xgI6Rtxf9D9YHc8G3d3EQ; __Secure-1PSIDCC=AP8dLtxWRYXXDYdFaob_hsK1Kqpxd6kg4udc51-7h0CrfDSOqOb9_Q_X2jYyES1IQccgDGfrZqY; __Secure-3PSIDCC=AP8dLtyvqSyYPdwiZJ1uvZ9N0bfelUnSovHr_hujMnFirEwBtTaGYnJ3tT9FJs3bNP40U9sdUh21',
-    'referer': 'https://trends.google.com/trends/explore?date=now%207-d&q=Fourth%20of%20july&hl=en',
-    'sec-ch-ua': '"Not.A/Brand";v="8", "Chromium";v="114", "Brave";v="114"',
-    'sec-ch-ua-mobile': '?0',
-    'sec-ch-ua-model': '""',
-    'sec-ch-ua-platform': '"macOS"',
-    'sec-ch-ua-platform-version': '"13.0.0"',
-    'sec-fetch-dest': 'empty',
-    'sec-fetch-mode': 'cors',
-    'sec-fetch-site': 'same-origin',
-    'sec-gpc': '1',
-    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
-}
-
-class TrendReq(UTrendReq):
-    def _get_data(self, url, method='get', trim_chars=0, **kwargs):
-        return super()._get_data(url, method=method, trim_chars=trim_chars, headers=headers, **kwargs)
-
-
-@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
-        ResponseError, RequestException, ConnectionError, Timeout,
-        TooManyRedirects), fallback_values=(0.0, 0.0))
-def check_search_trend_wrapper(keywords: List[str]) -> Tuple[float, float]:
-    """
-    Check if there is a significant increase in search volume for a list of keywords in the past 1 hour.
-
-    Args:
-        keywords (List[str]): The list of keywords to search for.
-
-    Returns:
-        bullish_score: a value between 0 (the lowest probability) and 1 (highest probability).
-        bearish_score: a value between 0 (the lowest probability) and 1 (highest probability).
-    """
-
-    keywords = [keyword.lower() for keyword in keywords]
-
-    pytrends = TrendReq(hl='en-US', tz=360, requests_args={'headers': headers})
-    pytrends.build_payload(keywords, cat=0, timeframe='now 7-d', geo='', gprop='')
-
-    trend = pytrends.interest_over_time()
-    print('trend', trend)
-    last_hour, two_hours_before = trend.iloc[-1].values[0], trend.iloc[-2].values[0]
-    print('last_hour, two_hours_before', last_hour, two_hours_before)
-    google_bullish,  google_bearish = compare_google_reddit_youtube(last_hour, two_hours_before)
-
-    save_value_to_database('hourly_google_search', last_hour)
-    save_update_time('google_search')
-
-    return google_bullish,  google_bearish
-
-
-def check_search_trend(keywords: List[str]) -> Tuple[float, float]:
-    if should_update('google_search'):
-        google_bullish, google_bearish = check_search_trend_wrapper(keywords)
-        save_value_to_database('google_search_bullish', google_bullish)
-        save_value_to_database('google_search_bearish', google_bearish)
-        return google_bullish, google_bearish
+@retry_on_error(max_retries=3, delay=5,
+                allowed_exceptions=(requests.exceptions.RequestException, KeyError, TypeError
+                                    ), fallback_values={'bids': [], 'asks': []})
+def get_volume(symbol: str, limit: int) -> dict:
+    trading_state = read_latest_data('latest_trading_state', str)
+    if trading_state == 'short':
+        ENDPOINT = FUTURES_ENDPOINT_DEPTH
+        if symbol == 'BTCBUSD':
+            return {'bids': [], 'asks': []}
     else:
-        return retrieve_latest_factor_values_database('google_search')
+        ENDPOINT = SPOT_ENDPOINT_DEPTH
+    response = requests.get(ENDPOINT, params={'symbol': symbol, 'limit': str(limit)})
+    return response.json()
 
 
-if __name__ == "__main__":
-    bullish_score_outer, bearish_score_outer = check_search_trend_wrapper(["Bitcoin"])
-    logging.info(f'google_bullish: {bullish_score_outer}   google_bearish:{bearish_score_outer}')
+def order_book(symbols: List[str], limit: int = LIMIT, bid_multiplier: float = 0.995,
+               ask_multiplier: float = 1.005) -> Tuple[float, float]:
+
+    save_update_time('order_book')
+
+    bid_volume, ask_volume = 0.0000001, 0.0
+    current_price = get_bitcoin_price()
+    for symbol in symbols:
+        data = get_volume(symbol, limit)
+        if data is None:
+            return 0.0, 0.0
+        bid_volume += sum([float(bid[1]) for bid in data['bids'] if float(bid[0]) >=
+                           (current_price * bid_multiplier)])
+        ask_volume += sum([float(ask[1]) for ask in data['asks'] if float(ask[0]) <=
+                           current_price * ask_multiplier])
+
+    probability_up = bid_volume / (bid_volume + ask_volume)
+    probability_down = ask_volume / (bid_volume + ask_volume)
+
+    order_book_bullish, order_book_bearish = compare_order_volume(probability_up, probability_down)
+
+    save_value_to_database('bid_volume', round(bid_volume, 2))
+    save_value_to_database('ask_volume', round(ask_volume, 2))
+    save_value_to_database('order_book_bullish', order_book_bullish)
+    save_value_to_database('order_book_bearish', order_book_bearish)
+
+    return order_book_bullish, order_book_bearish
+
+
+def order_book_hit_target(symbols: List[str], limit: int, profit_target: float,
+                          stop_loss: float) -> Tuple[float, float]:
+
+    bid_volume, ask_volume = 0.0000001, 0.0
+    for symbol in symbols:
+        data = get_volume(symbol, limit)
+        if data is None:
+            return 0.0, 0.0
+
+        bids = data.get('bids')
+        asks = data.get('asks')
+
+        if bids is not None:
+            bid_volume += sum([float(bid[1]) for bid in bids if float(bid[0]) >= stop_loss])
+
+        if asks is not None:
+            ask_volume += sum([float(ask[1]) for ask in asks if float(ask[0]) <= profit_target])
+
+    probability_to_hit_target = bid_volume / (bid_volume + ask_volume)
+    probability_to_hit_stop_loss = ask_volume / (bid_volume + ask_volume)
+
+    write_latest_data('order_book_hit_profit', round(probability_to_hit_target, 2))
+    write_latest_data('order_book_hit_loss', round(probability_to_hit_stop_loss, 2))
+
+    return probability_to_hit_target, probability_to_hit_stop_loss
+
+
+if __name__ == '__main__':
+    order_book_bullish_outer, order_book_bearish_outer = order_book(
+        SYMBOLS, limit=LIMIT, bid_multiplier=0.99, ask_multiplier=1.01)
+    logging.info(f'order_book_bullish:{order_book_bullish_outer},'
+                 f'order_book_bearish: {order_book_bearish_outer}')

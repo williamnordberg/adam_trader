@@ -18,7 +18,6 @@ CONFIG_PATH = 'config/config.ini'
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
         SSLError, MaxRetryError,), fallback_values=(0.0, 0.0))
 def reddit_check_wrapper() -> Tuple[float, float]:
-    save_update_time('reddit')
 
     config = configparser.ConfigParser()
     config.read(CONFIG_PATH)
@@ -31,27 +30,27 @@ def reddit_check_wrapper() -> Tuple[float, float]:
     )
     previous_activity = read_latest_data('reddit_previous_activity', int)
 
-    try:
-        current_activity = reddit.subreddit("Bitcoin").active_user_count
-        reddit_bullish, reddit_bearish = compare_google_reddit_youtube(int(current_activity), int(previous_activity))
+    current_activity = reddit.subreddit("Bitcoin").active_user_count
+    reddit_bullish, reddit_bearish = compare_google_reddit_youtube(int(current_activity), int(previous_activity))
 
-        write_latest_data('reddit_previous_activity', current_activity)
+    write_latest_data('reddit_previous_activity', current_activity)
 
-        # Save to database
-        save_value_to_database('reddit_bullish', reddit_bullish)
-        save_value_to_database('reddit_bearish', reddit_bearish)
-        save_value_to_database('reddit_activity_24h', current_activity)
+    save_value_to_database('reddit_activity_24h', current_activity)
 
-    except Exception as e:
-        logging.error(f"Error occurred: {e}")
-        reddit_bullish, reddit_bearish = 0, 0
+    save_update_time('reddit')
 
     return reddit_bullish, reddit_bearish
 
 
 def reddit_check() -> Tuple[float, float]:
     if should_update('reddit'):
-        return reddit_check_wrapper()
+        reddit_bullish, reddit_bearish = reddit_check_wrapper()
+
+        # Save to database
+        save_value_to_database('reddit_bullish', reddit_bullish)
+        save_value_to_database('reddit_bearish', reddit_bearish)
+
+        return reddit_bullish, reddit_bearish
     else:
         return retrieve_latest_factor_values_database('reddit')
 
