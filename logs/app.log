@@ -569,3 +569,115 @@ pandas.errors.EmptyDataError: No columns to parse from file
 2023-07-05 14:01:53 - INFO - root - Loop number: 1 RUNNING
 2023-07-05 14:01:55 - INFO - root - Loop number: 1 SLEEPS
 2023-07-05 14:01:58 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-05 15:51:28 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-05 15:51:29 - INFO - root - Loop number: 1 RUNNING
+2023-07-05 15:51:29 - WARNING - root - Attempt 1 failed with error: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)). Retrying in 5 seconds...
+2023-07-05 15:51:34 - WARNING - root - Attempt 2 failed with error: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)). Retrying in 5 seconds...
+2023-07-05 15:51:39 - WARNING - root - Attempt 3 failed with error: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)). Retrying in 5 seconds...
+2023-07-05 15:51:44 - ERROR - root - All 3 attempts failed.
+2023-07-05 15:51:44 - ERROR - root - Returning fallback values {'bids': [], 'asks': []}.
+2023-07-05 15:51:44 - WARNING - root - Attempt 1 failed with error: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)). Retrying in 5 seconds...
+2023-07-05 15:51:49 - WARNING - root - Attempt 2 failed with error: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)). Retrying in 5 seconds...
+2023-07-05 15:51:54 - WARNING - root - Attempt 3 failed with error: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)). Retrying in 5 seconds...
+2023-07-05 15:51:59 - ERROR - root - All 3 attempts failed.
+2023-07-05 15:51:59 - ERROR - root - Returning fallback values {'bids': [], 'asks': []}.
+2023-07-05 15:52:25 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-05 15:52:41 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-05 15:53:08 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-05 15:53:09 - INFO - root - Loop number: 1 RUNNING
+2023-07-05 15:53:10 - WARNING - root - Attempt 1 failed with error: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)). Retrying in 5 seconds...
+2023-07-05 15:53:15 - WARNING - root - Attempt 2 failed with error: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)). Retrying in 5 seconds...
+2023-07-05 15:53:23 - INFO - root - Loop number: 1 SLEEPS
+2023-07-05 15:53:43 - INFO - root - Loop number: 2 RUNNING
+2023-07-05 15:53:44 - INFO - root - Loop number: 2 SLEEPS
+2023-07-05 15:54:04 - INFO - root - Loop number: 3 RUNNING
+2023-07-05 15:54:05 - INFO - root - Loop number: 3 SLEEPS
+2023-07-05 15:54:25 - INFO - root - Loop number: 4 RUNNING
+2023-07-05 15:54:25 - WARNING - root - Attempt 1 failed with error: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)). Retrying in 5 seconds...
+2023-07-05 15:54:30 - WARNING - root - Attempt 2 failed with error: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)). Retrying in 5 seconds...
+2023-07-05 15:54:35 - WARNING - root - Attempt 3 failed with error: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)). Retrying in 5 seconds...
+2023-07-05 15:54:40 - ERROR - root - All 3 attempts failed.
+2023-07-05 15:54:40 - ERROR - root - Returning fallback values {'bids': [], 'asks': []}.
+2023-07-05 15:54:41 - WARNING - root - Attempt 1 failed with error: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)). Retrying in 5 seconds...
+2023-07-05 15:54:46 - WARNING - root - Attempt 2 failed with error: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)). Retrying in 5 seconds...
+2023-07-05 15:54:52 - INFO - root - Loop number: 4 SLEEPS
+2023-07-05 15:55:54 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-05 15:55:55 - INFO - root - Loop number: 1 RUNNING
+2023-07-05 15:55:56 - INFO - root - Loop number: 1 SLEEPS
+2023-07-05 15:56:16 - INFO - root - Loop number: 2 RUNNING
+2023-07-05 15:56:17 - INFO - root - Loop number: 2 SLEEPS
+2023-07-05 15:56:37 - INFO - root - Loop number: 3 RUNNING
+2023-07-05 15:56:37 - INFO - root - Loop number: 3 SLEEPS
+2023-07-05 15:56:46 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-05 16:11:29 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-05 16:11:30 - INFO - root - Loop number: 1 RUNNING
+2023-07-05 16:11:30 - WARNING - root - Attempt 1 failed with error: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)). Retrying in 5 seconds...
+2023-07-05 16:11:36 - INFO - root - Loop number: 1 SLEEPS
+2023-07-05 16:11:51 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-05 16:12:13 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-05 16:12:13 - INFO - root - Loop number: 1 RUNNING
+2023-07-05 16:12:14 - INFO - root - Loop number: 1 SLEEPS
+2023-07-05 16:12:20 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-05 16:12:55 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-05 16:12:56 - INFO - root - Loop number: 1 RUNNING
+2023-07-05 16:12:58 - WARNING - root - Attempt 1 failed with error: The request failed: Google returned a response with code 500. Retrying in 5 seconds...
+2023-07-05 16:13:03 - WARNING - root - Attempt 2 failed with error: The request failed: Google returned a response with code 500. Retrying in 5 seconds...
+2023-07-05 16:13:09 - WARNING - root - Attempt 3 failed with error: The request failed: Google returned a response with code 500. Retrying in 5 seconds...
+2023-07-05 16:13:14 - ERROR - root - All 3 attempts failed.
+2023-07-05 16:13:14 - ERROR - root - Returning fallback values (0.0, 0.0).
+2023-07-05 16:13:14 - INFO - root - Loop number: 1 SLEEPS
+2023-07-05 16:13:20 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-06 09:14:11 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-06 09:14:11 - INFO - root - 8284_Loop number: 1 RUNNING
+2023-07-06 09:14:13 - WARNING - root - Attempt 1 failed with error: The request failed: Google returned a response with code 500. Retrying in 5 seconds...
+2023-07-06 09:14:19 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '0470C7C960094383A1514F61989D2F14BEB3', 'notBefore': 'May 21 20:54:12 2023 GMT', 'notAfter': 'Aug 19 20:54:11 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-06 09:14:19 - WARNING - prawcore - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-07-06 09:14:19 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '0470C7C960094383A1514F61989D2F14BEB3', 'notBefore': 'May 21 20:54:12 2023 GMT', 'notAfter': 'Aug 19 20:54:11 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-06 09:14:19 - WARNING - prawcore - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-07-06 09:14:22 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '0470C7C960094383A1514F61989D2F14BEB3', 'notBefore': 'May 21 20:54:12 2023 GMT', 'notAfter': 'Aug 19 20:54:11 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-06 09:15:11 - INFO - root - 13784_Rich addresses number: 1 RUNNING
+2023-07-06 09:15:11 - INFO - root - start scrapping list of bitcoin richest addresses
+2023-07-06 09:15:32 - ERROR - root - Error while fetching data: ("Connection broken: InvalidChunkLength(got length b'', 0 bytes read)", InvalidChunkLength(got length b'', 0 bytes read))
+2023-07-06 09:15:32 - WARNING - root - Attempt 1 failed with error: ("Connection broken: InvalidChunkLength(got length b'', 0 bytes read)", InvalidChunkLength(got length b'', 0 bytes read)). Retrying in 5 seconds...
+2023-07-06 09:16:18 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-06 09:16:19 - INFO - root - 5624_Loop number: 1 RUNNING
+2023-07-06 09:16:41 - INFO - root - 5624_Loop number: 1 SLEEPS
+2023-07-06 09:17:19 - INFO - root - 7452_Rich addresses number: 1 RUNNING
+2023-07-06 09:17:19 - INFO - root - start scrapping list of bitcoin richest addresses
+2023-07-06 09:18:38 - WARNING - root - Attempt 1 failed with error: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')). Retrying in 5 seconds...
+2023-07-06 09:21:45 - INFO - root - Richest addresses Send: 15975  RECEIVE: 10154 in 24H
+2023-07-06 09:21:45 - INFO - root - 7452_Rich addresses number: 1 SLEEPS
+2023-07-06 09:23:07 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-06 09:23:15 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-06 09:23:16 - INFO - root - 9048_trading(1) RUNNING
+2023-07-06 09:23:16 - INFO - root - 9048_trading(1) SLEEPS
+2023-07-06 09:24:16 - INFO - root - 2908_Rich addresses(1) RUNNING
+2023-07-06 09:24:16 - INFO - root - 2908_Rich addresses(1) SLEEPS
+2023-07-06 09:32:35 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-06 09:44:39 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-06 09:44:39 - INFO - root - 13608_trading(1) RUNNING
+2023-07-06 09:44:40 - INFO - root - 13608_trading(1) SLEEPS
+2023-07-06 09:45:39 - INFO - root - 15236_Rich addresses(1) RUNNING
+2023-07-06 09:50:06 - INFO - root - Richest addresses Send: 15917  RECEIVE: 10095 in 24H
+2023-07-06 09:50:06 - INFO - root - 15236_Rich addresses(1) SLEEPS
+2023-07-06 09:53:56 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-06 09:54:23 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-06 09:54:24 - INFO - root - 6900_trading(1) RUNNING
+2023-07-06 09:54:25 - INFO - root - 6900_trading(1) SLEEPS
+2023-07-06 09:55:24 - INFO - root - 10164_Rich addresses(1) RUNNING
+2023-07-06 09:57:54 - INFO - root - Blockcypher Rate limited for address 16H2Fe9MgxZ1jXW3TaXbgWh3SJfwyxQUTp. Sleeping for a minute.
+2023-07-06 09:59:19 - INFO - root - Blockcypher Rate limited for address 12mJZGPCWf5C2ap2dUdJiuGr8eWAvi6E5M. Sleeping for a minute.
+2023-07-06 10:02:56 - INFO - root - Richest addresses Send: 15991  RECEIVE: 10176 in 24H
+2023-07-06 10:02:56 - INFO - root - 10164_Rich addresses(1) SLEEPS
+2023-07-06 10:07:57 - INFO - root - Received interrupt signal. Cleaning up...

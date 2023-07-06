@@ -1,11 +1,12 @@
-import logging
 # Logging config must be in begen of first import to inherit
 from a_a_logging_config import do_nothing
+import logging
 from time import sleep
 from multiprocessing import Process
-from _datetime import datetime
+from datetime import datetime
 import signal
 import sys
+import os
 
 from z_handy_modules import get_bitcoin_price, calculate_score_margin
 from z_compares import compare_richest_addresses
@@ -14,7 +15,7 @@ from i_news_analyser import check_sentiment_of_news
 from h_youtube import check_bitcoin_youtube_videos_increase
 from g_reddit import reddit_check
 from a_macro import macro_sentiment, print_upcoming_events
-from f_google import check_search_trend
+# from f_google import check_search_trend
 from c_predictor import decision_tree_predictor
 from b_order_book import order_book
 from k_combined_score import make_trading_decision
@@ -45,7 +46,10 @@ def run_visualize_factors_states():
 
 
 def run_monitor_richest_addresses():
+    RICH_LOOP_COUNTER = 0
     while True:
+        RICH_LOOP_COUNTER += 1
+        logging.info(f'{os.getpid()}_Rich addresses({RICH_LOOP_COUNTER}) RUNNING')
         total_received, total_sent = monitor_bitcoin_richest_addresses()
         if total_received != 0.0:
             richest_addresses_bullish, richest_addresses_bearish = compare_richest_addresses()
@@ -56,6 +60,8 @@ def run_monitor_richest_addresses():
 
             logging.info(f'Richest addresses Send: {total_sent} '
                          f' RECEIVE: {total_received} in 24H')
+
+        logging.info(f'{os.getpid()}_Rich addresses({RICH_LOOP_COUNTER}) SLEEPS')
         sleep(RICHEST_ADDRESSES_SLEEP_TIME)
 
 
@@ -64,7 +70,7 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
     LOOP_COUNTER = 0
     while True:
         LOOP_COUNTER += 1
-        logging.info(f'Loop number: {LOOP_COUNTER} RUNNING')
+        logging.info(f'{os.getpid()}_trading({LOOP_COUNTER}) RUNNING')
         write_latest_data('latest_trading_state', 'main')
         factor_values = {
             'macro_bullish': 0.0,
@@ -95,14 +101,13 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
             order_book(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
 
         factor_values['macro_bullish'], factor_values['macro_bearish'], events_date_dict = macro_sentiment()
-        if LOOP_COUNTER % 6 == 0:
-            print_upcoming_events(events_date_dict)
+        print_upcoming_events(events_date_dict)
 
         factor_values['richest_bullish'], factor_values['richest_bearish'] = \
             retrieve_latest_factor_values_database('richest_addresses')
 
-        factor_values['google_bullish'], factor_values['google_bearish'] = check_search_trend(
-            ["Bitcoin", "Cryptocurrency"])
+        factor_values['google_bullish'], factor_values['google_bearish'] = 0, 0
+        # check_search_trend(["Bitcoin", "Cryptocurrency"])
 
         factor_values['reddit_bullish'], factor_values['reddit_bearish'] = reddit_check()
 
@@ -154,7 +159,7 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
                                'short', opening_price, close_price, pnl, factor_values)
 
             logging.info(f"profit_after_trade:{profit_after_trade}, "f"loss_after_trade:{loss_after_trade}")
-        logging.info(f'Loop number: {LOOP_COUNTER} SLEEPS')
+        logging.info(f'{os.getpid()}_trading({LOOP_COUNTER}) SLEEPS')
         write_latest_data('latest_trading_state', 'main')
         sleep(MAIN_TRADING_LOOP_SLEEP_TIME)
 
@@ -163,7 +168,8 @@ def signal_handler(sig, frame):
     logging.info('Received interrupt signal. Cleaning up...')
     # Stop child processes here.
     visualization_charts_process.terminate()
-    process.terminate()
+    rich_addresses_process.terminate()
+    main_trading_loop_process.terminate()
     sys.exit(0)
 
 
@@ -179,5 +185,5 @@ if __name__ == "__main__":
     main_trading_loop_process.start()
     sleep(60)
 
-    process = Process(target=run_monitor_richest_addresses)
-    process.start()
+    rich_addresses_process = Process(target=run_monitor_richest_addresses)
+    rich_addresses_process.start()

@@ -31,7 +31,6 @@ def check_multiple_addresses(addresses: List[str]) -> Tuple[int, int]:
         total_received += received
         total_sent += sent
         time.sleep(0.5)
-
     return int(total_received), int(total_sent)
 
 
@@ -45,25 +44,23 @@ def monitor_bitcoin_richest_addresses() -> Tuple[int, int]:
     if should_update('richest_addresses_scrap'):
         scrape_bitcoin_rich_list()
 
-    if should_update('richest_addresses'):
+    # Read addresses from the CSV file
+    addresses = read_rich_addresses()
 
-        # Read addresses from the CSV file
-        addresses = read_rich_addresses()
-
-        if not addresses:
-            logging.info('list of reach addresses not found')
-            return 0, 0
-
-        # Check the total Bitcoin received and sent in the last 24 hours for all addresses
-        total_received, total_sent = check_multiple_addresses(addresses)
-
-        save_update_time('richest_addresses')
-        save_value_to_database('richest_addresses_total_received', total_received)
-        save_value_to_database('richest_addresses_total_sent', total_sent)
-
-        return total_received, total_sent
-    else:
+    if not addresses:
+        logging.info('list of reach addresses not found')
         return 0, 0
+
+    # Check the total Bitcoin received and sent in the last 24 hours for all addresses
+    total_received, total_sent = check_multiple_addresses(addresses)
+    print(f'inside the monitor_bitcoin_richest_addresses_ received{total_received}, send {total_sent}')
+
+    save_update_time('richest_addresses')
+    save_value_to_database('richest_addresses_total_received', total_received)
+    save_value_to_database('richest_addresses_total_sent', total_sent)
+
+    return total_received, total_sent
+
 
 
 if __name__ == "__main__":
