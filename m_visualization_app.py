@@ -13,6 +13,7 @@ from z_handy_modules import COLORS
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
+
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP,
                                                 'https://use.fontawesome.com/releases/v5.8.1/css/all.css'])
 
@@ -46,7 +47,7 @@ def update_all(n):
             visualize_macro(),
             visualize_prediction(),
             visualize_trade_results(),
-            visualization_log('logs/app.log', 100),
+            visualization_log('logs/app.log', 200),
             create_gauge_charts())
 
 
