@@ -2,6 +2,8 @@ from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 from datetime import timedelta
 from dash import dash_table
+from dash import html
+
 
 from m_visualization_side import last_and_next_update
 from z_handy_modules import COLORS
@@ -113,6 +115,11 @@ def create_figure(trace_list, title_text, yaxis_title='Value'):
     fig.update_layout(**layout_kwargs)
 
     return fig
+
+
+def visualization_log(filename, lines=1):
+    with open(filename, 'r') as f:
+        return ''.join(list(f)[-lines:])
 
 
 def visualize_trade_details():
@@ -447,3 +454,21 @@ def create_gauge_charts():
             annotation['font'] = dict(color=COLORS['white'], size=15)
 
     return fig
+
+
+def create_trade_details_div():
+    return html.Div(
+        [
+            html.H3('Latest trades', style={'textAlign': 'center'}),
+            html.Div(
+                id='trade_details_table',
+                style={
+                    'width': '90%',
+                    'height': '20vh',
+                    'overflowY': 'scroll',
+                    'fontSize': '14px',
+                    'margin': 'auto'  # Center the table
+                }
+            )
+        ]
+    )
