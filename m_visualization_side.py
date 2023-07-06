@@ -2,10 +2,16 @@ import dash_bootstrap_components as dbc
 import pandas.errors
 from typing import Tuple
 from datetime import datetime, timedelta
+from dash import html
+from dash import dcc
+
 
 from z_read_write_csv import read_database, read_latest_data, update_intervals
 from a_macro import calculate_upcoming_events
 from z_handy_modules import get_bitcoin_price, retry_on_error
+
+APP_UPDATE_TIME = 60
+TIMER_PROGRESS_UPDATE_TIME = 10
 
 
 def generate_tooltips():
@@ -163,3 +169,35 @@ def last_and_next_update(factor: str) -> Tuple[str, str]:
     return time_since_last_update_str, next_update_str
 
 
+def create_scroll_up_button():
+    top_button = dbc.Button(
+     children=[html.I(className="fa fa-arrow-up", style={'margin': 'auto', 'color': 'black', 'font-size': '39px'})],
+     id="top-button",
+     className="mr-1",
+     outline=True,
+     color="secondary",
+     style={'position': 'fixed', 'bottom': '1%', 'right': '1%',
+            'z-index': '9999', 'height': '50px', 'width': '50px',
+            'opacity': '0.4', 'border-radius': '50%',
+            'padding': '6px', 'display': 'flex',
+            'justify-content': 'center',
+            'align-items': 'center',
+            'background-color': 'gray'
+            }
+     )
+    return top_button
+
+
+def create_update_intervals():
+    interval_component = dcc.Interval(
+        id='interval-component',
+        interval=APP_UPDATE_TIME * 1000,  # in milliseconds
+        n_intervals=0
+    )
+    timer_interval_component = dcc.Interval(
+        id='timer-interval-component',
+        interval=TIMER_PROGRESS_UPDATE_TIME * 1000,  # in milliseconds
+        n_intervals=0
+    )
+
+    return timer_interval_component, interval_component
