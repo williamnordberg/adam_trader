@@ -22,6 +22,9 @@ app = dash.Dash(__name__, external_stylesheets=[
 
 APP_UPDATE_TIME = 60
 TIMER_PROGRESS_UPDATE_TIME = 10
+PROGRESS_STEPS = 6
+PROGRESS_STEP_AMOUNT = 100 / PROGRESS_STEPS
+TIME_PER_STEP = APP_UPDATE_TIME / PROGRESS_STEPS
 
 
 @app.callback(
@@ -124,10 +127,12 @@ def update_divs(n):
      Output('progress', 'value')],
     [Input('timer-interval-component', 'n_intervals')])
 def update_timer_and_progress(n):
-    timer_countdown = APP_UPDATE_TIME - (n * 10) % APP_UPDATE_TIME
-    timer_display = f'Next update in {timer_countdown} sec'
+    current_step = (n * TIMER_PROGRESS_UPDATE_TIME // TIME_PER_STEP) % PROGRESS_STEPS
 
-    progress_countdown = 100 if n % 10 == 0 else 100 - (n % 10) * 10
+    timer_countdown = APP_UPDATE_TIME - current_step * TIME_PER_STEP
+    timer_display = f'Next update in {int(timer_countdown)} sec'
+
+    progress_countdown = 100 - current_step * PROGRESS_STEP_AMOUNT
 
     return timer_display, progress_countdown
 
