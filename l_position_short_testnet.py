@@ -87,8 +87,8 @@ def short_market_on_specific_price(btc_amount: float, price: float, leverage: in
 def get_open_futures_positions():
     client = initialized_future_client()
     open_positions = client.futures_position_information()
-    logging.info("Open futures positions:")
-
+    logging.info("Open futures positions are:")
+    print('open_positions', open_positions)
     if not open_positions:
         logging.info("No open futures positions.")
     else:
