@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import logging
+
 from z_handy_modules import retry_on_error
 from z_read_write_csv import save_update_time
 from http.client import HTTPException
@@ -48,10 +49,11 @@ def scrape_bitcoin_rich_list():
                     cells = row.find_all("td")
                     address_link = cells[1].find("a")
                     if address_link:
+                        address = address_link.get_text()
+                        clean_address = address.replace('.', '')  # this removes all "." from the address
                         data.append({
-                            "address": address_link.get_text()
+                            "address": clean_address
                         })
-
                 df2 = pd.DataFrame(data)
                 df = pd.concat([df, df2], ignore_index=True)
         except Exception as e:
@@ -62,6 +64,7 @@ def scrape_bitcoin_rich_list():
     df.to_csv(OUTPUT_FILE, index=False)
 
     # Save update time
+    logging.info('finish scrapping list of bitcoin richest addresses')
     save_update_time('richest_addresses_scrap')
 
 
