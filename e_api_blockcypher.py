@@ -28,9 +28,10 @@ config.read_string(config_string)
 # API_KEY_BLOCKCYPHER = config.get('API', 'Blockcypher')
 
 
-@retry_on_error(max_retries=3, delay=5,
-                allowed_exceptions=(RequestException, Timeout, TooManyRedirects, HTTPError,),
-                fallback_values=(0.0, 0.0))
+@retry_on_error(
+    3, 5, allowed_exceptions=(RequestException, Timeout,
+                              TooManyRedirects, HTTPError, Exception),
+    fallback_values=(0.0, 0.0))
 def get_address_transactions_24h_blockcypher(address: str, api_keys_cycle=itertools.cycle([
     'Blockcypher1', 'Blockcypher2', 'Blockcypher3', 'Blockcypher4', 'Blockcypher5'])) \
         -> Tuple[float, float]:
@@ -87,7 +88,7 @@ def get_address_transactions_24h_blockcypher(address: str, api_keys_cycle=iterto
         return get_address_transactions_24h_blockcypher(address)
 
     else:
-        # logging.info(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")
+        logging.info(f"blockcypher failed, Status code: {response.status_code}, api key: {api_key}, address:{address}")
         return 0, 0
 
 
