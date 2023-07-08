@@ -25,14 +25,12 @@ def check_multiple_addresses(addresses: List[str]) -> Tuple[int, int]:
     """
     total_received = 0
     total_sent = 0
-    logging.info('START  check_multiple_addresses')
 
     for i, address in enumerate(addresses):
         received, sent = get_address_transactions_24h_blockcypher(address)
         total_received += received
         total_sent += sent
         time.sleep(1)
-    logging.info('End  check_multiple_addresses')
     return int(total_received), int(total_sent)
 
 
@@ -43,7 +41,6 @@ def monitor_bitcoin_richest_addresses() -> Tuple[int, int]:
         total_received (float): Total Bitcoin received in the last 24 hours for the richest addresses.
         total_sent (float): Total Bitcoin sent in the last 24 hours for the richest addresses.
     """
-    logging.info('START monitor_bitcoin_richest_addresses')
     if should_update('richest_addresses_scrap'):
         scrape_bitcoin_rich_list()
 
@@ -60,8 +57,6 @@ def monitor_bitcoin_richest_addresses() -> Tuple[int, int]:
     save_update_time('richest_addresses')
     save_value_to_database('richest_addresses_total_received', total_received)
     save_value_to_database('richest_addresses_total_sent', total_sent)
-
-    logging.info('END  monitor_bitcoin_richest_addresses')
 
     return total_received, total_sent
 
