@@ -22,7 +22,7 @@ HEADERS = {
                                     TimeoutError, ConnectionError, HTTPException),
                 fallback_values='pass')
 def scrape_bitcoin_rich_list():
-    logging.info('start scrapping list of bitcoin richest addresses')
+    logging.info('$$$start scrapping list of bitcoin richest addresses$$$')
     df = pd.DataFrame(columns=["address"])
 
     for i in range(1, 4):
@@ -64,7 +64,7 @@ def scrape_bitcoin_rich_list():
     df.to_csv(OUTPUT_FILE, index=False)
 
     # Save update time
-    logging.info('finish scrapping list of bitcoin richest addresses')
+    logging.info('$$$finish scrapping list of bitcoin richest addresses$$$')
     save_update_time('richest_addresses_scrap')
 
 

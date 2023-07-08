@@ -25,12 +25,16 @@ def check_multiple_addresses(addresses: List[str]) -> Tuple[int, int]:
     """
     total_received = 0
     total_sent = 0
+    logging.info('$$$ Start check_multiple_addresses $$$')
 
     for i, address in enumerate(addresses):
         received, sent = get_address_transactions_24h_blockcypher(address)
         total_received += received
         total_sent += sent
         time.sleep(1)
+
+    logging.info('$$$ Finish check_multiple_addresses $$$')
+
     return int(total_received), int(total_sent)
 
 
