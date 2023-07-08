@@ -99,7 +99,7 @@ update_intervals = {
         tzinfo=None, microsecond=0) <= read_latest_data('next-fed-announcement', datetime)
     else timedelta(hours=24),
     "order_book": timedelta(minutes=10),
-    "predicted_price": timedelta(hours=12),
+    "predicted_price": timedelta(hours=1),
     "technical_analysis": timedelta(hours=4),
     "richest_addresses": timedelta(minutes=20),
     "google_search": timedelta(hours=2),
