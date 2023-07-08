@@ -58,7 +58,7 @@ def get_address_transactions_24h_blockcypher(address: str, api_keys_cycle=iterto
     api_url = f"{API_BASE_URL}{address}/full?token={api_key}"
 
     # Send the API request and get the response
-    response = session.get(api_url)
+    response = session.get(api_url, timeout=10)
 
     # Check the response status code
     if response.status_code == 200:
