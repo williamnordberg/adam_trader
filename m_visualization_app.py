@@ -117,8 +117,8 @@ def update_divs(n):
         ppi_announcement, f'T State: {trading_state}', {'color': color}, f'Bid vol: {bid_volume}', \
         f'Ask vol: {ask_volume}', f'Predicted: {predicted_price}', f'Current: {current_price}', \
         f'Diff: {price_difference}', f'RSI: {rsi}', f'Over 200EMA: {over_200EMA}', \
-        f'MACD up tr: {MACD_uptrend}', f'bb distance: {bb_MA_distance}', f'Rich receive: {BTC_received}', \
-        f'Rich send: {BTC_send}', f'+ POL news inc: {positive_news_polarity_change}', \
+        f'MACD up tr: {MACD_uptrend}', f'bb distance: {bb_MA_distance}', f'Rich receive: {round(BTC_received/1000, 1)} K', \
+        f'Rich send: {round(BTC_send/1000, 1)} K', f'+ POL news inc: {positive_news_polarity_change}', \
         f'- POL news inc: {negative_news_polarity_change}'
 
 
