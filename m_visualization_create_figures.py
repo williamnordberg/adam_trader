@@ -263,7 +263,7 @@ def visualize_prediction():
     df = read_database()
     trace_list = [
         go.Scatter(x=df.index, y=df["predicted_price"], name='Predicted price'),
-        go.Scatter(x=df.index, y=df["bitcoin_price"].shift(-12), name='Actual price'),
+        go.Scatter(x=df.index, y=df["bitcoin_price"].shift(-1), name='Actual price'),
         go.Scatter(x=df.index, y=df["prediction_bullish"], name='Prediction bullish', visible='legendonly'),
         go.Scatter(x=df.index, y=df["prediction_bearish"], name='Prediction bearish', visible='legendonly')
     ]
