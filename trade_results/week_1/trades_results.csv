@@ -1,0 +1,5 @@
+weighted_score_category,PNL,long_trades,short_trades,win_trades,loss_trades,total_trades
+65to70,0,0,0,0,0,0
+70to75,185,0,10,7,3,10
+75to80,333,0,2,2,0,2
+80to100,0,0,0,0,0,0
