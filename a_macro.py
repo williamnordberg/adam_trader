@@ -240,7 +240,8 @@ def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
             save_value_to_database('ppi_m_to_m', ppi_m_to_m)
 
         # Save the next event date
-        write_latest_data('next-fed-announcement', events_date_dict['Federal Funds Rate'])
+        if rate_this_month:
+            write_latest_data('next-fed-announcement', events_date_dict['Federal Funds Rate'])
 
         save_update_time('macro')
         return macro_bullish, macro_bearish, events_date_dict
