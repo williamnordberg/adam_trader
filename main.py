@@ -15,7 +15,7 @@ from i_news_analyser import check_sentiment_of_news
 from h_youtube import check_bitcoin_youtube_videos_increase
 from g_reddit import reddit_check
 from a_macro import macro_sentiment, print_upcoming_events
-# from f_google import check_search_trend
+from f_google import check_search_trend
 from c_predictor import decision_tree_predictor
 from b_order_book import order_book
 from k_combined_score import make_trading_decision
@@ -106,8 +106,8 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
         factor_values['richest_bullish'], factor_values['richest_bearish'] = \
             retrieve_latest_factor_values_database('richest_addresses')
 
-        factor_values['google_bullish'], factor_values['google_bearish'] = 0, 0
-        # check_search_trend(["Bitcoin", "Cryptocurrency"])
+        factor_values['google_bullish'], factor_values['google_bearish'] = \
+            check_search_trend(["Bitcoin", "Cryptocurrency"])
 
         factor_values['reddit_bullish'], factor_values['reddit_bearish'] = reddit_check()
 
