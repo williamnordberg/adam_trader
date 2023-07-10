@@ -201,3 +201,6 @@ def create_update_intervals():
     )
 
     return timer_interval_component, interval_component
+
+
+
