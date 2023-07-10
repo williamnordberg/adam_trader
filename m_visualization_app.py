@@ -1,9 +1,14 @@
 import dash
-from dash import dcc
-from dash import html
+from dash import dcc, html
 from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 import logging
+from flask import Flask, redirect, request
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+import flask
+import configparser
+import os
+from flask import render_template
 
 from m_visualization_divs import create_html_divs, create_progress_bar
 from m_visualization_side import generate_tooltips, read_layout_data, create_scroll_up_button, \
@@ -17,7 +22,20 @@ from z_handy_modules import COLORS
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
-app = dash.Dash(__name__, external_stylesheets=[
+# Load the config file
+config = configparser.ConfigParser()
+config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config/config.ini')
+
+with open(config_path, 'r') as f:
+    config_string = f.read()
+
+config.read_string(config_string)
+SERVER_SECRET_KEY = config.get('server_key', 'flask')
+
+server = Flask(__name__)
+server.secret_key = SERVER_SECRET_KEY
+
+app = dash.Dash(__name__, server=server, url_base_pathname='/', external_stylesheets=[
     dbc.themes.BOOTSTRAP, 'https://use.fontawesome.com/releases/v5.8.1/css/all.css'])
 
 APP_UPDATE_TIME = 60
@@ -25,6 +43,81 @@ TIMER_PROGRESS_UPDATE_TIME = 10
 PROGRESS_STEPS = 6
 PROGRESS_STEP_AMOUNT = 100 / PROGRESS_STEPS
 TIME_PER_STEP = APP_UPDATE_TIME / PROGRESS_STEPS
+
+login_manager = LoginManager()
+login_manager.init_app(server)
+
+users = {
+    'user1': {
+        'password': 'user1',
+    },
+    'user2': {
+        'password': 'user2123',
+    },
+    'user3': {
+        'password': 'user3123',
+    },
+}
+
+
+@server.route('/')
+def home():
+    if not current_user.is_authenticated:
+        return redirect(flask.url_for('login'))
+    else:
+        return flask.redirect('/protected_page')
+
+
+@app.server.before_request
+def protect_dash_views():
+    if flask.request.path == '/' or flask.request.path.startswith('/_dash'):
+        if not current_user.is_authenticated:
+            return flask.redirect(flask.url_for('login'))
+
+
+class User(UserMixin):
+    pass
+
+
+@login_manager.user_loader
+def user_loader(username):
+    if username not in users:
+        return
+
+    user = User()
+    user.id = username
+    return user
+
+
+@server.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        if username in users and users[username]['password'] == password:
+            user = User()
+            user.id = username
+            login_user(user)
+            return redirect('/')
+        else:
+            return "Wrong username or password"
+    else:
+        return render_template('login.html')  # Render the HTML template
+
+
+# Flask route
+@server.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect('/login')
+
+
+@server.route('/protected_page')
+@login_required
+def protected():
+    return 'You are seeing this because you are logged in!'
 
 
 @app.callback(
@@ -117,7 +210,8 @@ def update_divs(n):
         ppi_announcement, f'T State: {trading_state}', {'color': color}, f'Bid vol: {bid_volume}', \
         f'Ask vol: {ask_volume}', f'Predicted: {predicted_price}', f'Current: {current_price}', \
         f'Diff: {price_difference}', f'RSI: {rsi}', f'Over 200EMA: {over_200EMA}', \
-        f'MACD up tr: {MACD_uptrend}', f'bb distance: {bb_MA_distance}', f'Rich receive: {round(BTC_received/1000, 1)} K', \
+        f'MACD up tr: {MACD_uptrend}', f'bb distance: {bb_MA_distance}', \
+        f'Rich receive: {round(BTC_received/1000, 1)} K', \
         f'Rich send: {round(BTC_send/1000, 1)} K', f'+ POL news inc: {positive_news_polarity_change}', \
         f'- POL news inc: {negative_news_polarity_change}'
 
@@ -172,7 +266,12 @@ def create_layout(fig_dict):
 
     # div wrapping the layout and taking up 10% width
     layout_div = html.Div(
-        children=[timer_interval_component, interval_component, create_scroll_up_button()] + html_divs,
+        children=[timer_interval_component, interval_component, create_scroll_up_button(),
+                  dbc.Button("Logout", id="logout-button", className="mr-2",
+                             style={'background-color': COLORS['lightgray'], 'border': 'None', 'outline': 'None'},
+                             size="sm"),
+                  dcc.Location(id='logout', refresh=True),
+                  ] + html_divs,
         style={'width': '11%', 'height': '100vh', 'display': 'inline-block', 'verticalAlign': 'top'}
     )
 
@@ -190,29 +289,39 @@ def create_layout(fig_dict):
 
         style={'backgroundColor': COLORS['background'], 'color': COLORS['white']},
         children=[
-            html.Div(children=[progress_bar], style={'display': 'inline-block', 'width': '100%', 'height': '05vh'}),
-            html.Div(id='dummy-output', style={'display': 'none'}),
-            first_figure,
-            layout_div,
-            html.H3('Terminal putput', style={'textAlign': 'center'}),
-            html.Div(children=[
-                dcc.Textarea(id='log-data', style={
-                    'width': '90%',
-                    'height': '40vh',
-                    'backgroundColor': COLORS['black_chart'],
-                    'color': COLORS['white'],
-                    'margin': 'auto'
-                })
-            ],
-                style={
-                    'display': 'flex',
-                    'justifyContent': 'center',
-                    'alignItems': 'center',
-                    'width': '100%'
-                }
-            ),
-            trade_details_div,
-            figure_div,
+
+            html.Div(children=[progress_bar],
+                     style={'display': 'inline-block', 'width': '100%', 'height': '05vh'}),
+
+            dcc.Loading(
+                id="loading",
+                type="cube",  # you can also use "default" or "circle"
+                fullscreen=True,  # Change to False if you don't want it to be full screen
+                children=[
+                    html.Div(id='dummy-output', style={'display': 'none'}),
+                    first_figure,
+                    layout_div,
+                    html.H3('Terminal output', style={'textAlign': 'center'}),
+                    html.Div(children=[
+                        dcc.Textarea(id='log-data', style={
+                            'width': '90%',
+                            'height': '40vh',
+                            'backgroundColor': COLORS['black_chart'],
+                            'color': COLORS['white'],
+                            'margin': 'auto'
+                        })
+                    ],
+                        style={
+                            'display': 'flex',
+                            'justifyContent': 'center',
+                            'alignItems': 'center',
+                            'width': '100%'
+                        }
+                    ),
+                    trade_details_div,
+                    figure_div,
+                ]
+            )
         ]
     )
 
@@ -230,6 +339,18 @@ def create_layout(fig_dict):
     )
 
     app.run_server(host='0.0.0.0', port=8051, debug=False)
+
+
+@app.callback(Output('logout', 'pathname'), [Input('logout-button', 'n_clicks')])
+def logout(n):
+    if n is not None:
+        return '/logout'
+    return '/'
+
+
+@server.route('/logout')
+def routelogout():
+    return redirect('http://192.168.1.178:8051/login')  # Redirection to an external site
 
 
 def visualize_charts():
