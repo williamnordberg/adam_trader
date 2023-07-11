@@ -17,8 +17,10 @@ RANGES_ORDER_VOL = [(0.53, 0.56), (0.56, 0.59), (0.59, 0.62), (0.62, 0.65), (0.6
 VALUES_ORDER_VOL = [(0.6, 0.4), (0.7, 0.3), (0.8, 0.2), (0.9, 0.1), (1.0, 0.0)]
 
 # 3. Prediction
-RANGES_PREDICTION = [(0, 5), (5, 10), (10, 20), (20, float('inf'))]
-VALUES_PREDICTION = [(0.1, 0.9), (0.2, 0.8), (0.5, 0.5), (1, 0.0)]
+RANGES_PREDICTION = [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, float('inf'))]
+VALUES_PREDICTION_GREATER = [(0.0, 0.0), (6, 4), (7, 3), (8, 2), (9, 1), (1, 0.0)]
+VALUES_PREDICTION_LESSER = [(0.0, 0.0), (4, 6), (3, 7), (2, 8), (9, 1), (0.0, 1)]
+
 
 # 4. Technical in function
 
@@ -56,8 +58,17 @@ def compare_order_volume(probability_up: float, probability_down: float) -> Tupl
 
 
 def compare_predicted_price(predicted_price: int, current_price: int) -> Tuple[float, float]:
-    price_difference_percentage = (predicted_price - current_price) / current_price * 100
-    return compare(price_difference_percentage, RANGES_PREDICTION, VALUES_PREDICTION)
+    if predicted_price > current_price:
+        price_difference_percentage = (predicted_price - current_price) / current_price * 100
+        print('price_difference_percentage', price_difference_percentage)
+        return compare(price_difference_percentage, RANGES_PREDICTION, VALUES_PREDICTION_GREATER)
+    elif current_price > predicted_price:
+        price_difference_percentage = (current_price - predicted_price) / predicted_price * 100
+        print('price_difference_percentage', price_difference_percentage)
+        return compare(price_difference_percentage, RANGES_PREDICTION, VALUES_PREDICTION_LESSER)
+    else:
+        # if predicted_price == current_price
+        return (0.0, 0.0)
 
 
 def compare_technical(reversal: str, potential_up_trend: bool, over_ema200: bool) -> Tuple[float, float]:
@@ -164,3 +175,5 @@ def compare_news(last_24_hours_positive_polarity: float,
     news_bearish = 1 - score
 
     return round(news_bullish, 2), round(news_bearish, 2)
+
+
