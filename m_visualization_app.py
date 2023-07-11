@@ -1,4 +1,5 @@
 import dash
+from time import sleep
 from dash import dcc, html
 from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
@@ -248,6 +249,17 @@ def create_graphs(fig_dict):
     return graph_list
 
 
+@app.callback(Output('loading', 'style'),
+              Output('dummy-output_cube', 'children'),
+              Input('dummy-output_cube', 'id'))
+def start_up(_):
+    # simulate a delay
+    sleep(2)
+
+    # hide the Loading component after delay
+    return {'display': 'none'}, None
+
+
 # noinspection PyTypeChecker
 def create_layout(fig_dict):
 
@@ -292,36 +304,36 @@ def create_layout(fig_dict):
 
             html.Div(children=[progress_bar],
                      style={'display': 'inline-block', 'width': '100%', 'height': '05vh'}),
-
             dcc.Loading(
                 id="loading",
                 type="cube",  # you can also use "default" or "circle"
                 fullscreen=True,  # Change to False if you don't want it to be full screen
-                children=[
-                    html.Div(id='dummy-output', style={'display': 'none'}),
-                    first_figure,
-                    layout_div,
-                    html.H3('Terminal output', style={'textAlign': 'center'}),
-                    html.Div(children=[
-                        dcc.Textarea(id='log-data', style={
-                            'width': '90%',
-                            'height': '40vh',
-                            'backgroundColor': COLORS['black_chart'],
-                            'color': COLORS['white'],
-                            'margin': 'auto'
-                        })
-                    ],
-                        style={
-                            'display': 'flex',
-                            'justifyContent': 'center',
-                            'alignItems': 'center',
-                            'width': '100%'
-                        }
-                    ),
-                    trade_details_div,
-                    figure_div,
-                ]
-            )
+                children=html.Div(id='dummy-output_cube'),
+                style={'position': 'fixed', 'top': 0, 'left': 0, 'width': '100%', 'height': '100%'}
+            ),
+
+            html.Div(id='dummy-output', style={'display': 'none'}),
+            first_figure,
+            layout_div,
+            html.H3('Terminal output', style={'textAlign': 'center'}),
+            html.Div(children=[
+                dcc.Textarea(id='log-data', style={
+                    'width': '90%',
+                    'height': '40vh',
+                    'backgroundColor': COLORS['black_chart'],
+                    'color': COLORS['white'],
+                    'margin': 'auto'
+                })
+            ],
+                style={
+                    'display': 'flex',
+                    'justifyContent': 'center',
+                    'alignItems': 'center',
+                    'width': '100%'
+                }
+            ),
+            trade_details_div,
+            figure_div
         ]
     )
 
