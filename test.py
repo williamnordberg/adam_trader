@@ -1,4 +1,5 @@
 import dash
+from time import sleep
 from dash import dcc, html
 from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
@@ -248,6 +249,17 @@ def create_graphs(fig_dict):
     return graph_list
 
 
+@app.callback(Output('loading', 'style'),
+              Output('dummy-output_cube', 'children'),
+              Input('dummy-output_cube', 'id'))
+def start_up(_):
+    # simulate a delay
+    sleep(2)
+
+    # hide the Loading component after delay
+    return {'display': 'none'}, None
+
+
 # noinspection PyTypeChecker
 def create_layout(fig_dict):
 
@@ -266,7 +278,12 @@ def create_layout(fig_dict):
 
     # div wrapping the layout and taking up 10% width
     layout_div = html.Div(
-        children=[timer_interval_component, interval_component, create_scroll_up_button()] + html_divs,
+        children=[timer_interval_component, interval_component, create_scroll_up_button(),
+                  dbc.Button("Logout", id="logout-button", className="mr-2",
+                             style={'background-color': COLORS['lightgray'], 'border': 'None', 'outline': 'None'},
+                             size="sm"),
+                  dcc.Location(id='logout', refresh=True),
+                  ] + html_divs,
         style={'width': '11%', 'height': '100vh', 'display': 'inline-block', 'verticalAlign': 'top'}
     )
 
@@ -281,40 +298,42 @@ def create_layout(fig_dict):
     trade_details_div = create_trade_details_div()
 
     app.layout = html.Div(
+
         style={'backgroundColor': COLORS['background'], 'color': COLORS['white']},
         children=[
+
             html.Div(children=[progress_bar],
                      style={'display': 'inline-block', 'width': '100%', 'height': '05vh'}),
-
             dcc.Loading(
                 id="loading",
                 type="cube",  # you can also use "default" or "circle"
                 fullscreen=True,  # Change to False if you don't want it to be full screen
-                children=[
-                    html.Div(id='dummy-output', style={'display': 'none'}),
-                    first_figure,
-                    layout_div,
-                    html.H3('Terminal output', style={'textAlign': 'center'}),
-                    html.Div(children=[
-                        dcc.Textarea(id='log-data', style={
-                            'width': '90%',
-                            'height': '40vh',
-                            'backgroundColor': COLORS['black_chart'],
-                            'color': COLORS['white'],
-                            'margin': 'auto'
-                        })
-                    ],
-                        style={
-                            'display': 'flex',
-                            'justifyContent': 'center',
-                            'alignItems': 'center',
-                            'width': '100%'
-                        }
-                    ),
-                    trade_details_div,
-                    figure_div,
-                ]
-            )
+                children=html.Div(id='dummy-output_cube'),
+                style={'position': 'fixed', 'top': 0, 'left': 0, 'width': '100%', 'height': '100%'}
+            ),
+
+            html.Div(id='dummy-output', style={'display': 'none'}),
+            first_figure,
+            layout_div,
+            html.H3('Terminal output', style={'textAlign': 'center'}),
+            html.Div(children=[
+                dcc.Textarea(id='log-data', style={
+                    'width': '90%',
+                    'height': '40vh',
+                    'backgroundColor': COLORS['black_chart'],
+                    'color': COLORS['white'],
+                    'margin': 'auto'
+                })
+            ],
+                style={
+                    'display': 'flex',
+                    'justifyContent': 'center',
+                    'alignItems': 'center',
+                    'width': '100%'
+                }
+            ),
+            trade_details_div,
+            figure_div
         ]
     )
 
@@ -332,6 +351,18 @@ def create_layout(fig_dict):
     )
 
     app.run_server(host='0.0.0.0', port=8051, debug=False)
+
+
+@app.callback(Output('logout', 'pathname'), [Input('logout-button', 'n_clicks')])
+def logout(n):
+    if n is not None:
+        return '/logout'
+    return '/'
+
+
+@server.route('/logout')
+def routelogout():
+    return redirect('http://192.168.1.178:8051/login')  # Redirection to an external site
 
 
 def visualize_charts():
