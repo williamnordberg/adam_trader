@@ -9,7 +9,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="11July">
+      <change afterPath="$PROJECT_DIR$/tests/data/bitcoin_rich_list2000.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/data/database.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/data/dataset.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/data/exchange_addresses.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/data/latest_info_saved.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/data/trades_details.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/data/trades_results.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_z_compares.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/adam_trader.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/adam_trader.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/z_compares.py" beforeDir="false" afterPath="$PROJECT_DIR$/z_compares.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -63,26 +73,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;ToolWindowRun.ShowToolbar&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/will/Python_project/adam_trader/config&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;aDefault&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.folding&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "ToolWindowRun.ShowToolbar": "false",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/will/Python_project/adam_trader/tests",
+    "run.code.analysis.last.selected.profile": "aDefault",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\will\Python_project\adam_trader\tests" />
       <recent name="C:\will\Python_project\adam_trader\config" />
       <recent name="C:\will\Python_project\adam_trader\data" />
-      <recent name="C:\will\Python_project\adam_trader\tests" />
       <recent name="C:\will\Python_project\adam_trader" />
       <recent name="C:\will\Python_project\adam_trader\datasets" />
     </key>
@@ -94,7 +104,7 @@
       <recent name="C:\will\Python_project\adam_trader\src" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.z_compares">
+  <component name="RunManager" selected="Python tests.unit_test">
     <configuration name="m_visualization_app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -200,13 +210,13 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests with right config" type="tests" factoryName="Unittests">
+    <configuration name="unit_test" type="tests" factoryName="Unittests">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="C:\will\Python_project\adam_trader\adam_interpreter\Scripts\python.exe" />
+      <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_pattern" value="&quot;&quot;" />
@@ -221,19 +231,22 @@
       <item itemvalue="Python.test2" />
       <item itemvalue="Python.m_visualization_app" />
       <item itemvalue="Python.test" />
-      <item itemvalue="Python tests.Unittests with right config" />
+      <item itemvalue="Python tests.unit_test" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.z_compares" />
         <item itemvalue="Python.test" />
+        <item itemvalue="Python.z_compares" />
+        <item itemvalue="Python.test2" />
         <item itemvalue="Python.m_visualization_app" />
         <item itemvalue="Python.python3" />
-        <item itemvalue="Python.test2" />
       </list>
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="" />
@@ -585,7 +598,7 @@
       <option name="project" value="LOCAL" />
       <updated>1687483422567</updated>
     </task>
-    <option name="localTasksCounter" value="402" />
+    <option name="localTasksCounter" value="403" />
     <servers />
   </component>
   <component name="UnknownFeatures">

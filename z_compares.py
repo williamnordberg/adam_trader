@@ -54,21 +54,18 @@ def compare_order_volume(probability_up: float, probability_down: float) -> Tupl
     if probability_up >= probability_down:
         return compare(probability_up, RANGES_ORDER_VOL, VALUES_ORDER_VOL)
     else:
-        return compare(probability_down, RANGES_ORDER_VOL, [val[::-1] for val in VALUES_ORDER_VOL[::-1]])
+        return compare(probability_down, RANGES_ORDER_VOL, [val[::-1] for val in VALUES_ORDER_VOL])
 
 
 def compare_predicted_price(predicted_price: int, current_price: int) -> Tuple[float, float]:
     if predicted_price > current_price:
         price_difference_percentage = (predicted_price - current_price) / current_price * 100
-        print('price_difference_percentage', price_difference_percentage)
         return compare(price_difference_percentage, RANGES_PREDICTION, VALUES_PREDICTION_GREATER)
     elif current_price > predicted_price:
         price_difference_percentage = (current_price - predicted_price) / predicted_price * 100
-        print('price_difference_percentage', price_difference_percentage)
         return compare(price_difference_percentage, RANGES_PREDICTION, VALUES_PREDICTION_LESSER)
     else:
-        # if predicted_price == current_price
-        return (0.0, 0.0)
+        return 0.0, 0.0
 
 
 def compare_technical(reversal: str, potential_up_trend: bool, over_ema200: bool) -> Tuple[float, float]:
@@ -99,6 +96,7 @@ def compare_richest_addresses() -> Tuple[float, float]:
     total_received = df['richest_addresses_total_received'][-1]
     total_sent = df['richest_addresses_total_sent'][-1]
     activity_percentage = (total_received - total_sent) / total_sent * 100
+    print('activity_percentage', activity_percentage)
     return compare(activity_percentage, RANGES_RICH, VALUES_RICH)
 
 
