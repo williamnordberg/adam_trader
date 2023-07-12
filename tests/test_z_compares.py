@@ -1,10 +1,6 @@
 import unittest
-from unittest.mock import patch
-import pandas as pd
-
-from z_compares import compare_macro_m_to_m, compare_order_volume,\
-    compare_technical, compare_richest_addresses, compare_google_reddit_youtube,\
-    compare_news, compare_predicted_price
+from z_compares import compare_macro_m_to_m, compare_order_volume, compare_technical,\
+    compare_google_reddit_youtube, compare_news, compare_predicted_price
 
 
 class TestCompares(unittest.TestCase):
@@ -43,31 +39,28 @@ class TestCompares(unittest.TestCase):
         # testing with reversed inputs
         self.assertEqual(compare_technical('down', False, False), (0, 1))
 
-    @patch('z_read_write_csv.read_database')
-    def test_compare_richest_addresses(self, mock_read_database):
-        mock_df = pd.DataFrame({
-            'richest_addresses_total_received': [160],  # replace with your test data
-            'richest_addresses_total_sent': [100]  # replace with your test data
-        })
-        mock_read_database.return_value = mock_df
-
-        self.assertEqual(compare_richest_addresses(), (0.0, 1.0))
-
     def test_compare_google_reddit_youtube(self):
-        # testing with known inputs
-        result = compare_google_reddit_youtube(12, 11)
-        self.assertEqual(result, (0.0, 0.0))
-        # testing with inputs that lead to reversed result
-        result = compare_google_reddit_youtube(11, 12)
-        # self.assertEqual(result, (0.15, 0.85))
+        self.assertEqual(compare_google_reddit_youtube(100, 109), (0.0, 0.0))
+        self.assertEqual(compare_google_reddit_youtube(109, 100), (0.0, 0.0))
+
+        self.assertEqual(compare_google_reddit_youtube(110, 100), (0.6, 0.4))
+        self.assertEqual(compare_google_reddit_youtube(100, 110), (0.4, 0.6))
+
+        self.assertEqual(compare_google_reddit_youtube(124, 100), (0.85, 0.15))
+        self.assertEqual(compare_google_reddit_youtube(100, 124), (0.15, 0.85))
+
+        self.assertEqual(compare_google_reddit_youtube(115, 100), (0.75, 0.25))
+        self.assertEqual(compare_google_reddit_youtube(100, 115), (0.25, 0.75))
 
     def test_compare_news(self):
-        # testing with known inputs
-        result = compare_news(0.05, 0.04, 10, 12)
-        self.assertEqual(result, (0.4, 0.6))
-        # testing with inputs that lead to no changes
-        result = compare_news(0.05, 0.04, 10, 10)
-        # self.assertEqual(result, (0.5, 0.5))
+        self.assertEqual(compare_news(1, -1, 10000, 0), (1, 0.0))
+        self.assertEqual(compare_news(-1, 1.04, 0, 10000), (0.0, 1))
+
+        self.assertEqual(compare_news(1, -1, 10000, 0), (1, 0.0))
+        self.assertEqual(compare_news(-1, 1.04, 0, 10000), (0.0, 1))
+
+        self.assertEqual(compare_news(1, 1, 0, 10000), (0.2, 0.8))
+        self.assertEqual(compare_news(0, -1, 10000, 0), (0.8, 0.2))
 
 
 if __name__ == '__main__':
