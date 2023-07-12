@@ -8,7 +8,7 @@ logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.ERROR)
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(name)s - %(message)s',
                     handlers=[logging.StreamHandler(), logging.FileHandler('logs/app.log')],
-                    datefmt='%Y-%m-%d %H:%M:%S')  # date format without milliseconds
+                    datefmt='%Y-%m-%d %H:%M:%S')
 
 
 def do_nothing():
