@@ -25,10 +25,33 @@ VALUES_PREDICTION_LESSER = [(0.0, 0.0), (4, 6), (3, 7), (2, 8), (9, 1), (0.0, 1)
 # 4. Technical in function
 
 # 5.Richest
-RANGES_RICH = [(-INF, -50), (-50, -40), (-40, -30), (-30, -20),
-               (-20, -10), (-10, 0), (0, 10), (10, 20), (20, 30), (30, 40), (40, 50), (50, INF)]
-VALUES_RICH = [(0.0, 1.0), (0.1, 0.9), (0.2, 0.8), (0.3, 0.7),
-               (0.4, 0.6), (0.0, 0.0), (0.6, 0.4), (0.7, 0.3), (0.8, 0.2), (0.9, 0.1), (1.0, 0.0)]
+RANGES_RICH = [
+    (float('-inf'), -5),
+    (-5, -4),
+    (-4, -3),
+    (-3, -2),
+    (-2, -1),
+    (-1, 1),
+    (1, 2),
+    (2, 3),
+    (3, 4),
+    (4, 5),
+    (5, float('inf')),
+]
+VALUES_RICH = [
+    (0.0, 1.0),  # <-5
+    (0.1, 0.9),  # -5 to -4
+    (0.2, 0.8),  # -4 to -3
+    (0.3, 0.7),  # -3 to -2
+    (0.4, 0.6),  # -2 to -1
+    (0.0, 0.0),  # -1 to 1
+    (0.6, 0.4),  # 1 to 2
+    (0.7, 0.3),  # 2 to 3
+    (0.8, 0.2),  # 3 to 4
+    (0.9, 0.1),  # 4 to 5
+    (1.0, 0.0),  # >5
+]
+
 
 # 6,7,8. Google, Reddit, Youtube
 RANGES_GOOGLE = [(1.0, 1.1), (1.1, 1.15), (1.15, 1.2), (1.2, 1.25), (1.25, float('inf'))]
@@ -95,8 +118,14 @@ def compare_richest_addresses() -> Tuple[float, float]:
     df = read_database()
     total_received = df['richest_addresses_total_received'][-1]
     total_sent = df['richest_addresses_total_sent'][-1]
-    activity_percentage = (total_received - total_sent) / total_sent * 100
-    print('activity_percentage', activity_percentage)
+
+    if total_received > total_sent:
+        activity_percentage = ((total_received - total_sent) / total_sent) * 100
+    elif total_sent > total_received:
+        activity_percentage = -((total_sent - total_received) / total_received) * 100
+    else:
+        activity_percentage = 0
+
     return compare(activity_percentage, RANGES_RICH, VALUES_RICH)
 
 
@@ -173,5 +202,3 @@ def compare_news(last_24_hours_positive_polarity: float,
     news_bearish = 1 - score
 
     return round(news_bullish, 2), round(news_bearish, 2)
-
-
