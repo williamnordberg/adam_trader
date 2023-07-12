@@ -9,9 +9,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="11July">
+      <change afterPath="$PROJECT_DIR$/logs/z_read_write_csv.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/a_a_logging_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/a_a_logging_config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_z_compares.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_z_compares.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/youtube_token.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/config/youtube_token.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/bitcoin_rich_list2000.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/bitcoin_rich_list2000.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/dataset.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/dataset.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/latest_info_saved.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/z_read_write_csv.py" beforeDir="false" afterPath="$PROJECT_DIR$/z_read_write_csv.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +102,28 @@
       <recent name="C:\will\Python_project\adam_trader\logs" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python.main">
+    <configuration name="a_macro" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="adam_trader" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/a_macro.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="m_visualization_app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -117,7 +145,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="m_visualization_side" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -129,7 +157,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/m_visualization_side.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -138,7 +166,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -150,7 +178,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test2.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -159,7 +187,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="z_compares" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="z_read_write_csv" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -171,45 +199,29 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/z_compares.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/z_read_write_csv.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest in tests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="adam_trader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.z_compares" />
-      <item itemvalue="Python.test2" />
+      <item itemvalue="Python.a_macro" />
+      <item itemvalue="Python.m_visualization_side" />
+      <item itemvalue="Python.main" />
+      <item itemvalue="Python.z_read_write_csv" />
       <item itemvalue="Python.m_visualization_app" />
-      <item itemvalue="Python.test" />
-      <item itemvalue="Python tests.pytest in tests" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest in tests" />
-        <item itemvalue="Python.z_compares" />
-        <item itemvalue="Python.test" />
-        <item itemvalue="Python.test2" />
+        <item itemvalue="Python.main" />
         <item itemvalue="Python.m_visualization_app" />
+        <item itemvalue="Python.m_visualization_side" />
+        <item itemvalue="Python.z_read_write_csv" />
+        <item itemvalue="Python.a_macro" />
       </list>
     </recent_temporary>
   </component>
@@ -568,7 +580,7 @@
       <option name="project" value="LOCAL" />
       <updated>1687483422567</updated>
     </task>
-    <option name="localTasksCounter" value="405" />
+    <option name="localTasksCounter" value="406" />
     <servers />
   </component>
   <component name="UnknownFeatures">

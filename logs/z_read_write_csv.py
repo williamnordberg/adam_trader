@@ -93,23 +93,11 @@ def write_latest_data(column: str, value: Any):
     latest_info_saved.to_csv(LATEST_INFO_FILE, index=False)
 
 
-def check_macro_announcement():
-    now = datetime.now(timezone.utc).replace(tzinfo=None, microsecond=0)
-    keys = ['interest_rate_announcement_date', 'cpi_announcement_date', 'ppi_announcement_date']
-
-    for key in keys:
-        announcement_date = read_latest_data(key, datetime)
-        if announcement_date is not None:
-            diff = announcement_date - now
-            if diff.total_seconds() >= 0 and diff <= timedelta(days=3):
-                return True
-
-    return False
-
-
 update_intervals = {
     "dataset": timedelta(hours=24),
-    "macro": timedelta(hours=1) if check_macro_announcement() else timedelta(hours=24),
+    "macro": timedelta(hours=1) if datetime.now(timezone.utc).replace(
+        tzinfo=None, microsecond=0) <= read_latest_data('next-fed-announcement', datetime)
+    else timedelta(hours=24),
     "order_book": timedelta(minutes=10),
     "predicted_price": timedelta(hours=1),
     "technical_analysis": timedelta(hours=4),
