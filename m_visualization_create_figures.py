@@ -119,7 +119,9 @@ def create_figure(trace_list, title_text, yaxis_title='Value'):
 
 def visualization_log(filename, lines=1):
     with open(filename, 'r') as f:
-        return ''.join(list(f)[-lines:])
+        last_lines = list(f)[-lines:]
+        reversed_lines = last_lines[::-1]
+        return ''.join(reversed_lines)
 
 
 def visualize_trade_details():
@@ -472,3 +474,4 @@ def create_trade_details_div():
             )
         ]
     )
+

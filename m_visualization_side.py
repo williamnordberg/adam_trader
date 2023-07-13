@@ -116,9 +116,9 @@ def read_layout_data():
     read_latest_data('latest_trading_state', str)
     layout_data = {
         "trading_state": f'{read_latest_data("latest_trading_state", str)}',
-        "fed_rate_m_to_m": f'Fed rate MtM: {read_latest_data("fed_rate_m_to_m", float)}',
-        "cpi_m_to_m": f'{read_latest_data("cpi_m_to_m",float)}',
-        "ppi_m_to_m": f'{read_latest_data("ppi_m_to_m", float)}',
+        "fed_rate_m_to_m": f'Fed rate MtM: {database["fed_rate_m_to_m"][-1]}',
+        "cpi_m_to_m": database['cpi_m_to_m'][-1],
+        "ppi_m_to_m": database['ppi_m_to_m'][-1],
         "bid_volume": int(database['bid_volume'][-1]),
         "ask_volume": int(database['ask_volume'][-1]),
         "predicted_price": database['predicted_price'][-1],
