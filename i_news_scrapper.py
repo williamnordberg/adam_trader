@@ -21,7 +21,11 @@ def check_news_sentiment_scrapper() -> Tuple[float, float, int, int]:
 
     # Set up the search query
     search_query = "Bitcoin"
-    url = f"https://news.google.com/search?q={search_query}&hl=en-US&gl=US&ceid=US%3Aen&tbs=qdr:d"
+    search_query1 = "cryptocurrency"
+    search_query2 = "Ethereum"
+
+    url = f"https://news.google.com/search?q={search_query}%20OR%20{search_query1}" \
+          f"%20OR%20{search_query2}&hl=en-US&gl=US&ceid=US%3Aen&tbs=qdr:d"
 
     # Send a request to Google News and get the HTML response
     response = requests.get(url)
