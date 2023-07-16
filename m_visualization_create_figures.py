@@ -3,6 +3,8 @@ import plotly.graph_objects as go
 from datetime import timedelta
 from dash import dash_table
 from dash import html
+from sklearn.preprocessing import MinMaxScaler
+import pandas as pd
 
 
 from m_visualization_side import last_and_next_update
@@ -10,6 +12,8 @@ from z_handy_modules import COLORS
 from z_read_write_csv import read_database, read_trading_details,  read_trading_results
 from m_visualization_side import read_gauge_chart_data
 
+# Create a MinMaxScaler object
+scaler = MinMaxScaler((0, 1))
 
 APP_UPDATE_TIME = 50
 LONG_THRESHOLD = 0.68
@@ -157,6 +161,14 @@ def visualized_combined():
                    name='Combined score bullish', line=dict(color=COLORS['green_chart'])),
         go.Scatter(x=df.index, y=df["weighted_score_down"],
                    name='Combined score bearish', line=dict(color=COLORS['red_chart'])),
+        go.Scatter(
+            x=df.index,
+            y=(df["bitcoin_price"] / 100000),
+            name='Bitcoin price',
+            visible='legendonly',
+            text=(round(df["bitcoin_price"], 0).astype(str)),  # specify the hover text
+            hoverinfo='text'  # use the text for hover
+        )
     ]
 
     fig = create_figure(trace_list, "Combined score")
@@ -179,6 +191,14 @@ def visualized_news():
                    name='Positive Count', visible='legendonly'),
         go.Scatter(x=df.index, y=df["news_negative_count"],
                    name='Negative count', visible='legendonly'),
+        go.Scatter(
+            x=df.index,
+            y=(df["bitcoin_price"] / 100000),
+            name='Bitcoin price',
+            visible='legendonly',
+            text=(round(df["bitcoin_price"], 0).astype(str)),  # specify the hover text
+            hoverinfo='text'  # use the text for hover
+        )
     ]
 
     fig = create_figure(trace_list, "News")
@@ -194,7 +214,9 @@ def visualized_youtube():
         go.Scatter(x=df.index, y=df["youtube_bearish"],
                    name='YouTube bearish', visible='legendonly'),
         go.Scatter(x=df.index, y=df["last_24_youtube"],
-                   name='Number of Video in 24h')
+                   name='Number of Video in 24h'),
+        go.Scatter(x=df.index, y=(df["bitcoin_price"]/100), name='Bitcoin price'),
+
     ]
 
     fig = create_figure(trace_list, "Youtube")
@@ -212,7 +234,9 @@ def visualized_reddit():
         go.Scatter(x=df.index, y=df["reddit_count_bitcoin_posts_24h"],
                    name='Count bitcoin posts 24h', visible='legendonly'),
         go.Scatter(x=df.index, y=df["reddit_activity_24h"],
-                   name='Reddit activity')
+                   name='Reddit activity'),
+        go.Scatter(x=df.index, y=df["bitcoin_price"], name='Bitcoin price'),
+
     ]
 
     fig = create_figure(trace_list, "Reddit")
@@ -225,7 +249,9 @@ def visualized_google():
     trace_list = [
         go.Scatter(x=df.index, y=df["hourly_google_search"], name='Hourly Google Search'),
         go.Scatter(x=df.index, y=df["google_search_bullish"], name='Google Bullish', visible='legendonly'),
-        go.Scatter(x=df.index, y=df["google_search_bearish"], name='Google Bearish', visible='legendonly')
+        go.Scatter(x=df.index, y=df["google_search_bearish"], name='Google Bearish', visible='legendonly'),
+        go.Scatter(x=df.index, y=(df["bitcoin_price"]/1000), name='Bitcoin price'),
+
     ]
 
     fig = create_figure(trace_list, "Google search")
@@ -239,7 +265,9 @@ def visualized_richest():
         go.Scatter(x=df.index, y=df["richest_addresses_bullish"], name='Richest bullish', visible='legendonly'),
         go.Scatter(x=df.index, y=df["richest_addresses_bearish"], name='Richest bearish', visible='legendonly'),
         go.Scatter(x=df.index, y=df["richest_addresses_total_received"], name='Sent in last 24H'),
-        go.Scatter(x=df.index, y=df["richest_addresses_total_sent"], name='Received in last 24H')
+        go.Scatter(x=df.index, y=df["richest_addresses_total_sent"], name='Received in last 24H'),
+        go.Scatter(x=df.index, y=df["bitcoin_price"], name='Bitcoin price'),
+
     ]
 
     fig = create_figure(trace_list, "Richest Addresses", 'Value')
@@ -250,11 +278,19 @@ def visualize_macro():
     df = read_database()
 
     trace_list = [
-        go.Scatter(x=df.index, y=df['fed_rate_m_to_m'], name='Interest Rate M to M'),
-        go.Scatter(x=df.index, y=df["cpi_m_to_m"], name='CPI M to M'),
-        go.Scatter(x=df.index, y=df["ppi_m_to_m"], name='PPI M to M'),
-        go.Scatter(x=df.index, y=df["macro_bullish"], name='Macro Bullish', visible='legendonly'),
-        go.Scatter(x=df.index, y=df["macro_bearish"], name='Macro Bearish', visible='legendonly')
+        go.Scatter(x=df.index, y=df['fed_rate_m_to_m'], name='Interest Rate M to M', hovertemplate='%{y}'),
+        go.Scatter(x=df.index, y=df["cpi_m_to_m"], name='CPI M to M', hovertemplate='%{y}'),
+        go.Scatter(x=df.index, y=df["ppi_m_to_m"], name='PPI M to M', hovertemplate='%{y}'),
+        go.Scatter(x=df.index, y=df["macro_bullish"], name='Macro Bullish', visible='legendonly', hovertemplate='%{y}'),
+        go.Scatter(x=df.index, y=df["macro_bearish"], name='Macro Bearish', visible='legendonly', hovertemplate='%{y}'),
+        go.Scatter(
+            x=df.index,
+            y=(df["bitcoin_price"] / 100000),
+            name='Bitcoin price',
+            visible='legendonly',
+            text=(round(df["bitcoin_price"], 0).astype(str)),  # specify the hover text
+            hoverinfo='text'  # use the text for hover
+        )
     ]
 
     fig = create_figure(trace_list, "Macro Economic", 'Value')
@@ -474,4 +510,3 @@ def create_trade_details_div():
             )
         ]
     )
-
