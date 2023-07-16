@@ -4,7 +4,6 @@ from datetime import timedelta
 from dash import dash_table
 from dash import html
 from sklearn.preprocessing import MinMaxScaler
-import pandas as pd
 
 
 from m_visualization_side import last_and_next_update
