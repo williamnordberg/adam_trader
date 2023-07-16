@@ -36,7 +36,7 @@ def check_news_api_sentiment(start: datetime, end: datetime) -> Tuple[float, flo
 
     endpoint = 'https://newsapi.org/v2/everything'
     params = {
-        'q': 'bitcoin',
+        'q': '(bitcoin OR cryptocurrency)',
         'language': 'en',
         'sortBy': 'publishedAt',
         'apiKey': API_NEWSAPI,
@@ -51,7 +51,6 @@ def check_news_api_sentiment(start: datetime, end: datetime) -> Tuple[float, flo
     response = requests.get(endpoint, params=params)
     response.raise_for_status()
     data = json.loads(response.text)
-
     for article in data['articles']:
         content = article['content']
 
@@ -65,10 +64,10 @@ def check_news_api_sentiment(start: datetime, end: datetime) -> Tuple[float, flo
             negative_count += 1
 
         # Handle division by zero cases
-        avg_positive_polarity = positive_polarity_score / positive_count if positive_count > 0 else 0
-        avg_negative_polarity = negative_polarity_score / negative_count if negative_count > 0 else 0
+    avg_positive_polarity = positive_polarity_score / positive_count if positive_count > 0 else 0
+    avg_negative_polarity = negative_polarity_score / negative_count if negative_count > 0 else 0
 
-        return avg_positive_polarity, abs(avg_negative_polarity), positive_count, negative_count
+    return avg_positive_polarity, abs(avg_negative_polarity), positive_count, negative_count
 
 
 if __name__ == "__main__":
