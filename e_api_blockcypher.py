@@ -55,7 +55,7 @@ def get_address_transactions_24h_blockcypher(address: str, api_keys_cycle=iterto
     api_key = next(api_keys_cycle)
     api_key = config.get('API', api_key)
 
-    api_url = f"{API_BASE_URL}{address}/full?token={api_key}"
+    api_url = f"{API_BASE_URL}{address}/full?token={api_key}&limit=50"
 
     # Send the API request and get the response
     response = session.get(api_url, timeout=10)

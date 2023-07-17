@@ -1,17 +1,13 @@
 import logging
 import time
 from typing import Tuple, List
-import configparser
 
 from e_richest_scraper import scrape_bitcoin_rich_list
-from e_api_blockcypher import get_address_transactions_24h_blockcypher
 from z_read_write_csv import save_value_to_database, should_update, save_update_time, \
     read_rich_addresses
+from e_api_blockchain_info import get_address_transactions_24h
 
 SATOSHI_TO_BITCOIN = 100000000
-
-config = configparser.ConfigParser()
-config.read('config/config.ini')
 
 
 def check_multiple_addresses(addresses: List[str]) -> Tuple[int, int]:
@@ -27,10 +23,12 @@ def check_multiple_addresses(addresses: List[str]) -> Tuple[int, int]:
     total_sent = 0
 
     for i, address in enumerate(addresses):
-        received, sent = get_address_transactions_24h_blockcypher(address)
+        received, sent = get_address_transactions_24h(address)
+
         total_received += received
         total_sent += sent
-        time.sleep(1)
+
+        time.sleep(5)
 
     return int(total_received), int(total_sent)
 
