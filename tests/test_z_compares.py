@@ -1,5 +1,5 @@
 from z_compares import compare_macro_m_to_m, compare_order_volume, compare_technical,\
-    compare_google_reddit_youtube, compare_news, compare_predicted_price
+    compare_google_reddit_youtube, compare_news, compare_predicted_price, compare_richest_addresses
 
 
 def test_compare_macro_m_to_m():
