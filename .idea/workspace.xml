@@ -10,9 +10,6 @@
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="16July">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/b_order_book.py" beforeDir="false" afterPath="$PROJECT_DIR$/b_order_book.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/latest_info_saved.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_z_compares.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_z_compares.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/z_compares.py" beforeDir="false" afterPath="$PROJECT_DIR$/z_compares.py" afterDir="false" />
     </list>
@@ -566,7 +563,7 @@
       <option name="project" value="LOCAL" />
       <updated>1687483422567</updated>
     </task>
-    <option name="localTasksCounter" value="412" />
+    <option name="localTasksCounter" value="413" />
     <servers />
   </component>
   <component name="UnknownFeatures">
