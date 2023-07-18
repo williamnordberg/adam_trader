@@ -2,9 +2,10 @@ import praw
 import logging
 import configparser
 from typing import Tuple
-
 from requests.exceptions import SSLError
 from urllib3.exceptions import MaxRetryError
+from prawcore.exceptions import RequestException
+
 
 from z_read_write_csv import save_value_to_database, save_update_time, \
     should_update, read_latest_data, write_latest_data, retrieve_latest_factor_values_database
@@ -16,7 +17,7 @@ CONFIG_PATH = 'config/config.ini'
 
 
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
-        SSLError, MaxRetryError,), fallback_values=(0.0, 0.0))
+        SSLError, MaxRetryError, RequestException), fallback_values=(0.0, 0.0))
 def reddit_check_wrapper() -> Tuple[float, float]:
 
     config = configparser.ConfigParser()
