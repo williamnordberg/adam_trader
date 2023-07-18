@@ -49,7 +49,7 @@ def run_monitor_richest_addresses():
     RICH_LOOP_COUNTER = 0
     while True:
         RICH_LOOP_COUNTER += 1
-        logging.info(f'$$${os.getpid()}_Rich addresses({RICH_LOOP_COUNTER}) RUNNING$$$')
+        logging.info(f'♥♥♥♥ {os.getpid()}_Rich addresses({RICH_LOOP_COUNTER}) RUNNING ♥♥♥♥')
         total_received, total_sent = monitor_bitcoin_richest_addresses()
         if total_received != 0.0:
             richest_addresses_bullish, richest_addresses_bearish = compare_richest_addresses()
@@ -58,10 +58,10 @@ def run_monitor_richest_addresses():
             save_value_to_database('richest_addresses_bullish', richest_addresses_bullish)
             save_value_to_database('richest_addresses_bearish', richest_addresses_bearish)
 
-            logging.info(f'$$$Richest Send: {total_sent} '
-                         f' RECEIVE: {total_received} in 24H$$$')
+            logging.info(f'♥♥♥♥ Richest Send: {total_sent} '
+                         f' RECEIVE: {total_received} in 24H ♥♥♥♥')
 
-        logging.info(f'$$${os.getpid()}_Rich addresses({RICH_LOOP_COUNTER}) SLEEPS$$$')
+        logging.info(f'♥♥♥♥ {os.getpid()}_Rich addresses({RICH_LOOP_COUNTER}) SLEEPS ♥♥♥♥')
         sleep(RICHEST_ADDRESSES_SLEEP_TIME)
 
 
@@ -70,7 +70,7 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
     LOOP_COUNTER = 0
     while True:
         LOOP_COUNTER += 1
-        logging.info(f'***{os.getpid()}_trading({LOOP_COUNTER}) RUNNING***')
+        logging.info(f'███ {os.getpid()}_trading({LOOP_COUNTER}) RUNNING ███')
         write_latest_data('latest_trading_state', 'main')
         factor_values = {
             'macro_bullish': 0.0,
@@ -159,7 +159,7 @@ def trading_loop(long_threshold: float, short_threshold: float, profit_margin: f
                                'short', opening_price, close_price, pnl, factor_values)
 
             logging.info(f"profit_after_trade:{profit_after_trade}, "f"loss_after_trade:{loss_after_trade}")
-        logging.info(f'***{os.getpid()}_trading({LOOP_COUNTER}) SLEEPS***')
+        logging.info(f'███ {os.getpid()}_trading({LOOP_COUNTER}) SLEEPS ███')
         write_latest_data('latest_trading_state', 'main')
         sleep(MAIN_TRADING_LOOP_SLEEP_TIME)
 
