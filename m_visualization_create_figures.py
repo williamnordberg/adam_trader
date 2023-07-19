@@ -121,7 +121,7 @@ def create_figure(trace_list, title_text, yaxis_title='Value'):
 
 
 def visualization_log(filename, lines=1):
-    with open(filename, 'r') as f:
+    with open(filename, 'r', encoding='utf-8') as f:
         last_lines = list(f)[-lines:]
         reversed_lines = last_lines[::-1]
         return ''.join(reversed_lines)
