@@ -263,9 +263,9 @@ def visualized_richest():
     trace_list = [
         go.Scatter(x=df.index, y=df["richest_addresses_bullish"], name='Richest bullish', visible='legendonly'),
         go.Scatter(x=df.index, y=df["richest_addresses_bearish"], name='Richest bearish', visible='legendonly'),
-        go.Scatter(x=df.index, y=df["richest_addresses_total_received"], name='Sent in last 24H'),
-        go.Scatter(x=df.index, y=df["richest_addresses_total_sent"], name='Received in last 24H'),
-        go.Scatter(x=df.index, y=df["bitcoin_price"], name='Bitcoin price'),
+        go.Scatter(x=df.index, y=df["richest_addresses_total_received"], name='Received in last 24H'),
+        go.Scatter(x=df.index, y=df["richest_addresses_total_sent"], name='Sent in last 24H'),
+        go.Scatter(x=df.index, y=df["bitcoin_price"], name='Bitcoin price', visible='legendonly'),
 
     ]
 

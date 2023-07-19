@@ -8,19 +8,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="18July">
-      <change afterPath="$PROJECT_DIR$/assets/coingecko.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/tradingview_crypto_market.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/tradingview_market_data.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/tradingview_snaps.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/tradingview_technical_analysis.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test2.py" afterDir="false" />
+    <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="19July">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/latest_info_saved.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/m_visualization_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/m_visualization_app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/m_visualization_create_figures.py" beforeDir="false" afterPath="$PROJECT_DIR$/m_visualization_create_figures.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/m_visualization_divs.py" beforeDir="false" afterPath="$PROJECT_DIR$/m_visualization_divs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -212,10 +202,10 @@
     </configuration>
     <list>
       <item itemvalue="Python.f_google" />
-      <item itemvalue="Python.m_visualization_app" />
       <item itemvalue="Python.main" />
-      <item itemvalue="Python.test2" />
       <item itemvalue="Python.test" />
+      <item itemvalue="Python.test2" />
+      <item itemvalue="Python.m_visualization_app" />
     </list>
     <recent_temporary>
       <list>
@@ -582,7 +572,7 @@
       <option name="project" value="LOCAL" />
       <updated>1687483422567</updated>
     </task>
-    <option name="localTasksCounter" value="416" />
+    <option name="localTasksCounter" value="417" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -702,6 +692,7 @@
     <MESSAGE value="11July" />
     <MESSAGE value="16July" />
     <MESSAGE value="18July" />
-    <option name="LAST_COMMIT_MESSAGE" value="18July" />
+    <MESSAGE value="19July" />
+    <option name="LAST_COMMIT_MESSAGE" value="19July" />
   </component>
 </project>
