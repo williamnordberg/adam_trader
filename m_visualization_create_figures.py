@@ -132,7 +132,11 @@ def visualize_trade_details():
 
     # Select only the required columns
     df = df[["weighted_score", "position_opening_time", "position_closing_time", "opening_price",
-             "close_price", "position_type", "PNL"]]
+             "close_price", "position_type", "PNL", "macro_bullish", "macro_bearish", "order_book_bullish",
+             "order_book_bearish", "prediction_bullish", "prediction_bearish", "technical_bullish",
+             "technical_bearish", "richest_bullish", "richest_bearish", "google_bullish", "google_bearish",
+             "reddit_bullish", "reddit_bearish", "youtube_bullish", "youtube_bearish", "news_bullish",
+             "news_bearish", "weighted_score_up", "weighted_score_down"]]
 
     # Display all columns except index
     columns = [{"name": i, "id": i} for i in df.columns]
