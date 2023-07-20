@@ -3,8 +3,7 @@ import logging
 from requests.sessions import Session
 from typing import Tuple
 from z_handy_modules import retry_on_error
-from requests.exceptions import RequestException, Timeout
-
+from requests.exceptions import RequestException, Timeout, HTTPError, ChunkedEncodingError
 
 # Initialize a session object
 session = Session()
@@ -15,7 +14,9 @@ SLEEP_TIME = 60
 MAX_RETRIES = 3
 
 
-@retry_on_error(MAX_RETRIES, 5, allowed_exceptions=(RequestException, Timeout), fallback_values=(0.0, 0.0))
+@retry_on_error(MAX_RETRIES, 5, allowed_exceptions=(
+        RequestException, Timeout, HTTPError, ConnectionError, ChunkedEncodingError),
+                fallback_values=(0.0, 0.0))
 def get_address_transactions_24h(address: str) -> Tuple[float, float]:
     """
     Check the total Bitcoin received and sent in the last 24 hours for an address using the Blockchain.info API.
@@ -67,9 +68,14 @@ def get_address_transactions_24h(address: str) -> Tuple[float, float]:
         logging.info(f"blockchain.info rate limited for address {address}. Sleeping for a minute.")
         time.sleep(SLEEP_TIME)
         return get_address_transactions_24h(address)
+
+    elif response.status_code in {504, 524}:
+        # Treat these as timeout errors
+        raise Timeout(f"Timeout error with status code {response.status_code}")
+
     else:
         logging.info(f"Failed to get transaction history for address {address}. Status code: {response.status_code}")
-        return 0, 0
+        raise HTTPError(f"Received error status code {response.status_code}")
 
 
 if __name__ == '__main__':
