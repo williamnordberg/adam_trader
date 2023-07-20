@@ -10,7 +10,8 @@
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="19July">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_api_blockchain_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_api_blockchain_info.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m_visualization_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/m_visualization_app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m_visualization_create_figures.py" beforeDir="false" afterPath="$PROJECT_DIR$/m_visualization_create_figures.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +95,7 @@
       <recent name="C:\will\Python_project\adam_trader\templates" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.e_api_blockchain_info">
+  <component name="RunManager" selected="Python.m_visualization_app">
     <configuration name="e_api_blockchain_info" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -209,9 +210,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.m_visualization_app" />
         <item itemvalue="Python.e_api_blockchain_info" />
         <item itemvalue="Python.test2" />
-        <item itemvalue="Python.m_visualization_app" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python.f_google" />
       </list>
@@ -572,7 +573,7 @@
       <option name="project" value="LOCAL" />
       <updated>1687483422567</updated>
     </task>
-    <option name="localTasksCounter" value="418" />
+    <option name="localTasksCounter" value="419" />
     <servers />
   </component>
   <component name="UnknownFeatures">

@@ -146,7 +146,7 @@ def update_figures(n):
             visualize_macro(),
             visualize_prediction(),
             visualize_trade_results(),
-            visualization_log('logs/app.log', 200),
+            visualization_log('logs/app.log', 500),
             create_gauge_charts())
 
 
