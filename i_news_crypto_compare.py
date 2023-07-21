@@ -8,6 +8,8 @@ from z_handy_modules import retry_on_error
 SENTIMENT_POSITIVE_THRESHOLD = 0.1
 SENTIMENT_NEGATIVE_THRESHOLD = -0.001
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(name)s - %(message)s')
+
 
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=(Exception,),
                 fallback_values=(0.0, 0.0, 0, 0))

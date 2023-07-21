@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 from textblob import TextBlob
-import logging
 from typing import Tuple
 from z_handy_modules import retry_on_error
 
@@ -35,10 +34,8 @@ def check_news_sentiment_scrapper() -> Tuple[float, float, int, int]:
     articles = soup.find_all("a", class_="DY5T1d")
     for article in articles:
         content = article.text
-
         blob = TextBlob(content)
         sentiment_score = blob.sentiment.polarity
-
         if sentiment_score > SENTIMENT_POSITIVE_THRESHOLD:
             positive_polarity_score += sentiment_score
             positive_count += 1
@@ -57,7 +54,7 @@ if __name__ == "__main__":
     positive_polarity_score_outer, negative_polarity_score_outer, \
         positive_count_outer, negative_count_outer = check_news_sentiment_scrapper()
 
-    logging.info(f'positive_polarity: {positive_polarity_score_outer}'
-                 f' and negative_polarity: {negative_polarity_score_outer}')
-    logging.info(f'positive_count: {positive_count_outer} '
-                 f'negative_count: {negative_count_outer}')
+    print(f'positive_polarity: {positive_polarity_score_outer}'
+          f' and negative_polarity: {negative_polarity_score_outer}')
+    print(f'positive_count: {positive_count_outer} '
+          f'negative_count: {negative_count_outer}')
