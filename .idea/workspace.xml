@@ -10,10 +10,9 @@
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="19July">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/latest_info_saved.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/l_position_short.py" beforeDir="false" afterPath="$PROJECT_DIR$/l_position_short.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/z_handy_modules.py" beforeDir="false" afterPath="$PROJECT_DIR$/z_handy_modules.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/z_read_write_csv.py" beforeDir="false" afterPath="$PROJECT_DIR$/z_read_write_csv.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/i_newsAPI.py" beforeDir="false" afterPath="$PROJECT_DIR$/i_newsAPI.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/i_news_crypto_compare.py" beforeDir="false" afterPath="$PROJECT_DIR$/i_news_crypto_compare.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/i_news_scrapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/i_news_scrapper.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,8 +96,8 @@
       <recent name="C:\will\Python_project\adam_trader\templates" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.z_handy_modules">
-    <configuration name="e_api_blockchain_info" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.i_news_crypto_compare">
+    <configuration name="i_newsAPI" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -110,7 +109,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/e_api_blockchain_info.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/i_newsAPI.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -119,7 +118,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="m_visualization_app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="i_news_crypto_compare" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -131,7 +130,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/m_visualization_app.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/i_news_crypto_compare.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -140,7 +139,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="i_news_scrapper" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -152,7 +151,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test2.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/i_news_scrapper.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -204,19 +203,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.e_api_blockchain_info" />
+      <item itemvalue="Python.i_newsAPI" />
+      <item itemvalue="Python.i_news_crypto_compare" />
+      <item itemvalue="Python.i_news_scrapper" />
       <item itemvalue="Python.z_handy_modules" />
       <item itemvalue="Python.z_read_write_csv" />
-      <item itemvalue="Python.test2" />
-      <item itemvalue="Python.m_visualization_app" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.i_news_crypto_compare" />
+        <item itemvalue="Python.i_news_scrapper" />
+        <item itemvalue="Python.i_newsAPI" />
         <item itemvalue="Python.z_handy_modules" />
         <item itemvalue="Python.z_read_write_csv" />
-        <item itemvalue="Python.m_visualization_app" />
-        <item itemvalue="Python.e_api_blockchain_info" />
-        <item itemvalue="Python.test2" />
       </list>
     </recent_temporary>
   </component>
@@ -575,7 +574,7 @@
       <option name="project" value="LOCAL" />
       <updated>1687483422567</updated>
     </task>
-    <option name="localTasksCounter" value="420" />
+    <option name="localTasksCounter" value="421" />
     <servers />
   </component>
   <component name="UnknownFeatures">

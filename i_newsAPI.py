@@ -2,7 +2,6 @@ import requests
 import json
 import configparser
 from textblob import TextBlob
-import logging
 import os
 from datetime import datetime, timedelta
 from typing import Tuple
@@ -75,8 +74,7 @@ if __name__ == "__main__":
     end_outer = datetime.now()
     positive_polarity_score_outer, negative_polarity_score_outer, \
         positive_count_outer, negative_count_outer = check_news_api_sentiment(start_outer, end_outer)
-
-    logging.info(f'positive_polarity: {positive_polarity_score_outer}'
-                 f'and negative_polarity: {negative_polarity_score_outer}')
-    logging.info(f'positive_count: {positive_count_outer} '
-                 f'negative_count: {negative_count_outer}')
+    print(f'positive_polarity: {positive_polarity_score_outer} '
+          f'and negative_polarity: {negative_polarity_score_outer}')
+    print(f'positive_count: {positive_count_outer} '
+          f'negative_count: {negative_count_outer}')
