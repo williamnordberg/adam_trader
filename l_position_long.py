@@ -18,7 +18,7 @@ from l_position_long_testnet import place_market_buy_order, close_position_at_ma
 SCORE_MARGIN_TO_CLOSE = 0.65
 PROFIT_MARGIN = 0.01
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
-POSITION_SIZE = 0.3
+POSITION_SIZE = 0.1
 TRADING_LOOP_SLEEP_TIME = 60 * 5
 
 

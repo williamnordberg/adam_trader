@@ -8,11 +8,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="19July">
+    <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="21July">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/i_newsAPI.py" beforeDir="false" afterPath="$PROJECT_DIR$/i_newsAPI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/i_news_crypto_compare.py" beforeDir="false" afterPath="$PROJECT_DIR$/i_news_crypto_compare.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/i_news_scrapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/i_news_scrapper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/l_position_short.py" beforeDir="false" afterPath="$PROJECT_DIR$/l_position_short.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -574,7 +572,7 @@
       <option name="project" value="LOCAL" />
       <updated>1687483422567</updated>
     </task>
-    <option name="localTasksCounter" value="421" />
+    <option name="localTasksCounter" value="422" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -695,6 +693,7 @@
     <MESSAGE value="16July" />
     <MESSAGE value="18July" />
     <MESSAGE value="19July" />
-    <option name="LAST_COMMIT_MESSAGE" value="19July" />
+    <MESSAGE value="21July" />
+    <option name="LAST_COMMIT_MESSAGE" value="21July" />
   </component>
 </project>
