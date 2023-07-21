@@ -16,7 +16,7 @@ from z_handy_modules import get_bitcoin_future_market_price
 from l_position_short_testnet import short_market, close_shorts_open_positions
 
 SCORE_MARGIN_TO_CLOSE_OUTER = 0.68
-PROFIT_MARGIN = 0.005
+PROFIT_MARGIN = 0.01
 SYMBOL = 'BTCUSDT'
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 POSITION_SIZE = 0.01
@@ -46,12 +46,12 @@ def short_position(score_margin_to_close: float, profit_margin: float) -> Tuple[
         # Check if we meet profit or stop loss
         if current_price < profit_point:
             close_shorts_open_positions(SYMBOL)
-            profit = int(position_opening_price - current_price)
+            profit = int(position_opening_price - current_price) * LEVERAGE
             logging.info('&&&&&&&&&&&&&& TARGET HIT &&&&&&&&&&&&&&&&&&&&&')
             return profit, loss
         elif current_price > stop_loss:
             close_shorts_open_positions(SYMBOL)
-            loss = int(current_price - position_opening_price)
+            loss = int(current_price - position_opening_price) * LEVERAGE
             logging.info('&&&&&&&&&&&&&& STOP LOSS &&&&&&&&&&&&&&&&&&&&&')
             return profit, loss
 
