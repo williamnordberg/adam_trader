@@ -336,3 +336,7 @@ def read_rich_addresses() -> List[str]:
     addresses = [addr for addr in addresses if addr not in exchange_addresses]
 
     return addresses
+
+
+if __name__ == "__main__":
+    print('')
