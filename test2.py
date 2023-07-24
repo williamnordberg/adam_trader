@@ -10,8 +10,10 @@ import flask
 import configparser
 import os
 from flask import render_template
+import json
 
-from m_visualization_divs import create_html_divs, create_progress_bar, create_widget
+
+from m_visualization_divs import create_html_divs, create_progress_bar, create_widget, create_news_div
 from m_visualization_side import generate_tooltips, read_layout_data, create_scroll_up_button, \
     create_update_intervals
 from m_visualization_create_figures import visualize_trade_details, visualized_combined, \
@@ -29,6 +31,15 @@ config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config/c
 
 with open(config_path, 'r') as f:
     config_string = f.read()
+
+with open('data/news_data.json') as json_file:
+    data = json.load(json_file)
+
+news_titles = []
+for sentiment in ["positive", "negative"]:
+    for news in data[sentiment]:
+        title = news['title']
+        news_titles.append(title)
 
 config.read_string(config_string)
 SERVER_SECRET_KEY = config.get('server_key', 'flask')
@@ -146,7 +157,7 @@ def update_figures(n):
             visualize_macro(),
             visualize_prediction(),
             visualize_trade_results(),
-            visualization_log('logs/app.log', 200),
+            visualization_log('logs/app.log', 500),
             create_gauge_charts())
 
 
@@ -298,6 +309,20 @@ def create_layout(fig_dict):
 
     trade_details_div = create_trade_details_div()
 
+    @app.callback(
+        Output('news-description', 'children'),
+        [Input('news-dropdown', 'value')])
+    def update_news_description(selected_news): 
+        for sentiment_inner in ["positive", "negative"]:
+            for news_inner in data[sentiment_inner]:
+                if news_inner['title'] == selected_news:
+                    return [
+                        html.H2(news_inner['title']),
+                        html.P(news_inner['description']),
+                        html.A('Read more', href=news_inner['link'], target='_blank')
+                    ]
+        return ""
+
     app.layout = html.Div(
 
         style={'backgroundColor': COLORS['background'], 'color': COLORS['white']},
@@ -315,6 +340,7 @@ def create_layout(fig_dict):
             html.Div(id='dummy-output', style={'display': 'none'}),
             first_figure,
             layout_div,
+            create_news_div(data),
             html.H3('Terminal output', style={'textAlign': 'center'}),
             html.Div(children=[
                 dcc.Textarea(id='log-data', style={

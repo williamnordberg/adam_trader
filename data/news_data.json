@@ -1,0 +1,90 @@
+{
+    "positive": [
+        {
+            "title": "Craig Wright Will Be Able to Fight Bitcoin Copyright Claim in UK After Winning Appeal",
+            "score": 0.333,
+            "description": "Craig Wright, who claims to be Bitcoin inventor Satoshi Nakamoto, will be able to argue his case that the Bitcoin file format should receive copyright protection under UK law after a bench of three UK judges accepted his appeal to a previous court denial, according to a court filing.",
+            "publish_time": "2023-07-24 01:32",
+            "link": "https://www.coindesk.com/policy/2023/07/21/craig-wright-will-be-able-to-fight-bitcoin-copyright-claim-in-uk-after-winning-appeal/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "First Mover Americas: ProShares Dismisses Concerns Over Cost of Tracking Futures",
+            "score": 0.3,
+            "description": "The latest price moves in bitcoin (BTC) and crypto markets in context for July 21, 2023. First Mover is CoinDesk\u2019s daily newsletter that contextualizes the latest actions in the crypto markets.",
+            "publish_time": "2023-07-21 12:56",
+            "link": "https://www.coindesk.com/markets/2023/07/21/first-mover-americas-xrp-momentum-could-set-precedent-for-bitcoin/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "Ripple effect? Stellar (XLM) is catching up to XRP price gains",
+            "score": 0.45,
+            "description": "XLM has turned most overbought since April 2021, boosting risks of a 30% price decline by September. ",
+            "publish_time": "2023-07-23 15:54",
+            "link": "https://cointelegraph.com/news/ripple-effect-stellar-xlm-xrp-price-gains"
+        },
+        {
+            "title": "Evidence of crypto usage by ISIS is mounting \u2014 TRM Labs",
+            "score": 0.4,
+            "description": "Blockchain intelligence platform TRM Labs revealed that USDT on the Tron network is the primary choice for transactions among ISIS affiliates across Asia.",
+            "publish_time": "2023-07-23 06:10",
+            "link": "https://cointelegraph.com/news/evidence-crypto-usage-isis-trm-labs"
+        },
+        {
+            "title": "AI companies commit to safe and transparent AI \u2014 White House",
+            "score": 0.333,
+            "description": "The Biden Administration emphasized the responsibility of AI companies to ensure their products are safe for use.",
+            "publish_time": "2023-07-22 07:05",
+            "link": "https://cointelegraph.com/news/ai-companies-commit-safe-and-transparent-ai-white-house-reports"
+        },
+        {
+            "title": "First Mover Americas: XRP Momentum Could Set Precedent for Bitcoin",
+            "score": 0.3,
+            "description": "The latest price moves in bitcoin (BTC) and crypto markets in context for July 20, 2023. First Mover is CoinDesk\u2019s daily newsletter that contextualizes the latest actions in the crypto markets.",
+            "publish_time": "2023-07-20 12:19",
+            "link": "https://www.coindesk.com/markets/2023/07/20/first-mover-americas-xrp-momentum-could-set-precedent-for-bitcoin/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        }
+    ],
+    "negative": [
+        {
+            "title": "Bitcoin Dawdles Below $30K as Investors Eye Coming Fed Rate Decision, BTC Options Expiry",
+            "score": -0.167,
+            "description": "Next week\u2019s U.S. central bank interest rate decision and the bitcoin options expiry are unlikely to move markets, which have been stuck for weeks.",
+            "publish_time": "2023-07-21 21:46",
+            "link": "https://www.coindesk.com/markets/2023/07/21/bitcoin-dawdles-below-30k-as-investors-eye-coming-fed-rate-decision-btc-options-expiry/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "Ripple CEO Brad Garlinghouse: \u2018The SEC created this mess\u2019",
+            "score": -0.219,
+            "description": "Brad Garlinghouse has lashed out at the SEC for its \"absurd\" comments on the Ripple Labs case. ",
+            "publish_time": "2023-07-24 01:54",
+            "link": "https://cointelegraph.com/news/ripple-ceo-brad-garlinghouse-condemns-sec-hint-appeal-xrp"
+        },
+        {
+            "title": "Bitcoin can still hit $19K, warns trader ahead of BTC price \u2018big move\u2019",
+            "score": -0.167,
+            "description": "BTC price should see a serious shake-up in the coming days, but Bitcoin market participants are increasingly worried it will be to the downside.",
+            "publish_time": "2023-07-23 10:45",
+            "link": "https://cointelegraph.com/news/bitcoin-can-hit-19k-btc-price-big-move"
+        },
+        {
+            "title": "Price analysis 7/21: BTC, ETH, XRP, BNB, ADA, SOL, DOGE, MATIC, LTC, DOT",
+            "score": -0.1,
+            "description": "Several Bitcoin price indicators suggest that BTC\u2019s narrow trading range could end soon, resulting in a volatile price move in BTC and altcoins.",
+            "publish_time": "2023-07-21 18:55",
+            "link": "https://cointelegraph.com/news/price-analysis-7-21-btc-eth-xrp-bnb-ada-sol-doge-matic-ltc-dot"
+        },
+        {
+            "title": "Why Nasdaq Backing Out of Custody Is Bad, Bad News for Crypto",
+            "score": -0.28,
+            "description": "If a financial giant can\u2019t navigate the red tape, who can?",
+            "publish_time": "2023-07-20 17:48",
+            "link": "https://www.coindesk.com/consensus-magazine/2023/07/20/why-nasdaq-backing-out-of-custody-is-bad-bad-news-for-crypto/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "MakerDAO Votes to Halt Lending to Tokenized Credit Pool After $2M Loan Default",
+            "score": -0.2,
+            "description": "The embattled Harbour Trade credit pool minted $1.5 million of DAI stablecoin secured with loans to a consumer electronics firm, which defaulted on $2.1 million of debt.",
+            "publish_time": "2023-07-20 16:16",
+            "link": "https://www.coindesk.com/markets/2023/07/20/makerdao-votes-to-halt-lending-to-tokenized-credit-pool-after-2m-loan-default/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        }
+    ]
+}

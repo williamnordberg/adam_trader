@@ -1,13 +1,11 @@
-import logging
-from datetime import datetime, timedelta
-from typing import Tuple
 import requests.exceptions
 import json
-
+from typing import Tuple
 
 from i_newsAPI import check_news_api_sentiment
 from i_news_crypto_compare import check_news_cryptocompare_sentiment
-from i_news_scrapper import check_news_sentiment_scrapper
+from i_news_coin_desk import check_news_coin_desk
+from i_news_coin_telegraph import check_news_coin_telegraph
 
 from z_handy_modules import retry_on_error, get_bitcoin_price
 from z_compares import compare_news
@@ -30,44 +28,38 @@ def update_bitcoin_price_in_database():
 
 def aggregate_news() -> Tuple[float, float, int, int]:
     """
-        Aggregates news sentiment from different sources for the last 24 hours.
+    Aggregates news sentiment from different sources for the last 24 hours.
 
-        Returns:
-            positive_polarity_24_hours_before (float): Average positive polarity score.
-            negative_polarity_24_hours_before (float): Average negative polarity score.
-            positive_count_24_hours_before (int): Total number of positive news articles.
-            negative_count_24_hours_before (int): Total number of negative news articles.
-        """
+    Returns:
+        positive_polarity_24_hours_before (float): Average positive polarity score.
+        negative_polarity_24_hours_before (float): Average negative polarity score.
+        positive_count_24_hours_before (int): Total number of positive news articles.
+        negative_count_24_hours_before (int): Total number of negative news articles.
+    """
 
-    start = datetime.now() - timedelta(days=1)
-    end = datetime.now()
-    positive_polarity_24_hours_before1, negative_polarity_24_hours_before1, \
-        positive_count_24_hours_before1, negative_count_24_hours_before1 = \
-        check_news_api_sentiment(start, end)
+    # Create a list of the functions that will be used to check sentiment
+    check_functions = [check_news_api_sentiment, check_news_cryptocompare_sentiment,
+                       check_news_coin_desk, check_news_coin_telegraph]
 
-    positive_polarity_24_hours_before2, negative_polarity_24_hours_before2, \
-        positive_count_24_hours_before2, negative_count_24_hours_before2 = \
-        check_news_cryptocompare_sentiment()
+    # Initialize accumulators
+    total_positive_polarity, total_negative_polarity, total_positive_count, total_negative_count = 0, 0, 0, 0
 
-    positive_polarity_24_hours_before3, negative_polarity_24_hours_before3, \
-        positive_count_24_hours_before3, negative_count_24_hours_before3 = \
-        check_news_sentiment_scrapper()
+    # Loop through the functions, call them, and add their results to the accumulators
+    for check_func in check_functions:
+        positive_polarity, negative_polarity, positive_count, negative_count = check_func()
+        total_positive_polarity += positive_polarity
+        total_negative_polarity += negative_polarity
+        total_positive_count += positive_count
+        total_negative_count += negative_count
 
-    # divide by number of news aggregates
-    positive_polarity_24_hours_before = (positive_polarity_24_hours_before1 + positive_polarity_24_hours_before2
-                                         + positive_polarity_24_hours_before3) / 3
+    # Compute averages
+    num_functions = len(check_functions)
+    avg_positive_polarity = round(total_positive_polarity / num_functions, 2)
+    avg_negative_polarity = round(total_negative_polarity / num_functions, 2)
+    avg_positive_count = total_positive_count // num_functions
+    avg_negative_count = total_negative_count // num_functions
 
-    negative_polarity_24_hours_before = (negative_polarity_24_hours_before1 + negative_polarity_24_hours_before2
-                                         + negative_polarity_24_hours_before3) / 3
-
-    positive_count_24_hours_before = int((positive_count_24_hours_before1 + positive_count_24_hours_before2
-                                          + positive_count_24_hours_before3) / 3)
-
-    negative_count_24_hours_before = int((negative_count_24_hours_before1 + negative_count_24_hours_before2
-                                          + negative_count_24_hours_before3) / 3)
-
-    return round(positive_polarity_24_hours_before, 2), round(negative_polarity_24_hours_before, 2), \
-        positive_count_24_hours_before, negative_count_24_hours_before
+    return avg_positive_polarity, avg_negative_polarity, avg_positive_count, avg_negative_count
 
 
 @retry_on_error(3, 5, (requests.exceptions.RequestException,
@@ -107,4 +99,4 @@ def check_sentiment_of_news() -> Tuple[float, float]:
 
 if __name__ == "__main__":
     news_bullish_outer, news_bearish_outer = check_sentiment_of_news_wrapper()
-    logging.info(f'news_bullish: {news_bullish_outer}, and news_bearish: {news_bearish_outer}')
+    print(f'news_bullish: {news_bullish_outer}, and news_bearish: {news_bearish_outer}')
