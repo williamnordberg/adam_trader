@@ -38,7 +38,7 @@ def convert_to_utc_format(pub_date_str: str) -> str:
 
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=(Exception,),
                 fallback_values=(0.0, 0.0, 0, 0))
-def check_news_coin_desk() -> Tuple[float, float, int, int]:
+def check_news_coin_telegraph() -> Tuple[float, float, int, int]:
 
     positive_polarity_score = 0.0
     negative_polarity_score = 0.0
@@ -115,7 +115,7 @@ def check_news_coin_desk() -> Tuple[float, float, int, int]:
 
 if __name__ == "__main__":
     positive_polarity_score_outer, negative_polarity_score_outer,\
-        positive_count_outer, negative_count_outer = check_news_coin_desk()
+        positive_count_outer, negative_count_outer = check_news_coin_telegraph()
 
     logging.info(f'positive_polarity: {positive_polarity_score_outer}'
                  f' and negative_polarity: {negative_polarity_score_outer}')
