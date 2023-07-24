@@ -1,6 +1,6 @@
 from z_handy_modules import COLORS
-from dash import html
 import dash_bootstrap_components as dbc
+from dash import dcc, html
 
 tradingview_widget = "https://www.tradingview.com/widgetembed/?frameElementId=tradingview_76464&symbol=BINANCE%3ABTCUSDT&interval=D&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%5D&hideideas=1&theme=Dark&style=1&timezone=Etc%2FUTC&studies_overrides=%7B%7D&overrides=%7B%7D&enabled_features=%5B%5D&disabled_features=%5B%5D&locale=en&utm_source=www.tradingview.com&utm_medium=widget_new&utm_campaign=chart&utm_term=BINANCE%3ABTCUSDT"
 
@@ -153,3 +153,36 @@ def create_widget():
             style={'display': 'flex', 'justifyContent': 'center', 'alignItems': 'center', 'marginTop': '1px'}),
     ]
     return html_div_list
+
+
+def create_news_div(data):
+    news_titles = []
+    for sentiment in ["positive", "negative"]:
+        for news in data[sentiment]:
+            title = news['title']
+            news_titles.append(title)
+
+    news_div = html.Div(
+        children=[
+            html.Div(
+                children=[
+                    dcc.Dropdown(
+                        id='news-dropdown',
+                        options=[{'label': i, 'value': i} for i in news_titles],
+                        placeholder="Select a news item",
+                        style={'backgroundColor': COLORS['background'], 'color': COLORS['background'],
+                               'width': '90%'},
+                    ),
+                ],
+                style={'display': 'flex', 'justify-content': 'center'}
+            ),
+            html.Div(
+                children=[
+                    html.Div(id='news-description'),
+                ],
+                style={'display': 'flex', 'justify-content': 'center', 'width': '90%', 'margin': '0 auto'}
+            ),
+        ]
+    )
+
+    return news_div

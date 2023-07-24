@@ -20,15 +20,15 @@ API_NEWSAPI = config.get("API", "Newsapi")
 
 @retry_on_error(3, 5, (Exception, requests.exceptions.RequestException, json.JSONDecodeError),
                 fallback_values=(0.0, 0.0, 0, 0))
-def check_news_api_sentiment(start: datetime, end: datetime) -> Tuple[float, float, int, int]:
+def check_news_api_sentiment() -> Tuple[float, float, int, int]:
     """
         Check the sentiment of news articles about Bitcoin within the specified date range.
 
-        :param start: The start date of the range.
-        :param end: The end date of the range.
         :return: A tuple containing the average positive polarity,
          average negative polarity, positive count, and negative count.
         """
+    start = datetime.now() - timedelta(days=1)
+    end = datetime.now()
 
     start_date = start.strftime('%Y-%m-%d')
     end_date = end.strftime('%Y-%m-%d')

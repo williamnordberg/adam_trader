@@ -33,7 +33,6 @@ def check_news_cryptocompare_sentiment() -> Tuple[float, float, int, int]:
 
         for article in data:
             content = article['body']
-
             blob = TextBlob(content)
             sentiment_score = blob.sentiment.polarity
 

@@ -10,7 +10,6 @@ from datetime import datetime, timedelta, timezone
 from dateutil.parser import parse
 
 from z_handy_modules import retry_on_error
-from i_news_coin_desk import convert_to_utc_format
 
 SENTIMENT_POSITIVE_THRESHOLD = 0.1
 SENTIMENT_NEGATIVE_THRESHOLD = -0.001
@@ -30,9 +29,16 @@ def is_not_similar(news, existing_news):
     return True
 
 
+def convert_to_utc_format(pub_date_str: str) -> str:
+    pub_date = datetime.strptime(pub_date_str, '%a, %d %b %Y %H:%M:%S %z')
+    utc_pub_date = pub_date.astimezone(timezone.utc).replace(tzinfo=None)
+    formatted_utc_pub_date = utc_pub_date.strftime('%Y-%m-%d %H:%M')
+    return formatted_utc_pub_date
+
+
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=(Exception,),
                 fallback_values=(0.0, 0.0, 0, 0))
-def check_news_coin_telegraph() -> Tuple[float, float, int, int]:
+def check_news_coin_desk() -> Tuple[float, float, int, int]:
 
     positive_polarity_score = 0.0
     negative_polarity_score = 0.0
@@ -43,7 +49,7 @@ def check_news_coin_telegraph() -> Tuple[float, float, int, int]:
     positive_news = []
     negative_news = []
 
-    url = 'https://cointelegraph.com/rss'
+    url = 'https://www.coindesk.com/arc/outboundfeeds/rss/'
     response = feedparser.parse(url)
 
     for post in response.entries:
@@ -63,7 +69,8 @@ def check_news_coin_telegraph() -> Tuple[float, float, int, int]:
             negative_polarity_score += sentiment_score
             formatted_utc_pub_date = convert_to_utc_format(post.published)
             negative_news.append({"title": post.title, "score": round(sentiment_score, 3),
-                                  "description": description, "publish_time": formatted_utc_pub_date, "link": post.link})
+                                  "description": description, "publish_time":
+                                      formatted_utc_pub_date, "link": post.link})
             negative_count += 1
 
     # Sort the news from highest to lowest sentiment score
@@ -86,11 +93,11 @@ def check_news_coin_telegraph() -> Tuple[float, float, int, int]:
         # If the file doesn't exist, create an empty structure
         existing_data = {"positive": [], "negative": []}
 
-    # Remove old data (older than 48 hours)
-    current_time = datetime.now(tz=timezone.utc)
+    # Remove old data (older than 72 hours)
+    current_time = datetime.now(tz=timezone.utc).replace(tzinfo=None)
     for sentiment in ["positive", "negative"]:
         existing_data[sentiment] = [news for news in existing_data[sentiment]
-                                    if current_time - parse(news["publish_time"]) <= timedelta(hours=48)]
+                                    if current_time - parse(news["publish_time"]) <= timedelta(hours=72)]
 
     # Add new data if it doesn't exist
     for sentiment in ["positive", "negative"]:
@@ -108,7 +115,7 @@ def check_news_coin_telegraph() -> Tuple[float, float, int, int]:
 
 if __name__ == "__main__":
     positive_polarity_score_outer, negative_polarity_score_outer,\
-        positive_count_outer, negative_count_outer = check_news_coin_telegraph()
+        positive_count_outer, negative_count_outer = check_news_coin_desk()
 
     logging.info(f'positive_polarity: {positive_polarity_score_outer}'
                  f' and negative_polarity: {negative_polarity_score_outer}')
