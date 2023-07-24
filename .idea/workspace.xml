@@ -8,36 +8,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="21July">
-      <change afterPath="$PROJECT_DIR$/data/news_data.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/i_news_coin_desk.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/i_news_coin_telegraph.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trade_results/old/week_1/app.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trade_results/old/week_1/trade_resilts.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trade_results/old/week_1/trades_details.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trade_results/old/week_1/trades_results.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trade_results/old/week_2/app.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trade_results/old/week_2/trades_details.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trade_results/old/week_2/trades_results.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trade_results/old/week_2/week_2_result.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trade_results/week1/trades_details.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trade_results/week1/trades_results.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trade_results/week1/week1.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/tradingview_snaps.html" beforeDir="false" afterPath="$PROJECT_DIR$/assets/tradingview_snaps.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/latest_info_saved.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/rich_test.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/i_newsAPI.py" beforeDir="false" afterPath="$PROJECT_DIR$/i_newsAPI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/i_news_analyser.py" beforeDir="false" afterPath="$PROJECT_DIR$/i_news_analyser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/i_news_crypto_compare.py" beforeDir="false" afterPath="$PROJECT_DIR$/i_news_crypto_compare.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/i_news_scrapper.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/l_position_short.py" beforeDir="false" afterPath="$PROJECT_DIR$/l_position_short.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/m_visualization_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/m_visualization_app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/m_visualization_divs.py" beforeDir="false" afterPath="$PROJECT_DIR$/m_visualization_divs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test2.py" beforeDir="false" afterPath="$PROJECT_DIR$/test2.py" afterDir="false" />
-    </list>
+    <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="24July" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -598,7 +569,7 @@
       <option name="project" value="LOCAL" />
       <updated>1687483422567</updated>
     </task>
-    <option name="localTasksCounter" value="423" />
+    <option name="localTasksCounter" value="424" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -720,6 +691,7 @@
     <MESSAGE value="18July" />
     <MESSAGE value="19July" />
     <MESSAGE value="21July" />
-    <option name="LAST_COMMIT_MESSAGE" value="21July" />
+    <MESSAGE value="24July" />
+    <option name="LAST_COMMIT_MESSAGE" value="24July" />
   </component>
 </project>
