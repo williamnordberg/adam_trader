@@ -1,7 +1,7 @@
 import dash
 from time import sleep
 from dash import dcc, html
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
 import logging
 from flask import Flask, redirect, request
@@ -70,6 +70,10 @@ users = {
         'password': 'user3123',
     },
 }
+
+
+def sanitize_id(id):
+    return ''.join(e if e.isalnum() else '_' for e in id)
 
 
 @server.route('/')
@@ -311,17 +315,26 @@ def create_layout(fig_dict):
 
     @app.callback(
         Output('news-description', 'children'),
-        [Input('news-dropdown', 'value')])
-    def update_news_description(selected_news):
-        for sentiment_inner in ["positive", "negative"]:
-            for news_inner in data[sentiment_inner]:
-                if news_inner['title'] == selected_news:
-                    return [
-                        html.H2(news_inner['title']),
-                        html.P(news_inner['description']),
-                        html.A('Read more', href=news_inner['link'], target='_blank')
-                    ]
-        return ""
+        [Input(title[0], 'n_clicks') for title in news_titles],
+        [State(title[0], 'id') for title in news_titles]
+    )
+    def update_news_description(*args):
+        ctx = dash.callback_context
+
+        if not ctx.triggered:
+            return ""
+        else:
+            selected_news = ctx.triggered[0]['prop_id'].split('.')[0]
+
+            for sentiment_inner in ["positive", "negative"]:
+                for news_inner in data[sentiment_inner]:
+                    if news_inner['title'] == selected_news:
+                        return [
+                            html.H2(news_inner['title']),
+                            html.P(news_inner['description']),
+                            html.A('Read more', href=news_inner['link'], target='_blank')
+                        ]
+            return ""
 
     app.layout = html.Div(
 
@@ -340,8 +353,8 @@ def create_layout(fig_dict):
             html.Div(id='dummy-output', style={'display': 'none'}),
             first_figure,
             layout_div,
-            create_news_div(data),
             html.H3('Terminal output', style={'textAlign': 'center'}),
+
             html.Div(children=[
                 dcc.Textarea(id='log-data', style={
                     'width': '90%',
@@ -360,6 +373,7 @@ def create_layout(fig_dict):
             ),
             trade_details_div,
             *widgets_divs,
+            create_news_div(data),
             figure_div
         ]
     )

@@ -8,13 +8,6 @@
             "link": "https://www.coindesk.com/policy/2023/07/21/craig-wright-will-be-able-to-fight-bitcoin-copyright-claim-in-uk-after-winning-appeal/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
         },
         {
-            "title": "First Mover Americas: ProShares Dismisses Concerns Over Cost of Tracking Futures",
-            "score": 0.3,
-            "description": "The latest price moves in bitcoin (BTC) and crypto markets in context for July 21, 2023. First Mover is CoinDesk\u2019s daily newsletter that contextualizes the latest actions in the crypto markets.",
-            "publish_time": "2023-07-21 12:56",
-            "link": "https://www.coindesk.com/markets/2023/07/21/first-mover-americas-xrp-momentum-could-set-precedent-for-bitcoin/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
             "title": "Ripple effect? Stellar (XLM) is catching up to XRP price gains",
             "score": 0.45,
             "description": "XLM has turned most overbought since April 2021, boosting risks of a 30% price decline by September. ",
@@ -29,28 +22,49 @@
             "link": "https://cointelegraph.com/news/evidence-crypto-usage-isis-trm-labs"
         },
         {
-            "title": "AI companies commit to safe and transparent AI \u2014 White House",
-            "score": 0.333,
-            "description": "The Biden Administration emphasized the responsibility of AI companies to ensure their products are safe for use.",
-            "publish_time": "2023-07-22 07:05",
-            "link": "https://cointelegraph.com/news/ai-companies-commit-safe-and-transparent-ai-white-house-reports"
+            "title": "Japan Signals More Web3 Promotion Policies Are Coming",
+            "score": 0.5,
+            "description": "Japan's Prime Minister Fumio Kishida said on Tuesday that the country plans to improve the environment for Web3 when it comes to using tokens and revitalize the content industry.",
+            "publish_time": "2023-07-25 04:37",
+            "link": "https://www.coindesk.com/policy/2023/07/25/japan-signals-more-web3-promotion-policies-are-to-come/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
         },
         {
-            "title": "First Mover Americas: XRP Momentum Could Set Precedent for Bitcoin",
-            "score": 0.3,
-            "description": "The latest price moves in bitcoin (BTC) and crypto markets in context for July 20, 2023. First Mover is CoinDesk\u2019s daily newsletter that contextualizes the latest actions in the crypto markets.",
-            "publish_time": "2023-07-20 12:19",
-            "link": "https://www.coindesk.com/markets/2023/07/20/first-mover-americas-xrp-momentum-could-set-precedent-for-bitcoin/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+            "title": "Through It All, the Bitcoin Mining Industry Looks Set for Growth",
+            "score": 0.4,
+            "description": "Though the Bitcoin halving will reduce rewards for miners, the prospects for the industry remain bright and innovations like Ordinals promise more demand for miner services in the future.",
+            "publish_time": "2023-07-24 13:58",
+            "link": "https://www.coindesk.com/consensus-magazine/2023/07/24/through-it-all-the-bitcoin-mining-industry-looks-set-for-growth/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "First Mover Asia: Bitcoin Holds Its Latest Foothold at $29.1K While Worldcoin Soars",
+            "score": 0.388,
+            "description": "PLUS: BTC's positive vibes may be waning as outflows from BTC investment products rose for the first time in weeks. But mining is in a better state than it was a year ago.",
+            "publish_time": "2023-07-25 01:18",
+            "link": "https://www.coindesk.com/markets/2023/07/25/first-mover-asia-bitcoin-holds-its-latest-foothold-at-291k-while-worldcoin-soars/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "History of Python programming language",
+            "score": 0.65,
+            "description": "Delve into the remarkable evolution of Python, and learn how it grew to become a prominent and beloved programming language in the tech world.",
+            "publish_time": "2023-07-24 11:07",
+            "link": "https://cointelegraph.com/news/history-of-python-programming-language"
+        },
+        {
+            "title": "Price analysis 7/24: SPX, DXY, BTC, ETH, XRP, BNB, ADA, DOGE, SOL, MATIC",
+            "score": 0.5,
+            "description": "Bitcoin is at the pivotal 50-day SMA support, and a drop below this level could result in accelerated selling of BTC and altcoins.",
+            "publish_time": "2023-07-24 18:00",
+            "link": "https://cointelegraph.com/news/price-analysis-7-24-spx-dxy-btc-eth-xrp-bnb-ada-doge-sol-matic"
+        },
+        {
+            "title": "Worldcoin launch raises eyebrows as WLD price notches a double-digit gain",
+            "score": 0.25,
+            "description": "Worldcoin price soared to $3.58 shortly after launching but traders and crypto advocates have many concerns.",
+            "publish_time": "2023-07-24 20:35",
+            "link": "https://cointelegraph.com/news/worldcoin-launch-raises-eyebrows-as-wld-price-notches-a-double-digit-gain"
         }
     ],
     "negative": [
-        {
-            "title": "Bitcoin Dawdles Below $30K as Investors Eye Coming Fed Rate Decision, BTC Options Expiry",
-            "score": -0.167,
-            "description": "Next week\u2019s U.S. central bank interest rate decision and the bitcoin options expiry are unlikely to move markets, which have been stuck for weeks.",
-            "publish_time": "2023-07-21 21:46",
-            "link": "https://www.coindesk.com/markets/2023/07/21/bitcoin-dawdles-below-30k-as-investors-eye-coming-fed-rate-decision-btc-options-expiry/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
         {
             "title": "Ripple CEO Brad Garlinghouse: \u2018The SEC created this mess\u2019",
             "score": -0.219,
@@ -66,25 +80,39 @@
             "link": "https://cointelegraph.com/news/bitcoin-can-hit-19k-btc-price-big-move"
         },
         {
-            "title": "Price analysis 7/21: BTC, ETH, XRP, BNB, ADA, SOL, DOGE, MATIC, LTC, DOT",
-            "score": -0.1,
-            "description": "Several Bitcoin price indicators suggest that BTC\u2019s narrow trading range could end soon, resulting in a volatile price move in BTC and altcoins.",
-            "publish_time": "2023-07-21 18:55",
-            "link": "https://cointelegraph.com/news/price-analysis-7-21-btc-eth-xrp-bnb-ada-sol-doge-matic-ltc-dot"
+            "title": "Binance Says It Intends to File Motion to Dismiss CFTC Complaint",
+            "score": -0.3,
+            "description": "Binance, Changpeng Zhao, and Samuel Lim filed a motion Monday night to ask the court for additional allowed length in its response.",
+            "publish_time": "2023-07-25 01:29",
+            "link": "https://www.coindesk.com/policy/2023/07/25/binance-says-it-intends-to-file-motion-to-dismiss-cftc-complaint/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
         },
         {
-            "title": "Why Nasdaq Backing Out of Custody Is Bad, Bad News for Crypto",
-            "score": -0.28,
-            "description": "If a financial giant can\u2019t navigate the red tape, who can?",
-            "publish_time": "2023-07-20 17:48",
-            "link": "https://www.coindesk.com/consensus-magazine/2023/07/20/why-nasdaq-backing-out-of-custody-is-bad-bad-news-for-crypto/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+            "title": "Bitcoin Long-Term Holders Control 75% of Circulating Supply: Glassnode",
+            "score": -0.3,
+            "description": "The balance kept in addresses that hold coins for at least 155 days has increased by $1.87 billion this month.",
+            "publish_time": "2023-07-24 10:05",
+            "link": "https://www.coindesk.com/markets/2023/07/24/bitcoin-long-term-holders-control-75-of-circulating-supply-glassnode/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
         },
         {
-            "title": "MakerDAO Votes to Halt Lending to Tokenized Credit Pool After $2M Loan Default",
-            "score": -0.2,
-            "description": "The embattled Harbour Trade credit pool minted $1.5 million of DAI stablecoin secured with loans to a consumer electronics firm, which defaulted on $2.1 million of debt.",
-            "publish_time": "2023-07-20 16:16",
-            "link": "https://www.coindesk.com/markets/2023/07/20/makerdao-votes-to-halt-lending-to-tokenized-credit-pool-after-2m-loan-default/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+            "title": "Reading the Elon Musk \u2018tea leaves\u2019 \u2014 Is Dogecoin coming for Twitter?",
+            "score": -0.333,
+            "description": "A subtle change in Elon Musk\u2019s Twitter bio has reignited rumors Dogecoin may soon be used for payments on Musk\u2019s \u201ceverything app.\u201d",
+            "publish_time": "2023-07-25 04:27",
+            "link": "https://cointelegraph.com/news/elon-musk-dogecoin-price-twitter-x-rebrand"
+        },
+        {
+            "title": "Twitter vs. Threads: Users are the real losers",
+            "score": -0.3,
+            "description": "The world\u2019s eyes turned in excitement to the battle between Elon Musk's Twitter and Mark Zuckerberg's Threads, but users emerged as the real losers. ",
+            "publish_time": "2023-07-24 19:58",
+            "link": "https://cointelegraph.com/news/twitter-threads-users-are-the-real-losers"
+        },
+        {
+            "title": "Worldcoin launch divides opinions \u2014 Crypto community has its say",
+            "score": -0.25,
+            "description": "\u201cWhat could go wrong?\u201d Decentralized ID protocol Worldcoin has launched, receiving mixed reactions from the cryptocurrency community.",
+            "publish_time": "2023-07-24 13:26",
+            "link": "https://cointelegraph.com/news/worldcoin-launch-divides-crypto-community"
         }
     ]
 }
