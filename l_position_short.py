@@ -38,7 +38,10 @@ def short_position(score_margin_to_close: float, profit_margin: float) -> Tuple[
     print_upcoming_events(events_date_dict)
 
     # Place an order on testnet
-    short_market(POSITION_SIZE, LEVERAGE, MARGIN_MODE)  # 5x leverage and isolated margin mode
+    try:
+        short_market(POSITION_SIZE, LEVERAGE, MARGIN_MODE)  # 5x leverage and isolated margin mode
+    except Exception as e:
+        logging.error(f'exception with shorting market as {e}')
 
     while True:
         current_price = get_bitcoin_future_market_price()
@@ -47,14 +50,23 @@ def short_position(score_margin_to_close: float, profit_margin: float) -> Tuple[
 
         # Check if we meet profit or stop loss
         if current_price < profit_point:
-            close_shorts_open_positions(SYMBOL)
             profit = int(position_opening_price - current_price) * LEVERAGE
             logging.info('&&&&&&&&&&&&&& TARGET HIT &&&&&&&&&&&&&&&&&&&&&')
+            try:
+                close_shorts_open_positions(SYMBOL)
+            except Exception as e:
+                logging.error(f"Unexpected error occurre, with closing short: {e}")
             return profit, loss
         elif current_price > stop_loss:
-            close_shorts_open_positions(SYMBOL)
             loss = int(current_price - position_opening_price) * LEVERAGE
             logging.info('&&&&&&&&&&&&&& STOP LOSS &&&&&&&&&&&&&&&&&&&&&')
+
+            try:
+                close_shorts_open_positions(SYMBOL)
+
+            except Exception as e:
+                logging.error(f"Unexpected error occurre, with closing short: {e}")
+
             return profit, loss
 
         # order  book Hit

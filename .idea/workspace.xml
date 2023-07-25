@@ -10,6 +10,8 @@
   <component name="ChangeListManager">
     <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="24July">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/l_position_short.py" beforeDir="false" afterPath="$PROJECT_DIR$/l_position_short.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/l_position_short_testnet.py" beforeDir="false" afterPath="$PROJECT_DIR$/l_position_short_testnet.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -571,7 +573,7 @@
       <option name="project" value="LOCAL" />
       <updated>1687483422567</updated>
     </task>
-    <option name="localTasksCounter" value="425" />
+    <option name="localTasksCounter" value="426" />
     <servers />
   </component>
   <component name="UnknownFeatures">
