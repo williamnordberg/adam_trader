@@ -4,6 +4,7 @@ import configparser
 import os
 from binance.exceptions import BinanceAPIException, BinanceRequestException
 from time import sleep
+import concurrent.futures
 from z_read_write_csv import retry_on_error
 
 
@@ -98,8 +99,25 @@ def get_open_futures_positions():
                              f" Entry Price: {position['entryPrice']} - Unrealized PnL: {position['unRealizedProfit']}")
 
 
-@retry_on_error(3, 5, (Exception,), 'could not close future position')
 def close_shorts_open_positions(symbol: str):
+    try:
+        # Define a timeout value in seconds (e.g., 60 seconds for 1 minute)
+        timeout = 60
+
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            future = executor.submit(close_shorts_open_positions_wrapper, symbol)
+            # Wait for the function to complete or raise TimeoutError if it takes too long
+            future.result(timeout=timeout)
+            # If the function completes within the timeout, the result will be returned here
+
+    except concurrent.futures.TimeoutError:
+        logging.error("close_shorts_open_positions took too long and was terminated.")
+    except Exception as e:
+        logging.error(f"Unexpected error occurred while closing shorts: {e}")
+
+
+@retry_on_error(3, 5, (Exception,), 'could not close future position')
+def close_shorts_open_positions_wrapper(symbol: str):
     client = initialized_future_client()
     open_positions = client.futures_position_information()
 
