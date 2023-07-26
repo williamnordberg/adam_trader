@@ -1,205 +1,158 @@
-from z_handy_modules import COLORS
-import dash_bootstrap_components as dbc
-from dash import html
-import datetime
-import pytz
+import feedparser
+from textblob import TextBlob
+import logging
+from typing import Tuple
+import json
+from bs4 import BeautifulSoup
+import os
+from difflib import SequenceMatcher
+from datetime import datetime, timedelta, timezone
+from dateutil.parser import parse
+from feedparser import FeedParserDict
 
-tradingview_widget = "https://www.tradingview.com/widgetembed/?frameElementId=tradingview_76464&symbol=BINANCE%3ABTCUSDT&interval=D&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%5D&hideideas=1&theme=Dark&style=1&timezone=Etc%2FUTC&studies_overrides=%7B%7D&overrides=%7B%7D&enabled_features=%5B%5D&disabled_features=%5B%5D&locale=en&utm_source=www.tradingview.com&utm_medium=widget_new&utm_campaign=chart&utm_term=BINANCE%3ABTCUSDT"
+from z_handy_modules import retry_on_error
 
+SENTIMENT_POSITIVE_THRESHOLD = 0.1
+SENTIMENT_NEGATIVE_THRESHOLD = -0.001
+OLDEST_NEWS_TO_CONSIDER_HOURS = 24
 
-def create_progress_bar():
-    return html.Div([
-        html.Div(id='timer', style={
-            'position': 'fixed',
-            'top': '0',
-            'width': '100%',
-            'textAlign': 'center',
-            'color': '#D3D3D3',
-            'fontSize': '14px',
-            'marginTop': '-3px',
-            'zIndex': '9999'
-        }),
-
-        dbc.Progress(value=50, color=COLORS['background'], striped=True, animated=True, id="progress",
-                     className="custom-progress", style={'position': 'fixed', 'top': '0', 'width': '100%',
-                                                         'backgroundColor': COLORS['background'], 'zIndex': '9998'})
-
-    ])
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(name)s - %(message)s')
 
 
-def create_html_divs(initial_layout_data):
-    html_div_list = [
-        html.Div([
-
-            html.P('L: last update', id='last_update', style={
-                'fontSize': '13px', 'margin': '0px'}),
-            html.P('N: next update', id='next_update',
-                   style={'fontSize': '13px', 'margin': '0px'}),
-        ], ),
-
-        html.Div([
-            html.A(
-                f'{initial_layout_data["fed_rate_m_to_m"]}',
-                id='fed-rate',
-                target='_blank',  # Opens link in new tab
-                href="https://www.forexfactory.com/calendar",
-                style={'fontSize': '13px'}
-            ),
-            html.P(f'CPI MtoM: {initial_layout_data["cpi_m_to_m"]}', id='cpi-rate', style={
-                'fontSize': '13px', 'marginBottom': '0px'}),
-            html.P(f'PPI MtoM: {initial_layout_data["ppi_m_to_m"]}', id='ppi-rate', style={
-                'fontSize': '13px', 'marginBottom': '0px'}),
-            html.P(initial_layout_data["fed_announcement"] if initial_layout_data["fed_announcement"] != '' else "",
-                   id='fed-announcement',
-                   style={'fontSize': '13px', 'marginBottom': '0px',
-                          'color': 'red' if initial_layout_data["fed_announcement"] != '' else None,
-                          'fontWeight': '' if initial_layout_data["fed_announcement"] != '' else None}),
-            html.P(initial_layout_data["cpi_announcement"] if initial_layout_data["cpi_announcement"] != '' else "",
-                   id='cpi-announcement', style={'fontSize': '13px',
-                                                 'marginBottom': '0px',
-                                                 'color': 'red' if initial_layout_data["cpi_announcement"] != '' else
-                                                 None,
-                                                 'fontWeight': '' if initial_layout_data["cpi_announcement"] != '' else
-                                                 None}),
-            html.P(initial_layout_data["ppi_announcement"] if initial_layout_data["ppi_announcement"] else "",
-                   id='ppi-announcement',
-                   style={'fontSize': '13px', 'marginBottom': '0px',
-                          'color': 'red' if initial_layout_data["ppi_announcement"] != '' else None,
-                          'fontWeight': '' if initial_layout_data["ppi_announcement"] != '' else None}),
-        ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
-        html.Div([
-            html.P(f'T State: {initial_layout_data["trading_state"]}', id='trading-state',
-                   style={'fontSize': '13px',
-                          'margin': '0px',
-                          'color': 'green' if initial_layout_data["trading_state"] == 'long'
-                          else ('red' if
-                                initial_layout_data["trading_state"] == 'short'
-                                else COLORS['white'])}),
-        ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
-        html.Div([
-            html.P(f'Bid vol: {initial_layout_data["bid_volume"]}', id='bid-volume',
-                   style={'fontSize': '14px', 'margin': '0px'}),
-            html.P(f'Ask vol: {initial_layout_data["ask_volume"]}', id='ask-volume',
-                   style={'fontSize': '14px', 'margin': '0px'}),
-        ], style={'borderTop': '1px solid white'}),
-
-        html.Div([
-            html.P(f'Predicted: {initial_layout_data["predicted_price"]}', id='predicted-price',
-                   style={'fontSize': '13px', 'margin': '0px'}),
-            html.P(f'Current: {initial_layout_data["current_price"]}', id='current-price', style={
-                'fontSize': '13px', 'margin': '0px'}),
-            html.P(f'Diff: {int(initial_layout_data["predicted_price"] - initial_layout_data["current_price"])}',
-                   id='price-difference',
-                   # style={'fontSize': '13px', 'margin': '0px'}),
-                   style={'fontSize': '13px',
-                          'margin': '0px',
-                          'color': 'green' if int(initial_layout_data["predicted_price"] -
-                                                  initial_layout_data["current_price"]) > 300
-                          else ('red' if int(initial_layout_data["predicted_price"] -
-                                             initial_layout_data["current_price"]) < 300
-                                else COLORS['white'])}),
-        ], style={'borderTop': '1px solid white'}),
-
-        html.Div([
-            html.P(f'RSI: {initial_layout_data["rsi"]}', id='rsi', style={'fontSize': '13px', 'margin': '0px'}),
-            html.P(f'Over 200EMA: {initial_layout_data["over_200EMA"]}', id='over-200EMA',
-                   style={'fontSize': '13px', 'margin': '0px'}),
-            html.P(f'MACD uptrend: {initial_layout_data["MACD_uptrend"]}', id='MACD-uptrend',
-                   style={'fontSize': '13px', 'margin': '0px'}),
-            html.P(f'MA distance: {initial_layout_data["bb_MA_distance"]}', id='MA-distance',
-                   style={'fontSize': '13px', 'margin': '0px'}),
-        ], style={'borderTop': '1px solid white'}),
-
-        html.Div([
-            html.P(f'BTC received: {initial_layout_data["BTC_received"]}', id='BTC-received',
-                   style={'fontSize': '13px', 'margin': '0px'}),
-            html.P(f'BTC sent: {initial_layout_data["BTC_send"]}', id='BTC-sent', style={
-                'fontSize': '13px', 'margin': '0px'}),
-        ], style={'borderTop': '1px solid white'}),
-
-        html.Div([
-            html.P(f'+ news change: {initial_layout_data["positive_news_polarity_change"]}',
-                   id='positive-news-change', style={'fontSize': '13px', 'margin': '0px'}),
-            html.P(f'- news change: {initial_layout_data["negative_news_polarity_change"]}',
-                   id='negative-news-change', style={'fontSize': '13px', 'margin': '0px'}),
-        ], style={'borderTop': '1px solid white'})
-    ]
-
-    return html_div_list
+regulatory_keywords = ['sec', 'tesla', 'etf']  # all should be in lower case
+important_topic_multiplier = 1.5
 
 
-def create_widget():
-    html_div_list = [
-        html.Div(children=[
-            html.Iframe(src=tradingview_widget, style={'width': '90%', 'height': '400px'}),
-        ],
-            style={'display': 'flex', 'justifyContent': 'center', 'alignItems': 'center', 'marginTop': '10px'}),
-
-        html.Div(children=[
-            html.Iframe(src='/assets/tradingview_crypto_market.html', style={'width': '1030px', 'height': '294px'}, ),
-        ],
-            style={'display': 'flex', 'justifyContent': 'center', 'alignItems': 'center', 'marginTop': '10px'}),
-
-        html.Div(children=[
-            html.Iframe(src='/assets/tradingview_market_data.html', style={'width': '90%', 'height': '300px'}),
-        ],
-            style={'display': 'flex', 'justifyContent': 'center', 'alignItems': 'center', 'marginTop': '5px'}),
-
-        html.Div(children=[
-            html.Iframe(src='/assets/tradingview_snaps.html', style={'width': '30%', 'height': '400px'}),
-            html.Iframe(src='/assets/coingecko.html', style={'width': '30%', 'height': '400px'}),
-            html.Iframe(src='/assets/tradingview_technical_analysis.html', style={'width': '35%', 'height': '400px'})
-        ], style={'display': 'flex', 'justifyContent': 'space-between', 'margin': '0 5%'}),
-
-    ]
-    return html_div_list
+def similar(a, b):
+    return SequenceMatcher(None, a, b).ratio()
 
 
-def create_news_div(data):
-    news_data = []
+def is_not_similar(news, existing_news):
+    for existing in existing_news:
+        # you can adjust the 0.8 threshold to higher or lower, depending on how similar you want the titles to be
+        if similar(news['title'], existing['title']) > 0.8:
+            return False
+    return True
+
+
+def convert_to_utc_format(pub_date_str: str) -> str:
+    pub_date = datetime.strptime(pub_date_str, '%a, %d %b %Y %H:%M:%S %z')
+    utc_pub_date = pub_date.astimezone(timezone.utc).replace(tzinfo=None)
+    formatted_utc_pub_date = utc_pub_date.strftime('%Y-%m-%d %H:%M')
+    return formatted_utc_pub_date
+
+
+def calculate_sentiment_score(content: str) -> float:
+    blob = TextBlob(content)
+    sentiment_score = blob.sentiment.polarity
+
+    # Identify important topics
+    words = blob.words.lower()
+    if any(keyword in words for keyword in regulatory_keywords):
+        sentiment_score *= important_topic_multiplier
+        # This not let score go out or range [-1, 1]
+        if sentiment_score > 1:
+            sentiment_score = 1.0
+        elif sentiment_score < -1:
+            sentiment_score = -1.0
+
+    return sentiment_score
+
+
+def calculate_temporal_decay(sentiment_score: float, post: FeedParserDict) -> float:
+    # Temporal Decay: remove  news older than 24h, and  decrease old news sentiment score
+    current_time = datetime.now(tz=timezone.utc)
+    publish_time = parse(post.published)
+    hours_diff = (current_time - publish_time).total_seconds() / 3600
+    decay_factor = max(1 - (hours_diff / OLDEST_NEWS_TO_CONSIDER_HOURS), 0)  # Ensure it doesn't go below 0
+    return sentiment_score * decay_factor
+
+
+def handle_existing_data(news_data: dict):
+    if os.path.exists('data/news_data.json'):
+        # Load existing data
+        try:
+            with open('data/news_data.json', 'r') as f:
+                existing_data = json.load(f)
+        except json.JSONDecodeError:
+            existing_data = {"positive": [], "negative": []}
+    else:
+        # If the file doesn't exist, create an empty structure
+        existing_data = {"positive": [], "negative": []}
+
+    # Remove old data (older than 72 hours)
+    current_time = datetime.now(tz=timezone.utc).replace(tzinfo=None)
     for sentiment in ["positive", "negative"]:
-        for news in data[sentiment]:
-            title = news['title']
-            score = round(news['score'], 2)
-            publish_time = datetime.datetime.strptime(news['publish_time'], "%Y-%m-%d %H:%M")
-            publish_time = pytz.utc.localize(publish_time)
-            now_time = datetime.datetime.now(pytz.utc)
-            time_diff = now_time - publish_time
-            minutes, seconds = divmod(time_diff.seconds, 60)
-            hours, minutes = divmod(minutes, 60)
-            if hours > 0:
-                time_string = f"{hours} hours ago"
-            else:
-                time_string = f"{minutes} minutes ago"
-            link = news['link']
-            news_data.append((title, score, time_string, publish_time, link))
+        existing_data[sentiment] = [news for news in existing_data[sentiment]
+                                    if current_time - parse(news["publish_time"]) <= timedelta(hours=48)]
 
-    # Sort the news data in descending order of publish times
-    news_data.sort(key=lambda x: x[3], reverse=True)
+    # Add new data if it doesn't exist
+    for sentiment in ["positive", "negative"]:
+        for news in news_data[sentiment]:
+            if is_not_similar(news, existing_data[sentiment]):
+                existing_data[sentiment].append(news)
 
-    news_div = html.Div(
-        children=[
-            html.H2('Latest News', style={'textAlign': 'center'}),
-            html.Div(
-                children=[
-                    html.Div(
-                        id=title[0],
-                        children=[
-                            html.Div(f"{title[0]} (score:{title[1]})"),
-                            html.A('Read more', href=title[4], target='_blank'),
-                            html.Div(title[2], style={'fontSize': 'small'})
-                        ],
-                        n_clicks=0,
-                        style={'padding': '10px', 'cursor': 'pointer'},
-                        className='news-title'
-                    ) for title in news_data
-                ],
-                style={'display': 'flex', 'flex-direction': 'column', 'max-height': '200px', 'overflow-y': 'auto',
-                       'margin': '10px', 'border': '1px solid white', 'border-radius': '10px', 'width': '90%',
-                       'margin-left': 'auto', 'margin-right': 'auto'}
-            ),
-        ]
-    )
+    # Save back to the file
+    with open('data/news_data.json', 'w') as f:
+        json.dump(existing_data, f, indent=4)
 
-    return news_div
 
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(Exception,),
+                fallback_values=(0.0, 0.0))
+def check_news_feeds() -> Tuple[float, float]:
+
+    urls = [
+        'https://www.coindesk.com/arc/outboundfeeds/rss/',
+        'https://cointelegraph.com/rss',
+        'https://cointelegraph.com/editors_pick_rss'
+    ]
+
+    positive_scores = []
+    negative_scores = []
+
+    for url in urls:
+        positive_polarity_score, negative_polarity_score, positive_count, negative_count = 0.0, 0.0, 0, 0
+        positive_news, negative_news = [], []
+        response = feedparser.parse(url)
+
+        for post in response.entries:
+            description = BeautifulSoup(post.description, 'html.parser').get_text()
+            content = post.title + " " + description
+
+            sentiment_score = calculate_sentiment_score(content)
+
+            if sentiment_score > SENTIMENT_POSITIVE_THRESHOLD:
+                sentiment_score = calculate_temporal_decay(sentiment_score, post)
+
+                positive_polarity_score += sentiment_score
+                formatted_utc_pub_date = convert_to_utc_format(post.published)
+                positive_news.append({"title": post.title, "score": round(sentiment_score, 3),
+                                      "description": description, "publish_time": formatted_utc_pub_date,
+                                      "link": post.link})
+                positive_count += 1
+
+            elif sentiment_score < SENTIMENT_NEGATIVE_THRESHOLD:
+                sentiment_score = calculate_temporal_decay(sentiment_score, post)
+
+                negative_polarity_score += sentiment_score
+                formatted_utc_pub_date = convert_to_utc_format(post.published)
+                negative_news.append({"title": post.title, "score": round(sentiment_score, 3),
+                                      "description": description, "publish_time":
+                                          formatted_utc_pub_date, "link": post.link})
+                negative_count += 1
+
+        news_data = {
+            "positive": positive_news[:3],
+            "negative": negative_news[:3]
+        }
+        handle_existing_data(news_data)
+
+        positive_scores.append(positive_polarity_score / positive_count if positive_count != 0 else 0)
+        negative_scores.append(abs(negative_polarity_score / negative_count) if negative_count != 0 else 0)
+
+    return sum(positive_scores) / len(positive_scores), sum(negative_scores) / len(negative_scores)
+
+
+if __name__ == "__main__":
+    positive_polarity_score_outer, negative_polarity_score_outer, = check_news_feeds()
+    logging.info(f'positive sentiment: {positive_polarity_score_outer}, neg sentiment: {negative_polarity_score_outer}')
