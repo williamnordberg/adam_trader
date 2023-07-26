@@ -1,27 +1,6 @@
 {
     "positive": [
         {
-            "title": "Craig Wright Will Be Able to Fight Bitcoin Copyright Claim in UK After Winning Appeal",
-            "score": 0.333,
-            "description": "Craig Wright, who claims to be Bitcoin inventor Satoshi Nakamoto, will be able to argue his case that the Bitcoin file format should receive copyright protection under UK law after a bench of three UK judges accepted his appeal to a previous court denial, according to a court filing.",
-            "publish_time": "2023-07-24 01:32",
-            "link": "https://www.coindesk.com/policy/2023/07/21/craig-wright-will-be-able-to-fight-bitcoin-copyright-claim-in-uk-after-winning-appeal/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "Ripple effect? Stellar (XLM) is catching up to XRP price gains",
-            "score": 0.45,
-            "description": "XLM has turned most overbought since April 2021, boosting risks of a 30% price decline by September. ",
-            "publish_time": "2023-07-23 15:54",
-            "link": "https://cointelegraph.com/news/ripple-effect-stellar-xlm-xrp-price-gains"
-        },
-        {
-            "title": "Evidence of crypto usage by ISIS is mounting \u2014 TRM Labs",
-            "score": 0.4,
-            "description": "Blockchain intelligence platform TRM Labs revealed that USDT on the Tron network is the primary choice for transactions among ISIS affiliates across Asia.",
-            "publish_time": "2023-07-23 06:10",
-            "link": "https://cointelegraph.com/news/evidence-crypto-usage-isis-trm-labs"
-        },
-        {
             "title": "Japan Signals More Web3 Promotion Policies Are Coming",
             "score": 0.5,
             "description": "Japan's Prime Minister Fumio Kishida said on Tuesday that the country plans to improve the environment for Web3 when it comes to using tokens and revitalize the content industry.",
@@ -62,23 +41,100 @@
             "description": "Worldcoin price soared to $3.58 shortly after launching but traders and crypto advocates have many concerns.",
             "publish_time": "2023-07-24 20:35",
             "link": "https://cointelegraph.com/news/worldcoin-launch-raises-eyebrows-as-wld-price-notches-a-double-digit-gain"
+        },
+        {
+            "title": "Bitcoin Stuck Below $30K Before Likely Fed Rate Hike, While DOGE Spikes 7%",
+            "score": 0.122,
+            "description": "Except for the popular meme coin, which was recently up more than 10%, the largest cryptos by market cap were largely unchanged over the past 24 hours as investors awaited a likely 25 basis point increase from the U.S. central bank.",
+            "publish_time": "2023-07-25 23:22",
+            "link": "https://www.coindesk.com/markets/2023/07/25/crypto-markets-today-btc-eth-doge-xrp-price-analysis/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "Elon Musk\u2019s Twitter Overhaul Could Be Huge for DOGE and Crypto Generally",
+            "score": 0.067,
+            "description": "\u201cElon clearly has an affinity for DOGE, almost as part of a running joke, but I wouldn\u2019t be surprised if he actually went through with enabling payments via DOGE.\u201d",
+            "publish_time": "2023-07-25 16:30",
+            "link": "https://www.coindesk.com/business/2023/07/25/elon-musks-twitter-overhaul-could-be-huge-for-doge-and-crypto-generally/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "Avalanche Foundation Commits $50M to Bring More Tokenized Assets to Blockchain",
+            "score": 0.11,
+            "description": "The program follows Avalanche\u2019s initiative to financial institutions to test blockchain services on one of its subnets.",
+            "publish_time": "2023-07-25 14:39",
+            "link": "https://www.coindesk.com/markets/2023/07/25/avalanche-foundation-commits-50m-to-bring-more-tokenized-assets-to-blockchain/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "CFTC charges Tennessee couple over 'Blessings of God Thru Crypto\u2019 scheme",
+            "score": 0.374,
+            "description": "Despite having no trading experience a Tennessee couple convinced 100 people to hand over their money for a uniquely named crypto investment pool.",
+            "publish_time": "2023-07-26 04:34",
+            "link": "https://cointelegraph.com/news/cftc-charge-couple-blessings-of-god-crypto-investment-scheme"
+        },
+        {
+            "title": "USD-backed stablecoin pilot project launched by Pacific island nation of Palau",
+            "score": 0.202,
+            "description": "The Palau Stablecoin, or \u201cKluk,\u201d will be minted on XRP Ledger using the Ripple CBDC Platform and will be distributed first to government employees. ",
+            "publish_time": "2023-07-26 00:00",
+            "link": "https://cointelegraph.com/news/us-dollar-backed-stablecoin-pilot-project-launched-pacific-island-nation-palau"
+        },
+        {
+            "title": "Trademark attorney predicts legal fights ahead with Twitter\u2019s rebrand to X",
+            "score": 0.083,
+            "description": "According to Josh Gerben, the social media platform could be embroiled in lawsuits over its \u201cX\u201d branding for years, costing upward of millions of dollars. ",
+            "publish_time": "2023-07-25 21:40",
+            "link": "https://cointelegraph.com/news/trademark-attorney-predicts-legal-fights-ahead-twitter-rebrand-x"
+        },
+        {
+            "title": "China\u2019s blockchain satellite in space, Hong Kong\u2019s McNuggets Metaverse: Asia Express",
+            "score": 0.057,
+            "description": "China launches world\u2019s first blockchain satellite into space, meanwhile, McDonalds Hong Kong brings McNuggets into the Metaverse.",
+            "publish_time": "2023-07-25 10:06",
+            "link": "https://cointelegraph.com/magazine/chinas-blockchain-satellite-in-space-hong-kongs-mcnuggets-metaverse-asia-express/"
+        },
+        {
+            "title": "SEC appeal could \u2018amplify\u2019 Ripple win, says Ripple Labs legal chief",
+            "score": 0.239,
+            "description": "Stuart Alderoty said that an appeal on behalf of the SEC could see Ripple consolidate its victory over the regulator even further.",
+            "publish_time": "2023-07-26 06:47",
+            "link": "https://cointelegraph.com/news/sec-appeal-could-amplify-xrp-win-ripple-labs-legal-chief"
+        },
+        {
+            "title": "UK crime agency scouts for seasoned crypto investigators",
+            "score": 0.382,
+            "description": "The ideal candidate to join the National Crime Agency will be an existing member of the police staff who is a certified accredited financial investigator (AFI).",
+            "publish_time": "2023-07-26 08:00",
+            "link": "https://cointelegraph.com/news/uk-crime-agency-to-hire-crypto-blockchain-investigators"
+        },
+        {
+            "title": "Is It Finally Time to \u2018X-it\u2019 Twitter For Threads?",
+            "score": 0.008,
+            "description": "Threads hopes to swoop in and capture Web3 users that are looking for social media alternatives. But does the app have what crypto natives are looking for?",
+            "publish_time": "2023-07-25 20:05",
+            "link": "https://www.coindesk.com/web3/2023/07/25/is-it-finally-time-to-x-it-twitter-for-threads/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "Venture Capital Firm a16z Unloads $7M of MKR Tokens as Price Soars",
+            "score": 0.005,
+            "description": "Lending platform Maker\u2019s governance tokens soared to near one-year high prices last week prior to the transactions.",
+            "publish_time": "2023-07-25 18:07",
+            "link": "https://www.coindesk.com/markets/2023/07/25/venture-capital-firm-a16z-unloads-7m-of-mkr-tokens-as-price-soars/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "Ether death cross threatens more downside as ETH price trades at a key support level",
+            "score": 0.043,
+            "description": "ETH\u2019s technical and on-chain indicators point toward further downside, but there is a silver lining.",
+            "publish_time": "2023-07-25 18:31",
+            "link": "https://cointelegraph.com/news/ethereum-death-cross-threatens-more-downside-as-eth-price-trades-at-a-key-support-level"
+        },
+        {
+            "title": "Singapore High Court Declares Crypto as Property in Case Involving Bybit",
+            "score": 0.129,
+            "description": "The ruling held that a crypto asset is a \u201cthing in action\u201d enforceable via court orders.",
+            "publish_time": "2023-07-26 08:08",
+            "link": "https://www.coindesk.com/policy/2023/07/26/singapore-high-court-declares-crypto-as-property-in-case-involving-bybit/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
         }
     ],
     "negative": [
-        {
-            "title": "Ripple CEO Brad Garlinghouse: \u2018The SEC created this mess\u2019",
-            "score": -0.219,
-            "description": "Brad Garlinghouse has lashed out at the SEC for its \"absurd\" comments on the Ripple Labs case. ",
-            "publish_time": "2023-07-24 01:54",
-            "link": "https://cointelegraph.com/news/ripple-ceo-brad-garlinghouse-condemns-sec-hint-appeal-xrp"
-        },
-        {
-            "title": "Bitcoin can still hit $19K, warns trader ahead of BTC price \u2018big move\u2019",
-            "score": -0.167,
-            "description": "BTC price should see a serious shake-up in the coming days, but Bitcoin market participants are increasingly worried it will be to the downside.",
-            "publish_time": "2023-07-23 10:45",
-            "link": "https://cointelegraph.com/news/bitcoin-can-hit-19k-btc-price-big-move"
-        },
         {
             "title": "Binance Says It Intends to File Motion to Dismiss CFTC Complaint",
             "score": -0.3,
@@ -113,6 +169,69 @@
             "description": "\u201cWhat could go wrong?\u201d Decentralized ID protocol Worldcoin has launched, receiving mixed reactions from the cryptocurrency community.",
             "publish_time": "2023-07-24 13:26",
             "link": "https://cointelegraph.com/news/worldcoin-launch-divides-crypto-community"
+        },
+        {
+            "title": "From Vintage to MNTGE: Digital Fashion Brand to Release NFT Patches Linked to IRL Rewards",
+            "score": -0.233,
+            "description": "The patches were designed by 11 artists, including Jen Stark, Nyan Cat creator Christopher Torres and Bored Ape Yacht Club artist Seneca, and are embedded with NFC chips.",
+            "publish_time": "2023-07-25 19:35",
+            "link": "https://www.coindesk.com/web3/2023/07/25/from-vintage-to-mntge-digital-fashion-brand-to-release-nft-patchwork-collection-linked-to-irl-rewards/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "ZkSync's Largest Lender Struck by $3.4M Exploit",
+            "score": -0.2,
+            "description": "EraLend, the largest lending protocol on Ethereum scaling blockchain zkSync, has been hit by a $3.4 million reentrancy attack, according to blockchain security firm CertiK.",
+            "publish_time": "2023-07-25 13:34",
+            "link": "https://www.coindesk.com/business/2023/07/25/zksyncs-largest-lender-struck-by-34m-exploit/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "First Mover Asia: Bitcoin Awaits Its Spot ETF in Absence of a Macro Catalyst: Crypto CEO",
+            "score": -0.078,
+            "description": "PLUS: At least one bitcoin price indicator suggests that BTC may be turning slightly upward soon, writes a CoinDesk analyst, while Tribe Capital's managing partner sees a DeFi \"resurgence.\"",
+            "publish_time": "2023-07-26 01:47",
+            "link": "https://www.coindesk.com/markets/2023/07/26/first-mover-asia-bitcoin-awaits-its-spot-etf-in-absence-of-a-macro-catalyst-crypto-custodian-ceo/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "Mashinsky's Arrest, Ripple Ruling, Etc.",
+            "score": -0.013,
+            "description": "I was on vacation for the last week-and-a-half but before I left, I sent a list of things to watch for to my colleagues that in hindsight, was wholly inadequate. Anyway, here's my effort to catch up.",
+            "publish_time": "2023-07-25 23:00",
+            "link": "https://www.coindesk.com/policy/2023/07/25/mashinskys-arrest-ripple-ruling-etc/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "Miami Heat\u2019s Jimmy Butler seeks dismissal from Binance promo class suit",
+            "score": -0.096,
+            "description": "Lawyers for the basketball star claim he did not mention any alleged securities but instead warned of celebrities promoting crypto investments.",
+            "publish_time": "2023-07-26 03:44",
+            "link": "https://cointelegraph.com/news/jimmy-butler-miami-heat-binance-lawsuit-dismissal"
+        },
+        {
+            "title": "Deloitte, Chainalysis alliance to give law enforcement a crypto edge",
+            "score": -0.257,
+            "description": "Big Four accounting firm Deloitte said the partnership could help authorities identify and take down bad actors hiding \"behind the keyboard.\"",
+            "publish_time": "2023-07-26 01:48",
+            "link": "https://cointelegraph.com/news/deloitte-chainalysis-partnership-boost-compliance-law-enforcement"
+        },
+        {
+            "title": "KuCoin denies mass layoffs, says cuts are part of normal operations",
+            "score": -0.002,
+            "description": "KuCoin has shut down rumors that it would be laying off 30% of its workforce but admitted there may be some \u201cpersonnel adjustments\u201d in the future.",
+            "publish_time": "2023-07-26 01:20",
+            "link": "https://cointelegraph.com/news/kucoin-denies-layoffs-staff-cuts-normal-process"
+        },
+        {
+            "title": "AI and dot-com bubble share some similarities but differ where it counts",
+            "score": -0.063,
+            "description": "AI has seen massive growth in recent years, leading to comparisons with the now infamous dot-com bubble and crash of the 1990s.",
+            "publish_time": "2023-07-25 13:44",
+            "link": "https://cointelegraph.com/news/ai-and-dot-com-bubble-share-some-similarities-but-differ-where-it-counts"
+        },
+        {
+            "title": "What are NFT mystery boxes, and how do they work?",
+            "score": -0.009,
+            "description": "NFT mystery boxes are curated collections of unknown digital assets, offering buyers the excitement of discovering the contents after purchase.",
+            "publish_time": "2023-07-25 09:10",
+            "link": "https://cointelegraph.com/explained/what-are-nft-mystery-boxes-and-how-do-they-work"
         }
     ]
 }

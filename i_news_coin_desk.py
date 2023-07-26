@@ -57,6 +57,8 @@ def check_news_coin_desk() -> Tuple[float, float, int, int]:
         content = post.title + " " + description
         blob = TextBlob(content)
         sentiment_score = blob.sentiment.polarity
+        print(content)
+        print(f'score: {sentiment_score}')
 
         if sentiment_score > SENTIMENT_POSITIVE_THRESHOLD:
             positive_polarity_score += sentiment_score

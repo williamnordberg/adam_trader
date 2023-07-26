@@ -48,13 +48,14 @@ def check_news_api_sentiment() -> Tuple[float, float, int, int]:
     negative_count = 0
 
     response = requests.get(endpoint, params=params)
-    response.raise_for_status()
     data = json.loads(response.text)
     for article in data['articles']:
+        print(article)
         content = article['content']
 
         blob = TextBlob(content)
         sentiment_score = blob.sentiment.polarity
+        print('sentiment_score:', sentiment_score)
         if sentiment_score > SENTIMENT_POSITIVE_THRESHOLD:
             positive_polarity_score += sentiment_score
             positive_count += 1
@@ -73,7 +74,7 @@ if __name__ == "__main__":
     start_outer = datetime.now() - timedelta(days=1)
     end_outer = datetime.now()
     positive_polarity_score_outer, negative_polarity_score_outer, \
-        positive_count_outer, negative_count_outer = check_news_api_sentiment(start_outer, end_outer)
+        positive_count_outer, negative_count_outer = check_news_api_sentiment()
     print(f'positive_polarity: {positive_polarity_score_outer} '
           f'and negative_polarity: {negative_polarity_score_outer}')
     print(f'positive_count: {positive_count_outer} '
