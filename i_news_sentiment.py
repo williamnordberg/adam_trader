@@ -89,11 +89,6 @@ def calculate_temporal_decay(sentiment_score: float, post: FeedParserDict) -> fl
     publish_time = parse(post.published)
     hours_diff = (current_time - publish_time).total_seconds() / 3600
     decay_factor = max(1 - (hours_diff / OLDEST_NEWS_TO_CONSIDER_HOURS), 0)  # Ensure it doesn't go below 0
-    print('sentiment_score before', sentiment_score)
-    print('hours_diff', hours_diff)
-    print('decay_factor', decay_factor)
-    print('sentiment_score  after', (sentiment_score * decay_factor))
-    print('##################################')
     return sentiment_score * decay_factor
 
 
@@ -130,12 +125,6 @@ def calculate_temporal_decay_cryptocompare(sentiment_score, published_date):
 
     hours_diff = (datetime.now() - published_date).total_seconds() / (60 * 60)  # convert to hours
     decay_factor = max(1 - (hours_diff / OLDEST_NEWS_TO_CONSIDER_HOURS), 0)  # Ensure it doesn't go below 0
-    print('sentiment_score before', sentiment_score)
-    print('hours_diff', hours_diff)
-    print('decay_factor', decay_factor)
-    print('sentiment_score  after', (sentiment_score * decay_factor))
-    print('##################################')
-
     return sentiment_score * decay_factor
 
 
@@ -159,7 +148,7 @@ def process_cryptocompare_news(response_json):
                 negative_polarity_score += sentiment
                 negative_count += 1
         else:
-            print(f"Skipping article without 'title' or 'body': {article}")
+            logging.info(f"Skipping article without 'title' or 'body': {article}")
 
     return positive_polarity_score / positive_count if positive_count != 0 else 0,\
         abs(negative_polarity_score / negative_count) if negative_count != 0 else 0
@@ -167,14 +156,12 @@ def process_cryptocompare_news(response_json):
 
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=(Exception,),
                 fallback_values=(0.0, 0.0, 0, 0))
-def check_news_feeds() -> Tuple[float, float, int, int]:
+def calculate_news_sentiment() -> Tuple[float, float, int, int]:
 
     positive_scores = []
     negative_scores = []
 
     for url in URLS:
-        print(url)
-
         if url == 'https://min-api.cryptocompare.com/data/v2/news/?lang=EN':
             response_json = requests.get(url).json()
             positive_score, negative_score = process_cryptocompare_news(response_json)
@@ -225,13 +212,11 @@ def check_news_feeds() -> Tuple[float, float, int, int]:
     negative_sentiment = sum(negative_scores) / len(negative_scores)
 
     # Adjust negative sentiment to avoid bias
-    print('negative_sentiment before', negative_sentiment)
     negative_sentiment = adjust_negative_score(negative_sentiment)
 
     return positive_sentiment, negative_sentiment, len(positive_scores), len(negative_scores)
 
 
 if __name__ == "__main__":
-    positive_polarity_score_outer, negative_polarity_score_outer, pos_count, \
-        neg_count = check_news_feeds()
-    logging.info(f'positive sentiment: {positive_polarity_score_outer}, neg sentiment: {negative_polarity_score_outer}')
+    positive_pol_outer, negative_pol_outer, pos_count, neg_count = calculate_news_sentiment()
+    logging.info(f'positive sentiment: {positive_pol_outer}, neg sentiment: {negative_pol_outer}')

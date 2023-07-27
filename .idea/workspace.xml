@@ -8,15 +8,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="24July">
+    <list default="true" id="9044ea66-5088-4098-8065-80e63944c8d4" name="Changes" comment="26July">
+      <change afterPath="$PROJECT_DIR$/i_news_sentiment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/adam_trader.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/adam_trader.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/coingecko.html" beforeDir="false" afterPath="$PROJECT_DIR$/assets/coingecko.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/tradingview_market_data.html" beforeDir="false" afterPath="$PROJECT_DIR$/assets/tradingview_market_data.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/a_a_logging_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/a_a_logging_config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/youtube_token.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/config/youtube_token.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/bitcoin_rich_list2000.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/bitcoin_rich_list2000.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/dataset.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/dataset.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/latest_info_saved.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/news_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/news_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/i_newsAPI.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/i_news_analyser.py" beforeDir="false" afterPath="$PROJECT_DIR$/i_news_analyser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/i_news_coin_desk.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/i_news_coin_telegraph.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/i_news_crypto_compare.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m_visualization_side.py" beforeDir="false" afterPath="$PROJECT_DIR$/m_visualization_side.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test2.py" beforeDir="false" afterPath="$PROJECT_DIR$/test2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/z_compares.py" beforeDir="false" afterPath="$PROJECT_DIR$/z_compares.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,8 +105,8 @@
       <recent name="C:\will\Python_project\adam_trader" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\will\Python_project\adam_trader\.gitignore" />
       <recent name="C:\will\Python_project\adam_trader" />
+      <recent name="C:\will\Python_project\adam_trader\.gitignore" />
       <recent name="C:\will\Python_project\adam_trader\data" />
       <recent name="C:\will\Python_project\adam_trader\config" />
       <recent name="C:\will\Python_project\adam_trader\templates" />
@@ -122,7 +134,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="i_news_coin_desk" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="i_news_sentiment" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -134,7 +146,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/i_news_coin_desk.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/i_news_sentiment.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -164,6 +176,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="adam_trader" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -185,41 +218,20 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="youtube_token" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="adam_trader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\will\Python_project\adam_trader\.gitignore\youtube_token.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Python.i_news_analyser" />
-      <item itemvalue="Python.test" />
+      <item itemvalue="Python.i_news_sentiment" />
       <item itemvalue="Python.m_visualization_app" />
-      <item itemvalue="Python.youtube_token" />
-      <item itemvalue="Python.i_news_coin_desk" />
+      <item itemvalue="Python.main" />
+      <item itemvalue="Python.test" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.m_visualization_app" />
-        <item itemvalue="Python.test" />
+        <item itemvalue="Python.main" />
         <item itemvalue="Python.i_news_analyser" />
-        <item itemvalue="Python.youtube_token" />
-        <item itemvalue="Python.i_news_coin_desk" />
+        <item itemvalue="Python.i_news_sentiment" />
+        <item itemvalue="Python.test" />
       </list>
     </recent_temporary>
   </component>
@@ -578,7 +590,7 @@
       <option name="project" value="LOCAL" />
       <updated>1687483422567</updated>
     </task>
-    <option name="localTasksCounter" value="427" />
+    <option name="localTasksCounter" value="428" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -701,6 +713,7 @@
     <MESSAGE value="19July" />
     <MESSAGE value="21July" />
     <MESSAGE value="24July" />
-    <option name="LAST_COMMIT_MESSAGE" value="24July" />
+    <MESSAGE value="26July" />
+    <option name="LAST_COMMIT_MESSAGE" value="26July" />
   </component>
 </project>

@@ -17,9 +17,6 @@ logging.basicConfig(level=logging.INFO,
                     handlers=[logging.StreamHandler(), UTF8FileHandler('logs/app.log')],
                     datefmt='%Y-%m-%d %H:%M:%S')
 
-import nltk
-nltk.download('punkt')
-
 
 def do_nothing():
     return
