@@ -2,21 +2,24 @@ import requests.exceptions
 import json
 from typing import Tuple
 
-from i_newsAPI import check_news_api_sentiment
-from i_news_crypto_compare import check_news_cryptocompare_sentiment
-from i_news_coin_desk import check_news_coin_desk
-from i_news_coin_telegraph import check_news_coin_telegraph
-
+from i_news_sentiment import calculate_news_sentiment
 from z_handy_modules import retry_on_error, get_bitcoin_price
-from z_compares import compare_news
 from z_read_write_csv import save_value_to_database, \
     should_update, save_update_time, retrieve_latest_factor_values_database
 
-# remove last_news_update_time, news_bullish, news_bearish,
-# positive_news_polarity_change, negative_percentage_increase  from latest data
-
-
 ALLOWED_EXCEPTIONS = (requests.exceptions.RequestException, ValueError)
+
+
+def normalize_scores(positive_score, negative_score):
+    total_score = positive_score + negative_score
+    if total_score == 0:  # avoid dividing by 0
+        news_bullish = 0.5
+        news_bearish = 0.5
+    else:
+        news_bullish = positive_score / total_score
+        news_bearish = negative_score / total_score
+
+    return round(news_bullish, 2), round(news_bearish, 2)
 
 
 @retry_on_error(max_retries=3, delay=5,
@@ -26,42 +29,6 @@ def update_bitcoin_price_in_database():
     save_value_to_database('bitcoin_price', price)
 
 
-def aggregate_news() -> Tuple[float, float, int, int]:
-    """
-    Aggregates news sentiment from different sources for the last 24 hours.
-
-    Returns:
-        positive_polarity_24_hours_before (float): Average positive polarity score.
-        negative_polarity_24_hours_before (float): Average negative polarity score.
-        positive_count_24_hours_before (int): Total number of positive news articles.
-        negative_count_24_hours_before (int): Total number of negative news articles.
-    """
-
-    # Create a list of the functions that will be used to check sentiment
-    check_functions = [check_news_api_sentiment, check_news_cryptocompare_sentiment,
-                       check_news_coin_desk, check_news_coin_telegraph]
-
-    # Initialize accumulators
-    total_positive_polarity, total_negative_polarity, total_positive_count, total_negative_count = 0, 0, 0, 0
-
-    # Loop through the functions, call them, and add their results to the accumulators
-    for check_func in check_functions:
-        positive_polarity, negative_polarity, positive_count, negative_count = check_func()
-        total_positive_polarity += positive_polarity
-        total_negative_polarity += negative_polarity
-        total_positive_count += positive_count
-        total_negative_count += negative_count
-
-    # Compute averages
-    num_functions = len(check_functions)
-    avg_positive_polarity = round(total_positive_polarity / num_functions, 2)
-    avg_negative_polarity = round(total_negative_polarity / num_functions, 2)
-    avg_positive_count = total_positive_count // num_functions
-    avg_negative_count = total_negative_count // num_functions
-
-    return avg_positive_polarity, avg_negative_polarity, avg_positive_count, avg_negative_count
-
-
 @retry_on_error(3, 5, (requests.exceptions.RequestException,
                        json.JSONDecodeError, ValueError, KeyError), (0.0, 0.0))
 def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
@@ -69,20 +36,18 @@ def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
     # We need to update Bitcoin price hourly (same as news)
     update_bitcoin_price_in_database()
 
-    # Get aggregated value from 3 function for las 24 hours
-    last_24_hours_positive_polarity, last_24_hours_negative_polarity,\
-        positive_count_24_hours_before, negative_count_24_hours_before = aggregate_news()
-
-    news_bullish, news_bearish = compare_news(last_24_hours_positive_polarity, last_24_hours_negative_polarity,
-                                              positive_count_24_hours_before, negative_count_24_hours_before)
+    positive_polarity, negative_polarity, positive_count, negative_count = calculate_news_sentiment()
 
     # Save data on database
-    save_value_to_database('news_positive_polarity', round(last_24_hours_positive_polarity, 2))
-    save_value_to_database('news_negative_polarity', round(last_24_hours_negative_polarity, 2))
-    save_value_to_database('news_positive_count', positive_count_24_hours_before)
-    save_value_to_database('news_negative_count', negative_count_24_hours_before)
+    save_value_to_database('news_positive_polarity', round(positive_polarity, 2))
+    save_value_to_database('news_negative_polarity', round(negative_polarity, 2))
+    save_value_to_database('news_positive_count', positive_count)
+    save_value_to_database('news_negative_count', negative_count)
 
     save_update_time('sentiment_of_news')
+
+    # calculate news_bullish and bearish
+    news_bullish, news_bearish = normalize_scores(positive_polarity, negative_polarity)
 
     return news_bullish, news_bearish
 

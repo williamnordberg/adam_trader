@@ -847,3 +847,20 @@ pandas.errors.EmptyDataError: No columns to parse from file
 2023-07-18 09:06:45 - INFO - root - ♥♥♥♥ 10260_Rich addresses(1) RUNNING ♥♥♥♥
 2023-07-18 09:06:45 - INFO - root - blockchain.info rate limited for address bc1ql49ydapnjafl5t2cp9zqpjwe6pdgmxy98859v2. Sleeping for a minute.
 2023-07-18 09:06:50 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-27 12:18:30 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-27 12:18:31 - INFO - root - ███ 14280_trading(1) RUNNING ███
+2023-07-27 12:18:33 - INFO - root - 9 new rows of internal factors added.
+2023-07-27 12:18:36 - INFO - root - interest rate added to the main dataset
+2023-07-27 12:18:36 - INFO - root - dataset has been updated
+2023-07-27 12:19:02 - WARNING - root - Attempt 1 failed with error: The request failed: Google returned a response with code 429. Retrying in 5 seconds...
+2023-07-27 12:19:11 - WARNING - root - Attempt 2 failed with error: The request failed: Google returned a response with code 429. Retrying in 5 seconds...
+2023-07-27 12:19:20 - WARNING - root - Attempt 3 failed with error: The request failed: Google returned a response with code 429. Retrying in 5 seconds...
+2023-07-27 12:19:25 - ERROR - root - All 3 attempts failed.
+2023-07-27 12:19:25 - ERROR - root - Returning fallback values (0.0, 0.0).
+2023-07-27 12:19:29 - INFO - root - ♥♥♥♥ 11292_Rich addresses(1) RUNNING ♥♥♥♥
+2023-07-27 12:19:29 - INFO - root - $$$start scrapping list of bitcoin richest addresses$$$
+2023-07-27 12:19:36 - INFO - root - $$$finish scrapping list of bitcoin richest addresses$$$
+2023-07-27 12:20:03 - WARNING - root - Attempt 1 failed with error: ("Connection broken: InvalidChunkLength(got length b'', 0 bytes read)", InvalidChunkLength(got length b'', 0 bytes read)). Retrying in 5 seconds...
+2023-07-27 12:20:10 - INFO - root - ███ 14280_trading(1) SLEEPS ███
+2023-07-27 12:21:52 - INFO - root - Received interrupt signal. Cleaning up...

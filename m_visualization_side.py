@@ -129,8 +129,8 @@ def read_layout_data():
         "bb_MA_distance": read_latest_data("bb_band_MA_distance", float),
         "BTC_received": int(database['richest_addresses_total_received'][-1]),
         "BTC_send": int(database['richest_addresses_total_sent'][-1]),
-        "positive_news_polarity_change": read_latest_data("positive_news_polarity_change", float),
-        "negative_news_polarity_change": read_latest_data("negative_news_polarity_change", float),
+        "positive_news_polarity_change": 0,
+        "negative_news_polarity_change": 0,
         "fed_announcement": fed_announcement,
         "cpi_announcement": cpi_announcement,
         "ppi_announcement": ppi_announcement
