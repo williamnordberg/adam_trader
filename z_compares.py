@@ -1,6 +1,6 @@
 import bisect
 from typing import Tuple
-from z_read_write_csv import write_latest_data, read_database
+from z_read_write_csv import read_database
 
 LATEST_INFO_PATH = 'data/latest_info_saved.csv'
 
@@ -54,7 +54,7 @@ VALUES_RICH = [
 ]
 
 
-# 6,7,8. Google, Reddit, Youtube
+# 6,7,8. Google, Reddit, You tube
 RANGES_GOOGLE = [(1.0, 1.1), (1.1, 1.15), (1.15, 1.2), (1.2, 1.25), (1.25, float('inf'))]
 VALUES__GOOGLE = [(0.0, 0.0), (0.6, 0.4), (0.75, 0.25), (0.85, 0.15), (1.0, 0.0)]
 RANGES_GOOGLE_DOWN = [(1.0, 1.1), (1.1, 1.15), (1.15, 1.2), (1.2, 1.25), (1.25, float('inf'))]
@@ -133,8 +133,8 @@ def compare_richest_addresses() -> Tuple[float, float]:
 def compare_google_reddit_youtube(last_hour: int, two_hours_before: int) -> Tuple[float, float]:
     # prevent division by zero
     if last_hour == 0 or two_hours_before == 0:
-        last_hour += 0.0001
-        two_hours_before += 0.0001
+        last_hour += 1
+        two_hours_before += 1
 
     if last_hour >= two_hours_before:
         ratio = last_hour / two_hours_before
@@ -142,4 +142,3 @@ def compare_google_reddit_youtube(last_hour: int, two_hours_before: int) -> Tupl
     else:
         ratio = two_hours_before / last_hour
         return compare(ratio, RANGES_GOOGLE_DOWN, VALUES_GOOGLE_DOWN)
-
