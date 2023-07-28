@@ -21,7 +21,7 @@ from b_order_book import order_book
 from k_combined_score import make_trading_decision
 from l_position_long import long_position
 from l_position_short import short_position
-from m_visualization_app import visualize_charts
+from m_visual_app import visualize_charts
 from l_position_short_testnet import check_no_open_future_position
 from e_richest import monitor_bitcoin_richest_addresses
 from z_read_write_csv import retrieve_latest_factor_values_database, \

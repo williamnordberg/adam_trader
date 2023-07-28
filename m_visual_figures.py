@@ -563,7 +563,8 @@ def create_loading_component():
         type="cube",  # you can also use "default" or "circle"
         fullscreen=True,  # Change to False if you don't want it to be full screen
         children=html.Div(id='dummy-output_cube'),
-        style={'position': 'fixed', 'top': 0, 'left': 0, 'width': '100%', 'height': '100%'}
+        style={'backgroundColor': COLORS['background'],
+               'position': 'fixed', 'top': 0, 'left': 0, 'width': '100%', 'height': '100%'}
     )
 
 
