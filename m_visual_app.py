@@ -9,13 +9,13 @@ from dash import html
 
 # Local application/library specific imports
 from z_handy_modules import COLORS
-from m_visual_server_config import setup_auth, load_configuration
-from m_visual_app_callbacks import register_callbacks, setup_clientside_callback
+from m_visual_server import setup_auth, load_configuration
+from m_visual_callbacks import register_callbacks, setup_clientside_callback
 from m_visualization_divs import create_widget, create_news_div, create_layout_div
 from m_visualization_side import create_progress_bar
-from m_visualization_create_figures import (create_trade_details_div,
-                                            create_loading_component, create_log_output,
-                                            create_figure_div, create_first_graph)
+from m_visual_figures import (create_trade_details_div,
+                              create_loading_component, create_log_output,
+                              create_figure_div, create_first_graph)
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)

@@ -100,13 +100,6 @@ def create_html_divs():
             html.P(f'BTC sent: {initial_layout_data["BTC_send"]}', id='BTC-sent', style={
                 'fontSize': '13px', 'margin': '0px'}),
         ], style={'borderTop': '1px solid white'}),
-
-        html.Div([
-            html.P(f'+ news change: {initial_layout_data["positive_news_polarity_change"]}',
-                   id='positive-news-change', style={'fontSize': '13px', 'margin': '0px'}),
-            html.P(f'- news change: {initial_layout_data["negative_news_polarity_change"]}',
-                   id='negative-news-change', style={'fontSize': '13px', 'margin': '0px'}),
-        ], style={'borderTop': '1px solid white'})
     ]
 
     return html_div_list

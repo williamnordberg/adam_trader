@@ -8,7 +8,7 @@ from time import sleep
 from m_visualization_divs import create_news_div
 from m_visualization_side import read_layout_data
 
-from m_visualization_create_figures import visualize_trade_details, visualized_combined, \
+from m_visual_figures import visualize_trade_details, visualized_combined, \
     visualized_news, visualized_youtube, visualized_reddit, visualized_google, visualized_richest, \
     visualize_macro, visualize_prediction, visualize_trade_results, create_gauge_charts, visualization_log
 from z_handy_modules import COLORS
@@ -85,9 +85,7 @@ def register_callbacks(app):
          Output('MACD-uptrend', 'children'),
          Output('MA-distance', 'children'),
          Output('BTC-received', 'children'),
-         Output('BTC-sent', 'children'),
-         Output('positive-news-change', 'children'),
-         Output('negative-news-change', 'children')],
+         Output('BTC-sent', 'children')],
         [Input('interval-component', 'n_intervals')])
     def update_divs(n):
         # Get the latest data
@@ -117,20 +115,19 @@ def register_callbacks(app):
         bb_MA_distance = int(layout_data["bb_MA_distance"])
         BTC_received = layout_data["BTC_received"]
         BTC_send = layout_data["BTC_send"]
-        positive_news_polarity_change = layout_data["positive_news_polarity_change"]
-        negative_news_polarity_change = layout_data["negative_news_polarity_change"]
+
         fed_announcement = layout_data["fed_announcement"]
         cpi_announcement = layout_data["cpi_announcement"]
         ppi_announcement = layout_data["ppi_announcement"]
 
-        return fed_rate_m_to_m, f'CPI MtoM: {cpi_m_to_m}', f'PPI MtoM: {ppi_m_to_m}', fed_announcement, cpi_announcement, \
-            ppi_announcement, f'T State: {trading_state}', {'color': color}, f'Bid vol: {bid_volume}', \
-            f'Ask vol: {ask_volume}', f'Predicted: {predicted_price}', f'Current: {current_price}', \
-            f'Diff: {price_difference}', f'RSI: {rsi}', f'Over 200EMA: {over_200EMA}', \
-            f'MACD up tr: {MACD_uptrend}', f'bb distance: {bb_MA_distance}', \
-            f'Rich receive: {round(BTC_received / 1000, 1)} K', \
-            f'Rich send: {round(BTC_send / 1000, 1)} K', f'+ POL news inc: {positive_news_polarity_change}', \
-            f'- POL news inc: {negative_news_polarity_change}'
+        return (fed_rate_m_to_m, f'CPI MtoM: {cpi_m_to_m}', f'PPI MtoM: {ppi_m_to_m}',
+                fed_announcement, cpi_announcement,
+                ppi_announcement, f'T State: {trading_state}', {'color': color}, f'Bid vol: {bid_volume}',
+                f'Ask vol: {ask_volume}', f'Predicted: {predicted_price}', f'Current: {current_price}',
+                f'Diff: {price_difference}', f'RSI: {rsi}', f'Over 200EMA: {over_200EMA}',
+                f'MACD up tr: {MACD_uptrend}', f'bb distance: {bb_MA_distance}',
+                f'Rich receive: {round(BTC_received / 1000, 1)} K',
+                f'Rich send: {round(BTC_send / 1000, 1)} K')
 
     @app.callback(
         [Output('timer', 'children'),
@@ -170,4 +167,3 @@ def setup_clientside_callback(app):
         Output('dummy-output', 'children'),
         [Input('top-button', 'n_clicks')],
     )
-
