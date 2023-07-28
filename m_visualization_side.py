@@ -1,14 +1,13 @@
-import dash_bootstrap_components as dbc
 import pandas.errors
 from typing import Tuple
 from datetime import datetime, timedelta
 from dash import html
 from dash import dcc
-
+import dash_bootstrap_components as dbc
 
 from z_read_write_csv import read_database, read_latest_data, update_intervals
 from a_macro import calculate_upcoming_events
-from z_handy_modules import get_bitcoin_price, retry_on_error
+from z_handy_modules import get_bitcoin_price, retry_on_error, COLORS
 
 APP_UPDATE_TIME = 60
 TIMER_PROGRESS_UPDATE_TIME = 10
@@ -203,4 +202,21 @@ def create_update_intervals():
     return timer_interval_component, interval_component
 
 
+def create_progress_bar():
+    return html.Div([
+        html.Div(id='timer', style={
+            'position': 'fixed',
+            'top': '0',
+            'width': '100%',
+            'textAlign': 'center',
+            'color': '#D3D3D3',
+            'fontSize': '14px',
+            'marginTop': '-3px',
+            'zIndex': '9999'
+        }),
 
+        dbc.Progress(value=50, color=COLORS['background'], striped=True, animated=True, id="progress",
+                     className="custom-progress", style={'position': 'fixed', 'top': '0', 'width': '100%',
+                                                         'backgroundColor': COLORS['background'], 'zIndex': '9998'})
+
+    ])

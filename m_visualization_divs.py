@@ -1,34 +1,17 @@
-from z_handy_modules import COLORS
-import dash_bootstrap_components as dbc
-from dash import html
 import datetime
 import pytz
 import json
+from dash import dcc, html
+import dash_bootstrap_components as dbc
+
+from m_visualization_side import read_layout_data, create_update_intervals, create_scroll_up_button
+from z_handy_modules import COLORS
 
 tradingview_widget = "https://www.tradingview.com/widgetembed/?frameElementId=tradingview_76464&symbol=BINANCE%3ABTCUSDT&interval=D&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%5D&hideideas=1&theme=Dark&style=1&timezone=Etc%2FUTC&studies_overrides=%7B%7D&overrides=%7B%7D&enabled_features=%5B%5D&disabled_features=%5B%5D&locale=en&utm_source=www.tradingview.com&utm_medium=widget_new&utm_campaign=chart&utm_term=BINANCE%3ABTCUSDT"
 
 
-def create_progress_bar():
-    return html.Div([
-        html.Div(id='timer', style={
-            'position': 'fixed',
-            'top': '0',
-            'width': '100%',
-            'textAlign': 'center',
-            'color': '#D3D3D3',
-            'fontSize': '14px',
-            'marginTop': '-3px',
-            'zIndex': '9999'
-        }),
-
-        dbc.Progress(value=50, color=COLORS['background'], striped=True, animated=True, id="progress",
-                     className="custom-progress", style={'position': 'fixed', 'top': '0', 'width': '100%',
-                                                         'backgroundColor': COLORS['background'], 'zIndex': '9998'})
-
-    ])
-
-
-def create_html_divs(initial_layout_data):
+def create_html_divs():
+    initial_layout_data = read_layout_data()
     html_div_list = [
         html.Div([
 
@@ -149,7 +132,7 @@ def create_widget():
         html.Div(children=[
             html.Iframe(src='/assets/tradingview_snaps.html', style={'width': '30%', 'height': '400px'}),
             html.Iframe(src='/assets/coingecko.html', style={'width': '30%', 'height': '400px'}),
-            html.Iframe(src='/assets/tradingview_technical_analysis.html', style={'width': '35%', 'height': '400px'})
+            html.Iframe(src='/assets/tradingview_technical_analysis.html', style={'width': '39%', 'height': '400px'})
         ], style={'display': 'flex', 'justifyContent': 'space-between', 'margin': '0 5%'}),
 
     ]
@@ -182,7 +165,6 @@ def create_news_div():
     news_data.sort(key=lambda x: x[3], reverse=True)
 
     news_div = html.Div(
-        id='news-div',  # Add this line
         children=[
             html.H2('Latest News', style={'textAlign': 'center'}),
             html.Div(
@@ -208,3 +190,21 @@ def create_news_div():
 
     return news_div
 
+
+def create_layout_div():
+    timer_interval_component, interval_component = create_update_intervals()
+    html_divs = create_html_divs()
+
+    layout_div = html.Div(
+        children=[
+            timer_interval_component,
+            interval_component,
+            create_scroll_up_button(),
+            dbc.Button("Logout", id="logout-button", className="mr-2",
+                       style={'background-color': COLORS['lightgray'], 'border': 'None', 'outline': 'None'}, size="sm"),
+            dcc.Location(id='logout', refresh=True)
+        ] + html_divs,
+        style={'width': '11%', 'height': '100vh', 'display': 'inline-block', 'verticalAlign': 'top',
+               'marginTop': '20px'}
+    )
+    return layout_div

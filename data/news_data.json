@@ -1,10 +1,10 @@
 {
     "positive": [
         {
-            "title": "333Grayscale Urges Equal Treatment for All Spot Bitcoin ETF's in Letter to SEC",
+            "title": "9990Grayscale Urges Equal Treatment for All Spot Bitcoin ETF's in Letter to SEC",
             "score": 0.222,
             "description": "If the SEC decides to change course and approve one or more of of the current spot bitcoin ETF applications, \u201cit must do so in a fair and orderly manner,\u201d the statement said.",
-            "publish_time": "2023-07-27 22:00",
+            "publish_time": "2023-07-27 22:59",
             "link": "https://www.coindesk.com/business/2023/07/27/grayscale-urges-equal-treatment-for-all-spot-bitcoin-etfs-in-letter-to-sec/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
         },
         {
@@ -55,6 +55,27 @@
             "description": "Herv\u00e9 Larren\u2019s crypto journey has taken him from luxury goods to Bitcoin mining and back full circle to the world of \u201cblue-chip\u201d NFTs.",
             "publish_time": "2023-07-27 13:26",
             "link": "https://cointelegraph.com/magazine/journeys-herve-larren-on-bitcoin-apes-and-the-psychology-of-blue-chip-nfts/"
+        },
+        {
+            "title": "Bitcoin Steady Above $29K, Bond Yields Rise as BOJ Makes Yield Curve Control More Flexible",
+            "score": 0.156,
+            "description": "BOJ announced a proper yield curve control tweak with semantics that camouflaged the hawkish move.",
+            "publish_time": "2023-07-28 04:52",
+            "link": "https://www.coindesk.com/markets/2023/07/28/bitcoin-steady-above-29k-bond-yields-rise-as-boj-makes-yield-curve-control-more-flexible/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "Elon's 'not afraid of blowing things up' \u2014  ex-Twitter exec on working under Musk",
+            "score": 0.148,
+            "description": "Esther Crawford claimed Elon Musk\u2019s inability to handle criticism created a \u201czealous and fanatical\u201d inner circle.",
+            "publish_time": "2023-07-28 06:10",
+            "link": "https://cointelegraph.com/news/ex-twitter-executive-reveals-elon-musk-secrets"
+        },
+        {
+            "title": "Pro-XRP lawyer Jeremy Hogan\u2019s scam tweet bonanza finally falls silent",
+            "score": 0.11,
+            "description": "For the better part of the last four days, hackers used Hogan's account to promote fraudulent XRP giveaway scams.",
+            "publish_time": "2023-07-28 03:37",
+            "link": "https://cointelegraph.com/news/xrp-lawyer-jeremy-hogan-scam-twitter-account-hack"
         }
     ],
     "negative": [
@@ -99,6 +120,41 @@
             "description": "As BlackRock reiterates that an optimal investment allocation should include 84.9% BTC, the firm has formed a major investment partnership in India.",
             "publish_time": "2023-07-27 09:40",
             "link": "https://cointelegraph.com/news/crypto-friendly-blackrock-to-launch-digital-first-offering-in-india"
+        },
+        {
+            "title": "U.S. Senate Passes $886B Military Spending Bill With Crypto AML Provision",
+            "score": -0.085,
+            "description": "The amendment takes aim at crypto mixers and \u201canonymity-enhancing\u201d crypto assets.",
+            "publish_time": "2023-07-28 02:48",
+            "link": "https://www.coindesk.com/policy/2023/07/28/us-senate-passes-886b-military-spending-bill-with-crypto-aml-provision/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "First Mover Asia: Some Bitcoin Whales Appear Content to Wait for the Next Price Catalyst",
+            "score": -0.02,
+            "description": "PLUS: BTC continued to trade above $29.2K, slightly down over the past 24 hours amid another day of low volatility.",
+            "publish_time": "2023-07-28 00:49",
+            "link": "https://www.coindesk.com/markets/2023/07/28/first-mover-asia-some-bitcoin-whales-appear-content-to-wait-for-the-next-price-catalyst/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "Missing crypto millionaire found dismembered in suitcase: Report",
+            "score": -0.049,
+            "description": "Fernando P\u00e9rez Algaba reportedly ran a crypto trading business in Argentina and is suspected to have been murdered by a professional outfit.",
+            "publish_time": "2023-07-28 05:44",
+            "link": "https://cointelegraph.com/news/missing-crypto-millionaire-found-dismembered-suitcase"
+        },
+        {
+            "title": "SEC adopts cyberattack disclosure rules, listed crypto firms included",
+            "score": -0.072,
+            "description": "Coinbase, Marathon Digital and Riot Blockchain are among the SEC-registered cryptocurrency firms that would need to comply with the rules.",
+            "publish_time": "2023-07-28 05:27",
+            "link": "https://cointelegraph.com/news/sec-adopts-cyberattack-disclosure-rules-crypto-firms"
+        },
+        {
+            "title": "Grayscale urges SEC to approve all Bitcoin ETFs simultaneously",
+            "score": -0.02,
+            "description": "Grayscale\u2019s ETF was previously knocked back by the Securities and Exchange Commission and it wants it and competing ETFs approved together so none have an advantage.",
+            "publish_time": "2023-07-28 01:46",
+            "link": "https://cointelegraph.com/news/grayscale-sec-approve-all-bitcoin-etfs-together"
         }
     ]
 }

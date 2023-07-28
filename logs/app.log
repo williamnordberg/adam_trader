@@ -864,3 +864,236 @@ pandas.errors.EmptyDataError: No columns to parse from file
 2023-07-27 12:20:03 - WARNING - root - Attempt 1 failed with error: ("Connection broken: InvalidChunkLength(got length b'', 0 bytes read)", InvalidChunkLength(got length b'', 0 bytes read)). Retrying in 5 seconds...
 2023-07-27 12:20:10 - INFO - root - ███ 14280_trading(1) SLEEPS ███
 2023-07-27 12:21:52 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-28 14:22:49 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-28 14:22:49 - INFO - root - ███ 20616_trading(1) RUNNING ███
+2023-07-28 14:22:50 - INFO - root - 2 new rows of internal factors added.
+2023-07-28 14:22:52 - INFO - root - interest rate added to the main dataset
+2023-07-28 14:22:52 - INFO - root - dataset has been updated
+2023-07-28 14:22:54 - WARNING - root - Attempt 1 failed with error: Message: session not created: This version of ChromeDriver only supports Chrome version 113
+Current browser version is 115.0.5790.110 with binary path C:\Program Files\Google\Chrome\Application\chrome.exe
+Stacktrace:
+Backtrace:
+	GetHandleVerifier [0x011C8893+48451]
+	(No symbol) [0x0115B8A1]
+	(No symbol) [0x01065058]
+	(No symbol) [0x01085D9C]
+	(No symbol) [0x01081AA3]
+	(No symbol) [0x01080019]
+	(No symbol) [0x010B0798]
+	(No symbol) [0x010B047C]
+	(No symbol) [0x010AA0B6]
+	(No symbol) [0x01087E08]
+	(No symbol) [0x01088F2D]
+	GetHandleVerifier [0x01428E3A+2540266]
+	GetHandleVerifier [0x01468959+2801161]
+	GetHandleVerifier [0x0146295C+2776588]
+	GetHandleVerifier [0x01252280+612144]
+	(No symbol) [0x01164F6C]
+	(No symbol) [0x011611D8]
+	(No symbol) [0x011612BB]
+	(No symbol) [0x01154857]
+	BaseThreadInitThunk [0x76E37D59+25]
+	RtlInitializeExceptionChain [0x7796B79B+107]
+	RtlClearBits [0x7796B71F+191]
+. Retrying in 5 seconds...
+2023-07-28 14:23:02 - WARNING - root - Attempt 2 failed with error: Message: session not created: This version of ChromeDriver only supports Chrome version 113
+Current browser version is 115.0.5790.110 with binary path C:\Program Files\Google\Chrome\Application\chrome.exe
+Stacktrace:
+Backtrace:
+	GetHandleVerifier [0x011C8893+48451]
+	(No symbol) [0x0115B8A1]
+	(No symbol) [0x01065058]
+	(No symbol) [0x01085D9C]
+	(No symbol) [0x01081AA3]
+	(No symbol) [0x01080019]
+	(No symbol) [0x010B0798]
+	(No symbol) [0x010B047C]
+	(No symbol) [0x010AA0B6]
+	(No symbol) [0x01087E08]
+	(No symbol) [0x01088F2D]
+	GetHandleVerifier [0x01428E3A+2540266]
+	GetHandleVerifier [0x01468959+2801161]
+	GetHandleVerifier [0x0146295C+2776588]
+	GetHandleVerifier [0x01252280+612144]
+	(No symbol) [0x01164F6C]
+	(No symbol) [0x011611D8]
+	(No symbol) [0x011612BB]
+	(No symbol) [0x01154857]
+	BaseThreadInitThunk [0x76E37D59+25]
+	RtlInitializeExceptionChain [0x7796B79B+107]
+	RtlClearBits [0x7796B71F+191]
+. Retrying in 5 seconds...
+2023-07-28 14:23:10 - WARNING - root - Attempt 3 failed with error: Message: session not created: This version of ChromeDriver only supports Chrome version 113
+Current browser version is 115.0.5790.110 with binary path C:\Program Files\Google\Chrome\Application\chrome.exe
+Stacktrace:
+Backtrace:
+	GetHandleVerifier [0x011C8893+48451]
+	(No symbol) [0x0115B8A1]
+	(No symbol) [0x01065058]
+	(No symbol) [0x01085D9C]
+	(No symbol) [0x01081AA3]
+	(No symbol) [0x01080019]
+	(No symbol) [0x010B0798]
+	(No symbol) [0x010B047C]
+	(No symbol) [0x010AA0B6]
+	(No symbol) [0x01087E08]
+	(No symbol) [0x01088F2D]
+	GetHandleVerifier [0x01428E3A+2540266]
+	GetHandleVerifier [0x01468959+2801161]
+	GetHandleVerifier [0x0146295C+2776588]
+	GetHandleVerifier [0x01252280+612144]
+	(No symbol) [0x01164F6C]
+	(No symbol) [0x011611D8]
+	(No symbol) [0x011612BB]
+	(No symbol) [0x01154857]
+	BaseThreadInitThunk [0x76E37D59+25]
+	RtlInitializeExceptionChain [0x7796B79B+107]
+	RtlClearBits [0x7796B71F+191]
+. Retrying in 5 seconds...
+2023-07-28 14:23:17 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-28 14:23:17 - ERROR - root - All 3 attempts failed.
+2023-07-28 14:23:17 - ERROR - root - Returning fallback values (0.0, 0.0, {}).
+2023-07-28 14:23:18 - WARNING - root - Attempt 1 failed with error: The request failed: Google returned a response with code 429. Retrying in 5 seconds...
+2023-07-28 14:23:24 - WARNING - root - Attempt 2 failed with error: The request failed: Google returned a response with code 429. Retrying in 5 seconds...
+2023-07-28 14:23:29 - WARNING - root - Attempt 3 failed with error: The request failed: Google returned a response with code 429. Retrying in 5 seconds...
+2023-07-28 14:23:34 - ERROR - root - All 3 attempts failed.
+2023-07-28 14:23:34 - ERROR - root - Returning fallback values (0.0, 0.0).
+2023-07-28 14:23:44 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-28 14:23:44 - INFO - root - ███ 19392_trading(1) RUNNING ███
+2023-07-28 14:23:46 - WARNING - root - Attempt 1 failed with error: Message: session not created: This version of ChromeDriver only supports Chrome version 113
+Current browser version is 115.0.5790.110 with binary path C:\Program Files\Google\Chrome\Application\chrome.exe
+Stacktrace:
+Backtrace:
+	GetHandleVerifier [0x011C8893+48451]
+	(No symbol) [0x0115B8A1]
+	(No symbol) [0x01065058]
+	(No symbol) [0x01085D9C]
+	(No symbol) [0x01081AA3]
+	(No symbol) [0x01080019]
+	(No symbol) [0x010B0798]
+	(No symbol) [0x010B047C]
+	(No symbol) [0x010AA0B6]
+	(No symbol) [0x01087E08]
+	(No symbol) [0x01088F2D]
+	GetHandleVerifier [0x01428E3A+2540266]
+	GetHandleVerifier [0x01468959+2801161]
+	GetHandleVerifier [0x0146295C+2776588]
+	GetHandleVerifier [0x01252280+612144]
+	(No symbol) [0x01164F6C]
+	(No symbol) [0x011611D8]
+	(No symbol) [0x011612BB]
+	(No symbol) [0x01154857]
+	BaseThreadInitThunk [0x76E37D59+25]
+	RtlInitializeExceptionChain [0x7796B79B+107]
+	RtlClearBits [0x7796B71F+191]
+. Retrying in 5 seconds...
+2023-07-28 14:23:54 - WARNING - root - Attempt 2 failed with error: Message: session not created: This version of ChromeDriver only supports Chrome version 113
+Current browser version is 115.0.5790.110 with binary path C:\Program Files\Google\Chrome\Application\chrome.exe
+Stacktrace:
+Backtrace:
+	GetHandleVerifier [0x011C8893+48451]
+	(No symbol) [0x0115B8A1]
+	(No symbol) [0x01065058]
+	(No symbol) [0x01085D9C]
+	(No symbol) [0x01081AA3]
+	(No symbol) [0x01080019]
+	(No symbol) [0x010B0798]
+	(No symbol) [0x010B047C]
+	(No symbol) [0x010AA0B6]
+	(No symbol) [0x01087E08]
+	(No symbol) [0x01088F2D]
+	GetHandleVerifier [0x01428E3A+2540266]
+	GetHandleVerifier [0x01468959+2801161]
+	GetHandleVerifier [0x0146295C+2776588]
+	GetHandleVerifier [0x01252280+612144]
+	(No symbol) [0x01164F6C]
+	(No symbol) [0x011611D8]
+	(No symbol) [0x011612BB]
+	(No symbol) [0x01154857]
+	BaseThreadInitThunk [0x76E37D59+25]
+	RtlInitializeExceptionChain [0x7796B79B+107]
+	RtlClearBits [0x7796B71F+191]
+. Retrying in 5 seconds...
+2023-07-28 14:24:02 - WARNING - root - Attempt 3 failed with error: Message: session not created: This version of ChromeDriver only supports Chrome version 113
+Current browser version is 115.0.5790.110 with binary path C:\Program Files\Google\Chrome\Application\chrome.exe
+Stacktrace:
+Backtrace:
+	GetHandleVerifier [0x011C8893+48451]
+	(No symbol) [0x0115B8A1]
+	(No symbol) [0x01065058]
+	(No symbol) [0x01085D9C]
+	(No symbol) [0x01081AA3]
+	(No symbol) [0x01080019]
+	(No symbol) [0x010B0798]
+	(No symbol) [0x010B047C]
+	(No symbol) [0x010AA0B6]
+	(No symbol) [0x01087E08]
+	(No symbol) [0x01088F2D]
+	GetHandleVerifier [0x01428E3A+2540266]
+	GetHandleVerifier [0x01468959+2801161]
+	GetHandleVerifier [0x0146295C+2776588]
+	GetHandleVerifier [0x01252280+612144]
+	(No symbol) [0x01164F6C]
+	(No symbol) [0x011611D8]
+	(No symbol) [0x011612BB]
+	(No symbol) [0x01154857]
+	BaseThreadInitThunk [0x76E37D59+25]
+	RtlInitializeExceptionChain [0x7796B79B+107]
+	RtlClearBits [0x7796B71F+191]
+. Retrying in 5 seconds...
+2023-07-28 14:24:09 - ERROR - root - All 3 attempts failed.
+2023-07-28 14:24:09 - ERROR - root - Returning fallback values (0.0, 0.0, {}).
+2023-07-28 14:24:09 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-28 14:24:09 - WARNING - prawcore - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-07-28 14:24:11 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-28 14:24:11 - WARNING - prawcore - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-07-28 14:24:15 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-28 14:24:15 - WARNING - root - Attempt 1 failed with error: error with request HTTPSConnectionPool(host='www.reddit.com', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname 'www.reddit.com' doesn't match 'trustpositif.globalxtreme.net'"))). Retrying in 5 seconds...
+2023-07-28 14:24:20 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-28 14:24:20 - WARNING - prawcore - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-07-28 14:24:21 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-28 14:24:21 - WARNING - prawcore - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-07-28 14:24:25 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-28 14:24:25 - WARNING - root - Attempt 2 failed with error: error with request HTTPSConnectionPool(host='www.reddit.com', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname 'www.reddit.com' doesn't match 'trustpositif.globalxtreme.net'"))). Retrying in 5 seconds...
+2023-07-28 14:24:30 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-28 14:24:30 - WARNING - prawcore - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-07-28 14:24:32 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-28 14:24:32 - WARNING - prawcore - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-07-28 14:24:34 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-28 14:24:34 - WARNING - root - Attempt 3 failed with error: error with request HTTPSConnectionPool(host='www.reddit.com', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname 'www.reddit.com' doesn't match 'trustpositif.globalxtreme.net'"))). Retrying in 5 seconds...
+2023-07-28 14:24:39 - ERROR - root - All 3 attempts failed.
+2023-07-28 14:24:39 - ERROR - root - Returning fallback values (0.0, 0.0).
+2023-07-28 14:24:44 - INFO - root - ♥♥♥♥ 19904_Rich addresses(1) RUNNING ♥♥♥♥
+2023-07-28 14:24:44 - INFO - root - $$$start scrapping list of bitcoin richest addresses$$$
+2023-07-28 14:24:47 - INFO - root - $$$finish scrapping list of bitcoin richest addresses$$$
+2023-07-28 14:24:56 - INFO - root - Minimum contributing factors not met: 3/4
+2023-07-28 14:24:56 - INFO - root - ███ 19392_trading(1) SLEEPS ███
+2023-07-28 14:28:52 - INFO - root - Received interrupt signal. Cleaning up...
+2023-07-28 14:36:12 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-07-28 14:36:12 - INFO - root - ███ 14480_trading(1) RUNNING ███
+2023-07-28 14:36:23 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-28 14:36:23 - WARNING - prawcore - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-07-28 14:36:23 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-28 14:36:23 - WARNING - prawcore - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-07-28 14:36:25 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-28 14:36:25 - WARNING - root - Attempt 1 failed with error: error with request HTTPSConnectionPool(host='www.reddit.com', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname 'www.reddit.com' doesn't match 'trustpositif.globalxtreme.net'"))). Retrying in 5 seconds...
+2023-07-28 14:36:31 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-28 14:36:31 - WARNING - prawcore - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-07-28 14:36:32 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-28 14:36:32 - WARNING - prawcore - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-07-28 14:36:34 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-28 14:36:34 - WARNING - root - Attempt 2 failed with error: error with request HTTPSConnectionPool(host='www.reddit.com', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname 'www.reddit.com' doesn't match 'trustpositif.globalxtreme.net'"))). Retrying in 5 seconds...
+2023-07-28 14:36:39 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-28 14:36:39 - WARNING - prawcore - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-07-28 14:36:41 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-28 14:36:41 - WARNING - prawcore - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-07-28 14:36:45 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-07-28 14:36:45 - WARNING - root - Attempt 3 failed with error: error with request HTTPSConnectionPool(host='www.reddit.com', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname 'www.reddit.com' doesn't match 'trustpositif.globalxtreme.net'"))). Retrying in 5 seconds...
+2023-07-28 14:36:50 - ERROR - root - All 3 attempts failed.
+2023-07-28 14:36:50 - ERROR - root - Returning fallback values (0.0, 0.0).
+2023-07-28 14:36:50 - INFO - root - ███ 14480_trading(1) SLEEPS ███
+2023-07-28 14:37:13 - INFO - root - ♥♥♥♥ 18516_Rich addresses(1) RUNNING ♥♥♥♥
+2023-07-28 14:37:18 - INFO - root - Received interrupt signal. Cleaning up...
