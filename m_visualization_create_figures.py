@@ -2,11 +2,10 @@ from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 from datetime import timedelta
 from dash import dash_table
-from dash import html
 from sklearn.preprocessing import MinMaxScaler
+from dash import dcc, html
 
-
-from m_visualization_side import last_and_next_update
+from m_visualization_side import last_and_next_update, create_progress_bar, generate_tooltips
 from z_handy_modules import COLORS
 from z_read_write_csv import read_database, read_trading_details,  read_trading_results
 from m_visualization_side import read_gauge_chart_data
@@ -513,3 +512,86 @@ def create_trade_details_div():
             )
         ]
     )
+
+
+def create_first_graph():
+    fig = create_gauge_charts()
+
+    graph = dcc.Graph(id='live-update-graph', figure=fig,
+                      style={'width': '89%', 'height': '100vh', 'display': 'inline-block', 'marginTop': '-18px'})
+    return graph
+
+
+def create_graphs():
+    fig_dict = {
+        'fig': create_gauge_charts(),
+        'fig_trade_result': visualize_trade_results(),
+        'fig_macro': visualize_macro(),
+        'fig_prediction': visualize_prediction(),
+        'fig_richest': visualized_richest(),
+        'fig_google': visualized_google(),
+        'fig_reddit': visualized_reddit(),
+        'fig_youtube': visualized_youtube(),
+        'fig_news': visualized_news(),
+        'fig_combined': visualized_combined(),
+    }
+    graph_list = []
+    graph_ids = ['live-update-graph', 'trade_results_chart', 'macro_chart', 'prediction_chart',
+                 'richest_chart', 'google_chart', 'reddit_chart',
+                 'youtube_chart', 'news_chart', 'combined_chart']
+    fig_list = [fig_dict['fig'], fig_dict['fig_trade_result'], fig_dict['fig_macro'],
+                fig_dict['fig_prediction'], fig_dict['fig_richest'], fig_dict['fig_google'],
+                fig_dict['fig_reddit'], fig_dict['fig_youtube'], fig_dict['fig_news'],
+                fig_dict['fig_combined']]
+
+    for i in range(len(graph_ids)):
+        graph_list.append(dcc.Graph(id=graph_ids[i], figure=fig_list[i],
+                                    style={'width': '100%', 'height': '100vh'}))
+
+    return graph_list
+
+
+def create_progress_div():
+    progress_bar = create_progress_bar()
+    return html.Div(children=[progress_bar],
+                    style={'display': 'inline-block', 'width': '100%', 'height': '05vh'})
+
+
+def create_loading_component():
+    return dcc.Loading(
+        id="loading",
+        type="cube",  # you can also use "default" or "circle"
+        fullscreen=True,  # Change to False if you don't want it to be full screen
+        children=html.Div(id='dummy-output_cube'),
+        style={'position': 'fixed', 'top': 0, 'left': 0, 'width': '100%', 'height': '100%'}
+    )
+
+
+def create_log_output():
+    return html.Div(children=[
+        html.H3('Terminal output', style={'textAlign': 'center'}),
+        dcc.Textarea(id='log-data', style={
+            'width': '90%',
+            'height': '40vh',
+            'backgroundColor': COLORS['black_chart'],
+            'color': COLORS['white'],
+            'margin': 'auto'
+        })
+    ],
+        style={
+            'display': 'flex',
+            'flex-direction': 'column',
+            'justifyContent': 'center',
+            'alignItems': 'center',
+            'width': '100%'
+        }
+    )
+
+
+def create_figure_div():
+    graphs = create_graphs()
+    figure_div = html.Div(
+        children=graphs[1:] + generate_tooltips(),
+        style={'width': '100%', 'height': '90vh', 'display': 'inline-block', 'verticalAlign': 'top'}
+    )
+    return figure_div
