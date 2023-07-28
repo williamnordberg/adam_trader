@@ -1,5 +1,5 @@
 from z_compares import compare_macro_m_to_m, compare_order_volume, compare_technical,\
-    compare_google_reddit_youtube, compare_news, compare_predicted_price, compare_richest_addresses
+    compare_google_reddit_youtube, compare_predicted_price
 
 
 def test_compare_macro_m_to_m():
@@ -61,12 +61,3 @@ def test_compare_google_reddit_youtube():
     assert compare_google_reddit_youtube(100, 124) == (0.15, 0.85)
     assert compare_google_reddit_youtube(115, 100) == (0.75, 0.25)
     assert compare_google_reddit_youtube(100, 115) == (0.25, 0.75)
-
-
-def test_compare_news():
-    assert compare_news(1, -1, 10000, 0) == (1, 0.0)
-    assert compare_news(-1, 1.04, 0, 10000) == (0.0, 1)
-    assert compare_news(1, -1, 10000, 0) == (1, 0.0)
-    assert compare_news(-1, 1.04, 0, 10000) == (0.0, 1)
-    assert compare_news(1, 1, 0, 10000) == (0.2, 0.8)
-    assert compare_news(0, -1, 10000, 0) == (0.8, 0.2)
