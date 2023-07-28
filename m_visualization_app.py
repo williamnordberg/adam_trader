@@ -1,7 +1,7 @@
 import dash
 from time import sleep
 from dash import dcc, html
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 import logging
 from flask import Flask, redirect, request
@@ -10,8 +10,6 @@ import flask
 import configparser
 import os
 from flask import render_template
-import json
-
 
 from m_visualization_divs import create_html_divs, create_progress_bar, create_widget, create_news_div
 from m_visualization_side import generate_tooltips, read_layout_data, create_scroll_up_button, \
@@ -31,15 +29,6 @@ config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config/c
 
 with open(config_path, 'r') as f:
     config_string = f.read()
-
-with open('data/news_data.json') as json_file:
-    data = json.load(json_file)
-
-news_titles = []
-for sentiment in ["positive", "negative"]:
-    for news in data[sentiment]:
-        title = news['title']
-        news_titles.append(title)
 
 config.read_string(config_string)
 SERVER_SECRET_KEY = config.get('server_key', 'flask')
@@ -70,10 +59,6 @@ users = {
         'password': 'user3123',
     },
 }
-
-
-def sanitize_id(id):
-    return ''.join(e if e.isalnum() else '_' for e in id)
 
 
 @server.route('/')
@@ -186,7 +171,8 @@ def update_figures(n):
      Output('BTC-received', 'children'),
      Output('BTC-sent', 'children'),
      Output('positive-news-change', 'children'),
-     Output('negative-news-change', 'children')],
+     Output('negative-news-change', 'children'),
+     Output('news-div', 'children')],
     [Input('interval-component', 'n_intervals')])
 def update_divs(n):
     # Get the latest data
@@ -229,7 +215,7 @@ def update_divs(n):
         f'MACD up tr: {MACD_uptrend}', f'bb distance: {bb_MA_distance}', \
         f'Rich receive: {round(BTC_received/1000, 1)} K', \
         f'Rich send: {round(BTC_send/1000, 1)} K', f'+ POL news inc: {positive_news_polarity_change}', \
-        f'- POL news inc: {negative_news_polarity_change}'
+        f'- POL news inc: {negative_news_polarity_change}', create_news_div()
 
 
 @app.callback(
@@ -313,29 +299,6 @@ def create_layout(fig_dict):
 
     trade_details_div = create_trade_details_div()
 
-    @app.callback(
-        Output('news-description', 'children'),
-        [Input(title[0], 'n_clicks') for title in news_titles],
-        [State(title[0], 'id') for title in news_titles]
-    )
-    def update_news_description(*args):
-        ctx = dash.callback_context
-
-        if not ctx.triggered:
-            return ""
-        else:
-            selected_news = ctx.triggered[0]['prop_id'].split('.')[0]
-
-            for sentiment_inner in ["positive", "negative"]:
-                for news_inner in data[sentiment_inner]:
-                    if news_inner['title'] == selected_news:
-                        return [
-                            html.H2(news_inner['title']),
-                            html.P(news_inner['description']),
-                            html.A('Read more', href=news_inner['link'], target='_blank')
-                        ]
-            return ""
-
     app.layout = html.Div(
 
         style={'backgroundColor': COLORS['background'], 'color': COLORS['white']},
@@ -373,7 +336,7 @@ def create_layout(fig_dict):
             ),
             trade_details_div,
             *widgets_divs,
-            create_news_div(data),
+            create_news_div(),
             figure_div
         ]
     )

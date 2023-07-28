@@ -1,314 +1,104 @@
 {
     "positive": [
         {
-            "title": "Japan Signals More Web3 Promotion Policies Are Coming",
-            "score": 0.5,
-            "description": "Japan's Prime Minister Fumio Kishida said on Tuesday that the country plans to improve the environment for Web3 when it comes to using tokens and revitalize the content industry.",
-            "publish_time": "2023-07-25 04:37",
-            "link": "https://www.coindesk.com/policy/2023/07/25/japan-signals-more-web3-promotion-policies-are-to-come/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+            "title": "333Grayscale Urges Equal Treatment for All Spot Bitcoin ETF's in Letter to SEC",
+            "score": 0.222,
+            "description": "If the SEC decides to change course and approve one or more of of the current spot bitcoin ETF applications, \u201cit must do so in a fair and orderly manner,\u201d the statement said.",
+            "publish_time": "2023-07-27 22:00",
+            "link": "https://www.coindesk.com/business/2023/07/27/grayscale-urges-equal-treatment-for-all-spot-bitcoin-etfs-in-letter-to-sec/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
         },
         {
-            "title": "Bitcoin Stuck Below $30K Before Likely Fed Rate Hike, While DOGE Spikes 7%",
-            "score": 0.122,
-            "description": "Except for the popular meme coin, which was recently up more than 10%, the largest cryptos by market cap were largely unchanged over the past 24 hours as investors awaited a likely 25 basis point increase from the U.S. central bank.",
-            "publish_time": "2023-07-25 23:22",
-            "link": "https://www.coindesk.com/markets/2023/07/25/crypto-markets-today-btc-eth-doge-xrp-price-analysis/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+            "title": "KIN Token Surges Over 20% After Vote to Burn 70% of Supply Passes",
+            "score": 0.266,
+            "description": "The token climbed on news that about 7 trillion KIN tokens worth $156 million will be burned.",
+            "publish_time": "2023-07-27 22:06",
+            "link": "https://www.coindesk.com/markets/2023/07/27/kin-token-surges-over-20-after-vote-to-burn-70-of-supply-passes/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
         },
         {
-            "title": "Elon Musk\u2019s Twitter Overhaul Could Be Huge for DOGE and Crypto Generally",
-            "score": 0.067,
-            "description": "\u201cElon clearly has an affinity for DOGE, almost as part of a running joke, but I wouldn\u2019t be surprised if he actually went through with enabling payments via DOGE.\u201d",
-            "publish_time": "2023-07-25 16:30",
-            "link": "https://www.coindesk.com/business/2023/07/25/elon-musks-twitter-overhaul-could-be-huge-for-doge-and-crypto-generally/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "Avalanche Foundation Commits $50M to Bring More Tokenized Assets to Blockchain",
-            "score": 0.11,
-            "description": "The program follows Avalanche\u2019s initiative to financial institutions to test blockchain services on one of its subnets.",
-            "publish_time": "2023-07-25 14:39",
-            "link": "https://www.coindesk.com/markets/2023/07/25/avalanche-foundation-commits-50m-to-bring-more-tokenized-assets-to-blockchain/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "CFTC charges Tennessee couple over 'Blessings of God Thru Crypto\u2019 scheme",
-            "score": 0.374,
-            "description": "Despite having no trading experience a Tennessee couple convinced 100 people to hand over their money for a uniquely named crypto investment pool.",
-            "publish_time": "2023-07-26 04:34",
-            "link": "https://cointelegraph.com/news/cftc-charge-couple-blessings-of-god-crypto-investment-scheme"
-        },
-        {
-            "title": "USD-backed stablecoin pilot project launched by Pacific island nation of Palau",
-            "score": 0.202,
-            "description": "The Palau Stablecoin, or \u201cKluk,\u201d will be minted on XRP Ledger using the Ripple CBDC Platform and will be distributed first to government employees. ",
-            "publish_time": "2023-07-26 00:00",
-            "link": "https://cointelegraph.com/news/us-dollar-backed-stablecoin-pilot-project-launched-pacific-island-nation-palau"
-        },
-        {
-            "title": "Trademark attorney predicts legal fights ahead with Twitter\u2019s rebrand to X",
-            "score": 0.083,
-            "description": "According to Josh Gerben, the social media platform could be embroiled in lawsuits over its \u201cX\u201d branding for years, costing upward of millions of dollars. ",
-            "publish_time": "2023-07-25 21:40",
-            "link": "https://cointelegraph.com/news/trademark-attorney-predicts-legal-fights-ahead-twitter-rebrand-x"
-        },
-        {
-            "title": "China\u2019s blockchain satellite in space, Hong Kong\u2019s McNuggets Metaverse: Asia Express",
-            "score": 0.057,
-            "description": "China launches world\u2019s first blockchain satellite into space, meanwhile, McDonalds Hong Kong brings McNuggets into the Metaverse.",
-            "publish_time": "2023-07-25 10:06",
-            "link": "https://cointelegraph.com/magazine/chinas-blockchain-satellite-in-space-hong-kongs-mcnuggets-metaverse-asia-express/"
-        },
-        {
-            "title": "SEC appeal could \u2018amplify\u2019 Ripple win, says Ripple Labs legal chief",
-            "score": 0.239,
-            "description": "Stuart Alderoty said that an appeal on behalf of the SEC could see Ripple consolidate its victory over the regulator even further.",
-            "publish_time": "2023-07-26 06:47",
-            "link": "https://cointelegraph.com/news/sec-appeal-could-amplify-xrp-win-ripple-labs-legal-chief"
-        },
-        {
-            "title": "UK crime agency scouts for seasoned crypto investigators",
-            "score": 0.382,
-            "description": "The ideal candidate to join the National Crime Agency will be an existing member of the police staff who is a certified accredited financial investigator (AFI).",
-            "publish_time": "2023-07-26 08:00",
-            "link": "https://cointelegraph.com/news/uk-crime-agency-to-hire-crypto-blockchain-investigators"
-        },
-        {
-            "title": "Is It Finally Time to \u2018X-it\u2019 Twitter For Threads?",
-            "score": 0.008,
-            "description": "Threads hopes to swoop in and capture Web3 users that are looking for social media alternatives. But does the app have what crypto natives are looking for?",
-            "publish_time": "2023-07-25 20:05",
-            "link": "https://www.coindesk.com/web3/2023/07/25/is-it-finally-time-to-x-it-twitter-for-threads/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "Venture Capital Firm a16z Unloads $7M of MKR Tokens as Price Soars",
-            "score": 0.005,
-            "description": "Lending platform Maker\u2019s governance tokens soared to near one-year high prices last week prior to the transactions.",
-            "publish_time": "2023-07-25 18:07",
-            "link": "https://www.coindesk.com/markets/2023/07/25/venture-capital-firm-a16z-unloads-7m-of-mkr-tokens-as-price-soars/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "Ether death cross threatens more downside as ETH price trades at a key support level",
-            "score": 0.043,
-            "description": "ETH\u2019s technical and on-chain indicators point toward further downside, but there is a silver lining.",
-            "publish_time": "2023-07-25 18:31",
-            "link": "https://cointelegraph.com/news/ethereum-death-cross-threatens-more-downside-as-eth-price-trades-at-a-key-support-level"
-        },
-        {
-            "title": "Singapore High Court Declares Crypto as Property in Case Involving Bybit",
-            "score": 0.129,
-            "description": "The ruling held that a crypto asset is a \u201cthing in action\u201d enforceable via court orders.",
-            "publish_time": "2023-07-26 08:08",
-            "link": "https://www.coindesk.com/policy/2023/07/26/singapore-high-court-declares-crypto-as-property-in-case-involving-bybit/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "U.S. Justice Department Wants to Jail Sam Bankman-Fried",
-            "score": 0.132,
-            "description": "A prosecutor said that \"no set of release conditions can secure the safety of the community.\"",
-            "publish_time": "2023-07-26 19:38",
-            "link": "https://www.coindesk.com/policy/2023/07/26/us-justice-department-wants-to-jail-sam-bankman-fried/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "Reddit Brings In Good Karma With Gen 4 Collectible NFT Avatars",
-            "score": 0.182,
-            "description": "The latest release of colorful interpretations of the platform's \u201cSnoo\" character is titled \"Retro Reimagined.\"",
-            "publish_time": "2023-07-26 18:03",
-            "link": "https://www.coindesk.com/web3/2023/07/26/reddit-brings-in-good-karma-with-gen-4-collectible-nft-avatars/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "Bitcoin Mining Is an Oligopoly, and Proof-of-Stake Isn't Any Better",
-            "score": 0.327,
-            "description": "",
-            "publish_time": "2023-07-26 16:17",
-            "link": "https://www.coindesk.com/consensus-magazine/2023/07/26/bitcoin-mining-is-an-oligopoly-and-proof-of-stake-isnt-any-better/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "\u2018Elegant and ass-backward\u2019: Jameson Lopp\u2019s first impression of Bitcoin",
-            "score": 0.127,
-            "description": "Jameson Lopp says none of the developers \u201cdeep into Bitcoin\u201d think the protocol should be allowed to ossify: \u201cThere\u2019s so much work to be done.\u201d",
-            "publish_time": "2023-07-26 13:30",
-            "link": "https://cointelegraph.com/magazine/elegant-and-ass-backward-jameson-lopps-first-impression-of-bitcoin/"
-        },
-        {
-            "title": "House Financial Services Committee Votes in Favor of Crypto, Blockchain Bills",
-            "score": 0.131,
-            "description": "The House Financial Services Committee advanced a set of crypto bills after a landmark markup on Wednesday.",
-            "publish_time": "2023-07-27 00:35",
-            "link": "https://www.coindesk.com/policy/2023/07/27/house-financial-services-committee-votes-in-favor-of-crypto-blockchain-bills/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "Meta Q2 earnings: Reality Labs losses top $7.7B year to date",
-            "score": 0.456,
-            "description": "Meanwhile, Meta's metaverse-building business has racked up around $21 billion in losses since the start of 2022.",
-            "publish_time": "2023-07-26 22:51",
-            "link": "https://cointelegraph.com/news/meta-second-quarter-earnings-reality-labs-metaverse-loss"
-        },
-        {
-            "title": "ERC-20 inventor discusses origins, new blockchains, BRC-20 and more",
-            "score": 0.209,
-            "description": "Fabian Vogelsteller has been working full-time to create his new blockchain since 2018, with its mainnet launching just this May. ",
-            "publish_time": "2023-07-26 20:30",
-            "link": "https://cointelegraph.com/news/erc-20-inventor-discusses-origins-new-blockchains-brc-20"
+            "title": "Disgraced U.S. Congressman George Santos Involved Crypto in Nigerian Prince-Like Scheme: NYT",
+            "score": 0.128,
+            "description": "A source told The New York Times that Santos and two others appeared to try a crypto-centric version of the classic Nigerian prince email scam.",
+            "publish_time": "2023-07-27 21:07",
+            "link": "https://www.coindesk.com/policy/2023/07/27/disgraced-congressman-george-santos-involved-crypto-in-nigerian-prince-like-scheme-nyt/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
         },
         {
             "title": "Here\u2019s what happened in crypto today",
-            "score": 0.194,
+            "score": 0.216,
             "description": "Need to know what happened in crypto today? Here is the latest news on daily trends and events impacting the Bitcoin price, blockchain, DeFi, NFTs, Web3 and crypto regulation.",
-            "publish_time": "2023-07-26 19:37",
+            "publish_time": "2023-07-27 21:34",
             "link": "https://cointelegraph.com/news/what-happened-in-crypto-today"
         },
         {
-            "title": "Crypto bills pass congressional committee in 'huge win' for US crypto",
-            "score": 0.387,
-            "description": "Two crypto regulatory bills have been passed by the United States House Financial Services Committee United States in one day.",
-            "publish_time": "2023-07-27 01:26",
-            "link": "https://cointelegraph.com/news/crypto-regulatory-framework-bill-pass-house-congressional-committee"
+            "title": "Why is Jerome Powell gaslighting us about the odds of recession?",
+            "score": 0.111,
+            "description": "Economic data seems to indicate an economic slowdown is inevitable. So why is Fed Chairman Jerome Powell trying to gaslight Americans?",
+            "publish_time": "2023-07-27 20:53",
+            "link": "https://cointelegraph.com/news/jerome-powell-misleading-recession"
         },
         {
-            "title": "Redditor's hacked Bitcoin is a lesson on the hidden dangers of paper wallets",
-            "score": 0.232,
-            "description": "\"My Bitcoin was taken. How?\" A Reddit user thought they were following best practices until two days ago when their Bitcoin wallet was completely cleaned out.",
-            "publish_time": "2023-07-27 04:08",
-            "link": "https://cointelegraph.com/news/redditor-gets-lesson-after-bitcoin-paper-wallet-hacked"
+            "title": "MakerDAO increases DAI yield in bid to boost demand",
+            "score": 0.156,
+            "description": "The Enhanced Dai Savings Rate is based on DSR utilization and could boost the stablecoin yield by as much as 8%.",
+            "publish_time": "2023-07-27 19:30",
+            "link": "https://cointelegraph.com/news/makerdao-increases-dai-yield-boost-demand"
+        },
+        {
+            "title": "Stablecoins pose lower risk than bank deposits, says ex-Fed policy analyst",
+            "score": 0.091,
+            "description": "Stablecoins cannot be compared to bank deposits in terms of risk, nor can they be compared to money market funds, argues a new policy paper released by Paradigm...",
+            "publish_time": "2023-07-27 16:45",
+            "link": "https://cointelegraph.com/news/stablecoins-pose-lower-risk-than-bank-deposits-paradigm-ex-fed-policy-analyst"
+        },
+        {
+            "title": "Journeys: Herv\u00e9 Larren on Bitcoin, Apes and the psychology of \u2018blue-chip\u2019 NFTs",
+            "score": 0.092,
+            "description": "Herv\u00e9 Larren\u2019s crypto journey has taken him from luxury goods to Bitcoin mining and back full circle to the world of \u201cblue-chip\u201d NFTs.",
+            "publish_time": "2023-07-27 13:26",
+            "link": "https://cointelegraph.com/magazine/journeys-herve-larren-on-bitcoin-apes-and-the-psychology-of-blue-chip-nfts/"
         }
     ],
     "negative": [
         {
-            "title": "Reading the Elon Musk \u2018tea leaves\u2019 \u2014 Is Dogecoin coming for Twitter?",
-            "score": -0.333,
-            "description": "A subtle change in Elon Musk\u2019s Twitter bio has reignited rumors Dogecoin may soon be used for payments on Musk\u2019s \u201ceverything app.\u201d",
-            "publish_time": "2023-07-25 04:27",
-            "link": "https://cointelegraph.com/news/elon-musk-dogecoin-price-twitter-x-rebrand"
+            "title": "Bitcoin Wobbles, Then Regains Its Balance Above $29.2K; ETH, DOGE, MATIC Fall",
+            "score": -0.069,
+            "description": "The largest cryptocurrency ticked down for a couple of hours after a report that the Bank of Japan was mulling a change to its yield curve control policy before regaining ground.",
+            "publish_time": "2023-07-26 22:11",
+            "link": "https://www.coindesk.com/markets/2023/07/27/crypto-markets-today-btc-tk-eth-matic-doge-price-analysis/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
         },
         {
-            "title": "From Vintage to MNTGE: Digital Fashion Brand to Release NFT Patches Linked to IRL Rewards",
-            "score": -0.233,
-            "description": "The patches were designed by 11 artists, including Jen Stark, Nyan Cat creator Christopher Torres and Bored Ape Yacht Club artist Seneca, and are embedded with NFC chips.",
-            "publish_time": "2023-07-25 19:35",
-            "link": "https://www.coindesk.com/web3/2023/07/25/from-vintage-to-mntge-digital-fashion-brand-to-release-nft-patchwork-collection-linked-to-irl-rewards/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+            "title": "CBDCs Wrongfully Break Down the Separation Between Money and State",
+            "score": -0.136,
+            "description": "",
+            "publish_time": "2023-07-27 21:49",
+            "link": "https://www.coindesk.com/consensus-magazine/2023/07/27/cbdcs-wrongfully-break-down-the-separation-between-money-and-state/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
         },
         {
-            "title": "ZkSync's Largest Lender Struck by $3.4M Exploit",
-            "score": -0.2,
-            "description": "EraLend, the largest lending protocol on Ethereum scaling blockchain zkSync, has been hit by a $3.4 million reentrancy attack, according to blockchain security firm CertiK.",
-            "publish_time": "2023-07-25 13:34",
-            "link": "https://www.coindesk.com/business/2023/07/25/zksyncs-largest-lender-struck-by-34m-exploit/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "First Mover Asia: Bitcoin Awaits Its Spot ETF in Absence of a Macro Catalyst: Crypto CEO",
-            "score": -0.078,
-            "description": "PLUS: At least one bitcoin price indicator suggests that BTC may be turning slightly upward soon, writes a CoinDesk analyst, while Tribe Capital's managing partner sees a DeFi \"resurgence.\"",
-            "publish_time": "2023-07-26 01:47",
-            "link": "https://www.coindesk.com/markets/2023/07/26/first-mover-asia-bitcoin-awaits-its-spot-etf-in-absence-of-a-macro-catalyst-crypto-custodian-ceo/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "Mashinsky's Arrest, Ripple Ruling, Etc.",
-            "score": -0.013,
-            "description": "I was on vacation for the last week-and-a-half but before I left, I sent a list of things to watch for to my colleagues that in hindsight, was wholly inadequate. Anyway, here's my effort to catch up.",
-            "publish_time": "2023-07-25 23:00",
-            "link": "https://www.coindesk.com/policy/2023/07/25/mashinskys-arrest-ripple-ruling-etc/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "Miami Heat\u2019s Jimmy Butler seeks dismissal from Binance promo class suit",
-            "score": -0.096,
-            "description": "Lawyers for the basketball star claim he did not mention any alleged securities but instead warned of celebrities promoting crypto investments.",
-            "publish_time": "2023-07-26 03:44",
-            "link": "https://cointelegraph.com/news/jimmy-butler-miami-heat-binance-lawsuit-dismissal"
-        },
-        {
-            "title": "Deloitte, Chainalysis alliance to give law enforcement a crypto edge",
-            "score": -0.257,
-            "description": "Big Four accounting firm Deloitte said the partnership could help authorities identify and take down bad actors hiding \"behind the keyboard.\"",
-            "publish_time": "2023-07-26 01:48",
-            "link": "https://cointelegraph.com/news/deloitte-chainalysis-partnership-boost-compliance-law-enforcement"
-        },
-        {
-            "title": "KuCoin denies mass layoffs, says cuts are part of normal operations",
-            "score": -0.002,
-            "description": "KuCoin has shut down rumors that it would be laying off 30% of its workforce but admitted there may be some \u201cpersonnel adjustments\u201d in the future.",
-            "publish_time": "2023-07-26 01:20",
-            "link": "https://cointelegraph.com/news/kucoin-denies-layoffs-staff-cuts-normal-process"
-        },
-        {
-            "title": "AI and dot-com bubble share some similarities but differ where it counts",
-            "score": -0.063,
-            "description": "AI has seen massive growth in recent years, leading to comparisons with the now infamous dot-com bubble and crash of the 1990s.",
-            "publish_time": "2023-07-25 13:44",
-            "link": "https://cointelegraph.com/news/ai-and-dot-com-bubble-share-some-similarities-but-differ-where-it-counts"
-        },
-        {
-            "title": "What are NFT mystery boxes, and how do they work?",
-            "score": -0.009,
-            "description": "NFT mystery boxes are curated collections of unknown digital assets, offering buyers the excitement of discovering the contents after purchase.",
-            "publish_time": "2023-07-25 09:10",
-            "link": "https://cointelegraph.com/explained/what-are-nft-mystery-boxes-and-how-do-they-work"
-        },
-        {
-            "title": "For Crypto Investors Down Bad in Hector, the DAO Can\u2019t Die Fast Enough",
-            "score": -0.114,
-            "description": "Hector Network will take six to 12 months to hold a liquidation. Token holders want their money back sooner.",
-            "publish_time": "2023-07-26 21:28",
-            "link": "https://www.coindesk.com/business/2023/07/26/for-crypto-investors-down-bad-in-hector-the-dao-cant-die-fast-enough/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "Paradigm Moves $3.5M in MakerDAO's MKR Tokens Following Peer a16z's Maneuver",
-            "score": -0.083,
-            "description": "Paradigm Capital's transfer follows venture capital firm a16z depositing $7 million of MKR to Coinbase.",
-            "publish_time": "2023-07-26 20:35",
-            "link": "https://www.coindesk.com/markets/2023/07/26/paradigm-moves-35m-in-makerdaos-mkr-tokens-following-peer-a16zs-maneuver/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "Twitter Is Dead. Long Live Crypto Twitter?",
-            "score": -0.03,
-            "description": "Elon Musk's rebranded X.com used to be the white-hot center of the crypto world. What comes next?",
-            "publish_time": "2023-07-26 17:32",
-            "link": "https://www.coindesk.com/consensus-magazine/2023/07/26/twitter-is-dead-long-live-crypto-twitter/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "Italian central bank backs DeFi tokenization project with Polygon, Fireblocks",
-            "score": -0.019,
-            "description": "The Italian central bank\u2019s Milano Hub has selected a project headed by Cetif Advisory and Polygon Labs in its second round of proposals.",
-            "publish_time": "2023-07-26 14:00",
-            "link": "https://cointelegraph.com/news/bank-of-italy-innovation-hub-supports-research-into-security-tokens-on-secondary-markets"
-        },
-        {
-            "title": "Existential threat? Why some banks are anxious about CBDCs",
-            "score": -0.075,
-            "description": "The prospect of a retail CBDC has some major banks anxious over their revenue streams.",
-            "publish_time": "2023-07-26 13:01",
-            "link": "https://cointelegraph.com/news/existential-threat-why-some-banks-are-anxious-about-cbdcs"
-        },
-        {
-            "title": "Judge warns Sam Bankman-Fried to \u2018take it seriously\u2019 as prosecutors push to revoke bail: Report",
-            "score": -0.111,
-            "description": "Assistant U.S. Attorney Danielle Sassoon reportedly said SBF made roughly 100 calls to a reporter behind The New York Times story that revealed Caroline Ellison\u2019s private journals.",
-            "publish_time": "2023-07-26 20:04",
-            "link": "https://cointelegraph.com/news/judge-warns-sam-bankman-fried-take-seriously-prosecutors-push-revoke-bail"
-        },
-        {
-            "title": "SEC passes new \u2018conflict of interest\u2019 rules governing how brokers can use AI",
-            "score": -0.122,
-            "description": "The new rules will govern how brokers use artificial intelligence to entice investors and how they use \u201coptimization functions\u201d to target investors and determine investment strategies.",
-            "publish_time": "2023-07-26 19:19",
-            "link": "https://cointelegraph.com/news/sec-passes-conflict-of-interest-rules-governing-how-brokers-use-ai"
-        },
-        {
-            "title": "McDonald\u2019s in the metaverse, pro players to try Web3: Nifty Newsletter",
-            "score": -0.05,
-            "description": "The creators of the popular NFT game Axie Infinity announced a partnership with NFT collection CyberKongz to migrate the Play & Kollect game to Ronin.",
-            "publish_time": "2023-07-26 19:00",
-            "link": "https://cointelegraph.com/news/mcdonald-s-debuts-mcnuggets-land-in-the-sandbox-nifty-newsletter-july-19-25"
-        },
-        {
-            "title": "Meta\u2019s metaverse money pit sinks by $3.7B as CEO eyes Threads retention",
+            "title": "Sequoia Capital Slashes Crypto Fund From $585M to $200M : WSJ",
             "score": -0.086,
-            "description": "Meanwhile, Meta's metaverse-building business has racked up around $21 billion in losses since the start of 2022.",
-            "publish_time": "2023-07-26 22:51",
-            "link": "https://cointelegraph.com/news/meta-second-quarter-earnings-reality-labs-metaverse-loss"
+            "description": "The vaunted VC firm told investors earlier in the year it would shrink the fund to reflect a changed market.",
+            "publish_time": "2023-07-27 21:29",
+            "link": "https://www.coindesk.com/business/2023/07/27/sequoia-capital-slashes-crypto-fund-from-585m-to-200m-wsj/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
         },
         {
-            "title": "Robert Kennedy Jr. reveals buying 2 Bitcoin for each of his 7 children",
-            "score": -0.149,
-            "description": "\u201cI\u2019m going to put my money where my mouth is,\u201d said the Democratic presidential candidate as he doubled down on his support for Bitcoin.",
-            "publish_time": "2023-07-27 03:13",
-            "link": "https://cointelegraph.com/news/presidential-candidate-rfk-jr-purchased-bitcoin-for-his-children"
+            "title": "SEC chief accountant warns accountants about liabilities when auditing crypto firms",
+            "score": -0.185,
+            "description": "Paul Munter says making or allowing misleading statements can have serious consequences for accounting firms and individual accountants. ",
+            "publish_time": "2023-07-27 21:20",
+            "link": "https://cointelegraph.com/news/sec-chief-accountant-warns-accountants-about-liabilities-when-auditing-crypto-firms"
+        },
+        {
+            "title": "99-year-old Hungarian artist\u2019s computer-generated NFTs sold for $1.2M",
+            "score": -0.033,
+            "description": "Vera Moln\u00e1r pioneered the use of computer-generated art in the latter half of the 20th century. ",
+            "publish_time": "2023-07-27 15:14",
+            "link": "https://cointelegraph.com/news/99-year-old-hungarian-artist-computer-generated-nfts-sold-out-sothebys"
+        },
+        {
+            "title": "Crypto-friendly BlackRock starts \u2018digital-first\u2019 investment offering in India",
+            "score": -0.025,
+            "description": "As BlackRock reiterates that an optimal investment allocation should include 84.9% BTC, the firm has formed a major investment partnership in India.",
+            "publish_time": "2023-07-27 09:40",
+            "link": "https://cointelegraph.com/news/crypto-friendly-blackrock-to-launch-digital-first-offering-in-india"
         }
     ]
 }
