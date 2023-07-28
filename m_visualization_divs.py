@@ -3,6 +3,7 @@ import dash_bootstrap_components as dbc
 from dash import html
 import datetime
 import pytz
+import json
 
 tradingview_widget = "https://www.tradingview.com/widgetembed/?frameElementId=tradingview_76464&symbol=BINANCE%3ABTCUSDT&interval=D&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%5D&hideideas=1&theme=Dark&style=1&timezone=Etc%2FUTC&studies_overrides=%7B%7D&overrides=%7B%7D&enabled_features=%5B%5D&disabled_features=%5B%5D&locale=en&utm_source=www.tradingview.com&utm_medium=widget_new&utm_campaign=chart&utm_term=BINANCE%3ABTCUSDT"
 
@@ -155,7 +156,10 @@ def create_widget():
     return html_div_list
 
 
-def create_news_div(data):
+def create_news_div():
+    with open('data/news_data.json') as json_file:
+        data = json.load(json_file)
+
     news_data = []
     for sentiment in ["positive", "negative"]:
         for news in data[sentiment]:
@@ -178,6 +182,7 @@ def create_news_div(data):
     news_data.sort(key=lambda x: x[3], reverse=True)
 
     news_div = html.Div(
+        id='news-div',  # Add this line
         children=[
             html.H2('Latest News', style={'textAlign': 'center'}),
             html.Div(
