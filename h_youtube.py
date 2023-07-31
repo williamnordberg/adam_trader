@@ -1,23 +1,68 @@
+import pandas as pd
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
 from googleapiclient.errors import UnknownApiNameOrVersion
-
-
+from textblob import TextBlob
 import pickle
 import os.path
 from google.auth.transport.requests import Request
-import logging
-from datetime import datetime, timedelta
+from dateutil.parser import parse
+from datetime import datetime, timedelta, timezone
 from typing import Tuple
 from googleapiclient.errors import HttpError
 from google.auth.exceptions import RefreshError
 
-
-from z_compares import compare_google_reddit_youtube
 from z_handy_modules import retry_on_error
 from z_read_write_csv import save_value_to_database, \
-    should_update, save_update_time, retrieve_latest_factor_values_database
+    should_update, save_update_time, retrieve_latest_factor_values_database, read_database
+
+SENTIMENT_POSITIVE_THRESHOLD = 0.1
+SENTIMENT_NEGATIVE_THRESHOLD = -0.001
+SHORT_MOVING_AVERAGE_WINDOW = 5
+LONG_MOVING_AVERAGE_WINDOW = 20
+
+
+def calculate_youtube_sentiments(youtube_bullish, youtube_bearish, short_ma, long_ma, factor_type):
+    adjustment = 0.125
+
+    if factor_type == 'positive_polarity' or factor_type == 'positive_count':
+        if short_ma > long_ma:
+            youtube_bullish += adjustment
+            youtube_bearish -= adjustment
+    elif factor_type == 'negative_polarity' or factor_type == 'negative_count':
+        if short_ma > long_ma:
+            youtube_bullish -= adjustment
+            youtube_bearish += adjustment
+
+    return youtube_bullish, youtube_bearish
+
+
+def calculate_bitcoin_youtube_videos_increase():
+    youtube_bullish, youtube_bearish = 0.5, 0.5
+    data = read_database()
+    df = pd.DataFrame(data, columns=['youtube_positive_polarity',
+                                     'youtube_negative_polarity', 'youtube_positive_count',
+                                     'youtube_negative_count'])
+
+    for col in df.columns:
+        short_ma = df[col].rolling(window=SHORT_MOVING_AVERAGE_WINDOW, min_periods=1).mean()
+        long_ma = df[col].rolling(window=LONG_MOVING_AVERAGE_WINDOW, min_periods=1).mean()
+        youtube_bullish, youtube_bearish = calculate_youtube_sentiments(
+            youtube_bullish, youtube_bearish, short_ma.iloc[-1], long_ma.iloc[-1], col)
+
+    return youtube_bullish, youtube_bearish
+
+
+def calculate_youtube_temporal_decay(sentiment_score: float, publish_time: datetime) -> float:
+    current_time = datetime.now(tz=timezone.utc)
+    hours_diff = (current_time - publish_time).total_seconds() / 3600
+
+    base = 0.9  # decay factor at 24 hours
+    half_life = 24  # half-life in hours
+    decay_factor = base ** (hours_diff / half_life)
+
+    return sentiment_score * decay_factor
 
 
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
@@ -73,30 +118,60 @@ def get_youtube_videos(youtube, published_after, published_before):
     return search_results
 
 
+def calculate_sentiment_score(content: str) -> float:
+    blob = TextBlob(content)
+    return blob.sentiment.polarity
+
+
+def calculate_sentiment_youtube_videos(youtube, published_after, published_before):
+    positive_polarity_score, negative_polarity_score, positive_count, negative_count = 0.0, 0.0, 0, 0
+    search_results = get_youtube_videos(youtube, published_after, published_before)
+
+    for video in search_results:
+        title = video['snippet']['title']
+        description = video['snippet']['description']
+        content = title + " " + description
+
+        sentiment_score = calculate_sentiment_score(content)
+        publish_time = parse(video['snippet']['publishedAt'])
+        # Applying temporal decay
+        sentiment_score = calculate_youtube_temporal_decay(sentiment_score, publish_time)
+
+        if sentiment_score > SENTIMENT_POSITIVE_THRESHOLD:
+            positive_polarity_score += sentiment_score
+            positive_count += 1
+
+        elif sentiment_score < SENTIMENT_NEGATIVE_THRESHOLD:
+            negative_polarity_score += sentiment_score
+            negative_count += 1
+
+    positive_sentiment = positive_polarity_score / positive_count if positive_count != 0 else 0
+    negative_sentiment = abs(negative_polarity_score / negative_count) if negative_count != 0 else 0
+
+    return positive_sentiment, negative_sentiment, positive_count, negative_count
+
+
 @retry_on_error(
     max_retries=3, delay=5, allowed_exceptions=(RefreshError,),
     fallback_values=(0.0, 0.0))
 def youtube_wrapper() -> Tuple[float, float]:
-    # If so, check the increase in the number of YouTube videos with the #bitcoin hashtag
-
     youtube = get_authenticated_service()
 
     now = datetime.utcnow()
     last_24_hours_start = (now - timedelta(days=1)).strftime('%Y-%m-%dT%H:%M:%SZ')
-    last_48_hours_start = (now - timedelta(days=2)).strftime('%Y-%m-%dT%H:%M:%SZ')
     last_24_hours_end = now.strftime('%Y-%m-%dT%H:%M:%SZ')
 
-    search_results_last_24_hours = get_youtube_videos(youtube, last_24_hours_start, last_24_hours_end)
-    search_results_last_48_to_24_hours = get_youtube_videos(youtube, last_48_hours_start, last_24_hours_start)
-
-    num_last_24_hours = len(search_results_last_24_hours)
-    num_last_48_to_24_hours = len(search_results_last_48_to_24_hours)
-    youtube_bullish, youtube_bearish = compare_google_reddit_youtube(
-        num_last_24_hours, num_last_48_to_24_hours)
+    positive_polarity, negative_polarity, positive_count, negative_count = \
+        calculate_sentiment_youtube_videos(youtube, last_24_hours_start, last_24_hours_end)
 
     # Save to database
-    save_value_to_database('last_24_youtube', num_last_24_hours)
+    save_value_to_database('last_24_youtube', positive_count + negative_count)
+    save_value_to_database('youtube_positive_polarity', positive_polarity)
+    save_value_to_database('youtube_negative_polarity', negative_polarity)
+    save_value_to_database('youtube_positive_count', positive_count)
+    save_value_to_database('youtube_negative_count', negative_count)
 
+    youtube_bullish, youtube_bearish = calculate_bitcoin_youtube_videos_increase()
     save_update_time('youtube')
 
     return youtube_bullish, youtube_bearish
@@ -106,6 +181,9 @@ def check_bitcoin_youtube_videos_increase() -> Tuple[float, float]:
     if should_update('youtube'):
 
         youtube_bullish, youtube_bearish = youtube_wrapper()
+        if youtube_bullish == 0.5 and youtube_bearish == 0.5:
+            youtube_bullish, youtube_bearish = 0, 0
+
         save_value_to_database('youtube_bullish', youtube_bullish)
         save_value_to_database('youtube_bearish', youtube_bearish)
 
@@ -116,4 +194,4 @@ def check_bitcoin_youtube_videos_increase() -> Tuple[float, float]:
 
 if __name__ == "__main__":
     youtube_bullish_outer, youtube_bearish_outer = youtube_wrapper()
-    logging.info(f'youtube_bullish: {youtube_bullish_outer} , youtube_bearish: {youtube_bearish_outer}')
+    print(f'youtube_bullish: {youtube_bullish_outer} , youtube_bearish: {youtube_bearish_outer}')
