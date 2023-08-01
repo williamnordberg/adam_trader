@@ -1,4 +1,3 @@
-from a_a_logging_config import do_nothing
 import logging
 from typing import Tuple
 from z_read_write_csv import save_value_to_database, save_update_time
@@ -15,7 +14,6 @@ WEIGHTS = {
     "youtube": 0.05,
     "sentiment_of_news": 0.05,
 }
-do_nothing()
 
 
 def count_contributing_factors(*factors: Tuple[float, float]) -> float:
@@ -40,7 +38,6 @@ def make_trading_decision(factor_values) -> Tuple[float, float]:
     )
 
     weight_of_contributing_factors = count_contributing_factors(*factors)
-    print('weight_of_contributing_factors', weight_of_contributing_factors )
     weighted_score_up = weighted_score_down = 0
     for factor, (bullish, bearish) in zip(WEIGHTS.values(), factors):
         weighted_score_up += factor * bullish
@@ -55,7 +52,6 @@ def make_trading_decision(factor_values) -> Tuple[float, float]:
         save_value_to_database('weighted_score_down', 0.0)
         return 0.0, 0.0
 
-    print('weighted_score_up, weighted_score_down', weighted_score_up, weighted_score_down)
     total_score = weighted_score_up + weighted_score_down
     normalized_score_up = round((weighted_score_up / total_score), 2)
     normalized_score_down = round((weighted_score_down / total_score), 2)
