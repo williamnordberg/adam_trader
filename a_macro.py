@@ -243,7 +243,6 @@ def macro_sentiment_wrapper() -> Tuple[float, float, Dict[str, datetime]]:
         if rate_this_month:
             write_latest_data('next-fed-announcement', events_date_dict['Federal Funds Rate'])
 
-        save_update_time('macro')
         return macro_bullish, macro_bearish, events_date_dict
 
     else:
@@ -256,6 +255,7 @@ def macro_sentiment() -> Tuple[float, float, Dict[str, datetime]]:
         macro_bullish, macro_bearish, events_date_dict = macro_sentiment_wrapper()
         save_value_to_database('macro_bullish', round(macro_bullish, 2))
         save_value_to_database('macro_bearish', round(macro_bearish, 2))
+        save_update_time('macro')
         return macro_bullish, macro_bearish, events_date_dict
     else:
         macro_bullish, macro_bearish = retrieve_latest_factor_values_database('macro')
@@ -265,3 +265,4 @@ def macro_sentiment() -> Tuple[float, float, Dict[str, datetime]]:
 if __name__ == "__main__":
     macro_bullish_outer, macro_bearish_outer, events_date_dict_outer = macro_sentiment_wrapper()
     print(macro_bullish_outer, macro_bearish_outer, events_date_dict_outer)
+

@@ -1112,3 +1112,8 @@ Backtrace:
 2023-08-01 10:16:07 - INFO - root - $$$start scrapping list of bitcoin richest addresses$$$
 2023-08-01 10:16:09 - INFO - root - ███ 11812_trading(1) SLEEPS ███
 2023-08-01 10:16:27 - INFO - root - $$$finish scrapping list of bitcoin richest addresses$$$
+2023-08-01 10:26:31 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-08-01 10:26:32 - INFO - root - ███ 20192_trading(1) RUNNING ███
+2023-08-01 10:26:45 - INFO - root - ███ 20192_trading(1) SLEEPS ███
+2023-08-01 10:26:53 - INFO - root - Received interrupt signal. Cleaning up...
