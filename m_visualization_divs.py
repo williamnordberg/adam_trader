@@ -113,14 +113,15 @@ def create_widget():
             style={'display': 'flex', 'justifyContent': 'center', 'alignItems': 'center', 'marginTop': '10px'}),
 
         html.Div(children=[
-            html.Iframe(src='/assets/tradingview_crypto_market.html', style={'width': '1030px', 'height': '294px'}, ),
-        ],
-            style={'display': 'flex', 'justifyContent': 'center', 'alignItems': 'center', 'marginTop': '10px'}),
-
-        html.Div(children=[
             html.Iframe(src='/assets/tradingview_market_data.html', style={'width': '90%', 'height': '300px'}),
         ],
             style={'display': 'flex', 'justifyContent': 'center', 'alignItems': 'center', 'marginTop': '5px'}),
+
+        html.Div(children=[
+            html.Iframe(src='/assets/top_winnner_loser.html', style={'width': '45%', 'height': '400px'}),
+            html.Iframe(src='/assets/tradingview_crypto_market.html', style={'width': '45%', 'height': '400px'}),
+        ], style={'display': 'flex', 'justifyContent': 'space-between', 'margin': '0 5%'}),
+
 
         html.Div(children=[
             html.Iframe(src='/assets/tradingview_snaps.html', style={'width': '30%', 'height': '400px'}),

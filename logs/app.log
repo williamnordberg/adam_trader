@@ -1117,3 +1117,13 @@ Backtrace:
 2023-08-01 10:26:32 - INFO - root - ███ 20192_trading(1) RUNNING ███
 2023-08-01 10:26:45 - INFO - root - ███ 20192_trading(1) SLEEPS ███
 2023-08-01 10:26:53 - INFO - root - Received interrupt signal. Cleaning up...
+2023-08-01 14:10:48 - INFO - root - Minimum contributing factors not met: 1/4
+2023-08-01 14:11:03 - INFO - root - Minimum contributing factors not met: 2/4
+2023-08-01 14:11:08 - INFO - root - Minimum contributing factors not met: 3/4
+2023-08-01 14:59:49 - INFO - root - Minimum contributing factors not met: 0.45
+2023-08-01 15:00:34 - INFO - root - Minimum contributing factors weight not met: 0.45/ out of0.6
+2023-08-01 15:00:51 - INFO - root - Minimum contributing factors weight not met: 0.5/ out of0.6
+2023-08-01 15:01:22 - INFO - root - Minimum contributing factors weight not met: 0.55/ out of 0.6
+2023-08-01 15:01:28 - INFO - root - Minimum contributing factors weight not met: 0.55/ out of 0.6
+2023-08-01 15:03:23 - INFO - root - Minimum contributing factors weight not met: 0.55/ out of 0.56
+2023-08-01 15:03:37 - INFO - root - Minimum contributing factors weight not met: 0.55/ out of 0.6
