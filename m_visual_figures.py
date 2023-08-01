@@ -215,6 +215,16 @@ def visualized_youtube():
                    name='YouTube bullish', visible='legendonly'),
         go.Scatter(x=df.index, y=df["youtube_bearish"],
                    name='YouTube bearish', visible='legendonly'),
+
+        go.Scatter(x=df.index, y=df["youtube_positive_polarity"],
+                   name='Positive polarity', visible='legendonly'),
+        go.Scatter(x=df.index, y=df["youtube_negative_polarity"],
+                   name='Negative polarity', visible='legendonly'),
+        go.Scatter(x=df.index, y=df["youtube_positive_count"],
+                   name='Positive count', visible='legendonly'),
+        go.Scatter(x=df.index, y=df["youtube_negative_count"],
+                   name='Negative count', visible='legendonly'),
+
         go.Scatter(x=df.index, y=df["last_24_youtube"],
                    name='Number of Video in 24h'),
         go.Scatter(x=df.index, y=(df["bitcoin_price"]/100), name='Bitcoin price'),
@@ -233,11 +243,17 @@ def visualized_reddit():
                    name='Reddit bullish', visible='legendonly'),
         go.Scatter(x=df.index, y=df["reddit_bearish"],
                    name='Reddit bearish', visible='legendonly'),
-        go.Scatter(x=df.index, y=df["reddit_count_bitcoin_posts_24h"],
-                   name='Count bitcoin posts 24h', visible='legendonly'),
         go.Scatter(x=df.index, y=df["reddit_activity_24h"],
                    name='Reddit activity'),
-        go.Scatter(x=df.index, y=df["bitcoin_price"], name='Bitcoin price'),
+        go.Scatter(x=df.index, y=df["reddit_positive_polarity"],
+                   name='Positive polarity', visible='legendonly'),
+        go.Scatter(x=df.index, y=df["reddit_negative_polarity"],
+                   name='Negative polarity', visible='legendonly'),
+        go.Scatter(x=df.index, y=df["reddit_positive_count"],
+                   name='Positive count', visible='legendonly'),
+        go.Scatter(x=df.index, y=df["reddit_negative_count"],
+                   name='Negative count', visible='legendonly'),
+        go.Scatter(x=df.index, y=df["bitcoin_price"], name='Bitcoin price',  visible='legendonly'),
 
     ]
 

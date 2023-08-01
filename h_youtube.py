@@ -124,10 +124,13 @@ def calculate_sentiment_score(content: str) -> float:
 
 
 def calculate_sentiment_youtube_videos(youtube, published_after, published_before):
-    positive_polarity_score, negative_polarity_score, positive_count, negative_count = 0.0, 0.0, 0, 0
+    positive_polarity_score, negative_polarity_score, positive_count, negative_count,\
+        total_video_include_out_threshold = 0.0, 0.0, 0, 0, 0
     search_results = get_youtube_videos(youtube, published_after, published_before)
 
     for video in search_results:
+        total_video_include_out_threshold += 1
+
         title = video['snippet']['title']
         description = video['snippet']['description']
         content = title + " " + description
@@ -148,7 +151,7 @@ def calculate_sentiment_youtube_videos(youtube, published_after, published_befor
     positive_sentiment = positive_polarity_score / positive_count if positive_count != 0 else 0
     negative_sentiment = abs(negative_polarity_score / negative_count) if negative_count != 0 else 0
 
-    return positive_sentiment, negative_sentiment, positive_count, negative_count
+    return positive_sentiment, negative_sentiment, positive_count, negative_count, total_video_include_out_threshold
 
 
 @retry_on_error(
@@ -161,11 +164,11 @@ def youtube_wrapper() -> Tuple[float, float]:
     last_24_hours_start = (now - timedelta(days=1)).strftime('%Y-%m-%dT%H:%M:%SZ')
     last_24_hours_end = now.strftime('%Y-%m-%dT%H:%M:%SZ')
 
-    positive_polarity, negative_polarity, positive_count, negative_count = \
+    positive_polarity, negative_polarity, positive_count, negative_count, total_video_include_out_threshold = \
         calculate_sentiment_youtube_videos(youtube, last_24_hours_start, last_24_hours_end)
 
     # Save to database
-    save_value_to_database('last_24_youtube', positive_count + negative_count)
+    save_value_to_database('last_24_youtube', total_video_include_out_threshold)
     save_value_to_database('youtube_positive_polarity', positive_polarity)
     save_value_to_database('youtube_negative_polarity', negative_polarity)
     save_value_to_database('youtube_positive_count', positive_count)
