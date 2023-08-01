@@ -1,160 +1,97 @@
 {
     "positive": [
         {
-            "title": "9990Grayscale Urges Equal Treatment for All Spot Bitcoin ETF's in Letter to SEC",
-            "score": 0.222,
-            "description": "If the SEC decides to change course and approve one or more of of the current spot bitcoin ETF applications, \u201cit must do so in a fair and orderly manner,\u201d the statement said.",
-            "publish_time": "2023-07-27 22:59",
-            "link": "https://www.coindesk.com/business/2023/07/27/grayscale-urges-equal-treatment-for-all-spot-bitcoin-etfs-in-letter-to-sec/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+            "title": "First Mover Asia: BTC, ETH Stable While COMP and AAVE in the Red",
+            "score": 0.206,
+            "description": "Curve Founder Michael Egorov's $168M in holdings is under stress, imperiling DeFi as a whole. PLUS: The Litecoin Foundation and crypto cold-storage card manufacturer Ballet HAVE teased a sale of 500 collectable cards \u2013 fashioned from 50 grams of fine silver.",
+            "publish_time": "2023-08-01 01:06",
+            "link": "https://www.coindesk.com/markets/2023/08/01/first-mover-asia-btc-eth-stable-while-comp-and-aave-in-the-red/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
         },
         {
-            "title": "KIN Token Surges Over 20% After Vote to Burn 70% of Supply Passes",
-            "score": 0.266,
-            "description": "The token climbed on news that about 7 trillion KIN tokens worth $156 million will be burned.",
-            "publish_time": "2023-07-27 22:06",
-            "link": "https://www.coindesk.com/markets/2023/07/27/kin-token-surges-over-20-after-vote-to-burn-70-of-supply-passes/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+            "title": "Etihad Airways 'Horizon Club' Web3 Loyalty Program Will Let You Stake NFTs for Miles",
+            "score": 0.424,
+            "description": "Holders of its EY-ZERO1 NFT collection will be able to lock up their assets to earn Etihad miles that can be redeeed on real-world flights and upgrades.",
+            "publish_time": "2023-07-31 22:38",
+            "link": "https://www.coindesk.com/web3/2023/07/31/etihad-airways-horizon-club-web3-loyalty-program-will-let-you-stake-nfts-for-miles/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
         },
         {
-            "title": "Disgraced U.S. Congressman George Santos Involved Crypto in Nigerian Prince-Like Scheme: NYT",
-            "score": 0.128,
-            "description": "A source told The New York Times that Santos and two others appeared to try a crypto-centric version of the classic Nigerian prince email scam.",
-            "publish_time": "2023-07-27 21:07",
-            "link": "https://www.coindesk.com/policy/2023/07/27/disgraced-congressman-george-santos-involved-crypto-in-nigerian-prince-like-scheme-nyt/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+            "title": "Bitcoin Lingers Near $29.2K, as Investors Mull Latest Industry Woes; CRV Sinks 12.5%",
+            "score": 0.138,
+            "description": "",
+            "publish_time": "2023-07-31 22:06",
+            "link": "https://www.coindesk.com/markets/2023/07/31/bitcoin-lingers-near-292k-as-investors-mull-latest-industry-woes-crv-sinks-125/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "Judge rejects motion to dismiss Terraform case, disagrees with Ripple decision",
+            "score": 0.362,
+            "description": "Judge Jed Rakoff gave a detailed interpretation of the Howey test that was at odds with the decision in the Securities and Exchange\u2019s case against Ripple.",
+            "publish_time": "2023-07-31 23:59",
+            "link": "https://cointelegraph.com/news/judge-denies-motion-dismiss-terraform-sec-case-reject-ripple-ruling"
+        },
+        {
+            "title": "Republican candidate wants to end President Biden\u2019s supposed \u2018war on Bitcoin\u2019 if elected",
+            "score": 0.133,
+            "description": "\u201cAs president, on day one, CBDC goes into the trash can \u2014 we\u2019re not going to allow it,\" said Ron DeSantis at a New Hampshire campaign event.",
+            "publish_time": "2023-07-31 21:18",
+            "link": "https://cointelegraph.com/news/republican-candidate-end-president-biden-war-on-bitcoin-if-elected"
         },
         {
             "title": "Here\u2019s what happened in crypto today",
-            "score": 0.216,
+            "score": 0.198,
             "description": "Need to know what happened in crypto today? Here is the latest news on daily trends and events impacting the Bitcoin price, blockchain, DeFi, NFTs, Web3 and crypto regulation.",
-            "publish_time": "2023-07-27 21:34",
+            "publish_time": "2023-07-31 21:14",
             "link": "https://cointelegraph.com/news/what-happened-in-crypto-today"
         },
         {
-            "title": "Why is Jerome Powell gaslighting us about the odds of recession?",
-            "score": 0.111,
-            "description": "Economic data seems to indicate an economic slowdown is inevitable. So why is Fed Chairman Jerome Powell trying to gaslight Americans?",
-            "publish_time": "2023-07-27 20:53",
-            "link": "https://cointelegraph.com/news/jerome-powell-misleading-recession"
-        },
-        {
-            "title": "MakerDAO increases DAI yield in bid to boost demand",
-            "score": 0.156,
-            "description": "The Enhanced Dai Savings Rate is based on DSR utilization and could boost the stablecoin yield by as much as 8%.",
-            "publish_time": "2023-07-27 19:30",
-            "link": "https://cointelegraph.com/news/makerdao-increases-dai-yield-boost-demand"
-        },
-        {
-            "title": "Stablecoins pose lower risk than bank deposits, says ex-Fed policy analyst",
-            "score": 0.091,
-            "description": "Stablecoins cannot be compared to bank deposits in terms of risk, nor can they be compared to money market funds, argues a new policy paper released by Paradigm...",
-            "publish_time": "2023-07-27 16:45",
-            "link": "https://cointelegraph.com/news/stablecoins-pose-lower-risk-than-bank-deposits-paradigm-ex-fed-policy-analyst"
-        },
-        {
-            "title": "Journeys: Herv\u00e9 Larren on Bitcoin, Apes and the psychology of \u2018blue-chip\u2019 NFTs",
-            "score": 0.092,
-            "description": "Herv\u00e9 Larren\u2019s crypto journey has taken him from luxury goods to Bitcoin mining and back full circle to the world of \u201cblue-chip\u201d NFTs.",
-            "publish_time": "2023-07-27 13:26",
-            "link": "https://cointelegraph.com/magazine/journeys-herve-larren-on-bitcoin-apes-and-the-psychology-of-blue-chip-nfts/"
-        },
-        {
-            "title": "Bitcoin Steady Above $29K, Bond Yields Rise as BOJ Makes Yield Curve Control More Flexible",
-            "score": 0.156,
-            "description": "BOJ announced a proper yield curve control tweak with semantics that camouflaged the hawkish move.",
-            "publish_time": "2023-07-28 04:52",
-            "link": "https://www.coindesk.com/markets/2023/07/28/bitcoin-steady-above-29k-bond-yields-rise-as-boj-makes-yield-curve-control-more-flexible/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "Elon's 'not afraid of blowing things up' \u2014  ex-Twitter exec on working under Musk",
-            "score": 0.148,
-            "description": "Esther Crawford claimed Elon Musk\u2019s inability to handle criticism created a \u201czealous and fanatical\u201d inner circle.",
-            "publish_time": "2023-07-28 06:10",
-            "link": "https://cointelegraph.com/news/ex-twitter-executive-reveals-elon-musk-secrets"
-        },
-        {
-            "title": "Pro-XRP lawyer Jeremy Hogan\u2019s scam tweet bonanza finally falls silent",
-            "score": 0.11,
-            "description": "For the better part of the last four days, hackers used Hogan's account to promote fraudulent XRP giveaway scams.",
-            "publish_time": "2023-07-28 03:37",
-            "link": "https://cointelegraph.com/news/xrp-lawyer-jeremy-hogan-scam-twitter-account-hack"
+            "title": "US crypto bills on the move, Worldcoin launches and Russia\u2019s CBDC: Hodler\u2019s Digest, July 23-29",
+            "score": 0.0,
+            "description": "Crypto legislation goes to the House floor in the U.S., Worldcoin\u2019s controversial launch and Russia\u2019s digital ruble signed into law.",
+            "publish_time": "2023-07-29 21:22",
+            "link": "https://cointelegraph.com/magazine/us-crypto-bills-on-the-move-worldcoin-launches-and-russias-cbdc-hodlers-digest-july-23-29/"
         }
     ],
     "negative": [
         {
-            "title": "Bitcoin Wobbles, Then Regains Its Balance Above $29.2K; ETH, DOGE, MATIC Fall",
-            "score": -0.069,
-            "description": "The largest cryptocurrency ticked down for a couple of hours after a report that the Bank of Japan was mulling a change to its yield curve control policy before regaining ground.",
-            "publish_time": "2023-07-26 22:11",
-            "link": "https://www.coindesk.com/markets/2023/07/27/crypto-markets-today-btc-tk-eth-matic-doge-price-analysis/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+            "title": "Nomura Backs $6M Round for On-Chain Fund Platform Solv Protocol",
+            "score": -0.027,
+            "description": "The Singapore-based startup offers an on-chain fund platform that allows institutions and venture capitalists to create, use and sell financial products.",
+            "publish_time": "2023-07-31 22:00",
+            "link": "https://www.coindesk.com/business/2023/07/31/nomura-backs-6m-round-for-on-chain-fund-platform-solv-protocol/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
         },
         {
-            "title": "CBDCs Wrongfully Break Down the Separation Between Money and State",
-            "score": -0.136,
-            "description": "",
-            "publish_time": "2023-07-27 21:49",
-            "link": "https://www.coindesk.com/consensus-magazine/2023/07/27/cbdcs-wrongfully-break-down-the-separation-between-money-and-state/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "Sequoia Capital Slashes Crypto Fund From $585M to $200M : WSJ",
-            "score": -0.086,
-            "description": "The vaunted VC firm told investors earlier in the year it would shrink the fund to reflect a changed market.",
-            "publish_time": "2023-07-27 21:29",
-            "link": "https://www.coindesk.com/business/2023/07/27/sequoia-capital-slashes-crypto-fund-from-585m-to-200m-wsj/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "SEC chief accountant warns accountants about liabilities when auditing crypto firms",
-            "score": -0.185,
-            "description": "Paul Munter says making or allowing misleading statements can have serious consequences for accounting firms and individual accountants. ",
-            "publish_time": "2023-07-27 21:20",
-            "link": "https://cointelegraph.com/news/sec-chief-accountant-warns-accountants-about-liabilities-when-auditing-crypto-firms"
-        },
-        {
-            "title": "99-year-old Hungarian artist\u2019s computer-generated NFTs sold for $1.2M",
-            "score": -0.033,
-            "description": "Vera Moln\u00e1r pioneered the use of computer-generated art in the latter half of the 20th century. ",
-            "publish_time": "2023-07-27 15:14",
-            "link": "https://cointelegraph.com/news/99-year-old-hungarian-artist-computer-generated-nfts-sold-out-sothebys"
-        },
-        {
-            "title": "Crypto-friendly BlackRock starts \u2018digital-first\u2019 investment offering in India",
-            "score": -0.025,
-            "description": "As BlackRock reiterates that an optimal investment allocation should include 84.9% BTC, the firm has formed a major investment partnership in India.",
-            "publish_time": "2023-07-27 09:40",
-            "link": "https://cointelegraph.com/news/crypto-friendly-blackrock-to-launch-digital-first-offering-in-india"
-        },
-        {
-            "title": "U.S. Senate Passes $886B Military Spending Bill With Crypto AML Provision",
-            "score": -0.085,
-            "description": "The amendment takes aim at crypto mixers and \u201canonymity-enhancing\u201d crypto assets.",
-            "publish_time": "2023-07-28 02:48",
-            "link": "https://www.coindesk.com/policy/2023/07/28/us-senate-passes-886b-military-spending-bill-with-crypto-aml-provision/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "First Mover Asia: Some Bitcoin Whales Appear Content to Wait for the Next Price Catalyst",
+            "title": "Curve Founder\u2019s $168M Stash Is Under Stress, Creating a Risk for DeFi as a Whole",
             "score": -0.02,
-            "description": "PLUS: BTC continued to trade above $29.2K, slightly down over the past 24 hours amid another day of low volatility.",
-            "publish_time": "2023-07-28 00:49",
-            "link": "https://www.coindesk.com/markets/2023/07/28/first-mover-asia-some-bitcoin-whales-appear-content-to-wait-for-the-next-price-catalyst/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+            "description": "Curve CEO Michael Egorov pledged 34% of CRV\u2019s total market cap to back loans across DeFi protocols. A forced liquidation would result in selling at a time when prices are already falling.",
+            "publish_time": "2023-07-31 21:44",
+            "link": "https://www.coindesk.com/markets/2023/07/31/a-curve-founders-168m-stash-is-under-stress-creating-a-risk-for-defi-as-a-whole/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
         },
         {
-            "title": "Missing crypto millionaire found dismembered in suitcase: Report",
-            "score": -0.049,
-            "description": "Fernando P\u00e9rez Algaba reportedly ran a crypto trading business in Argentina and is suspected to have been murdered by a professional outfit.",
-            "publish_time": "2023-07-28 05:44",
-            "link": "https://cointelegraph.com/news/missing-crypto-millionaire-found-dismembered-suitcase"
+            "title": "Judge Rejects Ripple Ruling Precedent in Denying Terraform Labs' Motion to Dismiss SEC Lawsuit",
+            "score": -0.119,
+            "description": "A federal judge rejected Terraform Labs' motion to dismiss a lawsuit filed by the U.S. Securities and Exchange Commission.",
+            "publish_time": "2023-07-31 21:13",
+            "link": "https://www.coindesk.com/policy/2023/07/31/judge-rejects-ripple-ruling-precedent-in-denying-terraform-labs-motion-to-dismiss-sec-lawsuit/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
         },
         {
-            "title": "SEC adopts cyberattack disclosure rules, listed crypto firms included",
-            "score": -0.072,
-            "description": "Coinbase, Marathon Digital and Riot Blockchain are among the SEC-registered cryptocurrency firms that would need to comply with the rules.",
-            "publish_time": "2023-07-28 05:27",
-            "link": "https://cointelegraph.com/news/sec-adopts-cyberattack-disclosure-rules-crypto-firms"
+            "title": "\u2018Let's just diversify and see' \u2014 Binance CEO on its stablecoin strategy",
+            "score": -0.041,
+            "description": "Due to regulatory and transparency risks, CZ says that spreading risk across different stablecoins is the key to longevity.",
+            "publish_time": "2023-08-01 02:02",
+            "link": "https://cointelegraph.com/news/changpeng-zhao-cz-binance-stablecoin-strategy-tether-busd"
         },
         {
-            "title": "Grayscale urges SEC to approve all Bitcoin ETFs simultaneously",
-            "score": -0.02,
-            "description": "Grayscale\u2019s ETF was previously knocked back by the Securities and Exchange Commission and it wants it and competing ETFs approved together so none have an advantage.",
-            "publish_time": "2023-07-28 01:46",
-            "link": "https://cointelegraph.com/news/grayscale-sec-approve-all-bitcoin-etfs-together"
+            "title": "BALD token developer denies rug pull as price falls 85% post-launch",
+            "score": -0.063,
+            "description": "The BALD memecoin collapsed in price as collectors alleged an exit scam, but the developer claims not to have sold any coins.",
+            "publish_time": "2023-07-31 17:28",
+            "link": "https://cointelegraph.com/news/bald-token-developer-denies-rug-pull-price-falls-post-launch"
+        },
+        {
+            "title": "SEC files complaint against Hex founder for allegedly offering unregistered securities",
+            "score": -0.079,
+            "description": "According to the SEC, Richard Heart allegedly used more than $12 million of investor funds to buy \u201ca 555-carat diamond, expensive watches, and high-end automobiles.\u201d",
+            "publish_time": "2023-07-31 14:55",
+            "link": "https://cointelegraph.com/news/sec-files-complaint-hex-founder-offering-unregistered-securities"
         }
     ]
 }
