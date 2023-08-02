@@ -98,7 +98,9 @@ def read_gauge_chart_data():
     if data_dict['trading_state'] in ['long', 'short']:
         data_dict.update({
             'order_book_bullish': read_latest_data('order_book_hit_profit', float),
-            'order_book_bearish': read_latest_data('order_book_hit_loss', float)
+            'order_book_bearish': read_latest_data('order_book_hit_loss', float),
+            'weighted_score_up': read_latest_data('score_profit_position', float),
+            'weighted_score_down': read_latest_data('score_loss_position', float),
         })
     else:
         data_dict.update({
@@ -218,3 +220,7 @@ def create_progress_bar():
                                                          'backgroundColor': COLORS['background'], 'zIndex': '9998'})
 
     ])
+
+
+if __name__ == '__main__':
+    print(read_latest_data('latest_trading_state', str))
