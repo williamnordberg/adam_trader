@@ -218,3 +218,5 @@ def compare_google_reddit_youtube(last_hour: int, two_hours_before: int) -> Tupl
         return compare(ratio, RANGES_GOOGLE_DOWN, VALUES_GOOGLE_DOWN)
 
 
+if __name__ == '__main__':
+    print(compare_richest_addresses())
