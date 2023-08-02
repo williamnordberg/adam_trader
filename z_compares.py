@@ -6,6 +6,11 @@ LATEST_INFO_PATH = 'data/latest_info_saved.csv'
 
 # constants
 INF = float('inf')
+SHORT_MOVING_AVERAGE_WINDOW_Rich = 5
+LONG_MOVING_AVERAGE_WINDOW_Rich = 20
+
+SHORT_MOVING_AVERAGE_WINDOW_ORDER = 5
+LONG_MOVING_AVERAGE_WINDOW_ORDER = 20
 
 # 1. Macro
 RANGES_MACRO_MTM = [(-INF, -0.75), (-0.75, -0.5), (-0.5, -0.25),
@@ -22,9 +27,7 @@ RANGES_PREDICTION = [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, float('inf'))]
 VALUES_PREDICTION_GREATER = [(0.0, 0.0), (0.6, 0.4), (0.7, 0.3), (0.8, 0.2), (0.9, 0.1), (1.0, 0.0)]
 VALUES_PREDICTION_LESSER = [(0.0, 0.0), (0.4, 0.6), (0.3, 0.7), (0.2, 0.8), (0.1, 0.9), (0.0, 1.0)]
 
-
 # 4. Technical in function
-
 # 5.Richest
 RANGES_RICH = [
     (float('-inf'), -5),
@@ -74,11 +77,49 @@ def compare_macro_m_to_m(cpi_m_to_m: float) -> Tuple[float, float]:
     return compare(cpi_m_to_m, RANGES_MACRO_MTM, VALUES_MACRO_MTM)
 
 
+def moving_averages_cross_order_book() -> Tuple[float, float]:
+    df = read_database()
+
+    # Calculate the short and long moving averages for total received
+    short_mv_bid = (df['bid_volume'].
+                    rolling(window=SHORT_MOVING_AVERAGE_WINDOW_ORDER).mean().tail(1).item())
+    long_mv_bid = (df['bid_volume'].
+                   rolling(window=LONG_MOVING_AVERAGE_WINDOW_ORDER).mean().tail(1).item())
+
+    short_mv_ask = (df['ask_volume'].
+                    rolling(window=SHORT_MOVING_AVERAGE_WINDOW_ORDER).mean().tail(1).item())
+    long_mv_ask = (df['ask_volume'].
+                   rolling(window=LONG_MOVING_AVERAGE_WINDOW_ORDER).mean().tail(1).item())
+
+    if short_mv_bid > long_mv_bid and short_mv_ask < long_mv_ask:
+        return 0.15, -0.15
+    elif short_mv_bid < long_mv_bid and short_mv_ask > long_mv_ask:
+        return -0.15, 0.15
+
+    elif short_mv_bid > long_mv_bid and short_mv_ask > long_mv_ask:
+        return 0.1, -0.1
+    elif short_mv_bid < long_mv_bid and short_mv_ask < long_mv_ask:
+        return -0.1, 0.1
+    else:
+        return 0.0, 0.0
+
+
 def compare_order_volume(probability_up: float, probability_down: float) -> Tuple[float, float]:
     if probability_up >= probability_down:
-        return compare(probability_up, RANGES_ORDER_VOL, VALUES_ORDER_VOL)
+        order_bullish, order_bearish = compare(probability_up, RANGES_ORDER_VOL, VALUES_ORDER_VOL)
     else:
-        return compare(probability_down, RANGES_ORDER_VOL, [val[::-1] for val in VALUES_ORDER_VOL])
+        order_bullish, order_bearish = compare(probability_down, RANGES_ORDER_VOL, [val[::-1] for val in VALUES_ORDER_VOL])
+
+    mv_add_on_bullish, mv_add_on_bearish = moving_averages_cross_order_book()
+    order_bullish += mv_add_on_bullish
+    order_bearish += mv_add_on_bearish
+    order_bullish, order_bearish = round(order_bullish, 2), round(order_bearish, 2)
+
+    # Ensure values are within the range [0, 1]
+    order_bullish = min(max(order_bullish, 0), 1)
+    order_bearish = min(max(order_bearish, 0), 1)
+
+    return order_bullish, order_bearish
 
 
 def compare_predicted_price(predicted_price: int, current_price: int) -> Tuple[float, float]:
@@ -127,7 +168,40 @@ def compare_richest_addresses() -> Tuple[float, float]:
     else:
         activity_percentage = 0
 
-    return compare(activity_percentage, RANGES_RICH, VALUES_RICH)
+    rich_bullish, rich_bearish = compare(activity_percentage, RANGES_RICH, VALUES_RICH)
+
+    mv_add_on_bullish, mv_add_on_bearish = moving_averages_cross_richest()
+    rich_bullish += mv_add_on_bullish
+    rich_bearish += mv_add_on_bearish
+
+    rich_bullish, rich_bearish = round(rich_bullish, 2), round(rich_bearish, 2)
+
+    # Ensure values are within the range [0, 1]
+    rich_bullish = min(max(rich_bullish, 0), 1)
+    rich_bearish = min(max(rich_bearish, 0), 1)
+    return rich_bullish, rich_bearish
+
+
+def moving_averages_cross_richest() -> Tuple[float, float]:
+    df = read_database()
+
+    # Calculate the short and long moving averages for total received
+    short_mv_received = (df['richest_addresses_total_received'].
+                         rolling(window=SHORT_MOVING_AVERAGE_WINDOW_Rich).mean().tail(1).item())
+    long_mv_received = (df['richest_addresses_total_received'].
+                        rolling(window=LONG_MOVING_AVERAGE_WINDOW_Rich).mean().tail(1).item())
+
+    short_mv_sent = (df['richest_addresses_total_sent'].
+                     rolling(window=SHORT_MOVING_AVERAGE_WINDOW_Rich).mean().tail(1).item())
+    long_mv_sent = (df['richest_addresses_total_sent'].
+                    rolling(window=LONG_MOVING_AVERAGE_WINDOW_Rich).mean().tail(1).item())
+
+    if short_mv_received > long_mv_received and short_mv_sent < long_mv_sent:
+        return 0.1, -0.1
+    elif short_mv_received < long_mv_received and short_mv_sent > long_mv_sent:
+        return -0.1, 0.1
+    else:
+        return 0.0, 0.0
 
 
 def compare_google_reddit_youtube(last_hour: int, two_hours_before: int) -> Tuple[float, float]:
@@ -142,3 +216,5 @@ def compare_google_reddit_youtube(last_hour: int, two_hours_before: int) -> Tupl
     else:
         ratio = two_hours_before / last_hour
         return compare(ratio, RANGES_GOOGLE_DOWN, VALUES_GOOGLE_DOWN)
+
+
