@@ -7,7 +7,6 @@
     <list default="true" id="b02440e7-38c7-4d13-acf1-1ed63ab207ba" name="Changes" comment="2august">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/latest_info_saved.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/m_visualization_side.py" beforeDir="false" afterPath="$PROJECT_DIR$/m_visualization_side.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,8 +75,8 @@
       <recent name="C:\will\Python_project\adam_trader\assets" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.m_visual_app (1)">
-    <configuration name="g_reddit" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.z_compares">
+    <configuration name="l_position_decision" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -89,7 +88,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/g_reddit.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/l_position_decision.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -98,7 +97,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="k_combined_score" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="l_position_short_testnet" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -110,7 +109,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/k_combined_score.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/l_position_short_testnet.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -184,11 +183,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.z_compares" />
+        <item itemvalue="Python.l_position_short_testnet" />
+        <item itemvalue="Python.l_position_decision" />
         <item itemvalue="Python.m_visual_app (1)" />
         <item itemvalue="Python.m_visualization_side" />
-        <item itemvalue="Python.z_compares" />
-        <item itemvalue="Python.k_combined_score" />
-        <item itemvalue="Python.g_reddit" />
       </list>
     </recent_temporary>
   </component>
@@ -305,7 +304,15 @@
       <option name="project" value="LOCAL" />
       <updated>1690954110653</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="2august">
+      <option name="closed" value="true" />
+      <created>1690960135390</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1690960135390</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
