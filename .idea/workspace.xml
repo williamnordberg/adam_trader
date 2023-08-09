@@ -6,11 +6,36 @@
   <component name="ChangeListManager">
     <list default="true" id="b02440e7-38c7-4d13-acf1-1ed63ab207ba" name="Changes" comment="2august">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/a_macro.py" beforeDir="false" afterPath="$PROJECT_DIR$/a_macro.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/b_order_book.py" beforeDir="false" afterPath="$PROJECT_DIR$/b_order_book.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c_predictor.py" beforeDir="false" afterPath="$PROJECT_DIR$/c_predictor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/youtube_token.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/config/youtube_token.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/d_technical.py" beforeDir="false" afterPath="$PROJECT_DIR$/d_technical.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/bitcoin_rich_list2000_test.csv" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/data/database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/dataset.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/dataset.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/latest_info_saved.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/latest_info_saved.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/old_trade_history/trades_details.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/old_trade_history/trades_results.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/news_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/news_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/trades_details.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/trades_results.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/f_google.py" beforeDir="false" afterPath="$PROJECT_DIR$/f_google.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/g_reddit.py" beforeDir="false" afterPath="$PROJECT_DIR$/g_reddit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/h_youtube.py" beforeDir="false" afterPath="$PROJECT_DIR$/h_youtube.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/i_news_analyser.py" beforeDir="false" afterPath="$PROJECT_DIR$/i_news_analyser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k_combined_score.py" beforeDir="false" afterPath="$PROJECT_DIR$/k_combined_score.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/l_position_decision.py" beforeDir="false" afterPath="$PROJECT_DIR$/l_position_decision.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/l_position_long.py" beforeDir="false" afterPath="$PROJECT_DIR$/l_position_long.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/l_position_short.py" beforeDir="false" afterPath="$PROJECT_DIR$/l_position_short.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m_visual_figures.py" beforeDir="false" afterPath="$PROJECT_DIR$/m_visual_figures.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m_visualization_side.py" beforeDir="false" afterPath="$PROJECT_DIR$/m_visualization_side.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trade_results/week1/trades_details.csv" beforeDir="false" afterPath="$PROJECT_DIR$/logs/trades_details.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/z_compares.py" beforeDir="false" afterPath="$PROJECT_DIR$/z_compares.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/z_handy_modules.py" beforeDir="false" afterPath="$PROJECT_DIR$/z_handy_modules.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/z_read_write_csv.py" beforeDir="false" afterPath="$PROJECT_DIR$/z_read_write_csv.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +72,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -74,13 +102,15 @@
       <recent name="C:\will\Python_project\adam_trader\.mypy_cache" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\will\Python_project\adam_trader\data" />
+      <recent name="C:\will\Python_project\adam_trader\logs" />
+      <recent name="C:\will\Python_project\adam_trader\config" />
       <recent name="C:\will\Python_project\adam_trader\.gitignore" />
       <recent name="C:\will\Python_project\adam_trader" />
-      <recent name="C:\will\Python_project\adam_trader\assets" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.test">
-    <configuration name="l_position_decision" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.c_predictor">
+    <configuration name="c_predictor" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -92,7 +122,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/l_position_decision.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/c_predictor.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -101,7 +131,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="l_position_short_testnet" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="l_position_long" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -113,7 +143,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/l_position_short_testnet.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/l_position_long.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -122,7 +152,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="m_visual_app (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="m_visual_app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -143,7 +173,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -155,7 +185,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -164,7 +194,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="z_compares" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="z_read_write_csv" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -176,7 +206,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/z_compares.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/z_read_write_csv.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -187,11 +217,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.test" />
-        <item itemvalue="Python.z_compares" />
-        <item itemvalue="Python.l_position_short_testnet" />
-        <item itemvalue="Python.l_position_decision" />
-        <item itemvalue="Python.m_visual_app (1)" />
+        <item itemvalue="Python.c_predictor" />
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.m_visual_app" />
+        <item itemvalue="Python.z_read_write_csv" />
+        <item itemvalue="Python.l_position_long" />
       </list>
     </recent_temporary>
   </component>
@@ -324,7 +354,15 @@
       <option name="project" value="LOCAL" />
       <updated>1690981058980</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="2august">
+      <option name="closed" value="true" />
+      <created>1691381451351</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1691381451351</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

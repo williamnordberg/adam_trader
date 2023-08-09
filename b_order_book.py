@@ -1,6 +1,5 @@
-from typing import List, Tuple
+from typing import List
 import requests
-import logging
 
 from z_read_write_csv import save_update_time, read_latest_data,\
     write_latest_data, save_value_to_database
@@ -33,14 +32,14 @@ def get_volume(symbol: str, limit: int) -> dict:
 
 
 def order_book(symbols: List[str], limit: int = LIMIT, bid_multiplier: float = BID_MULTIPLIER,
-               ask_multiplier: float = ASK_MULTIPLIER) -> Tuple[float, float]:
+               ask_multiplier: float = ASK_MULTIPLIER) -> float:
 
     bid_volume, ask_volume = 0.0000001, 0.0
     current_price = get_bitcoin_price()
     for symbol in symbols:
         data = get_volume(symbol, limit)
         if data is None:
-            return 0.0, 0.0
+            return 0.5
         bid_volume += sum([float(bid[1]) for bid in data['bids'] if float(bid[0]) >=
                            (current_price * bid_multiplier)])
         ask_volume += sum([float(ask[1]) for ask in data['asks'] if float(ask[0]) <=
@@ -49,26 +48,26 @@ def order_book(symbols: List[str], limit: int = LIMIT, bid_multiplier: float = B
     probability_up = bid_volume / (bid_volume + ask_volume)
     probability_down = ask_volume / (bid_volume + ask_volume)
 
-    order_book_bullish, order_book_bearish = compare_order_volume(probability_up, probability_down)
+    order_book_bullish = compare_order_volume(probability_up, probability_down)
 
     save_value_to_database('bid_volume', round(bid_volume, 0))
     save_value_to_database('ask_volume', round(ask_volume, 0))
     save_value_to_database('order_book_bullish', order_book_bullish)
-    save_value_to_database('order_book_bearish', order_book_bearish)
+    # save_value_to_database('order_book_bearish', order_book_bearish)
 
     save_update_time('order_book')
 
-    return order_book_bullish, order_book_bearish
+    return order_book_bullish
 
 
 def order_book_hit_target(symbols: List[str], limit: int, profit_target: float,
-                          stop_loss: float) -> Tuple[float, float]:
+                          stop_loss: float) -> float:
 
     bid_volume, ask_volume = 0.0000001, 0.0
     for symbol in symbols:
         data = get_volume(symbol, limit)
         if data is None:
-            return 0.0, 0.0
+            return 0.5
 
         bids = data.get('bids')
         asks = data.get('asks')
@@ -80,16 +79,14 @@ def order_book_hit_target(symbols: List[str], limit: int, profit_target: float,
             ask_volume += sum([float(ask[1]) for ask in asks if float(ask[0]) <= profit_target])
 
     probability_to_hit_target = bid_volume / (bid_volume + ask_volume)
-    probability_to_hit_stop_loss = ask_volume / (bid_volume + ask_volume)
+    # probability_to_hit_stop_loss = ask_volume / (bid_volume + ask_volume)
 
     write_latest_data('order_book_hit_profit', round(probability_to_hit_target, 2))
-    write_latest_data('order_book_hit_loss', round(probability_to_hit_stop_loss, 2))
 
-    return probability_to_hit_target, probability_to_hit_stop_loss
+    return probability_to_hit_target
 
 
 if __name__ == '__main__':
-    order_book_bullish_outer, order_book_bearish_outer = order_book(
+    order_book_bullish_outer = order_book(
         SYMBOLS, limit=LIMIT, bid_multiplier=BID_MULTIPLIER, ask_multiplier=ASK_MULTIPLIER)
-    logging.info(f'order_book_bullish:{order_book_bullish_outer},'
-                 f'order_book_bearish: {order_book_bearish_outer}')
+    print(f'order_book_bullish:{order_book_bullish_outer}')

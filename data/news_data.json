@@ -1,97 +1,195 @@
 {
     "positive": [
         {
-            "title": "First Mover Asia: BTC, ETH Stable While COMP and AAVE in the Red",
-            "score": 0.206,
-            "description": "Curve Founder Michael Egorov's $168M in holdings is under stress, imperiling DeFi as a whole. PLUS: The Litecoin Foundation and crypto cold-storage card manufacturer Ballet HAVE teased a sale of 500 collectable cards \u2013 fashioned from 50 grams of fine silver.",
-            "publish_time": "2023-08-01 01:06",
-            "link": "https://www.coindesk.com/markets/2023/08/01/first-mover-asia-btc-eth-stable-while-comp-and-aave-in-the-red/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+            "title": "Solana-Based Cypher Protocol Experiences Exploit, Freezes Smart Contract",
+            "score": 0.131,
+            "description": "The protocol\u2019s contracts are now frozen as contributors attempt to make contact with hackers to negotiate a return of funds.",
+            "publish_time": "2023-08-07 21:06",
+            "link": "https://www.coindesk.com/business/2023/08/07/solana-based-cypher-protocol-experiences-exploit-freezes-smart-contract/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
         },
         {
-            "title": "Etihad Airways 'Horizon Club' Web3 Loyalty Program Will Let You Stake NFTs for Miles",
-            "score": 0.424,
-            "description": "Holders of its EY-ZERO1 NFT collection will be able to lock up their assets to earn Etihad miles that can be redeeed on real-world flights and upgrades.",
-            "publish_time": "2023-07-31 22:38",
-            "link": "https://www.coindesk.com/web3/2023/07/31/etihad-airways-horizon-club-web3-loyalty-program-will-let-you-stake-nfts-for-miles/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+            "title": "PayPal\u2019s Regulated Stablecoin Is a \u2018Watershed Moment\u2019 in Crypto Space, Says Partner Paxos",
+            "score": 0.211,
+            "description": "\u201cThe difference is significant because we have a prudential regulator,\u201d said Paxos head of strategy Walter Hessert.",
+            "publish_time": "2023-08-07 19:57",
+            "link": "https://www.coindesk.com/business/2023/08/07/paypals-regulated-stablecoin-is-a-watershed-moment-in-crypto-space-says-paxos/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
         },
         {
-            "title": "Bitcoin Lingers Near $29.2K, as Investors Mull Latest Industry Woes; CRV Sinks 12.5%",
-            "score": 0.138,
-            "description": "",
-            "publish_time": "2023-07-31 22:06",
-            "link": "https://www.coindesk.com/markets/2023/07/31/bitcoin-lingers-near-292k-as-investors-mull-latest-industry-woes-crv-sinks-125/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+            "title": "Crypto News Today: PayPal's Stablecoin Debut, Worldcoin's Kenyan Hurdles, and More",
+            "score": 0.27,
+            "description": "From PayPal's entry into the stablecoin market to regulatory challenges faced by Worldcoin in Kenya, the crypto world continues to be a blend of innovation and controversy.",
+            "publish_time": "2023-08-07 19:25",
+            "link": "https://www.coindesk.com/markets/2023/08/07/crypto-news-today-paypals-stablecoin-debut-worldcoins-kenyan-hurdles-and-more/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
         },
         {
-            "title": "Judge rejects motion to dismiss Terraform case, disagrees with Ripple decision",
-            "score": 0.362,
-            "description": "Judge Jed Rakoff gave a detailed interpretation of the Howey test that was at odds with the decision in the Securities and Exchange\u2019s case against Ripple.",
-            "publish_time": "2023-07-31 23:59",
-            "link": "https://cointelegraph.com/news/judge-denies-motion-dismiss-terraform-sec-case-reject-ripple-ruling"
+            "title": "Zoom updates terms after backlash, won\u2019t train AI without consent",
+            "score": 0.411,
+            "description": "Many online said they were halting the use of Zoom over terms that seemingly allowed the platform to scrape user data to train AI models.",
+            "publish_time": "2023-08-08 02:11",
+            "link": "https://cointelegraph.com/news/zoom-ai-terms-clarified-after-backlash"
         },
         {
-            "title": "Republican candidate wants to end President Biden\u2019s supposed \u2018war on Bitcoin\u2019 if elected",
-            "score": 0.133,
-            "description": "\u201cAs president, on day one, CBDC goes into the trash can \u2014 we\u2019re not going to allow it,\" said Ron DeSantis at a New Hampshire campaign event.",
-            "publish_time": "2023-07-31 21:18",
-            "link": "https://cointelegraph.com/news/republican-candidate-end-president-biden-war-on-bitcoin-if-elected"
+            "title": "Cypher Protocol freezes smart contract after an estimated $1M exploit",
+            "score": 0.154,
+            "description": "A crypto wallet suspected to be tied to the exploit has gained over $1 million in SOL and UDSC since the attack.",
+            "publish_time": "2023-08-07 23:41",
+            "link": "https://cointelegraph.com/news/cypher-protocol-solana-hack-exploited-smart-contract"
         },
         {
-            "title": "Here\u2019s what happened in crypto today",
-            "score": 0.198,
-            "description": "Need to know what happened in crypto today? Here is the latest news on daily trends and events impacting the Bitcoin price, blockchain, DeFi, NFTs, Web3 and crypto regulation.",
-            "publish_time": "2023-07-31 21:14",
-            "link": "https://cointelegraph.com/news/what-happened-in-crypto-today"
+            "title": "Bitcoin funds see weekly outflows of $111M, most since March: CoinShares",
+            "score": 0.152,
+            "description": "Solana bucked the trend, with its $9.5 million in inflows taking the top spot over the past week. ",
+            "publish_time": "2023-08-07 21:00",
+            "link": "https://cointelegraph.com/news/bitcoin-funds-weekly-outflows-111m-most-since-march-coin-shares"
         },
         {
-            "title": "US crypto bills on the move, Worldcoin launches and Russia\u2019s CBDC: Hodler\u2019s Digest, July 23-29",
-            "score": 0.0,
-            "description": "Crypto legislation goes to the House floor in the U.S., Worldcoin\u2019s controversial launch and Russia\u2019s digital ruble signed into law.",
-            "publish_time": "2023-07-29 21:22",
-            "link": "https://cointelegraph.com/magazine/us-crypto-bills-on-the-move-worldcoin-launches-and-russias-cbdc-hodlers-digest-july-23-29/"
+            "title": "Worldcoin expects more companies to integrate in the coming months, says product head",
+            "score": 0.048,
+            "description": "The head of product at Tools for Humanity told Cointelegraph that Worldcoin is expecting more companies to integrate in the second half of the year.",
+            "publish_time": "2023-08-07 12:00",
+            "link": "https://cointelegraph.com/news/worldcoin-expects-more-companies-to-integrate-soon"
+        },
+        {
+            "title": "First Mover Asia: First $30K, Then $40K, but Bitcoin Needs Volatility First",
+            "score": 0.188,
+            "description": "The world\u2019s largest digital asset is rangebound, but so far this year, bitcoin is beating the returns most digital asset funds are posting.",
+            "publish_time": "2023-08-09 01:35",
+            "link": "https://www.coindesk.com/markets/2023/08/09/first-mover-asia-first-30k-then-40k-but-bitcoin-needs-volatility-first/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "Crypto News Today: Bitcoin's Rally Toward $30K, PayPal's Stablecoin Fakes, and More",
+            "score": 0.213,
+            "description": "As Bitcoin retakes $30K and major players like PayPal delve into the crypto realm, the intersection of traditional finance and crypto becomes more pronounced.",
+            "publish_time": "2023-08-08 21:28",
+            "link": "https://www.coindesk.com/markets/2023/08/08/crypto-news-today/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "Fed Starts New Program to Oversee Crypto Activity in U.S. Banks",
+            "score": 0.088,
+            "description": "The U.S. Federal Reserve is starting a new program for overseeing banks\u2019 crypto activity, and it further clarified its requirement that the lenders under its authority get approval before engaging in digital assets activities.",
+            "publish_time": "2023-08-08 21:02",
+            "link": "https://www.coindesk.com/policy/2023/08/08/fed-starts-new-program-to-oversee-crypto-activity-in-us-banks/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "BlackRock insiders say Bitcoin ETF is likely 6 months away: Novogratz",
+            "score": 0.379,
+            "description": "\u201cWe\u2019re going to fight like cats and dogs to win market share\u201d once spot Bitcoin ETFs are approved, Galaxy Digital CEO Mike Novogratz told shareholders.",
+            "publish_time": "2023-08-09 00:58",
+            "link": "https://cointelegraph.com/news/blackrock-insiders-bitcoin-etf-within-six-months-galaxy-novogratz"
+        },
+        {
+            "title": "US Fed steps up oversight of banks' involvement with crypto firms",
+            "score": 0.223,
+            "description": "The limitations set out in the Federal Reserve\u2019s new Program provides additional measures to its original policy statement laid out in January.",
+            "publish_time": "2023-08-08 23:11",
+            "link": "https://cointelegraph.com/news/us-fed-increases-bank-oversight-on-crypto"
+        },
+        {
+            "title": "ChatGPT and Claude are \u2018becoming capable of tackling real-world missions,\u2019 say scientists",
+            "score": 0.191,
+            "description": "The scientists developed a tool called \"AgentBench\" to benchmark LLM models as agents.",
+            "publish_time": "2023-08-08 20:30",
+            "link": "https://cointelegraph.com/news/chatgpt-and-claude-are-becoming-capable-of-tackling-real-world-missions-say-scientists"
+        },
+        {
+            "title": "How self-sovereign identity helps users own their data",
+            "score": 0.127,
+            "description": "Shiba Inu lead developer Shytoshi Kusama recently unveiled plans to integrate self-sovereign identity into its projects.",
+            "publish_time": "2023-08-08 12:24",
+            "link": "https://cointelegraph.com/news/self-sovereign-identity-helps-users-own-data"
         }
     ],
     "negative": [
         {
-            "title": "Nomura Backs $6M Round for On-Chain Fund Platform Solv Protocol",
+            "title": "Congress, Not the SEC, Should Set U.S. Digital Asset Policy",
             "score": -0.027,
-            "description": "The Singapore-based startup offers an on-chain fund platform that allows institutions and venture capitalists to create, use and sell financial products.",
-            "publish_time": "2023-07-31 22:00",
-            "link": "https://www.coindesk.com/business/2023/07/31/nomura-backs-6m-round-for-on-chain-fund-platform-solv-protocol/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+            "description": "",
+            "publish_time": "2023-08-07 15:08",
+            "link": "https://www.coindesk.com/consensus-magazine/2023/08/07/congress-not-the-sec-should-set-us-digital-asset-policy/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
         },
         {
-            "title": "Curve Founder\u2019s $168M Stash Is Under Stress, Creating a Risk for DeFi as a Whole",
-            "score": -0.02,
-            "description": "Curve CEO Michael Egorov pledged 34% of CRV\u2019s total market cap to back loans across DeFi protocols. A forced liquidation would result in selling at a time when prices are already falling.",
-            "publish_time": "2023-07-31 21:44",
-            "link": "https://www.coindesk.com/markets/2023/07/31/a-curve-founders-168m-stash-is-under-stress-creating-a-risk-for-defi-as-a-whole/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+            "title": "Binance's VC Arm Dominated Funding Rounds Last Week Even as Regulators Scrutinized the Crypto Exchange",
+            "score": -0.036,
+            "description": "Binance Labs announced investments in four incubator projects and participated in a round for privacy infrastructure startup zkPass.",
+            "publish_time": "2023-08-07 14:59",
+            "link": "https://www.coindesk.com/business/2023/08/07/binances-vc-arm-dominated-funding-rounds-last-week-even-as-regulators-scrutinized-the-crypto-exchange/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
         },
         {
-            "title": "Judge Rejects Ripple Ruling Precedent in Denying Terraform Labs' Motion to Dismiss SEC Lawsuit",
+            "title": "Sino Global Files $67M Claim Against FTX-Alameda",
+            "score": -0.017,
+            "description": "Sino Global invested in tokens heavily affected by the decline of Sam Bankman-Fried's FTX crypto empire and partnered with FTX on a fund raised with outside investors' capital.",
+            "publish_time": "2023-08-07 14:35",
+            "link": "https://www.coindesk.com/markets/2023/08/07/sino-global-files-67m-claim-against-ftx-alameda/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "PayPal stablecoin launch sparks wave of fake PYUSD tokens",
             "score": -0.119,
-            "description": "A federal judge rejected Terraform Labs' motion to dismiss a lawsuit filed by the U.S. Securities and Exchange Commission.",
-            "publish_time": "2023-07-31 21:13",
-            "link": "https://www.coindesk.com/policy/2023/07/31/judge-rejects-ripple-ruling-precedent-in-denying-terraform-labs-motion-to-dismiss-sec-lawsuit/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+            "description": "Nearly 30 fake PYUSD tokens cropped up in the wake of PayPal\u2019s most recent announcement.",
+            "publish_time": "2023-08-08 05:21",
+            "link": "https://cointelegraph.com/news/paypal-stablecoin-launch-sparks-fake-pyusd-tokens"
         },
         {
-            "title": "\u2018Let's just diversify and see' \u2014 Binance CEO on its stablecoin strategy",
-            "score": -0.041,
-            "description": "Due to regulatory and transparency risks, CZ says that spreading risk across different stablecoins is the key to longevity.",
-            "publish_time": "2023-08-01 02:02",
-            "link": "https://cointelegraph.com/news/changpeng-zhao-cz-binance-stablecoin-strategy-tether-busd"
+            "title": "PayPal USD: Boon for Ethereum but not decentralization, says community",
+            "score": -0.106,
+            "description": "Proponents say PayPal\u2019s PYUSD could see Ethereum become the money layer of the internet, while opponents argue that it\u2019ll act like a poorly designed central bank digital currency.",
+            "publish_time": "2023-08-08 01:32",
+            "link": "https://cointelegraph.com/news/paypal-usd-boon-for-ethereum-but-not-decentralization-says-community"
         },
         {
-            "title": "BALD token developer denies rug pull as price falls 85% post-launch",
-            "score": -0.063,
-            "description": "The BALD memecoin collapsed in price as collectors alleged an exit scam, but the developer claims not to have sold any coins.",
-            "publish_time": "2023-07-31 17:28",
-            "link": "https://cointelegraph.com/news/bald-token-developer-denies-rug-pull-price-falls-post-launch"
+            "title": "China\u2019s risky Bitcoin court decision, is Huobi in trouble or not? Asia Express",
+            "score": -0.112,
+            "description": "Man loses $10M after Chinese court rules Bitcoin lending is not protected by law, loads of Web3 founders get arrested, and Huobi rumors swirl.",
+            "publish_time": "2023-08-07 22:35",
+            "link": "https://cointelegraph.com/magazine/chinas-risky-bitcoin-court-decision-is-huobi-in-trouble-or-not-asia-express/"
         },
         {
-            "title": "SEC files complaint against Hex founder for allegedly offering unregistered securities",
-            "score": -0.079,
-            "description": "According to the SEC, Richard Heart allegedly used more than $12 million of investor funds to buy \u201ca 555-carat diamond, expensive watches, and high-end automobiles.\u201d",
-            "publish_time": "2023-07-31 14:55",
-            "link": "https://cointelegraph.com/news/sec-files-complaint-hex-founder-offering-unregistered-securities"
+            "title": "Buffett and Ackman take opposing sides on Treasury yields \u2014 What does it mean for Bitcoin?",
+            "score": -0.094,
+            "description": "Two investment moguls are betting on different directions for inflation and Treasury yields, with potentially negative impacts on Bitcoin.",
+            "publish_time": "2023-08-07 17:30",
+            "link": "https://cointelegraph.com/news/buffett-and-ackman-take-opposing-sides-on-treasury-yields-what-does-it-mean-for-bitcoin"
+        },
+        {
+            "title": "Coinbase Exec: \u2018There\u2019s No Playbook\u2019 for Public Company Launching Blockchain",
+            "score": -0.161,
+            "description": "As Coinbase, the big U.S. crypto exchange, plans to launch its new Base blockchain on Wednesday, CoinDesk interviewed Jesse Pollak, who\u2019s leading the effort. Here\u2019s an excerpted version.",
+            "publish_time": "2023-08-09 01:31",
+            "link": "https://www.coindesk.com/tech/2023/08/09/coinbase-exec-theres-no-playbook-for-public-company-launching-blockchain/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "Venture-Backed Saddle Finance Proposes Wind-Down, Dissolution",
+            "score": -0.12,
+            "description": "The Ethereum-based crypto trading protocol will shut down and distribute its treasury to investors.",
+            "publish_time": "2023-08-08 20:39",
+            "link": "https://www.coindesk.com/tech/2023/08/08/venture-backed-saddle-finance-proposes-wind-down-dissolution/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "Desperately Seeking Crypto\u2019s Killer App",
+            "score": -0.213,
+            "description": "When you take away the speculation, what Web3 services actually deliver utility for users?",
+            "publish_time": "2023-08-08 19:15",
+            "link": "https://www.coindesk.com/consensus-magazine/2023/08/08/desperately-seeking-cryptos-killer-app/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "Core Scientific\u2019s bankruptcy plan includes equity stake for Bitmain and Anchorage",
+            "score": -0.082,
+            "description": "If the plan is approved, Core Scientific could buy 27,000 Bitmain miners for roughly $23 million in cash and $54 million in company equity.",
+            "publish_time": "2023-08-08 21:48",
+            "link": "https://cointelegraph.com/news/core-scientific-bankruptcy-plan-equity-stake-bitmain-and-anchorage"
+        },
+        {
+            "title": "Bitstamp to suspend trading of major altcoins for US users",
+            "score": -0.051,
+            "description": "All the soon-to-be-suspended tokens are alleged by the SEC to be securities in its lawsuit against Coinbase and Binance. ",
+            "publish_time": "2023-08-08 19:52",
+            "link": "https://cointelegraph.com/news/bitstamp-suspend-trading-major-altcoins-us-users"
+        },
+        {
+            "title": "Former FTX exec Ryan Salame and US prosecutors are discussing a plea deal: Report",
+            "score": -0.091,
+            "description": "It\u2019s unclear whether any reported guilty plea from Ryan Salame would have the former FTX Digital Markets co-CEO testify at Sam Bankman-Fried's trial in October.",
+            "publish_time": "2023-08-08 19:37",
+            "link": "https://cointelegraph.com/news/former-ftx-exec-ryan-salame-prosecutors-discuss-plea-deal"
         }
     ]
 }

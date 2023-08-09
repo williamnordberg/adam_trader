@@ -1,7 +1,8 @@
 from time import sleep
 import logging
-from typing import Tuple
+from datetime import datetime
 
+from a_config import factor_values_position, LONG_POSITION, position
 from z_read_write_csv import retrieve_latest_factor_values_database
 from b_order_book import order_book, order_book_hit_target
 from a_macro import macro_sentiment, print_upcoming_events
@@ -15,103 +16,68 @@ from l_position_decision import position_decision
 from z_handy_modules import get_bitcoin_price
 from l_position_long_testnet import place_market_buy_order, close_position_at_market
 
-SCORE_MARGIN_TO_CLOSE = 0.65
-PROFIT_MARGIN = 0.01
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
-POSITION_SIZE = 0.1
-TRADING_LOOP_SLEEP_TIME = 60 * 5
 
 
-def long_position(score_margin_to_close: float, profit_margin: float) -> Tuple[int, int]:
+def long_position() -> dict:
     current_price = get_bitcoin_price()
-    position_opening_price = current_price
-    profit_point = int(current_price + (current_price * profit_margin))
-    stop_loss = int(current_price - (current_price * profit_margin))
-    profit, loss = 0, 0
-
+    position['opening_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    position['opening_price'] = current_price
+    position['profit_target'] = int(current_price + (current_price * LONG_POSITION['PROFIT_MARGIN']))
+    position['stop_loss'] = int(current_price - (current_price * LONG_POSITION['PROFIT_MARGIN']))
+    position['type'] = 'long'
     # Remind upcoming macro events
-    macro_bullish_NA, macro_bearish_NA, events_date_dict = macro_sentiment()
+    macro_bullish_NA, events_date_dict = macro_sentiment()
     print_upcoming_events(events_date_dict)
 
     # Place order o spot testnet
-    place_market_buy_order(POSITION_SIZE)
+    try:
+        place_market_buy_order(LONG_POSITION['SIZE'])
+    except Exception as e:
+        logging.error(f'exception with shorting market as {e}')
 
     while True:
-        current_price = get_bitcoin_price()
-        logging.info(f'Current_price:{current_price},PNL:{current_price-position_opening_price} '
-                     f'Profit_point:{profit_point},Stop_loss:{stop_loss}')
+        logging.info(f'███ long_position RUNNING ███')
 
-        # Check if we meet profit or stop loss
-        if current_price >= profit_point:
-            close_position_at_market(POSITION_SIZE)
-            profit = int(current_price - position_opening_price)
-            logging.info('&&&&&&&&&&&&&& target hit &&&&&&&&&&&&&&&&&&&&&')
-            return profit, loss
-        elif current_price < stop_loss:
-            close_position_at_market(POSITION_SIZE)
-            loss = int(position_opening_price - current_price)
-            logging.info('&&&&&&&&&&&&&& STOP LOSS &&&&&&&&&&&&&&&&&&&&&')
-            return profit, loss
+        factor_values_position['macro'], events_date_dict = macro_sentiment()
 
-        probability_to_hit_target, probability_to_hit_stop_loss = \
-            order_book_hit_target(SYMBOLS, 1000, profit_point, stop_loss)
+        factor_values_position['order'] = order_book(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
+        factor_values_position['order_target'] = order_book_hit_target(
+            SYMBOLS, 1000, position["profit_target"], position["stop_loss"])
 
-        # 1 Get the prediction
-        prediction_bullish, prediction_bearish = decision_tree_predictor()
+        factor_values_position['prediction'] = decision_tree_predictor()
 
-        # 2 Get probabilities of price going up or down
-        order_book_bullish, order_book_bearish = \
-            order_book(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
+        factor_values_position['richest'] = retrieve_latest_factor_values_database('richest_addresses')
 
-        # 3 Monitor the richest Bitcoin addresses
-        richest_addresses_bullish, richest_addresses_bearish = \
-            retrieve_latest_factor_values_database('richest_addresses')
+        factor_values_position['technical'] = technical_analyse()
 
-        # 4 Check Google search trends for Bitcoin and cryptocurrency
-        google_search_bullish, google_search_bearish = check_search_trend(["Bitcoin", "Cryptocurrency"])
+        factor_values_position['google'] = check_search_trend(["Bitcoin", "Cryptocurrency"])
 
-        # 5 Check macroeconomic indicators
-        macro_bullish, macro_bearish, events_date_dict = macro_sentiment()
+        factor_values_position['reddit'] = reddit_check()
 
-        # 6 Reddit
-        reddit_bullish, reddit_bearish = reddit_check()
+        factor_values_position['youtube'] = check_bitcoin_youtube_videos_increase()
 
-        # 7 YouTube
-        youtube_bullish, youtube_bearish = check_bitcoin_youtube_videos_increase()
-
-        # 8 Collect data from news websites
-        news_bullish, news_bearish = check_sentiment_of_news()
-
-        # 9 Technical analysis
-        technical_bullish, technical_bearish = technical_analyse()
+        factor_values_position['news'] = check_sentiment_of_news()
 
         # position decision
-        weighted_score_up, weighted_score_down = position_decision(
-            macro_bullish, macro_bearish,
-            order_book_bullish, order_book_bearish,
-            probability_to_hit_target, probability_to_hit_stop_loss,
-            prediction_bullish, prediction_bearish,
-            technical_bullish, technical_bearish,
-            richest_addresses_bullish, richest_addresses_bearish,
-            google_search_bullish, google_search_bearish,
-            reddit_bullish, reddit_bearish,
-            youtube_bullish, youtube_bearish,
-            news_bullish, news_bearish)
+        weighted_score = position_decision(factor_values_position)
 
-        # Check if weighed score show high chance to position loss
-        if weighted_score_down > weighted_score_up and weighted_score_down > score_margin_to_close:
-            close_position_at_market(POSITION_SIZE)
-            if current_price > position_opening_price:
-                profit = int(current_price - position_opening_price)
-                logging.info('long position closed with profit')
-                return profit, loss
-            elif current_price <= position_opening_price:
-                loss = int(position_opening_price - current_price)
-                logging.info('long position closed with loss')
-                return profit, loss
-        sleep(TRADING_LOOP_SLEEP_TIME)
+        price = get_bitcoin_price()
+        logging.info(f'Current_price:{price},PNL:{price - position["opening_price"]} '
+                     f'profit_target:{position["profit_target"]},Stop_loss:{position["stop_loss"]}')
+        if price >= position['profit_target'] or price < position['stop_loss'] or \
+                weighted_score < LONG_POSITION['THRESHOLD_TO_CLOSE']:
+            close_position_at_market(LONG_POSITION['SIZE'])
+            position['pnl'] = int(price - position['opening_price'])
+            logging.info('&&&&&&&&&&&&&& LONG CLOSED &&&&&&&&&&&&&&&&&&&&')
+            position['closing_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            position['closing_price'] = price
+            position['closing_score'] = weighted_score
+            return position
+        logging.info(f'███ long_position SLEEPS ███')
+        sleep(LONG_POSITION['LOOP_SLEEP_TIME'])
 
 
 if __name__ == "__main__":
-    profit_after_trade, loss_after_trade = long_position(SCORE_MARGIN_TO_CLOSE, PROFIT_MARGIN)
-    logging.info(f"profit_after_trade:{profit_after_trade}, loss_after_trade:{loss_after_trade}")
+    position = long_position()
+    logging.info(f"profit_after_trade:{position['pnl']}")

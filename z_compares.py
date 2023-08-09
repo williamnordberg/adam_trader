@@ -20,14 +20,13 @@ VALUES_MACRO_MTM = [(1.0, 0.0), (0.85, 0.15), (0.7, 0.3), (0.6, 0.4), (0.4, 0.6)
 
 # 2. Order book
 RANGES_ORDER_VOL = [(0.5, 0.53), (0.53, 0.56), (0.56, 0.59), (0.59, 0.62), (0.62, 0.65), (0.65, INF)]
-VALUES_ORDER_VOL = [(0.0, 0.0), (0.6, 0.4), (0.7, 0.3), (0.8, 0.2), (0.9, 0.1), (1.0, 0.0)]
+VALUES_ORDER_VOL = [0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
 
 # 3. Prediction
 RANGES_PREDICTION = [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, float('inf'))]
-VALUES_PREDICTION_GREATER = [(0.0, 0.0), (0.6, 0.4), (0.7, 0.3), (0.8, 0.2), (0.9, 0.1), (1.0, 0.0)]
-VALUES_PREDICTION_LESSER = [(0.0, 0.0), (0.4, 0.6), (0.3, 0.7), (0.2, 0.8), (0.1, 0.9), (0.0, 1.0)]
+VALUES_PREDICTION_GREATER = [0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+VALUES_PREDICTION_LESSER = [0.5, 0.4, 0.3, 0.2, 0.1, 0.0]
 
-# 4. Technical in function
 # 5.Richest
 RANGES_RICH = [
     (float('-inf'), -5),
@@ -43,27 +42,24 @@ RANGES_RICH = [
     (5, float('inf')),
 ]
 VALUES_RICH = [
-    (0.0, 1.0),  # <-5
-    (0.1, 0.9),  # -5 to -4
-    (0.2, 0.8),  # -4 to -3
-    (0.3, 0.7),  # -3 to -2
-    (0.4, 0.6),  # -2 to -1
-    (0.0, 0.0),  # -1 to 1
-    (0.6, 0.4),  # 1 to 2
-    (0.7, 0.3),  # 2 to 3
-    (0.8, 0.2),  # 3 to 4
-    (0.9, 0.1),  # 4 to 5
-    (1.0, 0.0),  # >5
+    0.0,  # <-5
+    0.1,  # -5 to -4
+    0.2,  # -4 to -3
+    0.3,  # -3 to -2
+    0.4,  # -2 to -1
+    0.5,  # -1 to 1
+    0.6,  # 1 to 2
+    0.7,  # 2 to 3
+    0.8,  # 3 to 4
+    0.9,  # 4 to 5
+    1.0,  # >5
 ]
 
 
-# 6,7,8. Google, Reddit, You tube
 RANGES_GOOGLE = [(1.0, 1.1), (1.1, 1.15), (1.15, 1.2), (1.2, 1.25), (1.25, float('inf'))]
-VALUES__GOOGLE = [(0.0, 0.0), (0.6, 0.4), (0.75, 0.25), (0.85, 0.15), (1.0, 0.0)]
+VALUES__GOOGLE = [0.5, 0.6, 0.75, 0.85, 1.0]
 RANGES_GOOGLE_DOWN = [(1.0, 1.1), (1.1, 1.15), (1.15, 1.2), (1.2, 1.25), (1.25, float('inf'))]
-VALUES_GOOGLE_DOWN = [(0.0, 0.0), (0.4, 0.6), (0.25, 0.75), (0.15, 0.85), (0.0, 1.0)]
-
-# 9.News in function
+VALUES_GOOGLE_DOWN = [0.5, 0.4, 0.25, 0.15, 0.0]
 
 
 def compare(data, ranges, values):
@@ -77,7 +73,7 @@ def compare_macro_m_to_m(cpi_m_to_m: float) -> Tuple[float, float]:
     return compare(cpi_m_to_m, RANGES_MACRO_MTM, VALUES_MACRO_MTM)
 
 
-def moving_averages_cross_order_book() -> Tuple[float, float]:
+def moving_averages_cross_order_book() -> float:
     df = read_database()
 
     # Calculate the short and long moving averages for total received
@@ -92,65 +88,69 @@ def moving_averages_cross_order_book() -> Tuple[float, float]:
                    rolling(window=LONG_MOVING_AVERAGE_WINDOW_ORDER).mean().tail(1).item())
 
     if short_mv_bid > long_mv_bid and short_mv_ask < long_mv_ask:
-        return 0.15, -0.15
+        return 0.15
     elif short_mv_bid < long_mv_bid and short_mv_ask > long_mv_ask:
-        return -0.15, 0.15
+        return -0.15
 
     elif short_mv_bid > long_mv_bid and short_mv_ask > long_mv_ask:
-        return 0.1, -0.1
+        return 0.1
     elif short_mv_bid < long_mv_bid and short_mv_ask < long_mv_ask:
-        return -0.1, 0.1
+        return -0.1
     else:
-        return 0.0, 0.0
+        return 0.0
 
 
-def compare_order_volume(probability_up: float, probability_down: float) -> Tuple[float, float]:
+def compare_order_volume(probability_up: float, probability_down: float) -> float:
     if probability_up >= probability_down:
-        order_bullish, order_bearish = compare(probability_up, RANGES_ORDER_VOL, VALUES_ORDER_VOL)
+        order_bullish = compare(probability_up, RANGES_ORDER_VOL, VALUES_ORDER_VOL)
     else:
-        order_bullish, order_bearish = compare(probability_down, RANGES_ORDER_VOL, [val[::-1] for val in VALUES_ORDER_VOL])
+        order_bearish = compare(
+            probability_down, RANGES_ORDER_VOL, VALUES_ORDER_VOL)
+        order_bullish = round(1 - order_bearish, 2)
 
-    mv_add_on_bullish, mv_add_on_bearish = moving_averages_cross_order_book()
+    mv_add_on_bullish = moving_averages_cross_order_book()
     order_bullish += mv_add_on_bullish
-    order_bearish += mv_add_on_bearish
-    order_bullish, order_bearish = round(order_bullish, 2), round(order_bearish, 2)
+    order_bullish = round(order_bullish, 2)
 
     # Ensure values are within the range [0, 1]
     order_bullish = min(max(order_bullish, 0), 1)
-    order_bearish = min(max(order_bearish, 0), 1)
 
-    return order_bullish, order_bearish
+    return order_bullish
 
 
-def compare_predicted_price(predicted_price: int, current_price: int) -> Tuple[float, float]:
+def compare_predicted_price(predicted_price: int, current_price: int) -> float:
     if predicted_price > current_price:
         price_difference_percentage = (predicted_price - current_price) / current_price * 100
-        return compare(price_difference_percentage, RANGES_PREDICTION, VALUES_PREDICTION_GREATER)
+        prediction_bullish = compare(
+            price_difference_percentage, RANGES_PREDICTION, VALUES_PREDICTION_GREATER)
+        return prediction_bullish
     elif current_price > predicted_price:
         price_difference_percentage = (current_price - predicted_price) / predicted_price * 100
-        return compare(price_difference_percentage, RANGES_PREDICTION, VALUES_PREDICTION_LESSER)
+        prediction_bullish = compare(
+            price_difference_percentage, RANGES_PREDICTION, VALUES_PREDICTION_LESSER)
+        return prediction_bullish
     else:
-        return 0.0, 0.0
+        return 0.5
 
 
-def compare_technical(reversal: str, potential_up_trend: bool, over_ema200: bool) -> Tuple[float, float]:
+def compare_technical(reversal: str, potential_up_trend: bool, over_ema200: bool) -> float:
     # Define a dictionary for all possibilities
     technical_mapping = {
         # Reversal, Trend, EMA200
-        ('up', True, True): (1, 0),
-        ('up', True, False): (0.9, 0.1),
-        ('up', False, True): (0.9, 0.1),
-        ('up', False, False): (0.8, 0.2),
+        ('up', True, True): 1,
+        ('up', True, False): 0.9,
+        ('up', False, True): 0.9,
+        ('up', False, False): 0.8,
 
-        ('down', False, False): (0, 1),
-        ('down', True, False): (0.1, 0.9),
-        ('down', False, True): (0.1, 0.9),
-        ('down', True, True): (0.2, 0.8),
+        ('down', False, False): 0,
+        ('down', True, False): 0.1,
+        ('down', False, True): 0.1,
+        ('down', True, True): 0.2,
 
-        ('neither', True, False): (0, 0),
-        ('neither', False, True): (0, 0),
-        ('neither', True, True): (0.7, 0.3),
-        ('neither', False, False): (0.3, 0.7)
+        ('neither', True, False): 0.5,
+        ('neither', False, True): 0.5,
+        ('neither', True, True): 0.7,
+        ('neither', False, False): 0.3
     }
     return technical_mapping[(reversal, potential_up_trend, over_ema200)]
 
@@ -167,22 +167,19 @@ def compare_richest_addresses() -> Tuple[float, float]:
         activity_percentage = -((total_sent - total_received) / total_received) * 100
     else:
         activity_percentage = 0
+    rich_bullish = compare(activity_percentage, RANGES_RICH, VALUES_RICH)
 
-    rich_bullish, rich_bearish = compare(activity_percentage, RANGES_RICH, VALUES_RICH)
-
-    mv_add_on_bullish, mv_add_on_bearish = moving_averages_cross_richest()
+    mv_add_on_bullish = moving_averages_cross_richest()
     rich_bullish += mv_add_on_bullish
-    rich_bearish += mv_add_on_bearish
 
-    rich_bullish, rich_bearish = round(rich_bullish, 2), round(rich_bearish, 2)
+    rich_bullish = round(rich_bullish, 2)
 
     # Ensure values are within the range [0, 1]
     rich_bullish = min(max(rich_bullish, 0), 1)
-    rich_bearish = min(max(rich_bearish, 0), 1)
-    return rich_bullish, rich_bearish
+    return rich_bullish
 
 
-def moving_averages_cross_richest() -> Tuple[float, float]:
+def moving_averages_cross_richest() -> float:
     df = read_database()
 
     # Calculate the short and long moving averages for total received
@@ -197,14 +194,14 @@ def moving_averages_cross_richest() -> Tuple[float, float]:
                     rolling(window=LONG_MOVING_AVERAGE_WINDOW_Rich).mean().tail(1).item())
 
     if short_mv_received > long_mv_received and short_mv_sent < long_mv_sent:
-        return 0.1, -0.1
+        return 0.1
     elif short_mv_received < long_mv_received and short_mv_sent > long_mv_sent:
-        return -0.1, 0.1
+        return -0.1
     else:
-        return 0.0, 0.0
+        return 0.0
 
 
-def compare_google_reddit_youtube(last_hour: int, two_hours_before: int) -> Tuple[float, float]:
+def compare_google_reddit_youtube(last_hour: int, two_hours_before: int) -> float:
     # prevent division by zero
     if last_hour == 0 or two_hours_before == 0:
         last_hour += 1
@@ -219,4 +216,5 @@ def compare_google_reddit_youtube(last_hour: int, two_hours_before: int) -> Tupl
 
 
 if __name__ == '__main__':
+    # print(compare_predicted_price(1000, 1010))
     print(compare_richest_addresses())

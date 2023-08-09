@@ -1,6 +1,5 @@
 import requests.exceptions
 import json
-from typing import Tuple
 
 from i_news_sentiment import calculate_news_sentiment
 from z_handy_modules import retry_on_error, get_bitcoin_price
@@ -14,12 +13,10 @@ def normalize_scores(positive_score, negative_score):
     total_score = positive_score + negative_score
     if total_score == 0:  # avoid dividing by 0
         news_bullish = 0.5
-        news_bearish = 0.5
     else:
         news_bullish = positive_score / total_score
-        news_bearish = negative_score / total_score
 
-    return round(news_bullish, 2), round(news_bearish, 2)
+    return round(news_bullish, 2)
 
 
 @retry_on_error(max_retries=3, delay=5,
@@ -30,8 +27,8 @@ def update_bitcoin_price_in_database():
 
 
 @retry_on_error(3, 5, (requests.exceptions.RequestException,
-                       json.JSONDecodeError, ValueError, KeyError), (0.0, 0.0))
-def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
+                       json.JSONDecodeError, ValueError, KeyError), 0.5)
+def check_sentiment_of_news_wrapper() -> float:
 
     # We need to update Bitcoin price hourly (same as news)
     update_bitcoin_price_in_database()
@@ -47,21 +44,20 @@ def check_sentiment_of_news_wrapper() -> Tuple[float, float]:
     save_update_time('sentiment_of_news')
 
     # calculate news_bullish and bearish
-    news_bullish, news_bearish = normalize_scores(positive_polarity, negative_polarity)
+    news_bullish = normalize_scores(positive_polarity, negative_polarity)
 
-    return news_bullish, news_bearish
+    return news_bullish
 
 
-def check_sentiment_of_news() -> Tuple[float, float]:
+def check_sentiment_of_news() -> float:
     if should_update('sentiment_of_news'):
-        news_bullish, news_bearish = check_sentiment_of_news_wrapper()
+        news_bullish = check_sentiment_of_news_wrapper()
         save_value_to_database('news_bullish', news_bullish)
-        save_value_to_database('news_bearish', news_bearish)
-        return news_bullish, news_bearish
+        return news_bullish
     else:
         return retrieve_latest_factor_values_database('news')
 
 
 if __name__ == "__main__":
-    news_bullish_outer, news_bearish_outer = check_sentiment_of_news_wrapper()
-    print(f'news_bullish: {news_bullish_outer}, and news_bearish: {news_bearish_outer}')
+    news_bullish_outer = check_sentiment_of_news_wrapper()
+    print(f'news_bullish: {news_bullish_outer}')

@@ -3,12 +3,12 @@ from a_a_logging_config import do_nothing
 import logging
 from time import sleep
 from multiprocessing import Process
-from datetime import datetime
 import signal
 import sys
 import os
 
-from z_handy_modules import get_bitcoin_price, calculate_score_margin
+from a_config import (factor_values, LONG_THRESHOLD, SHORT_THRESHOLD,
+                      RICHEST_ADDRESSES_SLEEP_TIME, MAIN_TRADING_LOOP_SLEEP_TIME)
 from z_compares import compare_richest_addresses
 from d_technical import technical_analyse
 from i_news_analyser import check_sentiment_of_news
@@ -22,20 +22,14 @@ from k_combined_score import make_trading_decision
 from l_position_long import long_position
 from l_position_short import short_position
 from m_visual_app import visualize_charts
-from l_position_short_testnet import check_no_open_future_position
 from e_richest import monitor_bitcoin_richest_addresses
 from z_read_write_csv import retrieve_latest_factor_values_database, \
-    save_value_to_database, write_latest_data, save_trade_details, save_trade_result
+    save_value_to_database, write_latest_data, save_trade_details
 
 
 # Constants
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
-SYMBOL = 'BTCUSDT'
-LONG_THRESHOLD = 0.68
-SHORT_THRESHOLD = 0.70
-PROFIT_MARGIN = 0.005
-RICHEST_ADDRESSES_SLEEP_TIME = 20 * 60
-MAIN_TRADING_LOOP_SLEEP_TIME = 20 * 60
+
 
 
 do_nothing()
@@ -52,11 +46,10 @@ def run_monitor_richest_addresses():
         logging.info(f'♥♥♥♥ {os.getpid()}_Rich addresses({RICH_LOOP_COUNTER}) RUNNING ♥♥♥♥')
         total_received, total_sent = monitor_bitcoin_richest_addresses()
         if total_received != 0.0:
-            richest_addresses_bullish, richest_addresses_bearish = compare_richest_addresses()
+            richest_addresses_bullish = compare_richest_addresses()
 
             # Save to database
             save_value_to_database('richest_addresses_bullish', richest_addresses_bullish)
-            save_value_to_database('richest_addresses_bearish', richest_addresses_bearish)
 
             logging.info(f'♥♥♥♥ Richest Send: {total_sent} '
                          f' RECEIVE: {total_received} in 24H ♥♥♥♥')
@@ -66,99 +59,50 @@ def run_monitor_richest_addresses():
 
 
 # noinspection PyDictCreation
-def trading_loop(long_threshold: float, short_threshold: float, profit_margin: float):
+def trading_loop(long_threshold: float, short_threshold: float):
     LOOP_COUNTER = 0
     while True:
         LOOP_COUNTER += 1
         logging.info(f'███ {os.getpid()}_trading({LOOP_COUNTER}) RUNNING ███')
         write_latest_data('latest_trading_state', 'main')
-        factor_values = {
-            'macro_bullish': 0.0,
-            'macro_bearish': 0.0,
-            'order_book_bullish': 0.0,
-            'order_book_bearish': 0.0,
-            'prediction_bullish': 0.0,
-            'prediction_bearish': 0.0,
-            'technical_bullish': 0.0,
-            'technical_bearish': 0.0,
-            'richest_bullish': 0.0,
-            'richest_bearish': 0.0,
-            'google_bullish': 0.0,
-            'google_bearish': 0.0,
-            'reddit_bullish': 0.0,
-            'reddit_bearish': 0.0,
-            'youtube_bullish': 0.0,
-            'youtube_bearish': 0.0,
-            'news_bullish': 0.0,
-            'news_bearish': 0.0,
-            'weighted_score_up': 0.0,
-            'weighted_score_down': 0.0
-        }
 
-        factor_values['prediction_bullish'], factor_values['prediction_bearish'] = decision_tree_predictor()
-
-        factor_values['order_book_bullish'], factor_values['order_book_bearish'] =\
-            order_book(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
-
-        factor_values['macro_bullish'], factor_values['macro_bearish'], events_date_dict = macro_sentiment()
+        factor_values['macro'], events_date_dict = macro_sentiment()
         print_upcoming_events(events_date_dict)
 
-        factor_values['richest_bullish'], factor_values['richest_bearish'] = \
-            retrieve_latest_factor_values_database('richest_addresses')
+        factor_values['order'] = order_book(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
 
-        factor_values['google_bullish'], factor_values['google_bearish'] = \
-            check_search_trend(["Bitcoin", "Cryptocurrency"])
+        factor_values['prediction'] = decision_tree_predictor()
 
-        factor_values['reddit_bullish'], factor_values['reddit_bearish'] = reddit_check()
+        factor_values['richest'] = retrieve_latest_factor_values_database('richest_addresses')
 
-        factor_values['youtube_bullish'], factor_values['youtube_bearish'] = check_bitcoin_youtube_videos_increase()
+        factor_values['technical'] = technical_analyse()
 
-        factor_values['news_bullish'], factor_values['news_bearish'] = check_sentiment_of_news()
+        factor_values['google'] = check_search_trend(["Bitcoin", "Cryptocurrency"])
 
-        factor_values['technical_bullish'], factor_values['technical_bearish'] = technical_analyse()
+        factor_values['reddit'] = reddit_check()
+
+        factor_values['youtube'] = check_bitcoin_youtube_videos_increase()
+
+        factor_values['news'] = check_sentiment_of_news()
 
         # Make decision about the trade
-        weighted_score_up, weighted_score_down = make_trading_decision(factor_values)
-        factor_values['weighted_score_up'] = weighted_score_up
-        factor_values['weighted_score_down'] = weighted_score_down
+        weighted_score = make_trading_decision(factor_values)
 
         # Trading decision
-        if weighted_score_up > weighted_score_down and weighted_score_up > long_threshold:
-            logging.info(f'Opening a long position with score of: {weighted_score_up}')
-            trade_open_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            opening_price = get_bitcoin_price()
-            score_margin_to_close = calculate_score_margin(weighted_score_up)
-
+        if weighted_score > long_threshold:
+            logging.info(f'Opening a long position with score of: {weighted_score}')
             write_latest_data('latest_trading_state', 'long')
-            profit_after_trade, loss_after_trade = long_position(score_margin_to_close, profit_margin)
-            pnl = profit_after_trade - loss_after_trade
-            trade_close_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            close_price = get_bitcoin_price()
+            position = long_position()
+            position['opening_score'] = weighted_score
+            save_trade_details(position, factor_values)
 
-            save_trade_result(pnl, weighted_score_up, 'long')
-            save_trade_details(weighted_score_up, trade_open_time,
-                               trade_close_time, 'long', opening_price, close_price, pnl, factor_values)
-            logging.info(f"profit_after_trade:{profit_after_trade}, loss_after_trade:"
-                         f"{loss_after_trade}")
-
-        elif weighted_score_down > weighted_score_up and weighted_score_down > short_threshold and \
-                check_no_open_future_position(SYMBOL):
-            logging.info(f'Opening short position with score of: {weighted_score_down}')
-            trade_open_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            opening_price = get_bitcoin_price()
-            score_margin_to_close = calculate_score_margin(weighted_score_down)
-
+        elif weighted_score < short_threshold:
+            logging.info(f'Opening short position with score of: {weighted_score}')
             write_latest_data('latest_trading_state', 'short')
-            profit_after_trade, loss_after_trade = short_position(score_margin_to_close, profit_margin)
-            pnl = profit_after_trade - loss_after_trade
-            trade_close_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            close_price = get_bitcoin_price()
+            position = short_position()
+            position['opening_score'] = weighted_score
+            save_trade_details(position, factor_values)
 
-            save_trade_result(pnl, weighted_score_down, 'short')
-            save_trade_details(weighted_score_down, trade_open_time, trade_close_time,
-                               'short', opening_price, close_price, pnl, factor_values)
-
-            logging.info(f"profit_after_trade:{profit_after_trade}, "f"loss_after_trade:{loss_after_trade}")
         logging.info(f'███ {os.getpid()}_trading({LOOP_COUNTER}) SLEEPS ███')
         write_latest_data('latest_trading_state', 'main')
         sleep(MAIN_TRADING_LOOP_SLEEP_TIME)
@@ -181,7 +125,7 @@ if __name__ == "__main__":
     visualization_charts_process.start()
     sleep(2)
 
-    main_trading_loop_process = Process(target=trading_loop, args=[LONG_THRESHOLD, SHORT_THRESHOLD, PROFIT_MARGIN])
+    main_trading_loop_process = Process(target=trading_loop, args=[LONG_THRESHOLD, SHORT_THRESHOLD])
     main_trading_loop_process.start()
     sleep(60)
 

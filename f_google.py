@@ -1,5 +1,4 @@
-import logging
-from typing import List, Tuple
+from typing import List
 from pytrends.request import TrendReq as UTrendReq
 from pytrends.exceptions import ResponseError
 from requests.exceptions import RequestException, ConnectionError, Timeout, TooManyRedirects
@@ -53,8 +52,8 @@ class TrendReq(UTrendReq):
 
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
         ResponseError, RequestException, ConnectionError, Timeout,
-        TooManyRedirects), fallback_values=(0.0, 0.0))
-def check_search_trend_wrapper(keywords: List[str]) -> Tuple[float, float]:
+        TooManyRedirects), fallback_values=0.5)
+def check_search_trend_wrapper(keywords: List[str]) -> float:
     """
     Check if there is a significant increase in search volume for a list of keywords in the past 1 hour.
 
@@ -74,24 +73,23 @@ def check_search_trend_wrapper(keywords: List[str]) -> Tuple[float, float]:
 
     trend = pytrends.interest_over_time()
     last_hour, two_hours_before = trend.iloc[-1].values[0], trend.iloc[-2].values[0]
-    google_bullish,  google_bearish = compare_google_reddit_youtube(last_hour, two_hours_before)
+    google_bullish = compare_google_reddit_youtube(last_hour, two_hours_before)
 
     save_value_to_database('hourly_google_search', last_hour)
     # save_update_time('google_search')
 
-    return google_bullish,  google_bearish
+    return google_bullish
 
 
-def check_search_trend(keywords: List[str]) -> Tuple[float, float]:
+def check_search_trend(keywords: List[str]) -> float:
     if should_update('google_search'):
-        google_bullish, google_bearish = check_search_trend_wrapper(keywords)
+        google_bullish = check_search_trend_wrapper(keywords)
         save_value_to_database('google_search_bullish', google_bullish)
-        save_value_to_database('google_search_bearish', google_bearish)
-        return google_bullish, google_bearish
+        return google_bullish
     else:
         return retrieve_latest_factor_values_database('google_search')
 
 
 if __name__ == "__main__":
-    bullish_score_outer, bearish_score_outer = check_search_trend_wrapper(["Bitcoin"])
-    logging.info(f'google_bullish: {bullish_score_outer}   google_bearish:{bearish_score_outer}')
+    bullish_score_outer = check_search_trend_wrapper(["Bitcoin"])
+    print(f'google_bullish: {bullish_score_outer}')

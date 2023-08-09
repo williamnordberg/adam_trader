@@ -9,13 +9,13 @@ from m_visualization_side import last_and_next_update, create_progress_bar, gene
 from z_handy_modules import COLORS
 from z_read_write_csv import read_database, read_trading_details,  read_trading_results
 from m_visualization_side import read_gauge_chart_data
+from a_config import LONG_THRESHOLD, SHORT_THRESHOLD
 
 # Create a MinMaxScaler object
 scaler = MinMaxScaler((0, 1))
 
 APP_UPDATE_TIME = 50
-LONG_THRESHOLD = 0.68
-SHORT_THRESHOLD = 0.70
+
 LONG_THRESHOLD_GAUGE = 0.68
 SHORT_THRESHOLD_GAUGE = 0.30
 
@@ -126,43 +126,12 @@ def visualization_log(filename, lines=1):
         return ''.join(reversed_lines)
 
 
-def visualize_trade_details():
-    df = read_trading_details()
-
-    # Select only the required columns
-    df = df[["weighted_score", "position_opening_time", "position_closing_time", "opening_price",
-             "close_price", "position_type", "PNL", "macro_bullish", "macro_bearish", "order_book_bullish",
-             "order_book_bearish", "prediction_bullish", "prediction_bearish", "technical_bullish",
-             "technical_bearish", "richest_bullish", "richest_bearish", "google_bullish", "google_bearish",
-             "reddit_bullish", "reddit_bearish", "youtube_bullish", "youtube_bearish", "news_bullish",
-             "news_bearish", "weighted_score_up", "weighted_score_down"]]
-
-    # Display all columns except index
-    columns = [{"name": i, "id": i} for i in df.columns]
-
-    # Create table
-    table = dash_table.DataTable(
-        data=df.to_dict('records'),
-        columns=columns,
-        fixed_rows={'headers': True, 'data': 0},  # Enable fixed headers
-        style_header={'backgroundColor': 'rgb(30, 30, 30)'},
-        style_cell={
-            'backgroundColor': 'rgb(50, 50, 50)',
-            'color': 'white'
-        },
-    )
-
-    return table
-
-
 def visualized_combined():
     df = read_database()
 
     trace_list = [
         go.Scatter(x=df.index, y=df["weighted_score_up"],
-                   name='Combined score bullish', line=dict(color=COLORS['green_chart'])),
-        go.Scatter(x=df.index, y=df["weighted_score_down"],
-                   name='Combined score bearish', line=dict(color=COLORS['red_chart'])),
+                   name='Combined score', line=dict(color=COLORS['green_chart'])),
         go.Scatter(
             x=df.index,
             y=(df["bitcoin_price"] / 100000),
@@ -182,9 +151,7 @@ def visualized_news():
 
     trace_list = [
         go.Scatter(x=df.index, y=df["news_bullish"],
-                   name='News bullish', visible='legendonly'),
-        go.Scatter(x=df.index, y=df["news_bearish"],
-                   name='News bearish', visible='legendonly'),
+                   name='News', visible='legendonly'),
         go.Scatter(x=df.index, y=df["news_positive_polarity"],
                    name='Positive Polarity'),
         go.Scatter(x=df.index, y=df["news_negative_polarity"],
@@ -212,10 +179,7 @@ def visualized_youtube():
 
     trace_list = [
         go.Scatter(x=df.index, y=df["youtube_bullish"],
-                   name='YouTube bullish', visible='legendonly'),
-        go.Scatter(x=df.index, y=df["youtube_bearish"],
-                   name='YouTube bearish', visible='legendonly'),
-
+                   name='YouTube', visible='legendonly'),
         go.Scatter(x=df.index, y=df["youtube_positive_polarity"],
                    name='Positive polarity', visible='legendonly'),
         go.Scatter(x=df.index, y=df["youtube_negative_polarity"],
@@ -240,9 +204,7 @@ def visualized_reddit():
 
     trace_list = [
         go.Scatter(x=df.index, y=df["reddit_bullish"],
-                   name='Reddit bullish', visible='legendonly'),
-        go.Scatter(x=df.index, y=df["reddit_bearish"],
-                   name='Reddit bearish', visible='legendonly'),
+                   name='Reddit', visible='legendonly'),
         go.Scatter(x=df.index, y=df["reddit_activity_24h"],
                    name='Reddit activity'),
         go.Scatter(x=df.index, y=df["reddit_positive_polarity"],
@@ -266,8 +228,7 @@ def visualized_google():
 
     trace_list = [
         go.Scatter(x=df.index, y=df["hourly_google_search"], name='Hourly Google Search'),
-        go.Scatter(x=df.index, y=df["google_search_bullish"], name='Google Bullish', visible='legendonly'),
-        go.Scatter(x=df.index, y=df["google_search_bearish"], name='Google Bearish', visible='legendonly'),
+        go.Scatter(x=df.index, y=df["google_search_bullish"], name='Google', visible='legendonly'),
         go.Scatter(x=df.index, y=(df["bitcoin_price"]/1000), name='Bitcoin price'),
 
     ]
@@ -280,8 +241,7 @@ def visualized_richest():
     df = read_database()
 
     trace_list = [
-        go.Scatter(x=df.index, y=df["richest_addresses_bullish"], name='Richest bullish', visible='legendonly'),
-        go.Scatter(x=df.index, y=df["richest_addresses_bearish"], name='Richest bearish', visible='legendonly'),
+        go.Scatter(x=df.index, y=df["richest_addresses_bullish"], name='Richest', visible='legendonly'),
         go.Scatter(x=df.index, y=df["richest_addresses_total_received"], name='Received in last 24H'),
         go.Scatter(x=df.index, y=df["richest_addresses_total_sent"], name='Sent in last 24H'),
         go.Scatter(x=df.index, y=df["bitcoin_price"], name='Bitcoin price', visible='legendonly'),
@@ -299,8 +259,7 @@ def visualize_macro():
         go.Scatter(x=df.index, y=df['fed_rate_m_to_m'], name='Interest Rate M to M', hovertemplate='%{y}'),
         go.Scatter(x=df.index, y=df["cpi_m_to_m"], name='CPI M to M', hovertemplate='%{y}'),
         go.Scatter(x=df.index, y=df["ppi_m_to_m"], name='PPI M to M', hovertemplate='%{y}'),
-        go.Scatter(x=df.index, y=df["macro_bullish"], name='Macro Bullish', visible='legendonly', hovertemplate='%{y}'),
-        go.Scatter(x=df.index, y=df["macro_bearish"], name='Macro Bearish', visible='legendonly', hovertemplate='%{y}'),
+        go.Scatter(x=df.index, y=df["macro_bullish"], name='Macro', visible='legendonly', hovertemplate='%{y}'),
         go.Scatter(
             x=df.index,
             y=(df["bitcoin_price"] / 100000),
@@ -320,8 +279,7 @@ def visualize_prediction():
     trace_list = [
         go.Scatter(x=df.index, y=df["predicted_price"], name='Predicted price'),
         go.Scatter(x=df.index, y=df["bitcoin_price"].shift(-1), name='Actual price'),
-        go.Scatter(x=df.index, y=df["prediction_bullish"], name='Prediction bullish', visible='legendonly'),
-        go.Scatter(x=df.index, y=df["prediction_bearish"], name='Prediction bearish', visible='legendonly')
+        go.Scatter(x=df.index, y=df["prediction_bullish"], name='Prediction', visible='legendonly'),
     ]
 
     fig = create_figure(trace_list, "Prediction", 'Value')
@@ -406,10 +364,10 @@ def visualize_trade_results():
     return fig
 
 
-def create_single_gauge_chart(bullish, bearish, factor):
+def create_single_gauge_chart(bullish, factor):
     last_update_time_str, next_update_str = last_and_next_update(factor)
 
-    if bullish == 0 and bearish == 0:
+    if bullish == 0.5:
         value = 0
         gauge_steps = [
             {"range": [0, 1], "color": COLORS['lightgray']},
@@ -425,7 +383,7 @@ def create_single_gauge_chart(bullish, bearish, factor):
         }
 
     else:
-        value = round(((bullish / (bullish + bearish)) * 1), 2)
+        value = bullish
         gauge_steps = [
             {"range": [0, 1], "color": COLORS['red_chart']}
         ]
@@ -475,30 +433,24 @@ def create_gauge_charts():
                                         "YouTube Sentiment", "News Sentiment", "Combined Score"])
 
     fig.add_trace(create_single_gauge_chart(
-        data_dict['macro_bullish'], data_dict['macro_bearish'], 'macro'), row=1, col=1)
+        data_dict['macro_bullish'], 'macro'), row=1, col=1)
     fig.add_trace(create_single_gauge_chart(
-        data_dict['order_book_bullish'], data_dict['order_book_bearish'], 'order_book'), row=1, col=2)
+        data_dict['order_book_bullish'], 'order_book'), row=1, col=2)
     fig.add_trace(create_single_gauge_chart(
-        data_dict['prediction_bullish'], data_dict['prediction_bearish'],
-        'predicted_price'), row=1, col=3)
+        data_dict['prediction_bullish'], 'predicted_price'), row=1, col=3)
     fig.add_trace(create_single_gauge_chart(
-        data_dict['technical_bullish'], data_dict['technical_bearish'],
-        'technical_analysis'), row=1, col=4)
-    fig.add_trace(create_single_gauge_chart(data_dict['richest_addresses_bullish'],
-                                            data_dict['richest_addresses_bearish'],
-                                            'richest_addresses'), row=1, col=5)
+        data_dict['technical_bullish'], 'technical_analysis'), row=1, col=4)
+    fig.add_trace(create_single_gauge_chart(data_dict['richest_addresses_bullish'], 'richest_addresses'), row=1, col=5)
     fig.add_trace(create_single_gauge_chart(
-        data_dict['google_search_bullish'], data_dict['google_search_bearish'],
-        'google_search'), row=2, col=1)
+        data_dict['google_search_bullish'], 'google_search'), row=2, col=1)
     fig.add_trace(create_single_gauge_chart(
-        data_dict['reddit_bullish'], data_dict['reddit_bearish'], 'reddit'), row=2, col=2)
+        data_dict['reddit_bullish'], 'reddit'), row=2, col=2)
     fig.add_trace(create_single_gauge_chart(
-        data_dict['youtube_bullish'], data_dict['youtube_bearish'], 'youtube'), row=2, col=3)
+        data_dict['youtube_bullish'], 'youtube'), row=2, col=3)
     fig.add_trace(create_single_gauge_chart(
-        data_dict['news_bullish'], data_dict['news_bearish'], 'sentiment_of_news'), row=2, col=4)
+        data_dict['news_bullish'], 'sentiment_of_news'), row=2, col=4)
     fig.add_trace(create_single_gauge_chart(
-        data_dict['weighted_score_up'], data_dict['weighted_score_down'],
-        'weighted_score'), row=2, col=5)
+        data_dict['weighted_score_up'], 'weighted_score'), row=2, col=5)
 
     fig.update_layout(plot_bgcolor=COLORS['background'], paper_bgcolor=COLORS['background'])
 
@@ -510,6 +462,27 @@ def create_gauge_charts():
             annotation['font'] = dict(color=COLORS['white'], size=15)
 
     return fig
+
+
+def visualize_trade_details():
+    df = read_trading_details()
+
+    # Display all columns except index
+    columns = [{"name": i, "id": i} for i in df.columns]
+
+    # Create table
+    table = dash_table.DataTable(
+        data=df.to_dict('records'),
+        columns=columns,
+        fixed_rows={'headers': True, 'data': 0},  # Enable fixed headers
+        style_header={'backgroundColor': 'rgb(30, 30, 30)'},
+        style_cell={
+            'backgroundColor': 'rgb(50, 50, 50)',
+            'color': 'white'
+        },
+    )
+
+    return table
 
 
 def create_trade_details_div():

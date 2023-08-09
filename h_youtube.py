@@ -9,7 +9,6 @@ import os.path
 from google.auth.transport.requests import Request
 from dateutil.parser import parse
 from datetime import datetime, timedelta, timezone
-from typing import Tuple
 from googleapiclient.errors import HttpError
 from google.auth.exceptions import RefreshError
 
@@ -23,19 +22,17 @@ SHORT_MOVING_AVERAGE_WINDOW = 5
 LONG_MOVING_AVERAGE_WINDOW = 20
 
 
-def calculate_youtube_sentiments(youtube_bullish, youtube_bearish, short_ma, long_ma, factor_type):
+def calculate_youtube_sentiments(youtube_bullish, short_ma, long_ma, factor_type):
     adjustment = 0.125
 
     if factor_type == 'positive_polarity' or factor_type == 'positive_count':
         if short_ma > long_ma:
             youtube_bullish += adjustment
-            youtube_bearish -= adjustment
     elif factor_type == 'negative_polarity' or factor_type == 'negative_count':
         if short_ma > long_ma:
             youtube_bullish -= adjustment
-            youtube_bearish += adjustment
 
-    return youtube_bullish, youtube_bearish
+    return youtube_bullish
 
 
 def calculate_bitcoin_youtube_videos_increase():
@@ -48,10 +45,10 @@ def calculate_bitcoin_youtube_videos_increase():
     for col in df.columns:
         short_ma = df[col].rolling(window=SHORT_MOVING_AVERAGE_WINDOW, min_periods=1).mean()
         long_ma = df[col].rolling(window=LONG_MOVING_AVERAGE_WINDOW, min_periods=1).mean()
-        youtube_bullish, youtube_bearish = calculate_youtube_sentiments(
-            youtube_bullish, youtube_bearish, short_ma.iloc[-1], long_ma.iloc[-1], col)
+        youtube_bullish = calculate_youtube_sentiments(
+            youtube_bullish, short_ma.iloc[-1], long_ma.iloc[-1], col)
 
-    return youtube_bullish, youtube_bearish
+    return youtube_bullish
 
 
 def calculate_youtube_temporal_decay(sentiment_score: float, publish_time: datetime) -> float:
@@ -157,7 +154,7 @@ def calculate_sentiment_youtube_videos(youtube, published_after, published_befor
 @retry_on_error(
     max_retries=3, delay=5, allowed_exceptions=(RefreshError,),
     fallback_values=(0.0, 0.0))
-def youtube_wrapper() -> Tuple[float, float]:
+def youtube_wrapper() -> float:
     youtube = get_authenticated_service()
 
     now = datetime.utcnow()
@@ -166,7 +163,6 @@ def youtube_wrapper() -> Tuple[float, float]:
 
     positive_polarity, negative_polarity, positive_count, negative_count, total_video_include_out_threshold = \
         calculate_sentiment_youtube_videos(youtube, last_24_hours_start, last_24_hours_end)
-
     # Save to database
     save_value_to_database('last_24_youtube', total_video_include_out_threshold)
     save_value_to_database('youtube_positive_polarity', positive_polarity)
@@ -174,27 +170,23 @@ def youtube_wrapper() -> Tuple[float, float]:
     save_value_to_database('youtube_positive_count', positive_count)
     save_value_to_database('youtube_negative_count', negative_count)
 
-    youtube_bullish, youtube_bearish = calculate_bitcoin_youtube_videos_increase()
+    youtube_bullish = calculate_bitcoin_youtube_videos_increase()
     save_update_time('youtube')
 
-    return youtube_bullish, youtube_bearish
+    return youtube_bullish
 
 
-def check_bitcoin_youtube_videos_increase() -> Tuple[float, float]:
+def check_bitcoin_youtube_videos_increase() -> float:
     if should_update('youtube'):
 
-        youtube_bullish, youtube_bearish = youtube_wrapper()
-        if youtube_bullish == 0.5 and youtube_bearish == 0.5:
-            youtube_bullish, youtube_bearish = 0, 0
-
+        youtube_bullish = youtube_wrapper()
         save_value_to_database('youtube_bullish', youtube_bullish)
-        save_value_to_database('youtube_bearish', youtube_bearish)
 
-        return youtube_bullish, youtube_bearish
+        return youtube_bullish
     else:
         return retrieve_latest_factor_values_database('youtube')
 
 
 if __name__ == "__main__":
-    youtube_bullish_outer, youtube_bearish_outer = youtube_wrapper()
-    print(f'youtube_bullish: {youtube_bullish_outer} , youtube_bearish: {youtube_bearish_outer}')
+    youtube_bullish_outer = youtube_wrapper()
+    print(f'youtube_bullish: {youtube_bullish_outer}')

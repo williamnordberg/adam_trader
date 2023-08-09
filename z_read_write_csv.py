@@ -1,9 +1,10 @@
-from typing import TypeVar, Type, Any, Dict, Tuple, List
+from typing import TypeVar, Type, Any, Dict, List
 import pandas as pd
 import logging
 from functools import wraps
 from time import sleep
 from datetime import datetime, timedelta, timezone
+import os
 
 LATEST_INFO_FILE = "data/latest_info_saved.csv"
 DATABASE_PATH = 'data/database.csv'
@@ -189,11 +190,10 @@ def save_update_time(factor_name: str):
 
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=CSV_ALLOWED_EXCEPTIONS,
                 fallback_values=(0.0, 0.0))
-def retrieve_latest_factor_values_database(factor: str) -> Tuple[float, float]:
+def retrieve_latest_factor_values_database(factor: str) -> float:
     database = read_database()
     macro_bullish = database[f'{factor}_bullish'][-1]
-    macro_bearish = database[f'{factor}_bearish'][-1]
-    return macro_bullish, macro_bearish
+    return macro_bullish
 
 
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=CSV_ALLOWED_EXCEPTIONS,
@@ -221,63 +221,49 @@ def read_trading_details() -> pd.DataFrame:
 
 
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=CSV_ALLOWED_EXCEPTIONS,
-                fallback_values=pd.DataFrame())
-def read_trading_results() -> pd.DataFrame:
-    """Read the CSV file into a DataFrame and set the "date" column as the index"""
-    df = pd.read_csv(TRADE_RESULT_PATH)
-    return df
-
-
-@retry_on_error(max_retries=3, delay=5, allowed_exceptions=CSV_ALLOWED_EXCEPTIONS,
                 fallback_values=None)
-def save_trade_details(weighted_score, position_opening_time, position_closing_time,
-                       position_type, opening_price, close_price, pnl, factor_values):
+def save_trade_details(position: dict, factor_values: dict):
+    # Define the column order
+    column_order = list(position.keys()) + list(factor_values.keys())
 
-    # Read the existing trade details CSV
-    df = pd.read_csv(TRADE_DETAILS_PATH)
+    # Create a new row from the dictionaries
+    new_row_dict = {**position, **factor_values}
+    df_new = pd.DataFrame(new_row_dict, index=[0])
 
-    # Create a new row with the provided trade details
-    new_row = {
-        'weighted_score': weighted_score,
-        'position_opening_time': position_opening_time,
-        'position_closing_time': position_closing_time,
-        'position_type': position_type,
-        'opening_price': opening_price,
-        'close_price': close_price,
-        'PNL': pnl,
-        'macro_bullish': factor_values['macro_bullish'],
-        'macro_bearish': factor_values['macro_bearish'],
-        'order_book_bullish': factor_values['order_book_bullish'],
-        'order_book_bearish': factor_values['order_book_bearish'],
-        'prediction_bullish': factor_values['prediction_bullish'],
-        'prediction_bearish': factor_values['prediction_bearish'],
-        'technical_bullish': factor_values['technical_bullish'],
-        'technical_bearish': factor_values['technical_bearish'],
-        'richest_bullish': factor_values['richest_bullish'],
-        'richest_bearish': factor_values['richest_bearish'],
-        'google_bullish': factor_values['google_bullish'],
-        'google_bearish': factor_values['google_bearish'],
-        'reddit_bullish': factor_values['reddit_bullish'],
-        'reddit_bearish': factor_values['reddit_bearish'],
-        'youtube_bullish': factor_values['youtube_bullish'],
-        'youtube_bearish': factor_values['youtube_bearish'],
-        'news_bullish': factor_values['news_bullish'],
-        'news_bearish': factor_values['news_bearish'],
-        'weighted_score_up': factor_values['weighted_score_up'],
-        'weighted_score_down': factor_values['weighted_score_down']
-    }
-
-    # Use a list to store new rows
-    new_rows = [new_row]
-
-    # Create a new DataFrame from the list of new rows
-    df_new = pd.DataFrame(new_rows)
+    # If the CSV file exists, read it
+    if os.path.exists(TRADE_DETAILS_PATH):
+        df = pd.read_csv(TRADE_DETAILS_PATH)
+    else:  # If not, create an empty DataFrame with the column order
+        df = pd.DataFrame(columns=column_order)
 
     # Concatenate the new DataFrame with the original DataFrame
     df = pd.concat([df, df_new], ignore_index=True)
 
     # Save the updated DataFrame to the CSV file
     df.to_csv(TRADE_DETAILS_PATH, index=False)
+
+
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
+        FileNotFoundError,), fallback_values=[])
+def read_rich_addresses() -> List[str]:
+    """
+       Read Bitcoin addresses from a CSV file and remove addresses that exist in 'data/exchange_addresses.csv'.
+
+       Returns:
+           addresses (list): A list of Bitcoin addresses.
+       """
+    # Read Bitcoin rich list addresses
+    df1 = pd.read_csv(BITCOIN_RICH_LIST_FILE, header=None, skipinitialspace=True)
+    addresses = df1[0].tolist()
+
+    # Read exchange addresses
+    df2 = pd.read_csv(EXCHANGE_ADDRESSES, header=None, skipinitialspace=True)
+    exchange_addresses = df2[0].tolist()
+
+    # Remove exchange addresses from the rich list addresses
+    addresses = [addr for addr in addresses if addr not in exchange_addresses]
+
+    return addresses
 
 
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=CSV_ALLOWED_EXCEPTIONS,
@@ -315,28 +301,37 @@ def save_trade_result(pnl: float, weighted_score: float, trade_type: str):
     df.to_csv(TRADE_RESULT_PATH, index=False)
 
 
-@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
-        FileNotFoundError,), fallback_values=[])
-def read_rich_addresses() -> List[str]:
-    """
-       Read Bitcoin addresses from a CSV file and remove addresses that exist in 'data/exchange_addresses.csv'.
-
-       Returns:
-           addresses (list): A list of Bitcoin addresses.
-       """
-    # Read Bitcoin rich list addresses
-    df1 = pd.read_csv(BITCOIN_RICH_LIST_FILE, header=None, skipinitialspace=True)
-    addresses = df1[0].tolist()
-
-    # Read exchange addresses
-    df2 = pd.read_csv(EXCHANGE_ADDRESSES, header=None, skipinitialspace=True)
-    exchange_addresses = df2[0].tolist()
-
-    # Remove exchange addresses from the rich list addresses
-    addresses = [addr for addr in addresses if addr not in exchange_addresses]
-
-    return addresses
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=CSV_ALLOWED_EXCEPTIONS,
+                fallback_values=pd.DataFrame())
+def read_trading_results() -> pd.DataFrame:
+    """Read the CSV file into a DataFrame and set the "date" column as the index"""
+    df = pd.read_csv(TRADE_RESULT_PATH)
+    return df
 
 
 if __name__ == "__main__":
-    print('')
+    position1 = {
+        'opening_score': 0.0,
+        'opening_time': '',
+        'closing_time': '',
+        'opening_price': 0,
+        'closing_price': 0,
+        'profit_target': 0,
+        'stop_loss': 0,
+        'PNL': 0,
+        'closing_score': 0.5,
+        'type': ''
+    }
+    factor_values1 = {
+        'macro': 0.5,
+        'order': 0.5,
+        'prediction': 0.5,
+        'technical': 0.5,
+        'richest': 0.5,
+        'google': 0.5,
+        'reddit': 0.5,
+        'youtube': 0.5,
+        'news': 0.5
+    }
+
+    save_trade_details(position1, factor_values1)

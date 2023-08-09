@@ -111,13 +111,13 @@ def potential_up_trending(data_close: pd.Series) -> bool:
     return potential_up_trend
 
 
-def technical_analyse_wrapper() -> Tuple[float, float]:
+def technical_analyse_wrapper() -> float:
 
     # read the data
     data_close = get_historical_data('BTC/USDT', '1d', 200)
     if data_close.empty:
         logging.error('Could not get historical data from binance to technical analysis')
-        return 0.0, 0.0
+        return 0.5
 
     potential_up_reversal_bullish, potential_down_reversal_bearish = potential_reversal(data_close)
     potential_up_trend = potential_up_trending(data_close)
@@ -132,17 +132,16 @@ def technical_analyse_wrapper() -> Tuple[float, float]:
     # Save for visualization
     write_latest_data('over_200EMA', over_ema200)
 
-    technical_bullish, technical_bearish = compare_technical(
+    technical_bullish = compare_technical(
         reversal, potential_up_trend, over_ema200)
 
     save_value_to_database('technical_bullish', technical_bullish)
-    save_value_to_database('technical_bearish', technical_bearish)
     save_update_time('technical_analysis')
 
-    return technical_bullish, technical_bearish
+    return technical_bullish
 
 
-def technical_analyse() -> Tuple[float, float]:
+def technical_analyse() -> float:
     if should_update('technical_analysis'):
         return technical_analyse_wrapper()
     else:
@@ -150,5 +149,5 @@ def technical_analyse() -> Tuple[float, float]:
 
 
 if __name__ == '__main__':
-    technical_bullish1, technical_bearish1 = technical_analyse_wrapper()
-    logging.info(f'Bullish: {technical_bullish1}, Bearish: {technical_bearish1}')
+    technical_bullish1 = technical_analyse_wrapper()
+    print(f'Bullish: {technical_bullish1}')
