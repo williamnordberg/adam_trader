@@ -2,7 +2,6 @@ import pandas as pd
 from textblob import TextBlob
 import praw
 import configparser
-from typing import Tuple
 from requests.exceptions import SSLError
 from urllib3.exceptions import MaxRetryError
 from prawcore.exceptions import RequestException
@@ -17,19 +16,17 @@ LONG_MOVING_AVERAGE_WINDOW = 20
 CONFIG_PATH = 'config/config.ini'
 
 
-def calculate_reddit_trend(reddit_bullish, reddit_bearish, short_ma, long_ma, factor_type):
+def calculate_reddit_trend(reddit_bullish, short_ma, long_ma, factor_type):
     adjustment = 0.125
 
     if factor_type == 'positive_polarity' or factor_type == 'positive_count':
         if short_ma > long_ma:
             reddit_bullish += adjustment
-            reddit_bearish -= adjustment
     elif factor_type == 'negative_polarity' or factor_type == 'negative_count':
         if short_ma > long_ma:
             reddit_bullish -= adjustment
-            reddit_bearish += adjustment
 
-    return reddit_bullish, reddit_bearish
+    return reddit_bullish
 
 
 def calculate_reddit_sentiments():
@@ -42,9 +39,9 @@ def calculate_reddit_sentiments():
     for col in df.columns:
         short_ma = df[col].rolling(window=SHORT_MOVING_AVERAGE_WINDOW, min_periods=1).mean()
         long_ma = df[col].rolling(window=LONG_MOVING_AVERAGE_WINDOW, min_periods=1).mean()
-        reddit_bullish, reddit_bearish = calculate_reddit_trend(
-            reddit_bullish, reddit_bearish, short_ma.iloc[-1], long_ma.iloc[-1], col)
-    return reddit_bullish, reddit_bearish
+        reddit_bullish = calculate_reddit_trend(
+            reddit_bullish, short_ma.iloc[-1], long_ma.iloc[-1], col)
+    return reddit_bullish
 
 
 def calculate_sentiment_score(content: str) -> float:
@@ -79,8 +76,8 @@ def preprocess_and_save_reddit_data(reddit, subreddit_name):
 
 
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
-        SSLError, MaxRetryError, RequestException), fallback_values=(0.0, 0.0))
-def reddit_check_wrapper() -> Tuple[float, float]:
+        SSLError, MaxRetryError, RequestException), fallback_values=0.5)
+def reddit_check_wrapper() -> float:
 
     config = configparser.ConfigParser()
     config.read(CONFIG_PATH)
@@ -98,27 +95,23 @@ def reddit_check_wrapper() -> Tuple[float, float]:
 
     preprocess_and_save_reddit_data(reddit, "Bitcoin")
 
-    reddit_bullish, reddit_bearish = calculate_reddit_sentiments()
+    reddit_bullish = calculate_reddit_sentiments()
 
     save_update_time('reddit')
 
-    if reddit_bullish == 0.5 and reddit_bearish == 0.5:
-        reddit_bullish, reddit_bearish = 0, 0
-
-    return reddit_bullish, reddit_bearish
+    return reddit_bullish
 
 
-def reddit_check() -> Tuple[float, float]:
+def reddit_check() -> float:
     if should_update('reddit'):
-        reddit_bullish, reddit_bearish = reddit_check_wrapper()
+        reddit_bullish = reddit_check_wrapper()
         save_value_to_database('reddit_bullish', reddit_bullish)
-        save_value_to_database('reddit_bearish', reddit_bearish)
-        return reddit_bullish, reddit_bearish
+        return reddit_bullish
 
     else:
         return retrieve_latest_factor_values_database('reddit')
 
 
 if __name__ == '__main__':
-    reddit_bullish_outer, reddit_bearish_outer = reddit_check_wrapper()
-    print(f"reddit_bullish: {reddit_bullish_outer}, reddit_bearish: {reddit_bearish_outer}")
+    reddit_bullish_outer = reddit_check_wrapper()
+    print(f"reddit_bullish: {reddit_bullish_outer}")

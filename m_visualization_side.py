@@ -76,36 +76,21 @@ def read_gauge_chart_data():
     data_dict = {
         'trading_state': read_latest_data('latest_trading_state', str),
         'macro_bullish': database['macro_bullish'][-1],
-        'macro_bearish': database['macro_bearish'][-1],
+        'order_book_bullish': database['order_book_bullish'][-1],
         'prediction_bullish': database['prediction_bullish'][-1],
-        'prediction_bearish': database['prediction_bearish'][-1],
         'technical_bullish': database['technical_bullish'][-1],
-        'technical_bearish': database['technical_bearish'][-1],
         'richest_addresses_bullish': database['richest_addresses_bullish'][-1],
-        'richest_addresses_bearish': database['richest_addresses_bearish'][-1],
         'google_search_bullish': database['google_search_bullish'][-1],
-        'google_search_bearish': database['google_search_bearish'][-1],
         'reddit_bullish': database['reddit_bullish'][-1],
-        'reddit_bearish': database['reddit_bearish'][-1],
         'youtube_bullish': database['youtube_bullish'][-1],
-        'youtube_bearish': database['youtube_bearish'][-1],
         'news_bullish': database['news_bullish'][-1],
-        'news_bearish': database['news_bearish'][-1],
         'weighted_score_up': database['weighted_score_up'][-1],
-        'weighted_score_down': database['weighted_score_down'][-1],
     }
 
     if data_dict['trading_state'] in ['long', 'short']:
         data_dict.update({
             'order_book_bullish': read_latest_data('order_book_hit_profit', float),
-            'order_book_bearish': read_latest_data('order_book_hit_loss', float),
             'weighted_score_up': read_latest_data('score_profit_position', float),
-            'weighted_score_down': read_latest_data('score_loss_position', float),
-        })
-    else:
-        data_dict.update({
-            'order_book_bullish': database['order_book_bullish'][-1],
-            'order_book_bearish': database['order_book_bearish'][-1]
         })
 
     return data_dict
@@ -146,7 +131,7 @@ def last_and_next_update(factor: str) -> Tuple[str, str]:
     last_update_time = datetime.strptime(last_update_time_str, '%Y-%m-%d %H:%M:%S')
 
     # Calculate the time difference between now and the last update time
-    time_since_last_update = datetime.now() - last_update_time
+    time_since_last_update = datetime.utcnow() - last_update_time
 
     # If the time since last update is more than 1 hour, convert it to hours
     if time_since_last_update.total_seconds() > 3600:

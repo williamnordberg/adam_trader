@@ -90,16 +90,6 @@ def get_bitcoin_price() -> int:
     raise requests.exceptions.RequestException("Both API calls failed")
 
 
-def calculate_score_margin(weighted_score):
-    if 0.65 <= weighted_score < 0.70:
-        return 0.65
-    elif 0.70 <= weighted_score < 0.75:
-        return 0.68
-    elif 0.75 <= weighted_score < 0.80:
-        return 0.7
-    else:
-        return 0.65
-
 
 if __name__ == '__main__':
     while True:

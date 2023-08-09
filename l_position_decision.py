@@ -1,81 +1,55 @@
-from typing import Tuple
 from z_read_write_csv import write_latest_data
+from a_config import WEIGHTS_POSITION
+import logging
+
+MIN_CONTRIBUTING_FACTORS_WEIGHT = 0.5
 
 
-def position_decision(macro_bullish: float, macro_bearish: float,
-                      order_book_bullish: float, order_book_bearish: float,
-                      probability_to_hit_target: float, probability_to_hit_stop_loss: float,
-                      prediction_bullish: float, prediction_bearish: float,
-                      technical_bullish: float, technical_bearish: float,
-                      richest_addresses_bullish: float, richest_addresses_bearish: float,
-                      google_search_bullish: float, google_search_bearish: float,
-                      reddit_bullish: float, reddit_bearish: float,
-                      youtube_bullish: float, youtube_bearish: float,
-                      news_bullish: float, news_bearish: float) -> Tuple[float, float]:
+def calculate_contributing_factors(*factors: float) -> float:
+    total_weight = 0.0
+    for weight, bullish in zip(WEIGHTS_POSITION.values(), factors):
+        if bullish != 0.5:
+            total_weight += weight
+    return total_weight
 
-    """
-    Makes a trading decision based on the conditions met.
-    """
-    weights = {
-        "macro_indicators": 0.2,
-        "order_book": 0.2,
-        'probability_to_hit_target_or_stop': 0.15,
-        "predicted_price": 0.10,
-        "technical_analysis": 0.125,
-        "richest_addresses": 0.125,
-        "google_search": 0.01,
-        "reddit": 0.01,
-        "youtube": 0.02,
-        "sentiment_of_news": 0.05,
-    }
 
-    # Calculate the weighted score for each alternative:
-    weighted_score_up = (
-            weights["macro_indicators"] * macro_bullish +
-            weights["order_book"] * order_book_bullish +
-            weights["probability_to_hit_target_or_stop"] * probability_to_hit_target +
-            weights["predicted_price"] * prediction_bullish +
-            weights["technical_analysis"] * technical_bullish +
-            weights["richest_addresses"] * richest_addresses_bullish +
-            weights["google_search"] * google_search_bullish +
-            weights["reddit"] * reddit_bullish +
-            weights["youtube"] * youtube_bullish +
-            weights["sentiment_of_news"] * news_bullish
-    )
+def position_decision(factor_values_position) -> float:
 
-    weighted_score_down = (
-            weights["macro_indicators"] * macro_bearish +
-            weights["order_book"] * order_book_bearish +
-            weights["probability_to_hit_target_or_stop"] * probability_to_hit_stop_loss +
-            weights["predicted_price"] * prediction_bearish +
-            weights["technical_analysis"] * technical_bearish +
-            weights["richest_addresses"] * richest_addresses_bearish +
-            weights["google_search"] * google_search_bearish +
-            weights["reddit"] * reddit_bearish +
-            weights["youtube"] * youtube_bearish +
-            weights["sentiment_of_news"] * news_bearish
-    )
-    # Normalize the scores
+    weight_of_contributing_factors = calculate_contributing_factors(*factor_values_position.values())
+    if weight_of_contributing_factors < MIN_CONTRIBUTING_FACTORS_WEIGHT:
+        logging.info(f"Minimum contributing factors weight not met to decide position status: "
+                     f"{weight_of_contributing_factors}/ out of {MIN_CONTRIBUTING_FACTORS_WEIGHT}")
+        write_latest_data('score_profit_position', 0.5)
+        return 0.5
+
+    # Compute bearish values
+    factors = {key: (value, round(1 - value, 2)) for key, value in factor_values_position.items()}
+    weighted_score_up,  weighted_score_down = 0, 0
+    for key, weight in WEIGHTS_POSITION.items():
+        bullish, bearish = factors[key]
+        weighted_score_up += weight * bullish
+        weighted_score_down += weight * bearish
+
     total_score = weighted_score_up + weighted_score_down
-    normalized_score_up = weighted_score_up / total_score
-    normalized_score_down = weighted_score_down / total_score
+    normalized_score = round((weighted_score_up / total_score), 2)
 
-    write_latest_data('score_profit_position', round(normalized_score_up, 2))
-    write_latest_data('score_loss_position',  round(normalized_score_down, 2))
+    write_latest_data('score_profit_position', round(normalized_score, 2))
 
-    return normalized_score_up, normalized_score_down
+    return normalized_score
 
 
 if __name__ == "__main__":
-    score_up, score_down = position_decision(1, 0,
-                                             0, 1,
-                                             1, 0,
-                                             1, 1,
-                                             0, 1,
-                                             1, 0,
-                                             1, 0,
-                                             1, 0,
-                                             1, 0,
-                                             1, 0)
-
-    print(f'score_up: {score_up}, score_down: {score_down}')
+    factor_values_outer = {
+        'macro': 0.1,
+        'order': 0.9,
+        'order_target': 0.9,
+        'prediction': 0.9,
+        'technical': 0.5,
+        'richest': 0.5,
+        'google': 0.5,
+        'reddit': 0.5,
+        'youtube': 0.5,
+        'news': 0.5
+    }
+    score = position_decision(factor_values_outer)
+    print(f'score_up: {score}')
