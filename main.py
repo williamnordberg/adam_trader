@@ -26,12 +26,7 @@ from e_richest import monitor_bitcoin_richest_addresses
 from z_read_write_csv import retrieve_latest_factor_values_database, \
     save_value_to_database, write_latest_data, save_trade_details
 
-
-# Constants
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
-
-
-
 do_nothing()
 
 
@@ -105,6 +100,7 @@ def trading_loop(long_threshold: float, short_threshold: float):
 
         logging.info(f'███ {os.getpid()}_trading({LOOP_COUNTER}) SLEEPS ███')
         write_latest_data('latest_trading_state', 'main')
+        logging.info(f'███ score:{weighted_score} {factor_values}███ ')
         sleep(MAIN_TRADING_LOOP_SLEEP_TIME)
 
 

@@ -39,16 +39,9 @@ def make_trading_decision(factor_values) -> float:
 
 
 if __name__ == "__main__":
-    factor_values_outer = {
-        'macro': 0.1,
-        'order': 0.1,
-        'prediction': 0.5,
-        'technical': 0.5,
-        'richest': 0.1,
-        'google': 0.1,
-        'reddit': 0.1,
-        'youtube': 0.5,
-        'news': 0.5
-    }
+    factor_values_outer = {'macro': 0.4, 'order': 0.6,
+                           'prediction': 0.7, 'technical': 0.7,
+                           'richest': 0.5, 'google': 0.5, 'reddit': 0.5,
+                           'youtube': 0.5, 'news': 0.41}
 
     print(make_trading_decision(factor_values_outer))
