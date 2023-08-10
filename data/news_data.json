@@ -1,55 +1,6 @@
 {
     "positive": [
         {
-            "title": "Solana-Based Cypher Protocol Experiences Exploit, Freezes Smart Contract",
-            "score": 0.131,
-            "description": "The protocol\u2019s contracts are now frozen as contributors attempt to make contact with hackers to negotiate a return of funds.",
-            "publish_time": "2023-08-07 21:06",
-            "link": "https://www.coindesk.com/business/2023/08/07/solana-based-cypher-protocol-experiences-exploit-freezes-smart-contract/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "PayPal\u2019s Regulated Stablecoin Is a \u2018Watershed Moment\u2019 in Crypto Space, Says Partner Paxos",
-            "score": 0.211,
-            "description": "\u201cThe difference is significant because we have a prudential regulator,\u201d said Paxos head of strategy Walter Hessert.",
-            "publish_time": "2023-08-07 19:57",
-            "link": "https://www.coindesk.com/business/2023/08/07/paypals-regulated-stablecoin-is-a-watershed-moment-in-crypto-space-says-paxos/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "Crypto News Today: PayPal's Stablecoin Debut, Worldcoin's Kenyan Hurdles, and More",
-            "score": 0.27,
-            "description": "From PayPal's entry into the stablecoin market to regulatory challenges faced by Worldcoin in Kenya, the crypto world continues to be a blend of innovation and controversy.",
-            "publish_time": "2023-08-07 19:25",
-            "link": "https://www.coindesk.com/markets/2023/08/07/crypto-news-today-paypals-stablecoin-debut-worldcoins-kenyan-hurdles-and-more/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "Zoom updates terms after backlash, won\u2019t train AI without consent",
-            "score": 0.411,
-            "description": "Many online said they were halting the use of Zoom over terms that seemingly allowed the platform to scrape user data to train AI models.",
-            "publish_time": "2023-08-08 02:11",
-            "link": "https://cointelegraph.com/news/zoom-ai-terms-clarified-after-backlash"
-        },
-        {
-            "title": "Cypher Protocol freezes smart contract after an estimated $1M exploit",
-            "score": 0.154,
-            "description": "A crypto wallet suspected to be tied to the exploit has gained over $1 million in SOL and UDSC since the attack.",
-            "publish_time": "2023-08-07 23:41",
-            "link": "https://cointelegraph.com/news/cypher-protocol-solana-hack-exploited-smart-contract"
-        },
-        {
-            "title": "Bitcoin funds see weekly outflows of $111M, most since March: CoinShares",
-            "score": 0.152,
-            "description": "Solana bucked the trend, with its $9.5 million in inflows taking the top spot over the past week. ",
-            "publish_time": "2023-08-07 21:00",
-            "link": "https://cointelegraph.com/news/bitcoin-funds-weekly-outflows-111m-most-since-march-coin-shares"
-        },
-        {
-            "title": "Worldcoin expects more companies to integrate in the coming months, says product head",
-            "score": 0.048,
-            "description": "The head of product at Tools for Humanity told Cointelegraph that Worldcoin is expecting more companies to integrate in the second half of the year.",
-            "publish_time": "2023-08-07 12:00",
-            "link": "https://cointelegraph.com/news/worldcoin-expects-more-companies-to-integrate-soon"
-        },
-        {
             "title": "First Mover Asia: First $30K, Then $40K, but Bitcoin Needs Volatility First",
             "score": 0.188,
             "description": "The world\u2019s largest digital asset is rangebound, but so far this year, bitcoin is beating the returns most digital asset funds are posting.",
@@ -97,57 +48,57 @@
             "description": "Shiba Inu lead developer Shytoshi Kusama recently unveiled plans to integrate self-sovereign identity into its projects.",
             "publish_time": "2023-08-08 12:24",
             "link": "https://cointelegraph.com/news/self-sovereign-identity-helps-users-own-data"
+        },
+        {
+            "title": "First Mover Asia: SEC Appealing XRP Ruling Isn't Moving Markets",
+            "score": 0.281,
+            "description": "Ripple's partial victory over the Securities and Exchange Commission pushed up the layer 1 and altcoin market, as many of these tokens had been accused of being securities.",
+            "publish_time": "2023-08-10 01:52",
+            "link": "https://www.coindesk.com/markets/2023/08/10/first-mover-asia-sec-appealing-xrp-ruling-isnt-moving-markets/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "Animated Series Futurama Takes Characters to 'Doge City,' Mocks Crypto Miners",
+            "score": 0.229,
+            "description": "Popular animated science fiction show Futurama gave a glimpse into what it thinks the future of crypto could look like in its latest episode called \u201cHow the West Was 101001\u201d by mocking crypto miners.",
+            "publish_time": "2023-08-09 19:27",
+            "link": "https://www.coindesk.com/business/2023/08/09/animated-series-futurama-takes-characters-to-doge-city-mocks-crypto-miners/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "Barbie Is a Metaverse",
+            "score": 0.279,
+            "description": "Virtual worlds, like Barbie\u2019s, are a source of meaning and fulfillment for people seeking more in life. And these worlds gain from interactions: the more interoperability, the better.",
+            "publish_time": "2023-08-09 17:50",
+            "link": "https://www.coindesk.com/consensus-magazine/2023/08/09/barbie-is-a-metaverse/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "Aptos token rises 11.6% after Microsoft deal to marry AI with blockchain",
+            "score": 0.259,
+            "description": "APT pumped 17.6% within the first 50 minutes before cooling off to $7.51 \u2014 still 11.6% above pre-announcement levels.",
+            "publish_time": "2023-08-10 02:23",
+            "link": "https://cointelegraph.com/news/aptos-token-surges-after-partner-microsoft"
+        },
+        {
+            "title": "Fireblocks discloses massive vulnerability affecting crypto wallets",
+            "score": 0.178,
+            "description": "Fireblocks said the vulnerabilities affecting Coinbase, Binance, and Zengo have since been fixed and has reached out to more than 12 others still at risk.",
+            "publish_time": "2023-08-10 01:49",
+            "link": "https://cointelegraph.com/news/fireblocks-identifies-crypto-wallet-bitforge-vulnerability"
+        },
+        {
+            "title": "Bitcoin Lightning Network is growing, but 3 major challenges remain",
+            "score": 0.182,
+            "description": "The Lightning Network is growing, but liquidity issues and a need for greater user awareness continue to hinder mainstream adoption.",
+            "publish_time": "2023-08-09 20:00",
+            "link": "https://cointelegraph.com/news/bitcoins-lightning-network-major-challanges"
         }
     ],
     "negative": [
-        {
-            "title": "Congress, Not the SEC, Should Set U.S. Digital Asset Policy",
-            "score": -0.027,
-            "description": "",
-            "publish_time": "2023-08-07 15:08",
-            "link": "https://www.coindesk.com/consensus-magazine/2023/08/07/congress-not-the-sec-should-set-us-digital-asset-policy/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "Binance's VC Arm Dominated Funding Rounds Last Week Even as Regulators Scrutinized the Crypto Exchange",
-            "score": -0.036,
-            "description": "Binance Labs announced investments in four incubator projects and participated in a round for privacy infrastructure startup zkPass.",
-            "publish_time": "2023-08-07 14:59",
-            "link": "https://www.coindesk.com/business/2023/08/07/binances-vc-arm-dominated-funding-rounds-last-week-even-as-regulators-scrutinized-the-crypto-exchange/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
-        {
-            "title": "Sino Global Files $67M Claim Against FTX-Alameda",
-            "score": -0.017,
-            "description": "Sino Global invested in tokens heavily affected by the decline of Sam Bankman-Fried's FTX crypto empire and partnered with FTX on a fund raised with outside investors' capital.",
-            "publish_time": "2023-08-07 14:35",
-            "link": "https://www.coindesk.com/markets/2023/08/07/sino-global-files-67m-claim-against-ftx-alameda/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
-        },
         {
             "title": "PayPal stablecoin launch sparks wave of fake PYUSD tokens",
             "score": -0.119,
             "description": "Nearly 30 fake PYUSD tokens cropped up in the wake of PayPal\u2019s most recent announcement.",
             "publish_time": "2023-08-08 05:21",
             "link": "https://cointelegraph.com/news/paypal-stablecoin-launch-sparks-fake-pyusd-tokens"
-        },
-        {
-            "title": "PayPal USD: Boon for Ethereum but not decentralization, says community",
-            "score": -0.106,
-            "description": "Proponents say PayPal\u2019s PYUSD could see Ethereum become the money layer of the internet, while opponents argue that it\u2019ll act like a poorly designed central bank digital currency.",
-            "publish_time": "2023-08-08 01:32",
-            "link": "https://cointelegraph.com/news/paypal-usd-boon-for-ethereum-but-not-decentralization-says-community"
-        },
-        {
-            "title": "China\u2019s risky Bitcoin court decision, is Huobi in trouble or not? Asia Express",
-            "score": -0.112,
-            "description": "Man loses $10M after Chinese court rules Bitcoin lending is not protected by law, loads of Web3 founders get arrested, and Huobi rumors swirl.",
-            "publish_time": "2023-08-07 22:35",
-            "link": "https://cointelegraph.com/magazine/chinas-risky-bitcoin-court-decision-is-huobi-in-trouble-or-not-asia-express/"
-        },
-        {
-            "title": "Buffett and Ackman take opposing sides on Treasury yields \u2014 What does it mean for Bitcoin?",
-            "score": -0.094,
-            "description": "Two investment moguls are betting on different directions for inflation and Treasury yields, with potentially negative impacts on Bitcoin.",
-            "publish_time": "2023-08-07 17:30",
-            "link": "https://cointelegraph.com/news/buffett-and-ackman-take-opposing-sides-on-treasury-yields-what-does-it-mean-for-bitcoin"
         },
         {
             "title": "Coinbase Exec: \u2018There\u2019s No Playbook\u2019 for Public Company Launching Blockchain",
@@ -190,6 +141,69 @@
             "description": "It\u2019s unclear whether any reported guilty plea from Ryan Salame would have the former FTX Digital Markets co-CEO testify at Sam Bankman-Fried's trial in October.",
             "publish_time": "2023-08-08 19:37",
             "link": "https://cointelegraph.com/news/former-ftx-exec-ryan-salame-prosecutors-discuss-plea-deal"
+        },
+        {
+            "title": "The Protocol: Coinbase Launches Own Blockchain as Sleuths Scour PayPal's Stablecoin Software",
+            "score": -0.016,
+            "description": "In this week's issue, we cover Coinbase's launch of \"Base,\" a layer-2 network atop Ethereum, along with the crypto community's reaction to PayPal's new stablecoin and the brouhaha over Matter Labs' use of Polygon-crafted open-source software. The Protocol is CoinDesk's weekly newsletter devoted to blockchain and crypto technology.",
+            "publish_time": "2023-08-09 22:00",
+            "link": "https://www.coindesk.com/tech/2023/08/09/the-protocol-coinbase-launches-own-blockchain-as-sleuths-scour-paypals-stablecoin-software/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "SEC Will Appeal XRP Ruling in Case Against Ripple, Regulator Says",
+            "score": -0.107,
+            "description": "The U.S. Securities and Exchange Commission (SEC) said it would file an \"interlocutory appeal\" of a judge's ruling on Ripple's programmatic sales of XRP, the regulator said in a court filing Wednesday.",
+            "publish_time": "2023-08-09 21:33",
+            "link": "https://www.coindesk.com/policy/2023/08/09/sec-will-appeal-xrp-ruling-in-case-against-ripple-regulator-says/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "Fireblocks Discloses \u2018Zero Day\u2019 Vulnerabilities Impacting Leading MPC Wallets",
+            "score": -0.175,
+            "description": "It\u2019s unlikely users were impacted by the vulnerabilities \u2013 collectively referred to as \u201cBitForge\u201d \u2013 but Fireblocks says they could\u2019ve let hackers \u201cdrain funds from the wallets of millions of retail and institutional customers in seconds\u201d if left unfixed.",
+            "publish_time": "2023-08-09 21:15",
+            "link": "https://www.coindesk.com/tech/2023/08/09/fireblocks-discloses-zero-day-vulnerabilities-impacting-leading-mpc-wallets/?utm_medium=referral&utm_source=rss&utm_campaign=headlines"
+        },
+        {
+            "title": "Bitcoin miner Riot Platforms trims Q2 loss to $27.7M",
+            "score": -0.105,
+            "description": "The firm managed to narrow net loss in the quarter as it ramped up Bitcoin production.",
+            "publish_time": "2023-08-09 23:16",
+            "link": "https://cointelegraph.com/news/bitcoin-miner-riot-platforms-q2-results-filing"
+        },
+        {
+            "title": "SEC to seek interlocutory appeal in Ripple case",
+            "score": -0.037,
+            "description": "The SEC's interlocutory appeal comes nearly a month after Judge Analisa Torres laid out her non-final ruling.",
+            "publish_time": "2023-08-09 22:11",
+            "link": "https://cointelegraph.com/news/sec-seek-interlocutory-appeal-ripple-case"
+        },
+        {
+            "title": "Base network has officially launched: Here's how it can be used",
+            "score": -0.35,
+            "description": "Coinbase\u2019s Base network completed its phased launch on Aug. 9 and is officially open to end-users.",
+            "publish_time": "2023-08-09 20:11",
+            "link": "https://cointelegraph.com/news/coinbase-base-network-officially-launched-heres-how-it-can-be-used"
+        },
+        {
+            "title": "Bitcoin risks 15% dip by October, but $100K is due in 2026 \u2014 Analysis",
+            "score": -0.013,
+            "description": "Bitcoin falling back to $25,000 would mark its \u201clast big dip\u201d before the next BTC price bull run, says Cane Island\u2019s Timothy Peterson.",
+            "publish_time": "2023-08-09 16:49",
+            "link": "https://cointelegraph.com/news/bitcoin-price-prediction-october-100k-2026-analysis"
+        },
+        {
+            "title": "Blockchain games aren\u2019t really decentralized\u2026 but that\u2019s about to change",
+            "score": -0.003,
+            "description": "A ragtag group of communists and ZK-rollup fans are working tirelessly to make blockchain games composable and fully on-chain. It\u2019s not easy.",
+            "publish_time": "2023-08-09 13:30",
+            "link": "https://cointelegraph.com/magazine/blockchain-games-decentralized-lattice-starknet-cartridge/"
+        },
+        {
+            "title": "China\u2019s risky Bitcoin court decision, is Huobi in trouble or not? Asia Express",
+            "score": -0.0,
+            "description": "Man loses $10M after Chinese court rules Bitcoin lending is not protected by law, loads of Web3 founders get arrested, and Huobi rumors swirl.",
+            "publish_time": "2023-08-07 22:35",
+            "link": "https://cointelegraph.com/magazine/chinas-risky-bitcoin-court-decision-is-huobi-in-trouble-or-not-asia-express/"
         }
     ]
 }
