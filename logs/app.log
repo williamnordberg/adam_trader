@@ -1224,3 +1224,79 @@ Backtrace:
 2023-08-10 12:31:19 - INFO - root - ███ 13384_trading(1) SLEEPS ███
 2023-08-10 12:31:19 - INFO - root - score:0.42 {'macro': 0.4, 'order': 0.25, 'prediction': 0.7, 'technical': 0.7, 'richest': 0.0, 'google': 0.5, 'reddit': 0.5, 'youtube': 0.5, 'news': 0.38}
 2023-08-10 12:31:26 - INFO - root - Received interrupt signal. Cleaning up...
+2023-08-11 14:21:20 - INFO - root - Received interrupt signal. Cleaning up...
+2023-08-11 14:21:20 - INFO - root - Received interrupt signal. Cleaning up...
+2023-08-11 14:21:20 - INFO - root - Received interrupt signal. Cleaning up...
+2023-08-11 14:21:33 - INFO - dash.dash - Dash is running on http://0.0.0.0:8051/
+
+2023-08-11 14:21:34 - INFO - root - ███ 71046_trading(1) RUNNING ███
+2023-08-11 14:21:34 - WARNING - root - Attempt 1 failed with error: [Errno 2] No such file or directory: 'chromedriver'. Retrying in 5 seconds...
+2023-08-11 14:21:39 - WARNING - root - Attempt 2 failed with error: [Errno 2] No such file or directory: 'chromedriver'. Retrying in 5 seconds...
+2023-08-11 14:21:44 - WARNING - root - Attempt 3 failed with error: [Errno 2] No such file or directory: 'chromedriver'. Retrying in 5 seconds...
+2023-08-11 14:21:49 - ERROR - root - All 3 attempts failed.
+2023-08-11 14:21:49 - ERROR - root - Returning fallback values (0.5, {}).
+2023-08-11 14:21:51 - INFO - root - 2 new rows of internal factors added.
+2023-08-11 14:21:53 - INFO - root - interest rate added to the main dataset
+2023-08-11 14:21:53 - INFO - root - dataset has been updated
+2023-08-11 14:21:57 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-08-11 14:21:57 - WARNING - prawcore - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-08-11 14:21:58 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-08-11 14:21:58 - WARNING - prawcore - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-08-11 14:22:01 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-08-11 14:22:01 - WARNING - root - Attempt 1 failed with error: error with request HTTPSConnectionPool(host='www.reddit.com', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname 'www.reddit.com' doesn't match 'trustpositif.globalxtreme.net'"))). Retrying in 5 seconds...
+2023-08-11 14:22:06 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-08-11 14:22:06 - WARNING - prawcore - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-08-11 14:22:07 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-08-11 14:22:07 - WARNING - prawcore - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-08-11 14:22:11 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-08-11 14:22:11 - WARNING - root - Attempt 2 failed with error: error with request HTTPSConnectionPool(host='www.reddit.com', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname 'www.reddit.com' doesn't match 'trustpositif.globalxtreme.net'"))). Retrying in 5 seconds...
+2023-08-11 14:22:16 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-08-11 14:22:16 - WARNING - prawcore - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-08-11 14:22:17 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-08-11 14:22:17 - WARNING - prawcore - Retrying due to SSLError(MaxRetryError('HTTPSConnectionPool(host=\'www.reddit.com\', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname \'www.reddit.com\' doesn\'t match \'trustpositif.globalxtreme.net\'")))')) status: GET https://oauth.reddit.com/r/Bitcoin/about/
+2023-08-11 14:22:20 - WARNING - urllib3.connection - Certificate did not match expected hostname: www.reddit.com. Certificate: {'subject': ((('commonName', 'trustpositif.globalxtreme.net'),),), 'issuer': ((('countryName', 'US'),), (('organizationName', "Let's Encrypt"),), (('commonName', 'R3'),)), 'version': 3, 'serialNumber': '04BF46A131B32BDFC47638A63EE42B74C162', 'notBefore': 'Jul 21 02:46:25 2023 GMT', 'notAfter': 'Oct 19 02:46:24 2023 GMT', 'subjectAltName': (('DNS', 'trustpositif.globalxtreme.net'),), 'OCSP': ('http://r3.o.lencr.org',), 'caIssuers': ('http://r3.i.lencr.org/',)}
+2023-08-11 14:22:20 - WARNING - root - Attempt 3 failed with error: error with request HTTPSConnectionPool(host='www.reddit.com', port=443): Max retries exceeded with url: /api/v1/access_token (Caused by SSLError(CertificateError("hostname 'www.reddit.com' doesn't match 'trustpositif.globalxtreme.net'"))). Retrying in 5 seconds...
+2023-08-11 14:22:25 - ERROR - root - All 3 attempts failed.
+2023-08-11 14:22:25 - ERROR - root - Returning fallback values 0.5.
+2023-08-11 14:22:31 - WARNING - root - Attempt 1 failed with error: 
+Looks like you are missing some required data for this feature.
+
+To download the necessary data, simply run
+
+    python -m textblob.download_corpora
+
+or use the NLTK downloader to download the missing data: http://nltk.org/data.html
+If this doesn't fix the problem, file an issue at https://github.com/sloria/TextBlob/issues.
+. Retrying in 5 seconds...
+2023-08-11 14:22:34 - INFO - root - ♥♥♥♥ 71077_Rich addresses(1) RUNNING ♥♥♥♥
+2023-08-11 14:22:34 - INFO - root - $$$start scrapping list of bitcoin richest addresses$$$
+2023-08-11 14:22:36 - WARNING - root - Attempt 2 failed with error: 
+Looks like you are missing some required data for this feature.
+
+To download the necessary data, simply run
+
+    python -m textblob.download_corpora
+
+or use the NLTK downloader to download the missing data: http://nltk.org/data.html
+If this doesn't fix the problem, file an issue at https://github.com/sloria/TextBlob/issues.
+. Retrying in 5 seconds...
+2023-08-11 14:22:38 - INFO - root - $$$finish scrapping list of bitcoin richest addresses$$$
+2023-08-11 14:22:42 - WARNING - root - Attempt 3 failed with error: 
+Looks like you are missing some required data for this feature.
+
+To download the necessary data, simply run
+
+    python -m textblob.download_corpora
+
+or use the NLTK downloader to download the missing data: http://nltk.org/data.html
+If this doesn't fix the problem, file an issue at https://github.com/sloria/TextBlob/issues.
+. Retrying in 5 seconds...
+2023-08-11 14:22:47 - ERROR - root - All 3 attempts failed.
+2023-08-11 14:22:47 - ERROR - root - Returning fallback values (0.0, 0.0, 0, 0).
+2023-08-11 14:22:47 - INFO - root - Minimum contributing factors weight not met: 0.45/ out of 0.57
+2023-08-11 14:22:47 - INFO - root - ███ 71046_trading(1) SLEEPS ███
+2023-08-11 14:22:47 - INFO - root - ███ score:0.5 {'macro': 0.5, 'order': 0.65, 'prediction': 0.5, 'technical': 0.7, 'richest': 0.0, 'google': 0.5, 'reddit': 0.5, 'youtube': 0.5, 'news': 0.5}███ 
+2023-08-11 14:23:59 - INFO - root - Received interrupt signal. Cleaning up...
+2023-08-11 14:23:59 - INFO - root - Received interrupt signal. Cleaning up...
+2023-08-11 14:23:59 - INFO - root - Received interrupt signal. Cleaning up...
+2023-08-11 14:23:59 - INFO - root - Received interrupt signal. Cleaning up...

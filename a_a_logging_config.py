@@ -20,5 +20,3 @@ logging.basicConfig(level=logging.INFO,
 
 def do_nothing():
     return
-
-#test
