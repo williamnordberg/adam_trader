@@ -75,10 +75,8 @@ def register_callbacks(app):
          Output('ppi-announcement', 'children'),
          Output('trading-state', 'children'),
          Output('trading-state', 'style'),  # Add 'style' as an output
-
          Output('order_volume', 'children'),
          Output('position_score', 'children'),
-
          Output('bid-volume', 'children'),
          Output('ask-volume', 'children'),
          Output('predicted-price', 'children'),
