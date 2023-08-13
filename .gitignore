@@ -1,0 +1,17 @@
+# Ignore all .log files
+*.log
+*.csv
+*.jason
+
+# Ignore everything in a  directory
+tests/*
+data/*
+logs/*
+venv/*
+
+# Files
+chromedriver.exe
+test.py
+
+
+
