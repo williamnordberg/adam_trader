@@ -75,6 +75,10 @@ def register_callbacks(app):
          Output('ppi-announcement', 'children'),
          Output('trading-state', 'children'),
          Output('trading-state', 'style'),  # Add 'style' as an output
+
+         Output('order_volume', 'children'),
+         Output('position_score', 'children'),
+
          Output('bid-volume', 'children'),
          Output('ask-volume', 'children'),
          Output('predicted-price', 'children'),
@@ -96,10 +100,17 @@ def register_callbacks(app):
         # Generate color based on trading_state
         if trading_state == 'long':
             color = 'green'
+            order_volume = layout_data["order_volume"]
+            position_score = layout_data["position_score"]
         elif trading_state == 'short':
             color = 'red'
+            order_volume = layout_data["order_volume"]
+            position_score = layout_data["position_score"]
         else:
+
             color = COLORS['white']
+            order_volume = ''
+            position_score = ''
 
         fed_rate_m_to_m = layout_data["fed_rate_m_to_m"]
         cpi_m_to_m = layout_data["cpi_m_to_m"]
@@ -122,7 +133,8 @@ def register_callbacks(app):
 
         return (fed_rate_m_to_m, f'CPI MtoM: {cpi_m_to_m}', f'PPI MtoM: {ppi_m_to_m}',
                 fed_announcement, cpi_announcement,
-                ppi_announcement, f'T State: {trading_state}', {'color': color}, f'Bid vol: {bid_volume}',
+                ppi_announcement, f'T State: {trading_state}', {'color': color}, f'Order volume: {order_volume}',
+                f'Position score: {position_score}', f'Bid vol: {bid_volume}',
                 f'Ask vol: {ask_volume}', f'Predicted: {predicted_price}', f'Current: {current_price}',
                 f'Diff: {price_difference}', f'RSI: {rsi}', f'Over 200EMA: {over_200EMA}',
                 f'MACD up tr: {MACD_uptrend}', f'bb distance: {bb_MA_distance}',

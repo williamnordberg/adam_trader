@@ -59,7 +59,16 @@ def create_html_divs():
                           else ('red' if
                                 initial_layout_data["trading_state"] == 'short'
                                 else COLORS['white'])}),
+
+            html.P(f'Order volume target: {initial_layout_data["order_volume"]}', id='order_volume',
+                   style={'fontSize': '13px', 'margin': '0px'}),
+
+            html.P(f'Position decision score: {initial_layout_data["position_score"]}', id='position_score',
+                   style={'fontSize': '13px', 'margin': '0px'}),
+
+
         ], style={'borderTop': '1px solid white', 'lineHeight': '1.8'}),
+
         html.Div([
             html.P(f'Bid vol: {initial_layout_data["bid_volume"]}', id='bid-volume',
                    style={'fontSize': '14px', 'margin': '0px'}),
@@ -74,7 +83,6 @@ def create_html_divs():
                 'fontSize': '13px', 'margin': '0px'}),
             html.P(f'Diff: {int(initial_layout_data["predicted_price"] - initial_layout_data["current_price"])}',
                    id='price-difference',
-                   # style={'fontSize': '13px', 'margin': '0px'}),
                    style={'fontSize': '13px',
                           'margin': '0px',
                           'color': 'green' if int(initial_layout_data["predicted_price"] -

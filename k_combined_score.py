@@ -15,7 +15,7 @@ def make_trading_decision(factor_values) -> float:
 
     weight_of_contributing_factors = count_contributing_factors(*factor_values.values())
     if weight_of_contributing_factors < MIN_CONTRIBUTING_FACTORS_WEIGHT:
-        logging.info(f"Minimum contributing factors weight not met: "
+        logging.info(f"Minimum contributing factors weight not met to decide opening position: "
                      f"{weight_of_contributing_factors}/ out of {MIN_CONTRIBUTING_FACTORS_WEIGHT}")
         save_value_to_database('weighted_score_up', 0.5)
         return 0.5

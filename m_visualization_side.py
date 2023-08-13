@@ -87,12 +87,6 @@ def read_gauge_chart_data():
         'weighted_score_up': database['weighted_score_up'][-1],
     }
 
-    if data_dict['trading_state'] in ['long', 'short']:
-        data_dict.update({
-            'order_book_bullish': read_latest_data('order_book_hit_profit', float),
-            'weighted_score_up': read_latest_data('score_profit_position', float),
-        })
-
     return data_dict
 
 
@@ -117,7 +111,9 @@ def read_layout_data():
         "BTC_send": int(database['richest_addresses_total_sent'][-1]),
         "fed_announcement": fed_announcement,
         "cpi_announcement": cpi_announcement,
-        "ppi_announcement": ppi_announcement
+        "ppi_announcement": ppi_announcement,
+        "order_volume": read_latest_data("order_book_hit_profit", float),
+        "position_score": read_latest_data("score_profit_position", float)
     }
 
     return layout_data
