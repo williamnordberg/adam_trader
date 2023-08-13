@@ -31,7 +31,7 @@ def short_position() -> dict:
     position['type'] = 'short'
 
     # Remind upcoming macro events
-    macro_bullish_NA, events_date_dict = macro_sentiment()
+    macro_bullish_na, events_date_dict = macro_sentiment()
     print_upcoming_events(events_date_dict)
 
     try:
@@ -47,9 +47,9 @@ def short_position() -> dict:
         factor_values_position['order'] = order_book(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
 
         # We reverse the stop and profit,price more near to our stop(that is target) then the
-        # bullish value is bigger and bearsh become smaller, then we stay under short threshold
+        # bullish value is bigger and bearish become smaller, then we stay under short threshold
         factor_values_position['order_target'] = order_book_hit_target(
-            SYMBOLS, 1000, position["stop_loss"], position["profit_target"])
+            SYMBOLS, 1000, position['stop_loss'], position['profit_target'])
 
         factor_values_position['prediction'] = decision_tree_predictor()
 
@@ -69,8 +69,8 @@ def short_position() -> dict:
         weighted_score = position_decision(factor_values_position)
 
         price = get_bitcoin_future_market_price()
-        logging.info(f'price:{price},PNL:{position["opening_price"]- price} '
-                     f'target:{position["profit_target"]},loss:{position["stop_loss"]}')
+        logging.info(f'Price:{price},PNL:{position["opening_price"]- price} '
+                     f'target:{position["profit_target"]}, stop:{position["stop_loss"]}')
         if price <= position['profit_target'] or price > position['stop_loss'] or \
                 weighted_score > SHORT_POSITION['THRESHOLD_TO_CLOSE']:
 

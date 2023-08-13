@@ -100,7 +100,6 @@ def trading_loop(long_threshold: float, short_threshold: float):
 
         logging.info(f'███ {os.getpid()}_trading({LOOP_COUNTER}) SLEEPS ███')
         write_latest_data('latest_trading_state', 'main')
-        logging.info(f'███ score:{weighted_score} {factor_values}███ ')
         sleep(MAIN_TRADING_LOOP_SLEEP_TIME)
 
 

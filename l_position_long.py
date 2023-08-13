@@ -63,8 +63,8 @@ def long_position() -> dict:
         weighted_score = position_decision(factor_values_position)
 
         price = get_bitcoin_price()
-        logging.info(f'Current_price:{price},PNL:{price - position["opening_price"]} '
-                     f'profit_target:{position["profit_target"]},Stop_loss:{position["stop_loss"]}')
+        logging.info(f'Price:{price}, PNL:{price - position["opening_price"]} '
+                     f'target:{position["profit_target"]},Stop:{position["stop_loss"]}')
         if price >= position['profit_target'] or price < position['stop_loss'] or \
                 weighted_score < LONG_POSITION['THRESHOLD_TO_CLOSE']:
             close_position_at_market(LONG_POSITION['SIZE'])
