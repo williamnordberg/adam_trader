@@ -23,7 +23,7 @@ RANGES_ORDER_VOL = [(0.5, 0.53), (0.53, 0.56), (0.56, 0.59), (0.59, 0.62), (0.62
 VALUES_ORDER_VOL = [0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
 
 # 3. Prediction
-RANGES_PREDICTION = [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, float('inf'))]
+RANGES_PREDICTION = [(0, 0.5), (0.5, 1), (1, 1.5), (1.5, 3), (3, 4), (4, float('inf'))]
 VALUES_PREDICTION_GREATER = [0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
 VALUES_PREDICTION_LESSER = [0.5, 0.4, 0.3, 0.2, 0.1, 0.0]
 
