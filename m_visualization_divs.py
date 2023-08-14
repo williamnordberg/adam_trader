@@ -7,8 +7,6 @@ import dash_bootstrap_components as dbc
 from m_visualization_side import read_layout_data, create_update_intervals, create_scroll_up_button
 from z_handy_modules import COLORS
 
-tradingview_widget = "https://www.tradingview.com/widgetembed/?frameElementId=tradingview_76464&symbol=BINANCE%3ABTCUSDT&interval=D&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%5D&hideideas=1&theme=Dark&style=1&timezone=UTC&studies_overrides=%7B%7D&overrides=%7B%7D&enabled_features=%5B%5D&disabled_features=%5B%5D&locale=en&utm_source=www.tradingview.com&utm_medium=widget_new&utm_campaign=chart&utm_term=BINANCE%3ABTCUSDT"
-
 
 def create_html_divs():
     initial_layout_data = read_layout_data()
