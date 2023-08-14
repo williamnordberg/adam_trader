@@ -6,7 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="b02440e7-38c7-4d13-acf1-1ed63ab207ba" name="Changes" comment="Added .gitignore">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/coingecko.html" beforeDir="false" afterPath="$PROJECT_DIR$/assets/crypto_heatmap.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/top_winnner_loser.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/tradingview_crypto_market.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/tradingview_market_data.html" beforeDir="false" afterPath="$PROJECT_DIR$/assets/stock_heatmap.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/tradingview_snaps.html" beforeDir="false" afterPath="$PROJECT_DIR$/assets/cryptopanic.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/tradingview_technical_analysis.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/m_visualization_divs.py" beforeDir="false" afterPath="$PROJECT_DIR$/m_visualization_divs.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +87,7 @@
       <recent name="C:\will\Python_project\adam_trader\logs" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.m_visual_app">
     <configuration name="b_order_book" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -189,9 +195,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.m_visual_app" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.test" />
-        <item itemvalue="Python.m_visual_app" />
         <item itemvalue="Python.b_order_book" />
         <item itemvalue="Python.l_position_decision" />
       </list>
@@ -454,7 +460,15 @@
       <option name="project" value="LOCAL" />
       <updated>1691923894755</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="Added .gitignore">
+      <option name="closed" value="true" />
+      <created>1691923908344</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1691923908344</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

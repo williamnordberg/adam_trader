@@ -7,7 +7,7 @@ import dash_bootstrap_components as dbc
 from m_visualization_side import read_layout_data, create_update_intervals, create_scroll_up_button
 from z_handy_modules import COLORS
 
-tradingview_widget = "https://www.tradingview.com/widgetembed/?frameElementId=tradingview_76464&symbol=BINANCE%3ABTCUSDT&interval=D&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%5D&hideideas=1&theme=Dark&style=1&timezone=Etc%2FUTC&studies_overrides=%7B%7D&overrides=%7B%7D&enabled_features=%5B%5D&disabled_features=%5B%5D&locale=en&utm_source=www.tradingview.com&utm_medium=widget_new&utm_campaign=chart&utm_term=BINANCE%3ABTCUSDT"
+tradingview_widget = "https://www.tradingview.com/widgetembed/?frameElementId=tradingview_76464&symbol=BINANCE%3ABTCUSDT&interval=D&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%5D&hideideas=1&theme=Dark&style=1&timezone=UTC&studies_overrides=%7B%7D&overrides=%7B%7D&enabled_features=%5B%5D&disabled_features=%5B%5D&locale=en&utm_source=www.tradingview.com&utm_medium=widget_new&utm_campaign=chart&utm_term=BINANCE%3ABTCUSDT"
 
 
 def create_html_divs():
@@ -116,25 +116,18 @@ def create_html_divs():
 def create_widget():
     html_div_list = [
         html.Div(children=[
-            html.Iframe(src=tradingview_widget, style={'width': '90%', 'height': '400px'}),
+            html.Iframe(src='/assets/chart.html', style={'width': '90%', 'height': '700px'}),
         ],
             style={'display': 'flex', 'justifyContent': 'center', 'alignItems': 'center', 'marginTop': '10px'}),
 
         html.Div(children=[
-            html.Iframe(src='/assets/tradingview_market_data.html', style={'width': '90%', 'height': '300px'}),
+            html.Iframe(src='/assets/stock_heatmap.html', style={'width': '90%', 'height': '300px'}),
         ],
             style={'display': 'flex', 'justifyContent': 'center', 'alignItems': 'center', 'marginTop': '5px'}),
 
         html.Div(children=[
-            html.Iframe(src='/assets/top_winnner_loser.html', style={'width': '45%', 'height': '400px'}),
-            html.Iframe(src='/assets/tradingview_crypto_market.html', style={'width': '45%', 'height': '400px'}),
-        ], style={'display': 'flex', 'justifyContent': 'space-between', 'margin': '0 5%'}),
-
-
-        html.Div(children=[
-            html.Iframe(src='/assets/tradingview_snaps.html', style={'width': '30%', 'height': '400px'}),
-            html.Iframe(src='/assets/coingecko.html', style={'width': '30%', 'height': '400px'}),
-            html.Iframe(src='/assets/tradingview_technical_analysis.html', style={'width': '39%', 'height': '400px'})
+            html.Iframe(src='/assets/cryptopanic.html', style={'width': '30%', 'height': '400px'}),
+            html.Iframe(src='/assets/crypto_heatmap.html', style={'width': '30%', 'height': '400px'}),
         ], style={'display': 'flex', 'justifyContent': 'space-between', 'margin': '0 5%'}),
 
     ]
