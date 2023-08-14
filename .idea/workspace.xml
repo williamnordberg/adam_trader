@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b02440e7-38c7-4d13-acf1-1ed63ab207ba" name="Changes" comment="Added .gitignore">
-      <change beforePath="$PROJECT_DIR$/m_visualization_divs.py" beforeDir="false" afterPath="$PROJECT_DIR$/m_visualization_divs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m_visual_figures.py" beforeDir="false" afterPath="$PROJECT_DIR$/m_visual_figures.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/z_compares.py" beforeDir="false" afterPath="$PROJECT_DIR$/z_compares.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,19 +59,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/delta/adam_trader&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "/home/delta/adam_trader/data",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/data" />
       <recent name="$PROJECT_DIR$" />
       <recent name="C:\will\Python_project\adam_trader\.mypy_cache" />
     </key>
@@ -80,7 +84,7 @@
       <recent name="C:\will\Python_project\adam_trader\logs" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.m_visual_app">
+  <component name="RunManager" selected="Python.test">
     <configuration name="b_order_book" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -188,9 +192,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.test" />
         <item itemvalue="Python.m_visual_app" />
         <item itemvalue="Python.main" />
-        <item itemvalue="Python.test" />
         <item itemvalue="Python.b_order_book" />
         <item itemvalue="Python.l_position_decision" />
       </list>
@@ -469,7 +473,23 @@
       <option name="project" value="LOCAL" />
       <updated>1691982591404</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Added .gitignore">
+      <option name="closed" value="true" />
+      <created>1691983129923</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1691983129923</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Added .gitignore">
+      <option name="closed" value="true" />
+      <created>1691983188685</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1691983188685</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

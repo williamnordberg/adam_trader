@@ -277,9 +277,9 @@ def visualize_macro():
 def visualize_prediction():
     df = read_database()
     trace_list = [
-        go.Scatter(x=df.index, y=df["predicted_price"], name='Predicted price'),
-        go.Scatter(x=df.index, y=df["bitcoin_price"].shift(-1), name='Actual price'),
-        go.Scatter(x=df.index, y=df["prediction_bullish"], name='Prediction', visible='legendonly'),
+        go.Scatter(x=df.index, y=df["predicted_price"], name='Predicted price', visible='legendonly'),
+        go.Scatter(x=df.index, y=df["bitcoin_price"].shift(-1), name='Actual price', visible='legendonly'),
+        go.Scatter(x=df.index, y=df["prediction_bullish"], name='Prediction'),
     ]
 
     fig = create_figure(trace_list, "Prediction", 'Value')
