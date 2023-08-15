@@ -17,11 +17,11 @@ def get_authenticated_service():
     warnings.filterwarnings("ignore", message="file_cache is only supported with oauth2client<4.0.0")
     api_service_name = "youtube"
     api_version = "v3"
-    client_secrets_file = "config/youtube_client_secret.json"
+    client_secrets_file = "youtube_client_secret.json"
     scopes = ["https://www.googleapis.com/auth/youtube.force-ssl"]
 
     creds = None
-    token_file = 'config/youtube_token.pickle'
+    token_file = 'youtube_token.pickle'
     if os.path.exists(token_file):
         with open(token_file, 'rb') as token:
             creds = pickle.load(token)
