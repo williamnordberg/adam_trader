@@ -3,8 +3,6 @@ import bisect
 from typing import Tuple
 import plotly.graph_objects as go
 
-
-
 RANGES_PREDICTION = [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, float('inf'))]
 VALUES_PREDICTION_GREATER = [0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
 VALUES_PREDICTION_LESSER = [0.5, 0.4, 0.3, 0.2, 0.1, 0.0]
@@ -65,9 +63,25 @@ def evaluate_prediction():
 
 
 def evaluate_technical():
-    df = read_database()
+    df_filtered = read_database()
+
+    # Filter the DataFrame to include only the rows with a date after the specified time
+    # df_filtered = df[df.index > pd.Timestamp("2023-08-09 04:00:00")]
+
+    # Convert the boolean columns to integers
+    df_filtered['technical_potential_up_reversal_bullish'] = df_filtered[
+        'technical_potential_up_reversal_bullish'].astype(int)
+    df_filtered['technical_potential_down_reversal_bearish'] = df_filtered[
+        'technical_potential_down_reversal_bearish'].astype(int)
+
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=df.index, y=df['technical_bullish'], mode='lines', name='Technical Bullish'))
+    fig.add_trace(go.Scatter(x=df_filtered.index, y=df_filtered['technical_bullish'], mode='lines',
+                             name='Technical Bullish'))
+    fig.add_trace(go.Scatter(x=df_filtered.index, y=df_filtered['technical_potential_up_reversal_bullish'],
+                             mode='lines', name='technical_potential_up_reversal_bullish'))
+    fig.add_trace(go.Scatter(x=df_filtered.index, y=df_filtered['technical_potential_down_reversal_bearish'],
+                             mode='lines', name='technical_potential_down_reversal_bearish'))
+
     fig.update_layout(title='Technical Indicators')
     fig.show()
 
