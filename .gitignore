@@ -11,6 +11,6 @@ venv/*
 
 # Files
 chromedriver.exe
-
+youtube_token.pickle
 
 
