@@ -98,6 +98,7 @@ def trading_loop(long_threshold: float, short_threshold: float):
             position['opening_score'] = weighted_score
             save_trade_details(position, factor_values)
 
+        logging.info(factor_values)
         logging.info(f'███ {os.getpid()}_trading({LOOP_COUNTER}) SLEEPS ███')
         write_latest_data('latest_trading_state', 'main')
         sleep(MAIN_TRADING_LOOP_SLEEP_TIME)
