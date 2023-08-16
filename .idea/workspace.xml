@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b02440e7-38c7-4d13-acf1-1ed63ab207ba" name="Changes" comment="aug" />
+    <list default="true" id="b02440e7-38c7-4d13-acf1-1ed63ab207ba" name="Changes" comment="aug">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -72,8 +74,8 @@
       <recent name="C:\will\Python_project\adam_trader\.mypy_cache" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/config" />
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/.gitignore" />
       <recent name="C:\will\Python_project\adam_trader\data" />
       <recent name="C:\will\Python_project\adam_trader\logs" />
@@ -500,7 +502,23 @@
       <option name="project" value="LOCAL" />
       <updated>1692083189445</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="aug">
+      <option name="closed" value="true" />
+      <created>1692083322912</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1692083322912</updated>
+    </task>
+    <task id="LOCAL-00039" summary="aug">
+      <option name="closed" value="true" />
+      <created>1692083331606</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1692083331606</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
