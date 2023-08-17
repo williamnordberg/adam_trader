@@ -7,7 +7,7 @@ from datetime import datetime, timedelta, timezone
 import os
 
 LATEST_INFO_FILE = "data/latest_info_saved.csv"
-DATABASE_PATH = 'config/database.csv'
+DATABASE_PATH = 'data/database.csv'
 DATASET_PATH = 'data/dataset.csv'
 TRADE_RESULT_PATH = 'data/trades_results.csv'
 TRADE_DETAILS_PATH = 'data/trades_details.csv'
