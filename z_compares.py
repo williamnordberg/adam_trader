@@ -29,30 +29,30 @@ VALUES_PREDICTION_LESSER = [0.5, 0.4, 0.3, 0.2, 0.1, 0.0]
 
 # 5.Richest
 RANGES_RICH = [
-    (float('-inf'), -5),
-    (-5, -4),
-    (-4, -3),
-    (-3, -2),
-    (-2, -1),
-    (-1, 1),
-    (1, 2),
-    (2, 3),
-    (3, 4),
-    (4, 5),
-    (5, float('inf')),
+    (float('-inf'), -3),  # 0.0
+    (-3, -2),      # 0.1
+    (-2, -1.5),    # 0.2
+    (-1.5, -1),    # 0.3
+    (-1, -0.5),    # 0.4
+    (-0.5, 0.5),   # 0.5
+    (0.5, 1),  # 0.6
+    (1, 1.5),  # 0.7
+    (1.5, 2),  # 0.8
+    (2, 3),    # 0.9
+    (3, float('inf')),   # 1.0
 ]
 VALUES_RICH = [
-    0.0,  # <-5
-    0.1,  # -5 to -4
-    0.2,  # -4 to -3
-    0.3,  # -3 to -2
-    0.4,  # -2 to -1
-    0.5,  # -1 to 1
-    0.6,  # 1 to 2
-    0.7,  # 2 to 3
-    0.8,  # 3 to 4
-    0.9,  # 4 to 5
-    1.0,  # >5
+    0.0,  # <- < -3
+    0.1,  # -2 to -3
+    0.2,  # -1.5 to -2
+    0.3,  # -1 to -1.5
+    0.4,  # -0.5 to -1
+    0.5,  # -0.5 to 0.5
+    0.6,  # 0.5 to 1
+    0.7,  # 1 to 1.5
+    0.8,  # 1.5 to 2
+    0.9,  # 2 to 3
+    1.0,  # >3
 ]
 
 
@@ -171,7 +171,7 @@ def compare_richest_addresses() -> Tuple[float, float]:
 
     mv_add_on_bullish = moving_averages_cross_richest()
     rich_bullish += mv_add_on_bullish
-
+    print('add on ', mv_add_on_bullish)
     rich_bullish = round(rich_bullish, 2)
 
     # Ensure values are within the range [0, 1]
@@ -216,5 +216,4 @@ def compare_google_reddit_youtube(last_hour: int, two_hours_before: int) -> floa
 
 
 if __name__ == '__main__':
-    # print(compare_predicted_price(1000, 1010))
     print(compare_richest_addresses())
