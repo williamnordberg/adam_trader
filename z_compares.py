@@ -12,6 +12,9 @@ LONG_MOVING_AVERAGE_WINDOW_Rich = 20
 SHORT_MOVING_AVERAGE_WINDOW_ORDER = 5
 LONG_MOVING_AVERAGE_WINDOW_ORDER = 20
 
+SHORT_MOVING_AVERAGE_GOOGLE = 5
+LONG_MOVING_AVERAGE_GOOGLE = 20
+
 # 1. Macro
 RANGES_MACRO_MTM = [(-INF, -0.75), (-0.75, -0.5), (-0.5, -0.25),
                     (-0.25, 0.1), (0.1, 0.26), (0.26, 0.51), (0.51, 0.76), (0.76, INF)]
@@ -201,18 +204,29 @@ def moving_averages_cross_richest() -> float:
         return 0.0
 
 
-def compare_google_reddit_youtube(last_hour: int, two_hours_before: int) -> float:
+def compare_google(last_hour: int, two_hours_before: int) -> float:
     # prevent division by zero
     if last_hour == 0 or two_hours_before == 0:
         last_hour += 1
         two_hours_before += 1
 
+    # moving_averages_google
     if last_hour >= two_hours_before:
         ratio = last_hour / two_hours_before
-        return compare(ratio, RANGES_GOOGLE, VALUES__GOOGLE)
+        google = compare(ratio, RANGES_GOOGLE, VALUES__GOOGLE)
     else:
         ratio = two_hours_before / last_hour
-        return compare(ratio, RANGES_GOOGLE_DOWN, VALUES_GOOGLE_DOWN)
+        google = compare(ratio, RANGES_GOOGLE_DOWN, VALUES_GOOGLE_DOWN)
+
+    if last_hour > 70:
+        AMPLIFICATION_FACTOR = 1 + ((last_hour - 70) / 30)  # Scale from 1 to 2 as last_hour goes from 70 to 100
+        google = google * AMPLIFICATION_FACTOR
+    elif last_hour < 30:
+        AMPLIFICATION_FACTOR = 1 + ((30 - last_hour) / 30)  # Scale from 1 to 2 as last_hour goes from 0 to 30
+        google = google / AMPLIFICATION_FACTOR
+
+    google = min(max(google, 0), 1)
+    return google
 
 
 if __name__ == '__main__':

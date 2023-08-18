@@ -2,12 +2,13 @@ from typing import List
 from pytrends.request import TrendReq as UTrendReq
 from pytrends.exceptions import ResponseError
 from requests.exceptions import RequestException, ConnectionError, Timeout, TooManyRedirects
+from datetime import datetime
 
 
 from z_read_write_csv import save_value_to_database, \
     should_update, save_update_time, retrieve_latest_factor_values_database
 from z_handy_modules import retry_on_error
-from z_compares import compare_google_reddit_youtube
+from z_compares import compare_google
 
 headers = {
     'authority': 'ogs.google.com',
@@ -62,7 +63,6 @@ def check_search_trend_wrapper(keywords: List[str]) -> float:
 
     Returns:
         bullish_score: a value between 0 (the lowest probability) and 1 (highest probability).
-        bearish_score: a value between 0 (the lowest probability) and 1 (highest probability).
     """
     # it will be here until google trend server recover
     save_update_time('google_search')
@@ -72,12 +72,21 @@ def check_search_trend_wrapper(keywords: List[str]) -> float:
     pytrends.build_payload(keywords, cat=0, timeframe='now 7-d', geo='', gprop='')
 
     trend = pytrends.interest_over_time()
-    last_hour, two_hours_before = trend.iloc[-1].values[0], trend.iloc[-2].values[0]
-    google_bullish = compare_google_reddit_youtube(last_hour, two_hours_before)
+    isPartial = trend.iloc[-1].values[1]
 
+    # if isPartial is True then last hour is not complete so we project that
+    if isPartial:
+        current_minute = datetime.utcnow().minute
+        if current_minute >= 30:
+            last_hour, two_hours_before = trend.iloc[-1].values[0], trend.iloc[-2].values[0]
+            last_hour = last_hour * (60 / current_minute)
+        else:
+            last_hour, two_hours_before = trend.iloc[-2].values[0], trend.iloc[-3].values[0]
+    else:
+        last_hour, two_hours_before = trend.iloc[-1].values[0], trend.iloc[-2].values[0]
+
+    google_bullish = compare_google(last_hour, two_hours_before)
     save_value_to_database('hourly_google_search', last_hour)
-    # save_update_time('google_search')
-
     return google_bullish
 
 
