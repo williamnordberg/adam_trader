@@ -43,7 +43,7 @@ def position_decision(factor_values_position) -> float:
     write_latest_data('score_profit_position', round(normalized_score, 2))
 
     # Calculate combined score for database, and Remove the key 'order_target'
-    factor_values_outer.pop('order_target', None)
+    factor_values_position.pop('order_target', None)
     make_trading_decision(factor_values_position)
 
     return normalized_score
