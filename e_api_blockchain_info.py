@@ -16,7 +16,7 @@ MAX_RETRIES = 3
 
 @retry_on_error(MAX_RETRIES, 5, allowed_exceptions=(
         RequestException, Timeout, HTTPError, ConnectionError, ChunkedEncodingError),
-                fallback_values=(0.0, 0.0))
+                fallback_values=(999.91, 999.91))
 def get_address_transactions_24h(address: str) -> Tuple[float, float]:
     """
     Check the total Bitcoin received and sent in the last 24 hours for an address using the Blockchain.info API.
@@ -28,7 +28,7 @@ def get_address_transactions_24h(address: str) -> Tuple[float, float]:
         total_received (float): Total Bitcoin received in the last 24 hours.
         total_sent (float): Total Bitcoin sent in the last 24 hours.
     """
-
+    # we use  fallback_values=(999.91, 999.91) as indicator to error
     current_time = int(time.time())
     time_24_hours_ago = current_time - 86400
 
@@ -80,4 +80,5 @@ def get_address_transactions_24h(address: str) -> Tuple[float, float]:
 
 if __name__ == '__main__':
     received, sent = get_address_transactions_24h('bc1q4c8n5t00jmj8temxdgcc3t32nkg2wjwz24lywv')
-    logging.info(f'received: {received}, sent: {sent}')
+    print(f'received: {received}, sent: {sent}')
+
