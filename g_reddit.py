@@ -18,19 +18,22 @@ CONFIG_PATH = 'config/config.ini'
 
 def calculate_reddit_trend(reddit_bullish, short_ma, long_ma, factor_type):
     adjustment = 0.125
-
-    if factor_type == 'positive_polarity' or factor_type == 'positive_count':
-        if short_ma > long_ma:
+    if factor_type == 'reddit_positive_polarity' or factor_type == 'reddit_positive_count':
+        if short_ma >= long_ma:
             reddit_bullish += adjustment
-    elif factor_type == 'negative_polarity' or factor_type == 'negative_count':
-        if short_ma > long_ma:
+        else:
             reddit_bullish -= adjustment
 
+    elif factor_type == 'reddit_negative_polarity' or factor_type == 'reddit_negative_count':
+        if short_ma > long_ma:
+            reddit_bullish -= adjustment
+        else:
+            reddit_bullish += adjustment
     return reddit_bullish
 
 
 def calculate_reddit_sentiments():
-    reddit_bullish, reddit_bearish = 0.5, 0.5
+    reddit_bullish = 0.5
     data = read_database()
     df = pd.DataFrame(data, columns=['reddit_positive_polarity',
                                      'reddit_negative_polarity', 'reddit_positive_count',
@@ -41,6 +44,8 @@ def calculate_reddit_sentiments():
         long_ma = df[col].rolling(window=LONG_MOVING_AVERAGE_WINDOW, min_periods=1).mean()
         reddit_bullish = calculate_reddit_trend(
             reddit_bullish, short_ma.iloc[-1], long_ma.iloc[-1], col)
+
+    reddit_bullish = max(0, min(reddit_bullish, 1))
     return reddit_bullish
 
 

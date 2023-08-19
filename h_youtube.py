@@ -25,12 +25,17 @@ LONG_MOVING_AVERAGE_WINDOW = 20
 def calculate_youtube_sentiments(youtube_bullish, short_ma, long_ma, factor_type):
     adjustment = 0.125
 
-    if factor_type == 'positive_polarity' or factor_type == 'positive_count':
-        if short_ma > long_ma:
+    if factor_type == 'youtube_positive_polarity' or factor_type == 'youtube_positive_count':
+        if short_ma >= long_ma:
             youtube_bullish += adjustment
-    elif factor_type == 'negative_polarity' or factor_type == 'negative_count':
+        else:
+            youtube_bullish -= adjustment
+
+    elif factor_type == 'youtube_negative_polarity' or factor_type == 'youtube_negative_count':
         if short_ma > long_ma:
             youtube_bullish -= adjustment
+        else:
+            youtube_bullish += adjustment
 
     return youtube_bullish
 
@@ -120,9 +125,15 @@ def calculate_sentiment_score(content: str) -> float:
     return blob.sentiment.polarity
 
 
-def calculate_sentiment_youtube_videos(youtube, published_after, published_before):
+def calculate_sentiment_youtube_videos(youtube):
+
+    now = datetime.utcnow()
+    published_after = (now - timedelta(days=1)).strftime('%Y-%m-%dT%H:%M:%SZ')
+    published_before = now.strftime('%Y-%m-%dT%H:%M:%SZ')
+
     positive_polarity_score, negative_polarity_score, positive_count, negative_count,\
         total_video_include_out_threshold = 0.0, 0.0, 0, 0, 0
+
     search_results = get_youtube_videos(youtube, published_after, published_before)
 
     for video in search_results:
@@ -136,7 +147,6 @@ def calculate_sentiment_youtube_videos(youtube, published_after, published_befor
         publish_time = parse(video['snippet']['publishedAt'])
         # Applying temporal decay
         sentiment_score = calculate_youtube_temporal_decay(sentiment_score, publish_time)
-
         if sentiment_score > SENTIMENT_POSITIVE_THRESHOLD:
             positive_polarity_score += sentiment_score
             positive_count += 1
@@ -157,12 +167,8 @@ def calculate_sentiment_youtube_videos(youtube, published_after, published_befor
 def youtube_wrapper() -> float:
     youtube = get_authenticated_service()
 
-    now = datetime.utcnow()
-    last_24_hours_start = (now - timedelta(days=1)).strftime('%Y-%m-%dT%H:%M:%SZ')
-    last_24_hours_end = now.strftime('%Y-%m-%dT%H:%M:%SZ')
-
     positive_polarity, negative_polarity, positive_count, negative_count, total_video_include_out_threshold = \
-        calculate_sentiment_youtube_videos(youtube, last_24_hours_start, last_24_hours_end)
+        calculate_sentiment_youtube_videos(youtube)
     # Save to database
     save_value_to_database('last_24_youtube', total_video_include_out_threshold)
     save_value_to_database('youtube_positive_polarity', positive_polarity)
@@ -178,7 +184,6 @@ def youtube_wrapper() -> float:
 
 def check_bitcoin_youtube_videos_increase() -> float:
     if should_update('youtube'):
-
         youtube_bullish = youtube_wrapper()
         save_value_to_database('youtube_bullish', youtube_bullish)
 

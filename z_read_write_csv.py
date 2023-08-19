@@ -110,16 +110,16 @@ def check_macro_announcement():
 
 update_intervals = {
     "dataset": timedelta(hours=24),
+    "richest_addresses_scrap": timedelta(hours=12),
     "macro": timedelta(hours=1) if check_macro_announcement() else timedelta(hours=24),
-    "order_book": timedelta(minutes=10),
     "predicted_price": timedelta(hours=1),
     "technical_analysis": timedelta(hours=1),
+    "order_book": timedelta(minutes=10),
     "richest_addresses": timedelta(minutes=20),
-    "google_search": timedelta(hours=2),
+    "google_search": timedelta(hours=1),
     "reddit": timedelta(hours=1),
     "youtube": timedelta(hours=1),
     "sentiment_of_news": timedelta(hours=1),
-    "richest_addresses_scrap": timedelta(hours=12),
     "weighted_score": timedelta(minutes=10),
 }
 
