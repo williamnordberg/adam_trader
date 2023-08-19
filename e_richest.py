@@ -8,7 +8,7 @@ from z_read_write_csv import save_value_to_database, should_update, save_update_
 from e_api_blockchain_info import get_address_transactions_24h
 
 SATOSHI_TO_BITCOIN = 100000000
-CONSECUTIVE_ERRORS_THRESHOLD = 5
+CONSECUTIVE_ERRORS_THRESHOLD = 3
 
 
 def check_multiple_addresses(addresses: List[str]) -> Tuple[int, int]:
