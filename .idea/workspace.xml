@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="b02440e7-38c7-4d13-acf1-1ed63ab207ba" name="Changes" comment="18aug">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/a_macro.py" beforeDir="false" afterPath="$PROJECT_DIR$/a_macro.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/e_api_blockchain_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_api_blockchain_info.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/e_richest.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_richest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/m_visual_figures.py" beforeDir="false" afterPath="$PROJECT_DIR$/m_visual_figures.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +84,7 @@
       <recent name="C:\will\Python_project\adam_trader\logs" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.a_macro">
+  <component name="RunManager" selected="Python.m_visual_app">
     <configuration name="a_macro" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -168,7 +169,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="l_position_long_testnet" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="m_visual_app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -180,7 +181,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/l_position_long_testnet.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/m_visual_app.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -191,11 +192,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.m_visual_app" />
         <item itemvalue="Python.a_macro" />
         <item itemvalue="Python.f_google" />
         <item itemvalue="Python.e_api_blockchain_info" />
         <item itemvalue="Python.e_api_blockcypher" />
-        <item itemvalue="Python.l_position_long_testnet" />
       </list>
     </recent_temporary>
   </component>
@@ -207,14 +208,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1690438920740</updated>
-    </task>
-    <task id="LOCAL-00003" summary="28july">
-      <option name="closed" value="true" />
-      <created>1690527541492</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1690527541492</updated>
     </task>
     <task id="LOCAL-00004" summary="28july">
       <option name="closed" value="true" />
@@ -600,7 +593,15 @@
       <option name="project" value="LOCAL" />
       <updated>1692412582444</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="18aug">
+      <option name="closed" value="true" />
+      <created>1692414243111</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1692414243111</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
