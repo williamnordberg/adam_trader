@@ -154,7 +154,7 @@ def get_service() -> Service:
 
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
         Exception, TimeoutException), fallback_values=(None, {}))
-def macro_sentiment_wrapper() -> Tuple[float, Dict[str, datetime]]:
+def macro_sentiment_wrapper() -> Tuple[Optional[float], Dict[str, datetime]]:
 
     events_list = ["Federal Funds Rate", "CPI m/m", "PPI m/m"]
     url = "https://www.forexfactory.com/calendar"

@@ -1,7 +1,7 @@
 import time
 import logging
 import requests
-from typing import Tuple
+from typing import Tuple, Optional
 from z_handy_modules import retry_on_error
 from requests.exceptions import RequestException, Timeout, HTTPError, ChunkedEncodingError
 
@@ -13,8 +13,8 @@ MAX_RETRIES = 3
 
 @retry_on_error(MAX_RETRIES, 5, allowed_exceptions=(
         RequestException, Timeout, HTTPError, ConnectionError, ChunkedEncodingError),
-                fallback_values=(999.91, 999.91))
-def get_address_transactions_24h(address: str) -> Tuple[float, float]:
+                fallback_values=(None, None))
+def get_address_transactions_24h(address: str) -> Tuple[Optional[float], Optional[float]]:
     """
     Check the total Bitcoin received and sent in the last 24 hours for an address using the Blockchain.info API.
 
