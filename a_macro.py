@@ -153,7 +153,7 @@ def get_service() -> Service:
 
 
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
-        Exception, TimeoutException), fallback_values=(0.5, {}))
+        Exception, TimeoutException), fallback_values=(None, {}))
 def macro_sentiment_wrapper() -> Tuple[float, Dict[str, datetime]]:
 
     events_list = ["Federal Funds Rate", "CPI m/m", "PPI m/m"]
@@ -250,10 +250,12 @@ def macro_sentiment_wrapper() -> Tuple[float, Dict[str, datetime]]:
 def macro_sentiment() -> Tuple[float, Dict[str, datetime]]:
     if should_update('macro'):
         macro_bullish, events_date_dict = macro_sentiment_wrapper()
-        save_value_to_database('macro_bullish', round(macro_bullish, 2))
-        # save_value_to_database('macro_bearish', round(macro_bearish, 2))
-        save_update_time('macro')
-        return macro_bullish, events_date_dict
+
+        # Check if function is not fail and nor return fallback value
+        if macro_bullish is not None:
+            save_value_to_database('macro_bullish', round(macro_bullish, 2))
+            save_update_time('macro')
+            return macro_bullish, events_date_dict
     else:
         macro_bullish = retrieve_latest_factor_values_database('macro')
         return macro_bullish, {}
