@@ -27,8 +27,7 @@ def check_multiple_addresses(addresses: List[str]) -> Tuple[int, int]:
     for i, address in enumerate(addresses):
         received, sent = get_address_transactions_24h(address)
 
-        # we use  fallback_values=(999.91, 999.91) as indicator to error
-        if received == 999.91 and sent == 999.91:
+        if received is None:
             consecutive_errors += 1
         else:
             consecutive_errors = 0
