@@ -1,12 +1,9 @@
 import time
 import logging
-from requests.sessions import Session
+import requests
 from typing import Tuple
 from z_handy_modules import retry_on_error
 from requests.exceptions import RequestException, Timeout, HTTPError, ChunkedEncodingError
-
-# Initialize a session object
-session = Session()
 
 SATOSHI_TO_BITCOIN = 100000000
 API_URL = "https://blockchain.info/rawaddr/"
@@ -36,7 +33,7 @@ def get_address_transactions_24h(address: str) -> Tuple[float, float]:
     api_url = f"{API_URL}{address}"
 
     # Send the API request and get the response
-    response = session.get(api_url)
+    response = requests.get(api_url)
 
     # Check the response status code
     if response.status_code == 200:
