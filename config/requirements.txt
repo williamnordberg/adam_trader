@@ -50,7 +50,6 @@ oauthlib==3.2.2
 orjson==3.9.4
 outcome==1.2.0
 packaging==23.1
-pandas==2.0.3
 plotly==5.15.0
 praw==7.7.1
 prawcore==2.3.0
