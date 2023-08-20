@@ -4,15 +4,17 @@ import requests
 from typing import Tuple, Optional
 from z_handy_modules import retry_on_error
 from requests.exceptions import RequestException, Timeout, HTTPError, ChunkedEncodingError
+from ssl import SSLEOFError
 
 SATOSHI_TO_BITCOIN = 100000000
 API_URL = "https://blockchain.info/rawaddr/"
 SLEEP_TIME = 60
 MAX_RETRIES = 3
+# if still system hang then allowed_exceptions=(Exception)#############################################################
 
 
 @retry_on_error(MAX_RETRIES, 5, allowed_exceptions=(
-        RequestException, Timeout, HTTPError, ConnectionError, ChunkedEncodingError),
+        SSLEOFError, RequestException, Timeout, HTTPError, ConnectionError, ChunkedEncodingError),
                 fallback_values=(None, None))
 def get_address_transactions_24h(address: str) -> Tuple[Optional[float], Optional[float]]:
     """
@@ -33,7 +35,7 @@ def get_address_transactions_24h(address: str) -> Tuple[Optional[float], Optiona
     api_url = f"{API_URL}{address}"
 
     # Send the API request and get the response
-    response = requests.get(api_url)
+    response = requests.get(api_url, timeout=30)  # 30 seconds timeout
 
     # Check the response status code
     if response.status_code == 200:
