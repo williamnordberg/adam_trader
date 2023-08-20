@@ -80,4 +80,3 @@ def get_address_transactions_24h(address: str) -> Tuple[Optional[float], Optiona
 if __name__ == '__main__':
     received, sent = get_address_transactions_24h('bc1q4c8n5t00jmj8temxdgcc3t32nkg2wjwz24lywv')
     print(f'received: {received}, sent: {sent}')
-
