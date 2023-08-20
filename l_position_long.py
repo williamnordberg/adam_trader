@@ -68,7 +68,7 @@ def long_position() -> dict:
         if price >= position['profit_target'] or price < position['stop_loss'] or \
                 weighted_score < LONG_POSITION['THRESHOLD_TO_CLOSE']:
             close_position_at_market(LONG_POSITION['SIZE'])
-            position['pnl'] = int(price - position['opening_price'])
+            position['PNL'] = int(price - position['opening_price'])
             logging.info('&&&&&&&&&&&&&& LONG CLOSED &&&&&&&&&&&&&&&&&&&&')
             position['closing_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             position['closing_price'] = price
@@ -80,4 +80,4 @@ def long_position() -> dict:
 
 if __name__ == "__main__":
     position = long_position()
-    logging.info(f"profit_after_trade:{position['pnl']}")
+    logging.info(f"profit_after_trade:{position['PNL']}")
