@@ -4,10 +4,9 @@ from pytrends.exceptions import ResponseError
 from requests.exceptions import RequestException, ConnectionError, Timeout, TooManyRedirects
 from datetime import datetime
 
-
 from z_read_write_csv import save_value_to_database, \
-    should_update, save_update_time, retrieve_latest_factor_values_database
-from z_handy_modules import retry_on_error
+    should_update, save_update_time, retrieve_latest_factor_values_database, read_database
+from z_handy_modules import retry_on_error, get_bitcoin_price
 from z_compares import compare_google
 
 headers = {
@@ -51,6 +50,30 @@ class TrendReq(UTrendReq):
         return super()._get_data(url, method=method, trim_chars=trim_chars, headers=headers, **kwargs)
 
 
+def consider_market_sentiment(google_search_trend: float) -> float:
+    current_price = get_bitcoin_price()
+    df = read_database()
+    price_24_hours_ago = df['bitcoin_price'].iloc[-24]
+    news_sentiment = df['news_bullish'].iloc[-1]
+    youtube = df['youtube_bullish'].iloc[-1]
+    reddit = df['reddit_bullish'].iloc[-1]
+
+    price_change_percent = ((current_price - price_24_hours_ago) / price_24_hours_ago) * 100
+
+    # check price change to a value between 0 and 1
+    price_trend = 0.5 if (-2 < price_change_percent < 2) else max(min((price_change_percent + 7) / 14, 1), 0)
+
+    # Combine the other factors using their mean
+    combined_factors = (news_sentiment + youtube + reddit + price_trend) / 4
+
+    # Use the combined factors to influence the Google search trend
+    final_score = (google_search_trend + combined_factors) / 2
+
+    # Ensure the final score is in the range [0, 1]
+    final_score = min(max(final_score, 0), 1)
+    return final_score
+
+
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
         ResponseError, RequestException, ConnectionError, Timeout,
         TooManyRedirects), fallback_values=0.5)
@@ -86,6 +109,10 @@ def check_search_trend_wrapper(keywords: List[str]) -> float:
         last_hour, two_hours_before = trend.iloc[-1].values[0], trend.iloc[-2].values[0]
 
     google_bullish = compare_google(last_hour, two_hours_before)
+
+    # Here we consider the market sentiment
+    google_bullish = consider_market_sentiment(google_bullish)
+
     save_value_to_database('hourly_google_search', last_hour)
     return google_bullish
 
