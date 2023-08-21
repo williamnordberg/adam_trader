@@ -256,6 +256,10 @@ def macro_sentiment() -> Tuple[float, Dict[str, datetime]]:
             save_value_to_database('macro_bullish', round(macro_bullish, 2))
             save_update_time('macro')
             return macro_bullish, events_date_dict
+        elif macro_bullish is None:
+            macro_bullish = retrieve_latest_factor_values_database('macro')
+            return macro_bullish, {}
+
     else:
         macro_bullish = retrieve_latest_factor_values_database('macro')
         return macro_bullish, {}
