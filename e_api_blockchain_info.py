@@ -10,11 +10,11 @@ SATOSHI_TO_BITCOIN = 100000000
 API_URL = "https://blockchain.info/rawaddr/"
 SLEEP_TIME = 60
 MAX_RETRIES = 3
-# if still system hang then allowed_exceptions=(Exception)#############################################################
 
 
 @retry_on_error(MAX_RETRIES, 5, allowed_exceptions=(
-        SSLEOFError, RequestException, Timeout, HTTPError, ConnectionError, ChunkedEncodingError),
+        Exception, SSLEOFError, RequestException, Timeout, HTTPError,
+        ConnectionError, ChunkedEncodingError),
                 fallback_values=(None, None))
 def get_address_transactions_24h(address: str) -> Tuple[Optional[float], Optional[float]]:
     """
