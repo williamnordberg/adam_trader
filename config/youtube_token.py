@@ -6,7 +6,7 @@ import os.path
 from google.auth.transport.requests import Request
 import logging
 from datetime import datetime, timedelta
-from z_compares import compare_google_reddit_youtube
+from z_compares import compare_google
 from typing import Tuple
 import warnings
 
@@ -86,7 +86,7 @@ def youtube_wrapper() -> Tuple[float, float]:
         num_last_24_hours = len(search_results_last_24_hours)
         num_last_48_to_24_hours = len(search_results_last_48_to_24_hours)
 
-        youtube_bullish, youtube_bearish = compare_google_reddit_youtube(num_last_24_hours, num_last_48_to_24_hours)
+        youtube_bullish, youtube_bearish = compare_google(num_last_24_hours, num_last_48_to_24_hours)
 
     except Exception as e:
         logging.error(f"Error occurred: {e}")
