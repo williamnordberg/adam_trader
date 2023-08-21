@@ -76,8 +76,7 @@ def trading_loop(long_threshold: float, short_threshold: float):
 
         factor_values['reddit'] = reddit_check()
 
-        factor_values['youtube'] = 0.5
-            #check_bitcoin_youtube_videos_increase())
+        factor_values['youtube'] = check_bitcoin_youtube_videos_increase()
 
         factor_values['news'] = check_sentiment_of_news()
 
