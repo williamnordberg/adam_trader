@@ -7,7 +7,7 @@ from dash import dcc, html
 
 from m_visualization_side import last_and_next_update, create_progress_bar, generate_tooltips
 from z_handy_modules import COLORS
-from z_read_write_csv import read_database, read_trading_details,  read_trading_results
+from z_read_write_csv import read_database, read_trading_details
 from m_visualization_side import read_gauge_chart_data
 from a_config import LONG_THRESHOLD, SHORT_THRESHOLD
 
@@ -287,80 +287,24 @@ def visualize_prediction():
 
 
 def visualize_trade_results():
-    df = read_trading_results()
+    df = read_database()
 
-    # Create an empty figure
-    fig = go.Figure()
+    trace_list = [
+        go.Scatter(x=df.index, y=df["weighted_score_up"], name='score'),
+        go.Scatter(x=df.index, y=df["macro_bullish"], name='macro'),
+        go.Scatter(x=df.index, y=df["order_book_bullish"], name='order'),
+        go.Scatter(x=df.index, y=df["prediction_bullish"], name='prediction', visible='legendonly'),
+        go.Scatter(x=df.index, y=df["technical_bullish"], name='technical'),
+        go.Scatter(x=df.index, y=df["richest_addresses_bullish"], name='richest'),
+        go.Scatter(x=df.index, y=df["google_search_bullish"], name='google'),
+        go.Scatter(x=df.index, y=df["reddit_bullish"], name='reddit'),
+        go.Scatter(x=df.index, y=df["youtube_bullish"], name='youtube'),
+        go.Scatter(x=df.index, y=df["news_bullish"], name='news'),
+        go.Scatter(x=df.index, y=(df["bitcoin_price"]/100000), name='Bitcoin price'),
 
-    # Add a bar chart for PNL
-    fig.add_trace(go.Bar(
-        x=df['weighted_score_category'],
-        y=(df["PNL"] / 1000),
-        name='PNL(K)',
-        marker=dict(color=COLORS['lightgray']),
-        text=df["PNL"],
-        hoverinfo='none'
-    ))
+    ]
 
-    fig.add_trace(go.Bar(x=df['weighted_score_category'], y=df["long_trades"],
-                         name='Long trades', marker=dict(color=COLORS['green_chart']),
-                         text=df["long_trades"].map('long {}'.format),
-                         hoverinfo='none'
-                         ))
-
-    fig.add_trace(go.Bar(x=df['weighted_score_category'], y=df["short_trades"],
-                         name='Short trades', marker=dict(color=COLORS['red_chart']),
-                         text=df["short_trades"].map('short {}'.format),
-                         hoverinfo='none'
-                         ))
-
-    fig.add_trace(go.Bar(x=df['weighted_score_category'], y=df["win_trades"],
-                         name='Win trades', marker=dict(color='#006700'),
-                         text=df["win_trades"].map('win {}'.format),
-                         hoverinfo='none'
-                         ))
-
-    fig.add_trace(go.Bar(x=df['weighted_score_category'], y=df["loss_trades"],
-                         name='Loss trades', marker=dict(color='#9a0000'),
-                         text=df["loss_trades"].map('loss {}'.format),
-                         hoverinfo='none'
-                         ))
-
-    # Add a bar chart for number_of_trades
-    # fig.add_trace(go.Bar(x=df['weighted_score_category'], y=df["total_trades"],
-    #                    name='Number of Trades'))
-
-    fig.update_xaxes(showgrid=False)
-    fig.update_yaxes(showgrid=False)
-    fig.update_layout(
-        title={
-            'text': "Trade Results",
-            'y': 0.95,  # Adjust this as needed. Default is 0.9
-            'x': 0.5,  # Places the title in the center
-            'xanchor': 'center',  # ensures the title remains at center when resizing
-            'yanchor': 'top',  # ensures the title remains at top when resizing
-            'font': {
-                'color': COLORS['white'],  # Change this to your desired color
-                'size': 24  # Change this to your desired size
-            }
-        },
-        xaxis_title='Model Category',
-        yaxis_title='Value',
-        barmode='group',
-        plot_bgcolor=COLORS['black_chart'],
-        paper_bgcolor=COLORS['background'],
-        font=dict(
-            color=COLORS['white'],  # Change this to your desired color
-            size=11
-        ),
-        legend=dict(orientation="h",
-                    yanchor="bottom",
-                    y=1.02,  # put it a bit above the bottom of the plot
-                    xanchor="right",
-                    x=1),
-        hovermode="x"  # on hover, show info for all data series for that x-value
-    )
-
+    fig = create_figure(trace_list, "All factors")
     return fig
 
 
