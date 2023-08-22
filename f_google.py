@@ -67,7 +67,14 @@ def consider_market_sentiment(google_search_trend: float) -> float:
     combined_factors = (news_sentiment + youtube + reddit + price_trend) / 4
 
     # Use the combined factors to influence the Google search trend
-    final_score = (google_search_trend + combined_factors) / 2
+    if google_search_trend == 0.5:
+        return 0.5
+    elif combined_factors > 0.5:
+        final_score = (google_search_trend + combined_factors) / 2
+    elif combined_factors < 0.5 < google_search_trend:
+        final_score = combined_factors * (1 - google_search_trend)
+    else:  # combined_factors < 0.5 and google_search_trend < 0.5
+        final_score = (combined_factors + google_search_trend) / 2
 
     # Ensure the final score is in the range [0, 1]
     final_score = min(max(final_score, 0), 1)
@@ -97,7 +104,7 @@ def check_search_trend_wrapper(keywords: List[str]) -> float:
     trend = pytrends.interest_over_time()
     isPartial = trend.iloc[-1].values[1]
 
-    # if isPartial is True then last hour is not complete so we project that
+    # if isPartial is True then last hour is not complete, so we project that
     if isPartial:
         current_minute = datetime.utcnow().minute
         if current_minute >= 30:
