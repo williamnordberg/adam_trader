@@ -57,13 +57,13 @@ def short_position() -> dict:
 
         factor_values_position['technical'] = technical_analyse()
 
-        factor_values_position['google'] = check_search_trend(["Bitcoin", "Cryptocurrency"])
-
         factor_values_position['reddit'] = reddit_check()
 
         factor_values_position['youtube'] = check_bitcoin_youtube_videos_increase()
 
         factor_values_position['news'] = check_sentiment_of_news()
+
+        factor_values_position['google'] = check_search_trend(["Bitcoin", "Cryptocurrency"])
 
         # position decision
         weighted_score = position_decision(factor_values_position)

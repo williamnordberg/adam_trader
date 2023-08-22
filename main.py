@@ -72,13 +72,13 @@ def trading_loop(long_threshold: float, short_threshold: float):
 
         factor_values['technical'] = technical_analyse()
 
-        factor_values['google'] = check_search_trend(["Bitcoin", "Cryptocurrency"])
-
         factor_values['reddit'] = reddit_check()
 
         factor_values['youtube'] = check_bitcoin_youtube_videos_increase()
 
         factor_values['news'] = check_sentiment_of_news()
+
+        factor_values['google'] = check_search_trend(["Bitcoin", "Cryptocurrency"])
 
         # Make decision about the trade
         weighted_score = make_trading_decision(factor_values)
