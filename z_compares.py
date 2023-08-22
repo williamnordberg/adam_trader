@@ -158,6 +158,28 @@ def compare_technical(reversal: str, potential_up_trend: bool, over_ema200: bool
     return technical_mapping[(reversal, potential_up_trend, over_ema200)]
 
 
+def moving_averages_cross_richest() -> float:
+    df = read_database()
+
+    # Calculate the short and long moving averages for total received
+    short_mv_received = (df['richest_addresses_total_received'].
+                         rolling(window=SHORT_MOVING_AVERAGE_WINDOW_Rich).mean().tail(1).item())
+    long_mv_received = (df['richest_addresses_total_received'].
+                        rolling(window=LONG_MOVING_AVERAGE_WINDOW_Rich).mean().tail(1).item())
+
+    short_mv_sent = (df['richest_addresses_total_sent'].
+                     rolling(window=SHORT_MOVING_AVERAGE_WINDOW_Rich).mean().tail(1).item())
+    long_mv_sent = (df['richest_addresses_total_sent'].
+                    rolling(window=LONG_MOVING_AVERAGE_WINDOW_Rich).mean().tail(1).item())
+
+    if short_mv_received > long_mv_received and short_mv_sent < long_mv_sent:
+        return 0.1
+    elif short_mv_received < long_mv_received and short_mv_sent > long_mv_sent:
+        return -0.1
+    else:
+        return 0.0
+
+
 def compare_richest_addresses() -> Tuple[float, float]:
 
     df = read_database()
@@ -180,28 +202,6 @@ def compare_richest_addresses() -> Tuple[float, float]:
     # Ensure values are within the range [0, 1]
     rich_bullish = min(max(rich_bullish, 0), 1)
     return rich_bullish
-
-
-def moving_averages_cross_richest() -> float:
-    df = read_database()
-
-    # Calculate the short and long moving averages for total received
-    short_mv_received = (df['richest_addresses_total_received'].
-                         rolling(window=SHORT_MOVING_AVERAGE_WINDOW_Rich).mean().tail(1).item())
-    long_mv_received = (df['richest_addresses_total_received'].
-                        rolling(window=LONG_MOVING_AVERAGE_WINDOW_Rich).mean().tail(1).item())
-
-    short_mv_sent = (df['richest_addresses_total_sent'].
-                     rolling(window=SHORT_MOVING_AVERAGE_WINDOW_Rich).mean().tail(1).item())
-    long_mv_sent = (df['richest_addresses_total_sent'].
-                    rolling(window=LONG_MOVING_AVERAGE_WINDOW_Rich).mean().tail(1).item())
-
-    if short_mv_received > long_mv_received and short_mv_sent < long_mv_sent:
-        return 0.1
-    elif short_mv_received < long_mv_received and short_mv_sent > long_mv_sent:
-        return -0.1
-    else:
-        return 0.0
 
 
 def compare_google(last_hour: int, two_hours_before: int) -> float:
