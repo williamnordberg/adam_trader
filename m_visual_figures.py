@@ -277,9 +277,9 @@ def visualize_macro():
 def visualize_prediction():
     df = read_database()
     trace_list = [
-        go.Scatter(x=df.index, y=df["predicted_price"], name='Predicted price', visible='legendonly'),
-        go.Scatter(x=df.index, y=df["bitcoin_price"].shift(-1), name='Actual price', visible='legendonly'),
-        go.Scatter(x=df.index, y=df["prediction_bullish"], name='Prediction'),
+        go.Scatter(x=df.index, y=df["predicted_price"], name='Predicted price'),
+        go.Scatter(x=df.index, y=df["bitcoin_price"].shift(-1), name='Actual price'),
+        go.Scatter(x=df.index, y=df["prediction_bullish"], name='Prediction', visible='legendonly'),
     ]
 
     fig = create_figure(trace_list, "Prediction", 'Value')
@@ -293,7 +293,7 @@ def visualize_trade_results():
         go.Scatter(x=df.index, y=df["weighted_score_up"], name='score'),
         go.Scatter(x=df.index, y=df["macro_bullish"], name='macro'),
         go.Scatter(x=df.index, y=df["order_book_bullish"], name='order'),
-        go.Scatter(x=df.index, y=df["prediction_bullish"], name='prediction', visible='legendonly'),
+        go.Scatter(x=df.index, y=df["prediction_bullish"], name='prediction'),
         go.Scatter(x=df.index, y=df["technical_bullish"], name='technical'),
         go.Scatter(x=df.index, y=df["richest_addresses_bullish"], name='richest'),
         go.Scatter(x=df.index, y=df["google_search_bullish"], name='google'),

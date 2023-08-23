@@ -1,18 +1,22 @@
-import sqlite3
+from z_read_write_csv import read_database
+import pandas as pd
+from typing import Any, Dict
 
-conn = sqlite3.connect('my_database.db')  # Creates or opens the database file
-cursor = conn.cursor()
 
-# Create a table with columns
-cursor.execute('''
-CREATE TABLE IF NOT EXISTS my_table (
-    timestamp TEXT,
-    factor1 REAL,
-    factor2 REAL
-    -- Add more columns here as needed
-)
-''')
+DATABASE_PATH = 'data/database.csv'
 
-# Don't forget to commit changes and close the connection
-conn.commit()
-conn.close()
+
+def save_value_to_database(column: str):
+
+    df = read_database()
+
+    df[column] = df[column].apply(lambda x: 0 if x < 0 or x > 1 else x)
+
+    # Save the updated DataFrame back to the CSV file without the index
+    df.reset_index(inplace=True)
+    df.rename(columns={'index': 'date'}, inplace=True)
+    df.to_csv(DATABASE_PATH, index=False)
+
+
+if __name__ == '__main__':
+    save_value_to_database('prediction_bullish')
