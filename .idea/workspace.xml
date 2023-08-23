@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b02440e7-38c7-4d13-acf1-1ed63ab207ba" name="Changes" comment="19aug">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +82,7 @@
       <recent name="C:\will\Python_project\adam_trader\logs" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.youtube_token">
+  <component name="RunManager" selected="Python.m_visual_app">
     <configuration name="a_macro" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -178,7 +179,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/youtube_token.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/config/youtube_token.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -189,11 +190,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.youtube_token" />
         <item itemvalue="Python.m_visual_app" />
+        <item itemvalue="Python.test" />
+        <item itemvalue="Python.youtube_token" />
         <item itemvalue="Python.f_google" />
         <item itemvalue="Python.a_macro" />
-        <item itemvalue="Python.test" />
       </list>
     </recent_temporary>
   </component>
@@ -205,14 +206,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1690438920740</updated>
-    </task>
-    <task id="LOCAL-00031" summary="Added .gitignore">
-      <option name="closed" value="true" />
-      <created>1691923894755</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1691923894755</updated>
     </task>
     <task id="LOCAL-00032" summary="Added .gitignore">
       <option name="closed" value="true" />
@@ -598,7 +591,15 @@
       <option name="project" value="LOCAL" />
       <updated>1692690883701</updated>
     </task>
-    <option name="localTasksCounter" value="80" />
+    <task id="LOCAL-00080" summary="19aug">
+      <option name="closed" value="true" />
+      <created>1692691263520</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1692691263521</updated>
+    </task>
+    <option name="localTasksCounter" value="81" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
