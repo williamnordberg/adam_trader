@@ -127,7 +127,7 @@ def check_search_trend_wrapper(keywords: List[str]) -> float:
 def check_search_trend(keywords: List[str]) -> float:
     if should_update('google_search'):
         google_bullish = check_search_trend_wrapper(keywords)
-        save_value_to_database('google_search_bullish', google_bullish)
+        save_value_to_database('google_search_bullish', round(google_bullish, 2))
         return google_bullish
     else:
         return retrieve_latest_factor_values_database('google_search')
