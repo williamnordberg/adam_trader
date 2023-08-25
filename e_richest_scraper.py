@@ -19,7 +19,7 @@ HEADERS = {
 @retry_on_error(max_retries=3, delay=5,
                 allowed_exceptions=(requests.exceptions.RequestException,
                                     FileNotFoundError, IOError, AttributeError,
-                                    TimeoutError, ConnectionError, HTTPException),
+                                    TimeoutError, ConnectionError, HTTPException, Exception),
                 fallback_values='pass')
 def scrape_bitcoin_rich_list():
     logging.info('$$$start scrapping list of bitcoin richest addresses$$$')
