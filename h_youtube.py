@@ -192,6 +192,7 @@ def calculate_sentiment_youtube_videos(youtube):
 def youtube_wrapper() -> float:
     youtube = get_authenticated_service()
     if youtube is None:
+        logging.info('youtube is None')
         return 0.5
 
     positive_polarity, negative_polarity, positive_count, negative_count, total_video_include_out_threshold = \
@@ -204,6 +205,7 @@ def youtube_wrapper() -> float:
         save_value_to_database('youtube_positive_count', positive_count)
         save_value_to_database('youtube_negative_count', negative_count)
     else:
+        logging.info('calculate_sentiment_youtube_videos return None')
         return 0.5
 
     youtube_bullish = calculate_bitcoin_youtube_videos_increase()
