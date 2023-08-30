@@ -37,7 +37,6 @@ def retry_on_error(max_retries: int = 3, delay: int = 5,
                     logging.warning(f"Attempt {retries} failed with error: {e}. Retrying in {delay} seconds...")
                     sleep(delay)
             logging.error(f"All {max_retries} attempts failed.")
-            print('fallback_values', fallback_values)
             if fallback_values is not None:
                 if fallback_values == "pass":
                     logging.error("Fallback value is 'pass'. Skipping this function.")
