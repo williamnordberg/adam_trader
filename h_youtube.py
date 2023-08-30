@@ -11,6 +11,7 @@ from dateutil.parser import parse
 from datetime import datetime, timedelta, timezone
 from googleapiclient.errors import HttpError
 from google.auth.exceptions import RefreshError
+import logging
 
 from z_handy_modules import retry_on_error
 from z_read_write_csv import save_value_to_database, \
@@ -96,7 +97,6 @@ def get_authenticated_service():
     if os.path.exists(token_file):
         with open(token_file, 'rb') as token:
             creds = pickle.load(token)
-            print('creds.refresh_token', creds.refresh_token)
 
     if not creds or not creds.valid:
 
@@ -106,7 +106,7 @@ def get_authenticated_service():
                     creds.refresh(Request())
                 except RefreshError:
                     creds = None
-                    print("Failed to refresh. Need to re-authenticate.")
+                    logging.info("Failed to refresh. Need to re-authenticate.")
 
             if creds is None:
                 flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
