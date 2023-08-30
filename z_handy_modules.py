@@ -37,6 +37,7 @@ def retry_on_error(max_retries: int = 3, delay: int = 5,
                     logging.warning(f"Attempt {retries} failed with error: {e}. Retrying in {delay} seconds...")
                     sleep(delay)
             logging.error(f"All {max_retries} attempts failed.")
+            print('fallback_values', fallback_values)
             if fallback_values is not None:
                 if fallback_values == "pass":
                     logging.error("Fallback value is 'pass'. Skipping this function.")
@@ -45,7 +46,7 @@ def retry_on_error(max_retries: int = 3, delay: int = 5,
                     logging.error(f"Returning fallback values {fallback_values}.")
                     return fallback_values
             else:
-                raise Exception(f"All {max_retries} attempts failed without a fallback value.")
+                raise Exception(f"Exception raised, All {max_retries} attempts failed without a fallback value.")
 
         return wrapper
 
@@ -88,7 +89,6 @@ def get_bitcoin_price() -> int:
         logging.error(f"Error: Could not connect to CoinGecko API:{e}, It will try with Binance")
 
     raise requests.exceptions.RequestException("Both API calls failed")
-
 
 
 if __name__ == '__main__':

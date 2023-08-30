@@ -8,6 +8,10 @@ import configparser
 import os
 from pandas.errors import OutOfBoundsDatetime
 from requests.exceptions import RequestException
+from sklearn.metrics import mean_absolute_error
+import numpy as np
+
+from z_read_write_csv import read_database
 
 from z_read_write_csv import load_dataset, save_dataset
 from z_handy_modules import retry_on_error
@@ -131,6 +135,84 @@ def update_internal_factors():
         logging.info("Internal factors are already up to date.")
 
 
+def calculate_mape(y_true, y_pred):
+    # Avoid division by zero
+    mask = y_true != 0
+    y_true = y_true[mask]
+    y_pred = y_pred[mask]
+
+    return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
+
+
+def evaluate_prediction(rows: int) -> dict:
+    df1 = read_database()
+    df = df1.tail(rows) # Tail for the specific number of rows (15 or 30 days)
+    shift_values = [1, 8, 12]
+    accuracy_results = {}
+
+    for shift_value in shift_values:
+        shifted_bitcoin_price = df["bitcoin_price"].shift(-shift_value)
+        predicted_price = df["predicted_price"]
+
+        # Removing NaN values after shifting
+        mask = ~shifted_bitcoin_price.isna()
+        shifted_bitcoin_price = shifted_bitcoin_price[mask]
+        predicted_price = predicted_price[mask]
+
+        # Calculating metrics
+        mae = mean_absolute_error(shifted_bitcoin_price, predicted_price)
+        mape = calculate_mape(shifted_bitcoin_price, predicted_price)
+
+        accuracy_results[f'shift_{shift_value}'] = {'mae': mae, 'mape': mape}
+
+    return accuracy_results
+
+
+def evaluate_directional_accuracy() -> dict:
+    df1 = read_database()
+    df = df1.tail(30)  # 30 days
+    correct_directions = 0
+    wrong_directions = 0
+
+    # Loop through the DataFrame from the second-last row to the first row
+    for i in range(len(df) - 2, -1, -1):
+        actual_current_price = df["bitcoin_price"].iloc[i]
+        predicted_next_price = df["predicted_price"].iloc[i]
+        actual_next_price = df["bitcoin_price"].iloc[i + 1]
+
+        # Determine the predicted and actual direction
+        predicted_direction = np.sign(predicted_next_price - actual_current_price)
+        actual_direction = np.sign(actual_next_price - actual_current_price)
+
+        # Compare the predicted and actual direction
+        if predicted_direction == actual_direction:
+            correct_directions += 1
+        else:
+            wrong_directions += 1
+
+    total_predictions = correct_directions + wrong_directions
+    percentage_correct = (correct_directions / total_predictions) * 100
+    percentage_wrong = 100 - percentage_correct
+
+    results = {
+        'correct_directions': correct_directions,
+        'wrong_directions': wrong_directions,
+        'percentage_correct': percentage_correct,
+        'percentage_wrong': percentage_wrong
+    }
+
+    return results
+
+
 if __name__ == "__main__":
-    update_internal_factors()
-    update_macro_economic()
+    # update_internal_factors()
+    # update_macro_economic()
+    results_outer = evaluate_directional_accuracy()
+    print(results_outer)
+
+    number_of_rows = [180, 360, 720, 1440]
+    for rows_outer in number_of_rows:
+        results2 = evaluate_prediction(rows_outer)
+        print(f"Results for last {rows_outer / 24} days:")
+        for shift, measure in results2.items():
+            print(f" {shift}: {measure}")
