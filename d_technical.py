@@ -49,7 +49,8 @@ def rsi_overbought_oversold(data_close: pd.Series) -> Tuple[bool, bool]:
     elif rsi[-1] > 70:
         potential_down_reversal_bearish = True
 
-    write_latest_data('latest_rsi', round(rsi[-1], 0))
+    rsi_latest = float(rsi[-1])
+    write_latest_data('latest_rsi', round(rsi_latest, 0))
 
     return potential_up_reversal_bullish, potential_down_reversal_bearish
 
@@ -152,7 +153,7 @@ def technical_analyse_wrapper() -> float:
 
     # Get the current reversal state
     reversal = 'up' if potential_up_reversal_bullish else 'down' if potential_down_reversal_bearish else 'neither'
-    over_ema200 = current_price >= ema200[-1]
+    over_ema200 = float(current_price) >= float(ema200[-1])
 
     # Save for visualization
     write_latest_data('over_200EMA', over_ema200)

@@ -94,8 +94,7 @@ def check_search_trend_wrapper(keywords: List[str]) -> float:
     Returns:
         bullish_score: a value between 0 (the lowest probability) and 1 (highest probability).
     """
-    # it will be here until google trend server recover
-    save_update_time('google_search')
+
     keywords = [keyword.lower() for keyword in keywords]
 
     pytrends = TrendReq(hl='en-US', tz=360, requests_args={'headers': headers})
@@ -121,6 +120,7 @@ def check_search_trend_wrapper(keywords: List[str]) -> float:
     google_bullish = consider_market_sentiment(google_bullish)
 
     save_value_to_database('hourly_google_search', last_hour)
+    # save_update_time('google_search')
     return google_bullish
 
 

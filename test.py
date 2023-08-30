@@ -1,22 +1,35 @@
-from z_read_write_csv import read_database
+from binance.client import Client
+from datetime import datetime
 import pandas as pd
-from typing import Any, Dict
 
+client = Client()
+# Fetch 1 hour klines (candlestick data) for the last 500 hours
+candlesticks = client.futures_klines(symbol="BTCUSDT", interval=Client.KLINE_INTERVAL_1HOUR, limit=500)
 
-DATABASE_PATH = 'data/database.csv'
+# Initialize an empty list to store the rows
+data = []
 
+# Loop through the candlesticks to convert and save the data
+for candlestick in candlesticks:
+    time_open = candlestick[0]
+    open_price = candlestick[1]
+    high = candlestick[2]
+    low = candlestick[3]
+    close = candlestick[4]
 
-def save_value_to_database(column: str):
+    # Convert the timestamp to a readable date-time format
+    timestamp = time_open / 1000
+    readable_date = datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
 
-    df = read_database()
+    # Add the data to the list
+    data.append({"date": readable_date, "Open": open_price, "High": high, "Low": low, "Close": close})
 
-    df[column] = df[column].apply(lambda x: 0 if x < 0 or x > 1 else x)
+# Create a DataFrame to save the data
+df = pd.DataFrame(data)
 
-    # Save the updated DataFrame back to the CSV file without the index
-    df.reset_index(inplace=True)
-    df.rename(columns={'index': 'date'}, inplace=True)
-    df.to_csv(DATABASE_PATH, index=False)
+print(df)
 
+# Save to csv
+csv_path = 'data_predictor/btc_h.csv'
+df.to_csv(csv_path, index=False)
 
-if __name__ == '__main__':
-    save_value_to_database('prediction_bullish')
