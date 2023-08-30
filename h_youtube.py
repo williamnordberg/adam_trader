@@ -73,10 +73,26 @@ def get_authenticated_service():
     api_service_name = "youtube"
     api_version = "v3"
     client_secrets_file = "config/youtube_client_secret.json"
+    # client_secrets_file = "config/youtube_client_secret.json"
     scopes = ["https://www.googleapis.com/auth/youtube.force-ssl"]
 
-    creds = None
     token_file = 'config/youtube_token.pickle'
+
+    # Check if token file exists
+    if not os.path.exists(token_file):
+        # If the file doesn't exist, create a new token by running OAuth 2.0 flow
+        flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
+            client_secrets_file, scopes)
+        creds = flow.run_local_server(port=0)
+
+        # Save the new token to the file
+        with open(token_file, 'wb') as token:
+            pickle.dump(creds, token)
+
+    else:
+        with open(token_file, 'rb') as token:
+            creds = pickle.load(token)
+
     if os.path.exists(token_file):
         with open(token_file, 'rb') as token:
             creds = pickle.load(token)
