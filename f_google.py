@@ -120,7 +120,7 @@ def check_search_trend_wrapper(keywords: List[str]) -> float:
     google_bullish = consider_market_sentiment(google_bullish)
 
     save_value_to_database('hourly_google_search', last_hour)
-    # save_update_time('google_search')
+    save_update_time('google_search')
     return google_bullish
 
 

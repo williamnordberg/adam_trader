@@ -68,8 +68,7 @@ def calculate_youtube_temporal_decay(sentiment_score: float, publish_time: datet
 
 
 @retry_on_error(max_retries=3, delay=5, allowed_exceptions=(
-        FileNotFoundError, pickle.UnpicklingError,
-        RefreshError, HttpError, UnknownApiNameOrVersion), fallback_values='pass')
+        FileNotFoundError, pickle.UnpicklingError, HttpError, UnknownApiNameOrVersion), fallback_values='pass')
 def get_authenticated_service():
     api_service_name = "youtube"
     api_version = "v3"
@@ -81,15 +80,22 @@ def get_authenticated_service():
     if os.path.exists(token_file):
         with open(token_file, 'rb') as token:
             creds = pickle.load(token)
+            print('creds.refresh_token', creds.refresh_token)
 
     if not creds or not creds.valid:
 
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
-                client_secrets_file, scopes)
-            creds = flow.run_local_server(port=0)
+        if not creds or not creds.valid:
+            if creds and creds.expired and creds.refresh_token:
+                try:
+                    creds.refresh(Request())
+                except RefreshError:
+                    creds = None
+                    print("Failed to refresh. Need to re-authenticate.")
+
+            if creds is None:
+                flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
+                    client_secrets_file, scopes)
+                creds = flow.run_local_server(port=0)
 
     with open(token_file, 'wb') as token:
         pickle.dump(creds, token)
@@ -98,7 +104,8 @@ def get_authenticated_service():
     return youtube
 
 
-@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(HttpError, RefreshError), fallback_values='pass')
+@retry_on_error(max_retries=3, delay=5, allowed_exceptions=(HttpError, RefreshError),
+                fallback_values='pass')
 def get_youtube_videos(youtube, published_after, published_before):
     search_request = youtube.search().list(
         part="id,snippet",
@@ -135,46 +142,53 @@ def calculate_sentiment_youtube_videos(youtube):
         total_video_include_out_threshold = 0.0, 0.0, 0, 0, 0
 
     search_results = get_youtube_videos(youtube, published_after, published_before)
+    if search_results is not None:
+        for video in search_results:
+            total_video_include_out_threshold += 1
 
-    for video in search_results:
-        total_video_include_out_threshold += 1
+            title = video['snippet']['title']
+            description = video['snippet']['description']
+            content = title + " " + description
 
-        title = video['snippet']['title']
-        description = video['snippet']['description']
-        content = title + " " + description
+            sentiment_score = calculate_sentiment_score(content)
+            publish_time = parse(video['snippet']['publishedAt'])
+            # Applying temporal decay
+            sentiment_score = calculate_youtube_temporal_decay(sentiment_score, publish_time)
+            if sentiment_score > SENTIMENT_POSITIVE_THRESHOLD:
+                positive_polarity_score += sentiment_score
+                positive_count += 1
 
-        sentiment_score = calculate_sentiment_score(content)
-        publish_time = parse(video['snippet']['publishedAt'])
-        # Applying temporal decay
-        sentiment_score = calculate_youtube_temporal_decay(sentiment_score, publish_time)
-        if sentiment_score > SENTIMENT_POSITIVE_THRESHOLD:
-            positive_polarity_score += sentiment_score
-            positive_count += 1
+            elif sentiment_score < SENTIMENT_NEGATIVE_THRESHOLD:
+                negative_polarity_score += sentiment_score
+                negative_count += 1
 
-        elif sentiment_score < SENTIMENT_NEGATIVE_THRESHOLD:
-            negative_polarity_score += sentiment_score
-            negative_count += 1
+        positive_sentiment = positive_polarity_score / positive_count if positive_count != 0 else 0
+        negative_sentiment = abs(negative_polarity_score / negative_count) if negative_count != 0 else 0
 
-    positive_sentiment = positive_polarity_score / positive_count if positive_count != 0 else 0
-    negative_sentiment = abs(negative_polarity_score / negative_count) if negative_count != 0 else 0
-
-    return positive_sentiment, negative_sentiment, positive_count, negative_count, total_video_include_out_threshold
+        return positive_sentiment, negative_sentiment, positive_count, negative_count, total_video_include_out_threshold
+    else:
+        return None, None, None, None, None
 
 
 @retry_on_error(
     max_retries=3, delay=5, allowed_exceptions=(RefreshError,),
-    fallback_values=(0.0, 0.0))
+    fallback_values=0.5)
 def youtube_wrapper() -> float:
     youtube = get_authenticated_service()
+    if youtube is None:
+        return 0.5
 
     positive_polarity, negative_polarity, positive_count, negative_count, total_video_include_out_threshold = \
         calculate_sentiment_youtube_videos(youtube)
-    # Save to database
-    save_value_to_database('last_24_youtube', total_video_include_out_threshold)
-    save_value_to_database('youtube_positive_polarity', positive_polarity)
-    save_value_to_database('youtube_negative_polarity', negative_polarity)
-    save_value_to_database('youtube_positive_count', positive_count)
-    save_value_to_database('youtube_negative_count', negative_count)
+    if positive_count is not None:
+        # Save to database
+        save_value_to_database('last_24_youtube', total_video_include_out_threshold)
+        save_value_to_database('youtube_positive_polarity', positive_polarity)
+        save_value_to_database('youtube_negative_polarity', negative_polarity)
+        save_value_to_database('youtube_positive_count', positive_count)
+        save_value_to_database('youtube_negative_count', negative_count)
+    else:
+        return 0.5
 
     youtube_bullish = calculate_bitcoin_youtube_videos_increase()
     save_update_time('youtube')
