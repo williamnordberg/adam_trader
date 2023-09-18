@@ -10,7 +10,7 @@ from z_compares import compare_order_volume
 SPOT_ENDPOINT_DEPTH = "https://api.binance.com/api/v3/depth"
 FUTURES_ENDPOINT_DEPTH = 'https://fapi.binance.com/fapi/v1/depth'
 
-LIMIT = 5000
+LIMIT = 500000000000
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 
 BID_MULTIPLIER = 0.99
@@ -55,6 +55,7 @@ def order_book(symbols: List[str], limit: int = LIMIT, bid_multiplier: float = B
         except:
             order_book_bullish = 0.5
             print(f'Exception as {data}')
+            break
 
     save_value_to_database('bid_volume', round(bid_volume, 0))
     save_value_to_database('ask_volume', round(ask_volume, 0))
