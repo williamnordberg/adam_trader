@@ -14,7 +14,6 @@ from h_youtube import check_bitcoin_youtube_videos_increase
 from c_predictor import decision_tree_predictor
 from l_position_decision import position_decision
 from z_handy_modules import get_bitcoin_price
-from l_position_long_testnet import place_market_buy_order, close_position_at_market
 
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 
@@ -29,12 +28,6 @@ def long_position() -> dict:
     # Remind upcoming macro events
     macro_bullish_NA, events_date_dict = macro_sentiment()
     print_upcoming_events(events_date_dict)
-
-    # Place order o spot testnet
-    try:
-        place_market_buy_order(LONG_POSITION['SIZE'])
-    except Exception as e:
-        logging.error(f'exception with shorting market as {e}')
 
     while True:
         logging.info(f'███ long_position RUNNING ███')
@@ -57,6 +50,7 @@ def long_position() -> dict:
 
         factor_values_position['news'] = check_sentiment_of_news()
 
+        factor_values_position['google'] = check_search_trend(["Bitcoin", "Cryptocurrency"])
 
         # position decision
         weighted_score = position_decision(factor_values_position)
@@ -66,7 +60,6 @@ def long_position() -> dict:
                      f'target:{position["profit_target"]},Stop:{position["stop_loss"]}')
         if price >= position['profit_target'] or price < position['stop_loss'] or \
                 weighted_score < LONG_POSITION['THRESHOLD_TO_CLOSE']:
-            close_position_at_market(LONG_POSITION['SIZE'])
             position['PNL'] = int(price - position['opening_price'])
             logging.info('&&&&&&&&&&&&&& LONG CLOSED &&&&&&&&&&&&&&&&&&&&')
             position['closing_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
