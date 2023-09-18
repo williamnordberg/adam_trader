@@ -65,6 +65,7 @@ def order_book(symbols: List[str], limit: int = LIMIT, bid_multiplier: float = B
 
 def order_book_hit_target(symbols: List[str], limit: int, profit_target: float,
                           stop_loss: float) -> float:
+    print('here pull worked \n', )
 
     bid_volume, ask_volume = 0.0000001, 0.0
     for symbol in symbols:
