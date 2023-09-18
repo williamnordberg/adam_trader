@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b02440e7-38c7-4d13-acf1-1ed63ab207ba" name="Changes" comment="19aug" />
+    <list default="true" id="b02440e7-38c7-4d13-acf1-1ed63ab207ba" name="Changes" comment="15sep">
+      <change afterPath="$PROJECT_DIR$/z_count_output_adresses.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/b_order_book.py" beforeDir="false" afterPath="$PROJECT_DIR$/b_order_book.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/youtube_token_transfer.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test2.py" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -54,17 +61,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "/home/delta/adam_trader/config",
-    "settings.editor.selected.configurable": "editor.preferences.fonts.default"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/delta/adam_trader/config&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/config" />
@@ -80,8 +87,8 @@
       <recent name="C:\will\Python_project\adam_trader\data" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.h_youtube">
-    <configuration name="f_google" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.b_order_book">
+    <configuration name="b_order_book" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -93,7 +100,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/f_google.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/b_order_book.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -102,7 +109,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="h_youtube" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="c_ hyper_tuning_baysian" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -114,7 +121,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/h_youtube.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/c_ hyper_tuning_baysian.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -123,7 +130,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="c_predictor_random_forest" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -135,7 +142,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/c_predictor_random_forest.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -144,7 +151,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="l_position_short" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -156,7 +163,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test2.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/l_position_short.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -165,7 +172,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="youtube_token" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="z_dataset_sql" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -173,11 +180,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/config" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/youtube_token.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/z_dataset_sql.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -188,11 +195,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.h_youtube" />
-        <item itemvalue="Python.youtube_token" />
-        <item itemvalue="Python.f_google" />
-        <item itemvalue="Python.test2" />
-        <item itemvalue="Python.test" />
+        <item itemvalue="Python.b_order_book" />
+        <item itemvalue="Python.l_position_short" />
+        <item itemvalue="Python.z_dataset_sql" />
+        <item itemvalue="Python.c_ hyper_tuning_baysian" />
+        <item itemvalue="Python.c_predictor_random_forest" />
       </list>
     </recent_temporary>
   </component>
@@ -204,110 +211,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1690438920740</updated>
-    </task>
-    <task id="LOCAL-00040" summary="aug">
-      <option name="closed" value="true" />
-      <created>1692151073388</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1692151073388</updated>
-    </task>
-    <task id="LOCAL-00041" summary="aug">
-      <option name="closed" value="true" />
-      <created>1692158866347</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1692158866347</updated>
-    </task>
-    <task id="LOCAL-00042" summary="aug">
-      <option name="closed" value="true" />
-      <created>1692160373038</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1692160373038</updated>
-    </task>
-    <task id="LOCAL-00043" summary="aug">
-      <option name="closed" value="true" />
-      <created>1692160519212</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1692160519212</updated>
-    </task>
-    <task id="LOCAL-00044" summary="aug">
-      <option name="closed" value="true" />
-      <created>1692162005464</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1692162005464</updated>
-    </task>
-    <task id="LOCAL-00045" summary="17aug">
-      <option name="closed" value="true" />
-      <created>1692245566086</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1692245566086</updated>
-    </task>
-    <task id="LOCAL-00046" summary="17aug">
-      <option name="closed" value="true" />
-      <created>1692245878599</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1692245878599</updated>
-    </task>
-    <task id="LOCAL-00047" summary="17aug">
-      <option name="closed" value="true" />
-      <created>1692332424461</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1692332424461</updated>
-    </task>
-    <task id="LOCAL-00048" summary="17aug">
-      <option name="closed" value="true" />
-      <created>1692347283662</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1692347283662</updated>
-    </task>
-    <task id="LOCAL-00049" summary="18aug">
-      <option name="closed" value="true" />
-      <created>1692348136396</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1692348136396</updated>
-    </task>
-    <task id="LOCAL-00050" summary="18aug">
-      <option name="closed" value="true" />
-      <created>1692410852435</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1692410852435</updated>
-    </task>
-    <task id="LOCAL-00051" summary="18aug">
-      <option name="closed" value="true" />
-      <created>1692412582444</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1692412582444</updated>
-    </task>
-    <task id="LOCAL-00052" summary="18aug">
-      <option name="closed" value="true" />
-      <created>1692414243111</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1692414243111</updated>
     </task>
     <task id="LOCAL-00053" summary="18aug">
       <option name="closed" value="true" />
@@ -597,7 +500,111 @@
       <option name="project" value="LOCAL" />
       <updated>1693372297919</updated>
     </task>
-    <option name="localTasksCounter" value="89" />
+    <task id="LOCAL-00089" summary="19aug">
+      <option name="closed" value="true" />
+      <created>1693372612645</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1693372612645</updated>
+    </task>
+    <task id="LOCAL-00090" summary="19aug">
+      <option name="closed" value="true" />
+      <created>1693372901166</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1693372901167</updated>
+    </task>
+    <task id="LOCAL-00091" summary="19aug">
+      <option name="closed" value="true" />
+      <created>1694141755009</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1694141755010</updated>
+    </task>
+    <task id="LOCAL-00092" summary="19aug">
+      <option name="closed" value="true" />
+      <created>1694751580215</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1694751580216</updated>
+    </task>
+    <task id="LOCAL-00093" summary="15sep">
+      <option name="closed" value="true" />
+      <created>1694752207772</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1694752207772</updated>
+    </task>
+    <task id="LOCAL-00094" summary="15sep">
+      <option name="closed" value="true" />
+      <created>1695000554083</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1695000554084</updated>
+    </task>
+    <task id="LOCAL-00095" summary="15sep">
+      <option name="closed" value="true" />
+      <created>1695001447164</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1695001447164</updated>
+    </task>
+    <task id="LOCAL-00096" summary="15sep">
+      <option name="closed" value="true" />
+      <created>1695001554047</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1695001554047</updated>
+    </task>
+    <task id="LOCAL-00097" summary="15sep">
+      <option name="closed" value="true" />
+      <created>1695001611915</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1695001611915</updated>
+    </task>
+    <task id="LOCAL-00098" summary="15sep">
+      <option name="closed" value="true" />
+      <created>1695001777499</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1695001777499</updated>
+    </task>
+    <task id="LOCAL-00099" summary="15sep">
+      <option name="closed" value="true" />
+      <created>1695001901739</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1695001901740</updated>
+    </task>
+    <task id="LOCAL-00100" summary="15sep">
+      <option name="closed" value="true" />
+      <created>1695001968964</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1695001968964</updated>
+    </task>
+    <task id="LOCAL-00101" summary="15sep">
+      <option name="closed" value="true" />
+      <created>1695002049628</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1695002049628</updated>
+    </task>
+    <option name="localTasksCounter" value="102" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -623,6 +630,7 @@
     <MESSAGE value="17aug" />
     <MESSAGE value="18aug" />
     <MESSAGE value="19aug" />
-    <option name="LAST_COMMIT_MESSAGE" value="19aug" />
+    <MESSAGE value="15sep" />
+    <option name="LAST_COMMIT_MESSAGE" value="15sep" />
   </component>
 </project>

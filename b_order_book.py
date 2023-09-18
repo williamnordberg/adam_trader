@@ -91,9 +91,12 @@ def order_book_hit_target(symbols: List[str], limit: int, profit_target: float,
 
 
 if __name__ == '__main__':
-    # order_book_bullish_outer = order_book(
-    #    SYMBOLS, limit=LIMIT, bid_multiplier=BID_MULTIPLIER, ask_multiplier=ASK_MULTIPLIER)
-    # print(f'order_book_bullish:{order_book_bullish_outer}')
+    print('order_book')
+    order_book_bullish_outer = order_book(
+        SYMBOLS, limit=LIMIT, bid_multiplier=BID_MULTIPLIER, ask_multiplier=ASK_MULTIPLIER)
+    print(f'order_book_bullish:{order_book_bullish_outer}')
+
+    print('order_book_ target')
 
     current_price = get_bitcoin_future_market_price()
 
