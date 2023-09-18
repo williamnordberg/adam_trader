@@ -42,7 +42,9 @@ def order_book(symbols: List[str], limit: int = LIMIT, bid_multiplier: float = B
     for symbol in symbols:
         data = get_volume(symbol, limit)
         if data is None:
+            print('data is not None')
             return 0.5
+        print('data\n ', data)
         bid_volume += sum([float(bid[1]) for bid in data['bids'] if float(bid[0]) >=
                            (current_price * bid_multiplier)])
         ask_volume += sum([float(ask[1]) for ask in data['asks'] if float(ask[0]) <=
