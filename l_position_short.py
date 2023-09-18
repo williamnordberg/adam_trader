@@ -79,9 +79,10 @@ def short_position() -> dict:
 
 
 if __name__ == "__main__":
-    # position = short_position()
-    # logging.info(f"profit_after_trade:{position['PNL']}")
+    position = short_position()
+    logging.info(f"profit_after_trade:{position['PNL']}")
 
+    '''
     current_price = get_bitcoin_future_market_price()
 
     profit_target = int(current_price - (current_price * SHORT_POSITION['PROFIT_MARGIN']))
@@ -90,3 +91,4 @@ if __name__ == "__main__":
     order_book_bullish_outer1 = order_book_hit_target(
             SYMBOLS, 1000, stop_loss, profit_target)
     print(f'order_book_bullish:{order_book_bullish_outer1}')
+    '''
