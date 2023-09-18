@@ -73,6 +73,7 @@ def order_book_hit_target(symbols: List[str], limit: int, profit_target: float,
             return 0.5
 
         bids = data.get('bids')
+        print('bids\n', bids)
         asks = data.get('asks')
 
         if bids is not None:
