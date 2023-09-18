@@ -5,6 +5,8 @@ from z_read_write_csv import save_update_time, read_latest_data,\
     write_latest_data, save_value_to_database
 from z_handy_modules import get_bitcoin_price, retry_on_error
 from z_compares import compare_order_volume
+from a_config import position, SHORT_POSITION
+from z_handy_modules import get_bitcoin_future_market_price
 
 
 SPOT_ENDPOINT_DEPTH = "https://api.binance.com/api/v3/depth"
@@ -92,5 +94,13 @@ if __name__ == '__main__':
         SYMBOLS, limit=LIMIT, bid_multiplier=BID_MULTIPLIER, ask_multiplier=ASK_MULTIPLIER)
     print(f'order_book_bullish:{order_book_bullish_outer}')
 
+    current_price = get_bitcoin_future_market_price()
+
+    profit_target = int(current_price - (current_price * SHORT_POSITION['PROFIT_MARGIN']))
+    stop_loss = int(current_price + (current_price * SHORT_POSITION['PROFIT_MARGIN']))
+    position['type'] = 'short'
+    order_book_bullish_outer1 = order_book_hit_target(
+            SYMBOLS, 1000, stop_loss, profit_target)
+    print(f'order_book_bullish:{order_book_bullish_outer1}')
 
 
