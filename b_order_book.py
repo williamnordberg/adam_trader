@@ -6,6 +6,7 @@ from z_read_write_csv import save_update_time, read_latest_data,\
 from z_handy_modules import get_bitcoin_price, retry_on_error
 from z_compares import compare_order_volume
 
+
 SPOT_ENDPOINT_DEPTH = "https://api.binance.com/api/v3/depth"
 FUTURES_ENDPOINT_DEPTH = 'https://fapi.binance.com/fapi/v1/depth'
 
@@ -79,7 +80,7 @@ def order_book_hit_target(symbols: List[str], limit: int, profit_target: float,
             ask_volume += sum([float(ask[1]) for ask in asks if float(ask[0]) <= profit_target])
 
     probability_to_hit_target = bid_volume / (bid_volume + ask_volume)
-    # probability_to_hit_stop_loss = ask_volume / (bid_volume + ask_volume)
+    #  probability_to_hit_stop_loss = ask_volume / (bid_volume + ask_volume)
 
     write_latest_data('order_book_hit_profit', round(probability_to_hit_target, 2))
 
@@ -90,4 +91,6 @@ if __name__ == '__main__':
     order_book_bullish_outer = order_book(
         SYMBOLS, limit=LIMIT, bid_multiplier=BID_MULTIPLIER, ask_multiplier=ASK_MULTIPLIER)
     print(f'order_book_bullish:{order_book_bullish_outer}')
+
+
 
