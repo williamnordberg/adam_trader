@@ -34,6 +34,7 @@ def get_volume(symbol: str, limit: int) -> dict:
 
 def order_book(symbols: List[str], limit: int = LIMIT, bid_multiplier: float = BID_MULTIPLIER,
                ask_multiplier: float = ASK_MULTIPLIER) -> float:
+    order_book_bullish = 0.5
 
     bid_volume, ask_volume = 0.0000001, 0.0
     current_price = get_bitcoin_price()
@@ -47,19 +48,17 @@ def order_book(symbols: List[str], limit: int = LIMIT, bid_multiplier: float = B
                                (current_price * bid_multiplier)])
             ask_volume += sum([float(ask[1]) for ask in data['asks'] if float(ask[0]) <=
                                current_price * ask_multiplier])
+            probability_up = bid_volume / (bid_volume + ask_volume)
+            probability_down = ask_volume / (bid_volume + ask_volume)
+            order_book_bullish = compare_order_volume(probability_up, probability_down)
+
         except:
-            bid_volume, ask_volume = 0, 0
+            order_book_bullish = 0.5
             print(f'Exception as {data}')
-
-    probability_up = bid_volume / (bid_volume + ask_volume)
-    probability_down = ask_volume / (bid_volume + ask_volume)
-
-    order_book_bullish = compare_order_volume(probability_up, probability_down)
 
     save_value_to_database('bid_volume', round(bid_volume, 0))
     save_value_to_database('ask_volume', round(ask_volume, 0))
     save_value_to_database('order_book_bullish', order_book_bullish)
-    # save_value_to_database('order_book_bearish', order_book_bearish)
 
     save_update_time('order_book')
 
