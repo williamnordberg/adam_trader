@@ -83,6 +83,7 @@ if __name__ == "__main__":
     logging.info(f"profit_after_trade:{position['PNL']}")
 
     '''
+    #
     current_price = get_bitcoin_future_market_price()
 
     profit_target = int(current_price - (current_price * SHORT_POSITION['PROFIT_MARGIN']))
