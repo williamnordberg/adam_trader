@@ -95,3 +95,5 @@ if __name__ == '__main__':
     order_book_bullish_outer = order_book(
         SYMBOLS, limit=LIMIT, bid_multiplier=BID_MULTIPLIER, ask_multiplier=ASK_MULTIPLIER)
     print(f'order_book_bullish:{order_book_bullish_outer}')
+    print(requests.__version__)
+
