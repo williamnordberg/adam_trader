@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b02440e7-38c7-4d13-acf1-1ed63ab207ba" name="Changes" comment="15sep">
-      <change afterPath="$PROJECT_DIR$/z_count_output_adresses.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/b_order_book.py" beforeDir="false" afterPath="$PROJECT_DIR$/b_order_book.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/youtube_token_transfer.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test2.py" beforeDir="false" />
-    </list>
+    <list default="true" id="b02440e7-38c7-4d13-acf1-1ed63ab207ba" name="Changes" comment="15sep" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -211,30 +204,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1690438920740</updated>
-    </task>
-    <task id="LOCAL-00053" summary="18aug">
-      <option name="closed" value="true" />
-      <created>1692416597469</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1692416597469</updated>
-    </task>
-    <task id="LOCAL-00054" summary="19aug">
-      <option name="closed" value="true" />
-      <created>1692434392423</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1692434392423</updated>
-    </task>
-    <task id="LOCAL-00055" summary="19aug">
-      <option name="closed" value="true" />
-      <created>1692509807589</created>
-      <option name="number" value="00055" />
-      <option name="presentableId" value="LOCAL-00055" />
-      <option name="project" value="LOCAL" />
-      <updated>1692509807589</updated>
     </task>
     <task id="LOCAL-00056" summary="19aug">
       <option name="closed" value="true" />
@@ -604,7 +573,31 @@
       <option name="project" value="LOCAL" />
       <updated>1695002049628</updated>
     </task>
-    <option name="localTasksCounter" value="102" />
+    <task id="LOCAL-00102" summary="15sep">
+      <option name="closed" value="true" />
+      <created>1695002176295</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1695002176295</updated>
+    </task>
+    <task id="LOCAL-00103" summary="15sep">
+      <option name="closed" value="true" />
+      <created>1695002314031</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1695002314032</updated>
+    </task>
+    <task id="LOCAL-00104" summary="15sep">
+      <option name="closed" value="true" />
+      <created>1695002400918</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1695002400918</updated>
+    </task>
+    <option name="localTasksCounter" value="105" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -612,7 +605,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
