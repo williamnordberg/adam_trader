@@ -12,7 +12,7 @@ from z_handy_modules import get_bitcoin_future_market_price
 SPOT_ENDPOINT_DEPTH = "https://api.binance.com/api/v3/depth"
 FUTURES_ENDPOINT_DEPTH = 'https://fapi.binance.com/fapi/v1/depth'
 
-LIMIT = 2000
+LIMIT = 1000
 SYMBOLS = ['BTCUSDT', 'BTCBUSD']
 
 BID_MULTIPLIER = 0.99
