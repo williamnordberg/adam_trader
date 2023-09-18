@@ -14,7 +14,6 @@ from h_youtube import check_bitcoin_youtube_videos_increase
 from c_predictor import decision_tree_predictor
 from l_position_decision import position_decision
 from z_handy_modules import get_bitcoin_future_market_price
-from l_position_short_testnet import short_market, close_shorts_open_positions
 
 
 SYMBOL = 'BTCUSDT'
@@ -34,11 +33,6 @@ def short_position() -> dict:
     macro_bullish_na, events_date_dict = macro_sentiment()
     print_upcoming_events(events_date_dict)
 
-    try:
-        short_market(SHORT_POSITION['size'], SHORT_POSITION['LEVERAGE'], MARGIN_MODE)
-    except Exception as e:
-        logging.error(f'exception with shorting market as {e}')
-
     while True:
         logging.info(f'███short_position RUNNING ███')
 
@@ -46,8 +40,6 @@ def short_position() -> dict:
 
         factor_values_position['order'] = order_book(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
 
-        # We reverse the stop and profit,price more near to our stop(that is target) then the
-        # bullish value is bigger and bearish become smaller, then we stay under short threshold
         factor_values_position['order_target'] = order_book_hit_target(
             SYMBOLS, 1000, position['stop_loss'], position['profit_target'])
 
@@ -79,10 +71,6 @@ def short_position() -> dict:
             position['closing_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             position['closing_price'] = price
             position['closing_score'] = weighted_score
-            try:
-                close_shorts_open_positions(SYMBOL)
-            except Exception as e:
-                logging.error(f"Unexpected error occurre, with closing short: {e}")
 
             return position
 
