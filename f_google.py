@@ -121,7 +121,7 @@ def check_search_trend_wrapper(keywords: List[str]) -> float:
 
     save_value_to_database('hourly_google_search', last_hour)
     save_update_time('google_search')
-    return google_bullish
+    return round(google_bullish, 2)
 
 
 def check_search_trend(keywords: List[str]) -> float:
