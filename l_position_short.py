@@ -66,7 +66,7 @@ def short_position() -> dict:
         if price <= position['profit_target'] or price > position['stop_loss'] or \
                 weighted_score > SHORT_POSITION['THRESHOLD_TO_CLOSE']:
 
-            position['PNL'] = int(price - position['opening_price'])
+            position['PNL'] = int(position['opening_price'] - price)
             logging.info('&&&&&&&&&&&&&& SHORT CLOSED &&&&&&&&&&&&&&&&&&&&')
             position['closing_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             position['closing_price'] = price
