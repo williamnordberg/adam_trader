@@ -12,7 +12,6 @@ from datetime import datetime, timedelta, timezone
 from googleapiclient.errors import HttpError
 from google.auth.exceptions import RefreshError
 import logging
-
 from z_handy_modules import retry_on_error
 from z_read_write_csv import save_value_to_database, \
     should_update, save_update_time, retrieve_latest_factor_values_database, read_database
@@ -105,13 +104,15 @@ def get_authenticated_service():
                 try:
                     creds.refresh(Request())
                 except RefreshError:
-                    creds = None
+                    # creds = None
                     logging.info("Failed to refresh. Need to re-authenticate.")
+                    return None
 
-            if creds is None:
-                flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
-                    client_secrets_file, scopes)
-                creds = flow.run_local_server(port=0)
+            # This block is for manually refresh token
+            # if creds is None:
+            #    flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
+            #        client_secrets_file, scopes)
+            #    creds = flow.run_local_server(port=0)
 
     with open(token_file, 'wb') as token:
         pickle.dump(creds, token)
@@ -192,7 +193,7 @@ def calculate_sentiment_youtube_videos(youtube):
 def youtube_wrapper() -> float:
     youtube = get_authenticated_service()
     if youtube is None:
-        logging.info('youtube is None')
+        logging.info('youtube object is None')
         return 0.5
 
     positive_polarity, negative_polarity, positive_count, negative_count, total_video_include_out_threshold = \

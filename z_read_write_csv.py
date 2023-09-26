@@ -310,28 +310,7 @@ def read_trading_results() -> pd.DataFrame:
 
 
 if __name__ == "__main__":
-    position1 = {
-        'opening_score': 0.0,
-        'opening_time': '',
-        'closing_time': '',
-        'opening_price': 0,
-        'closing_price': 0,
-        'profit_target': 0,
-        'stop_loss': 0,
-        'PNL': 0,
-        'closing_score': 0.5,
-        'type': ''
-    }
-    factor_values1 = {
-        'macro': 0.5,
-        'order': 0.5,
-        'prediction': 0.5,
-        'technical': 0.5,
-        'richest': 0.5,
-        'google': 0.5,
-        'reddit': 0.5,
-        'youtube': 0.5,
-        'news': 0.5
-    }
+    df3 = read_database()
+    print(df3.isna().sum())
+    print(df3.iloc[-1])
 
-    save_trade_details(position1, factor_values1)
