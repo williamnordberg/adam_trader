@@ -3,16 +3,16 @@ LONG_THRESHOLD = 0.68
 SHORT_THRESHOLD = 0.3
 RICHEST_ADDRESSES_SLEEP_TIME = 20 * 60
 MAIN_TRADING_LOOP_SLEEP_TIME = 20 * 60
-MIN_CONTRIBUTING_FACTORS_WEIGHT = 0.57
+MIN_CONTRIBUTING_FACTORS_WEIGHT = 0.55
 
 
 # Market scanner
 WEIGHTS = {
     "macro": 0.2,
-    "order": 0.2,
-    "prediction": 0.15,
-    "technical": 0.125,
-    "richest": 0.125,
+    "order": 0.25,
+    "prediction": 0.0,
+    "technical": 0.175,
+    "richest": 0.175,
     "google": 0.05,
     "reddit": 0.05,
     "youtube": 0.05,
@@ -76,9 +76,9 @@ factor_values_position = {
 WEIGHTS_POSITION = {
     "macro": 0.2,
     "order": 0.2,
-    'order_target': 0.15,
-    "prediction": 0.10,
-    "technical": 0.125,
+    'order_target': 0.2,
+    "prediction": 0.0,
+    "technical": 0.175,
     "richest": 0.125,
     "google": 0.02,
     "reddit": 0.01,
