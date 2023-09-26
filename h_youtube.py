@@ -105,7 +105,7 @@ def get_authenticated_service():
                     creds.refresh(Request())
                 except RefreshError:
                     # creds = None
-                    logging.info("Failed to refresh. Need to re-authenticate.")
+                    logging.info("Failed to refresh Youtube token. Need to re-authenticate manually.")
                     return None
 
             # This block is for manually refresh token
