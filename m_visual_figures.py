@@ -423,21 +423,45 @@ def visualize_trade_details():
         style_cell={
             'backgroundColor': 'rgb(50, 50, 50)',
             'color': 'white'
-        },
+        }
     )
 
-    return table
+    # Calculate various trade statistics
+    total_pnl = df['PNL'].sum()
+    num_short_trades = len(df[df['type'] == 'short'])
+    num_long_trades = len(df[df['type'] == 'long'])
+    num_win_trades = len(df[df['PNL'] > 0])
+    num_lose_trades = len(df[df['PNL'] <= 0])
+    num_total_trades = num_win_trades + num_lose_trades
+    win_rate = round((num_win_trades / num_total_trades) * 100, 0)
+
+    # Create trade analysis results
+    trade_analysis = html.Div(
+        [
+            html.Div(f"PnL: {total_pnl}, Win Rate: {win_rate}%",
+                     style={'fontSize': '16px', 'marginBottom': '10px', 'fontWeight': 'bold', 'textAlign': 'center'}),
+            html.Div(f"Total Trades: {num_total_trades}, Wins: {num_win_trades}, Losses: {num_lose_trades}",
+                     style={'fontSize': '15px', 'marginBottom': '10px', 'textAlign': 'center'}),
+            html.Div(f"Short: {num_short_trades}, Long: {num_long_trades}",
+                     style={'fontSize': '15px', 'textAlign': 'center'})
+        ],
+        style={'textAlign': 'center', 'marginTop': '15px'}
+    )
+
+    return html.Div([trade_analysis, table], style={'textAlign': 'center'})
 
 
 def create_trade_details_div():
+
     return html.Div(
         [
             html.H3('Latest trades', style={'textAlign': 'center'}),
+
             html.Div(
                 id='trade_details_table',
                 style={
                     'width': '90%',
-                    'height': '20vh',
+                    'height': '40vh',
                     'overflowY': 'scroll',
                     'fontSize': '14px',
                     'margin': 'auto'  # Center the table
@@ -509,7 +533,9 @@ def create_log_output():
             'height': '40vh',
             'backgroundColor': COLORS['black_chart'],
             'color': COLORS['white'],
-            'margin': 'auto'
+            'margin': 'auto',
+            'marginBottom': '20px'  # Adjust the value as per your preference
+
         })
     ],
         style={

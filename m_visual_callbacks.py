@@ -8,9 +8,10 @@ from time import sleep
 from m_visualization_divs import create_news_div
 from m_visualization_side import read_layout_data
 
-from m_visual_figures import visualize_trade_details, visualized_combined, \
-    visualized_news, visualized_youtube, visualized_reddit, visualized_google, visualized_richest, \
-    visualize_macro, visualize_prediction, visualize_trade_results, create_gauge_charts, visualization_log
+from m_visual_figures import (visualize_trade_details, visualized_combined,
+                              visualized_news, visualized_youtube, visualized_reddit, visualized_google,
+                              visualized_richest, visualize_macro, visualize_prediction, visualize_trade_results,
+                              create_gauge_charts, visualization_log)
 from z_handy_modules import COLORS
 
 log = logging.getLogger('werkzeug')
