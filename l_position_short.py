@@ -11,7 +11,6 @@ from i_news_analyser import check_sentiment_of_news
 from f_google import check_search_trend
 from g_reddit import reddit_check
 from h_youtube import check_bitcoin_youtube_videos_increase
-from c_predictor import decision_tree_predictor
 from l_position_decision import position_decision
 from z_handy_modules import get_bitcoin_future_market_price
 
@@ -43,7 +42,8 @@ def short_position() -> dict:
         factor_values_position['order_target'] = order_book_hit_target(
             SYMBOLS, 1000, position['stop_loss'], position['profit_target'])
 
-        factor_values_position['prediction'] = decision_tree_predictor()
+        factor_values_position['prediction'] = 0.5
+        # factor_values_position['prediction'] = decision_tree_predictor()
 
         factor_values_position['richest'] = retrieve_latest_factor_values_database('richest_addresses')
 

@@ -16,7 +16,6 @@ from h_youtube import check_bitcoin_youtube_videos_increase
 from g_reddit import reddit_check
 from a_macro import macro_sentiment, print_upcoming_events
 from f_google import check_search_trend
-from c_predictor import decision_tree_predictor
 from b_order_book import order_book
 from k_combined_score import make_trading_decision
 from l_position_long import long_position
@@ -66,7 +65,8 @@ def trading_loop(long_threshold: float, short_threshold: float):
 
         factor_values['order'] = order_book(SYMBOLS, bid_multiplier=0.99, ask_multiplier=1.01)
 
-        factor_values['prediction'] = decision_tree_predictor()
+        factor_values['prediction'] = 0.5
+        # factor_values['prediction'] = decision_tree_predictor()
 
         factor_values['richest'] = retrieve_latest_factor_values_database('richest_addresses')
 
