@@ -1,6 +1,6 @@
 import logging
 
-# silence google module loggers
+# Silence google module loggers
 logging.getLogger('google.auth').setLevel(logging.ERROR)
 logging.getLogger('google_auth_httplib2').setLevel(logging.WARNING)
 logging.getLogger('oauth2client').setLevel(logging.WARNING)
