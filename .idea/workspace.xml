@@ -95,7 +95,7 @@
       <recent name="$PROJECT_DIR$/.gitignore" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.z_youtube_token">
+  <component name="RunManager" selected="Python.main">
     <configuration name="h_youtube" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="ENV_FILES" value="" />
@@ -208,8 +208,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.z_youtube_token" />
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.z_youtube_token" />
         <item itemvalue="Python.h_youtube" />
         <item itemvalue="Python.test_3" />
         <item itemvalue="Python.test_2" />
