@@ -58,9 +58,19 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Python.TEST.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Twigly_test2.executor&quot;: &quot;Run&quot;,
     &quot;Python.a_macro.executor&quot;: &quot;Run&quot;,
     &quot;Python.e_richest_scraper.executor&quot;: &quot;Run&quot;,
+    &quot;Python.h_youtube.executor&quot;: &quot;Run&quot;,
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test_1.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test_2.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test_3.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test_NLP.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test_Twingly_task.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test_posgresql.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test_twingly_apoi.executor&quot;: &quot;Run&quot;,
     &quot;Python.z_youtube_token.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
@@ -80,15 +90,15 @@
       <recent name="C:\will\Python_project\adam_trader\.mypy_cache" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/twingly" />
       <recent name="$PROJECT_DIR$/old" />
       <recent name="$PROJECT_DIR$/config" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/.gitignore" />
-      <recent name="C:\will\Python_project\adam_trader\data" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.a_macro">
-    <configuration name="a_macro" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.z_youtube_token">
+    <configuration name="h_youtube" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -101,29 +111,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/a_macro.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="e_richest_scraper" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="adam_trader" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/e_richest_scraper.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/h_youtube.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -154,7 +142,29 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="z_youtube_refresh_token" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="test_2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="adam_trader" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/twingly" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/twingly/test_2.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test_3" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="adam_trader" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -167,7 +177,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/z_youtube_refresh_token.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test_3.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -200,18 +210,18 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.a_macro" />
-        <item itemvalue="Python.e_richest_scraper" />
-        <item itemvalue="Python.main" />
         <item itemvalue="Python.z_youtube_token" />
-        <item itemvalue="Python.z_youtube_refresh_token" />
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.h_youtube" />
+        <item itemvalue="Python.test_3" />
+        <item itemvalue="Python.test_2" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-e8b2dc97e1a4-6ea2aa160b20-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.11555.5" />
+        <option value="bundled-python-sdk-d84064030637-6b96706af8f9-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.11799.32" />
       </set>
     </attachedChunks>
   </component>
@@ -223,22 +233,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1690438920740</updated>
-    </task>
-    <task id="LOCAL-00079" summary="19aug">
-      <option name="closed" value="true" />
-      <created>1692690883701</created>
-      <option name="number" value="00079" />
-      <option name="presentableId" value="LOCAL-00079" />
-      <option name="project" value="LOCAL" />
-      <updated>1692690883701</updated>
-    </task>
-    <task id="LOCAL-00080" summary="19aug">
-      <option name="closed" value="true" />
-      <created>1692691263520</created>
-      <option name="number" value="00080" />
-      <option name="presentableId" value="LOCAL-00080" />
-      <option name="project" value="LOCAL" />
-      <updated>1692691263521</updated>
     </task>
     <task id="LOCAL-00081" summary="19aug">
       <option name="closed" value="true" />
@@ -616,7 +610,23 @@
       <option name="project" value="LOCAL" />
       <updated>1699534318755</updated>
     </task>
-    <option name="localTasksCounter" value="128" />
+    <task id="LOCAL-00128" summary="15sep">
+      <option name="closed" value="true" />
+      <created>1699609732093</created>
+      <option name="number" value="00128" />
+      <option name="presentableId" value="LOCAL-00128" />
+      <option name="project" value="LOCAL" />
+      <updated>1699609732093</updated>
+    </task>
+    <task id="LOCAL-00129" summary="15sep">
+      <option name="closed" value="true" />
+      <created>1700394829354</created>
+      <option name="number" value="00129" />
+      <option name="presentableId" value="LOCAL-00129" />
+      <option name="project" value="LOCAL" />
+      <updated>1700394829354</updated>
+    </task>
+    <option name="localTasksCounter" value="130" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -656,5 +666,17 @@
     <MESSAGE value="19aug" />
     <MESSAGE value="15sep" />
     <option name="LAST_COMMIT_MESSAGE" value="15sep" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="NONE" type="python-line">
+          <url>file://$PROJECT_DIR$/twingly/test_2.py</url>
+          <line>1</line>
+          <log-expression expression="'/product-reviews/B0BDJ5F3R6/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&amp;reviewerType=all_reviews')" language="Python" />
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
