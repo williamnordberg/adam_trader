@@ -2,15 +2,14 @@
 *.log
 *.csv
 *.jason
-.idea
+*.idea
 
 # Ignore everything in a  directory
-tests/*
-data/*
-logs/*
-venv/*
-Twingly/*
 config/*
+data/*
+trade_results/*
+venv/*
+
 
 # Files
 chromedriver.exe
