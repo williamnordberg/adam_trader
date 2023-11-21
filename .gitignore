@@ -7,6 +7,9 @@ logs/
 __pycache__/
 .idea/
 placeholder_config/
+placeholder_log/
+placeholder_data/
+
 
 
 # Specific files to ignore
