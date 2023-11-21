@@ -1,19 +1,14 @@
-# Ignore all .log files
+# Ignore all log, CSV, and JSON files
 *.log
 *.csv
-*.jason
-*.idea
+*.json
 
-# Ignore everything in a  directory
-config/*
-data/*
-trade_results/*
-venv/*
+# Ignore specific directories and everything inside them
+config/
+data/
+trade_results/
+venv/
+__pycache__/
 
-
-# Files
+# Specific files to ignore
 chromedriver.exe
-youtube_token.pickle
-__pycache__/*
-
-/trade_results/
