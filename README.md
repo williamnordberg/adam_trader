@@ -12,10 +12,15 @@ This project is an automated trading system designed to analyze various factors 
 ## Installation
 
 1. Clone the repository:
-git clone https://github.com/yourusername/automated-bitcoin-trading.git
+git clone https://github.com/williamnordberg/adam_trader.git
 2. Install the required Python packages:
-pip install -r requirements.txt
-3. Make the directory and files listed in gitignore in your system.
+pip install -r requirements/requirements.txt
+3. Make the directory and files listed in gitignore in your system. 
+4. Adjust Placeholder Files and Directories:
+Look for files and directories starting with placeholder_.
+Rename each one to remove the placeholder_ prefix (e.g., rename placeholder_log to log).
+Adjust the contents of each file according to your environment and preferences. For example, for placeholder_config.ini, fill in your API keys and other relevant details.
+Configure API Keys and Other Settings:
 
 ## Usage
 
