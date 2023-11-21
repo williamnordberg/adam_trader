@@ -6,6 +6,8 @@ venv/
 logs/
 __pycache__/
 .idea/
+placeholder_config/
+
 
 # Specific files to ignore
 chromedriver.exe
