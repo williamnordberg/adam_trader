@@ -1,4 +1,4 @@
-# Automated Bitcoin Trading System
+# Automated Bitcoin Trading Tool
 
 This project is an automated trading system designed to analyze various factors that impact the Bitcoin price and make trading decisions based on the calculated probabilities. The system incorporates nine different factors or modules, each returning two values (bullish and bearish), which are then used in a Multi-Criteria Decision Analysis (MCDA) system to calculate the weighted score for the price going up and down. Based on the normalized scores, the system determines when to open a long or short position trade or when to close an open position.
 
@@ -15,16 +15,19 @@ This project is an automated trading system designed to analyze various factors 
 git clone https://github.com/yourusername/automated-bitcoin-trading.git
 2. Install the required Python packages:
 pip install -r requirements.txt
-
+3. Make the directory and files listed in gitignore in your system.
 
 ## Usage
 
 1. Configure the `config.py` file with your API keys, trading parameters, and other settings.
 
-2. Run the main script:
- python main.py
+2. Connect your exchange or wallet with API (give just trading permission)
+ 
+3. Run the main script:
+ python3 main.py
 
-3. Monitor the logs to view the trading decisions made by the system and the resulting profit or loss after each trade.
+4. Monitor the logs to view the trading decisions made by the system and the resulting profit or loss after each trade.
+
 
 ## Contributing
 
