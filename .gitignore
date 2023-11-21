@@ -16,3 +16,4 @@ chromedriver.exe
 youtube_token.pickle
 __pycache__/*
 
+/trade_results/
