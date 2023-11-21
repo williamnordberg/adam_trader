@@ -1,14 +1,11 @@
-# Ignore all log, CSV, and JSON files
-*.log
-*.csv
-*.json
-
 # Ignore specific directories and everything inside them
 config/
 data/
 trade_results/
 venv/
+logs/
 __pycache__/
+.idea/
 
 # Specific files to ignore
 chromedriver.exe
