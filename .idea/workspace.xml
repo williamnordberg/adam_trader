@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b02440e7-38c7-4d13-acf1-1ed63ab207ba" name="Changes" comment="15sep" />
+    <list default="true" id="b02440e7-38c7-4d13-acf1-1ed63ab207ba" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -55,31 +57,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.TEST.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Twigly_test2.executor&quot;: &quot;Run&quot;,
-    &quot;Python.a_macro.executor&quot;: &quot;Run&quot;,
-    &quot;Python.e_richest_scraper.executor&quot;: &quot;Run&quot;,
-    &quot;Python.h_youtube.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test_1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test_2.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test_3.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test_NLP.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test_Twingly_task.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test_posgresql.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test_twingly_apoi.executor&quot;: &quot;Run&quot;,
-    &quot;Python.z_youtube_token.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/delta/adam_trader/config&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.TEST.executor": "Run",
+    "Python.Twigly_test2.executor": "Run",
+    "Python.a_macro.executor": "Run",
+    "Python.e_richest_scraper.executor": "Run",
+    "Python.h_youtube.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.test_1.executor": "Run",
+    "Python.test_2.executor": "Run",
+    "Python.test_3.executor": "Run",
+    "Python.test_NLP.executor": "Run",
+    "Python.test_Twingly_task.executor": "Run",
+    "Python.test_posgresql.executor": "Run",
+    "Python.test_twingly_apoi.executor": "Run",
+    "Python.z_youtube_token.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "Merging main",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "/home/delta/adam_trader/config",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/config" />
