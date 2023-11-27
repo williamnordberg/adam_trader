@@ -1,4 +1,5 @@
 # Automated Bitcoin Trading Tool
+### Link to project visualization dashboard: https://rebrand.ly/threepeaksai
 
 This project is an automated trading system designed to analyze various factors that impact the Bitcoin price and make trading decisions based on the calculated probabilities. The system incorporates nine different factors or modules, each returning two values (bullish and bearish), which are then used in a Multi-Criteria Decision Analysis (MCDA) system to calculate the weighted score for the price going up and down. Based on the normalized scores, the system determines when to open a long or short position trade or when to close an open position.
 
