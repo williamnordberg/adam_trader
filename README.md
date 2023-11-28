@@ -54,6 +54,8 @@ our web application is built using a robust and modern technology stack:
 5. CI/CD: GitHub Actions.
 6. Version Control: Git.
 7. Testing: Selenium, pytest, unittest for Python testing.
+8. Provisioning & Server: Ansible on Ubuntu.
+9. Cloud Provider: Linode, Azure, AWS.
 
 ## License
 
