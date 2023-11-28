@@ -8,6 +8,7 @@ This project is an automated trading system designed to analyze various factors 
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
+- [Technology Stack](#Technology)
 - [License](#license)
 
 ## Installation
@@ -41,6 +42,18 @@ Configure API Keys and Other Settings:
 2. Create a branch for your changes.
 3. Commit your changes and push to your fork.
 4. Create a pull request to the original repository.
+
+## Technology
+
+our web application is built using a robust and modern technology stack:
+
+1. Containerization & Orchestration: Docker and Kubernetes.
+2. Backend: Python with Flask.
+3. Database: PostgreSQL, CSV files.
+4. Frontend: Dash by Plotly, CSS, HTML.
+5. CI/CD: GitHub Actions.
+6. Version Control: Git.
+7. Testing: Selenium, pytest, unittest for Python testing.
 
 ## License
 
